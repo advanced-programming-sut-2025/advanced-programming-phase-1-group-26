@@ -270,6 +270,8 @@ public enum GameObjectType
     DINOSAUR_EGG("dinosaur egg"),
     TRUFFLE("truffle"),
     SUNFLOWER("sunflower"),
+
+
     ;
 
     private final String name;
