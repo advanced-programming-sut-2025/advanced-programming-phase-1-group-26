@@ -1,5 +1,8 @@
 package model;
 
+import model.enums.DayOfWeek;
+import model.enums.Season;
+
 public class Time
 {
     private int hour = 9;
@@ -40,4 +43,13 @@ public class Time
     {
         return season;
     }
+
+    public DayOfWeek getDayOfWeek()
+    {
+        return DayOfWeek.values()[(day - 1) % DayOfWeek.values().length];
+    }
+
+    public void advanceHour(int amount) {}
+
+    public void advanceDay(int amount) {}
 }
