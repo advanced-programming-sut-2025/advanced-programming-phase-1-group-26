@@ -1,6 +1,6 @@
 package model.enums;
 
-public enum LevelType
+public enum SkillType
 {
     Farming,
     Mining,
