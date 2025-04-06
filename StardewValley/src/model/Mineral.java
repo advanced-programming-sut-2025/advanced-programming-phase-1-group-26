@@ -1,6 +1,6 @@
-package model.enums;
+package model;
 
-import model.GameObject;
+import model.enums.MineralType;
 
 public class Mineral extends GameObject
 {

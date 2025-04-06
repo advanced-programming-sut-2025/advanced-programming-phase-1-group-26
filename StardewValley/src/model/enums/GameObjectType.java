@@ -144,6 +144,11 @@ public enum GameObjectType
     MUSHROOM_TREE("Mushroom Tree"),
     MYSTIC_TREE("Mystic Tree"),
     ACORNS_TREE("Acorns"),
+
+    Spring_MIXED_SEED("Spring Mixed Seed"),
+    SUMMER_MIXED_SEED("Summer Mixed Seed"),
+    FALL_MIXED_SEED("Fall Mixed Seed"),
+    WINTER_MIXED_SEED("Winter Mixed Seed"),
     ;
 
     private final String name;
