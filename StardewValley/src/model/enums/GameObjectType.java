@@ -1,6 +1,7 @@
 package model.enums;
 
-public enum GameObjectType {
+public enum GameObjectType
+{
     JAZZ_SEEDS("Jazz Seeds"),
     CARROT_SEEDS("Carrot Seeds"),
     CAULIFLOWER_SEEDS("Cauliflower Seeds"),
@@ -141,17 +142,20 @@ public enum GameObjectType {
     PINE_TREE("Pine Tree"),
     MAHOGANY_TREE("Mahogany Tree"),
     MUSHROOM_TREE("Mushroom Tree"),
-    MYSTIC_TREE("Mystic Tree")
+    MYSTIC_TREE("Mystic Tree"),
+    ACORNS_TREE("Acorns"),
     ;
 
     private final String name;
 
-    GameObjectType(String name) {
+    GameObjectType(String name)
+    {
         this.name = name;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return name;
     }
 }
