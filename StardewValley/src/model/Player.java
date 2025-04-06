@@ -1,6 +1,9 @@
 package model;
 
+import model.enums.GameObjectType;
 import model.enums.SkillType;
+
+import java.util.HashMap;
 
 public class Player {
 
@@ -14,6 +17,8 @@ public class Player {
     private Skill miningSkill = new Skill(SkillType.Mining);
     private Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
     private Skill fishingSkill = new Skill(SkillType.Fishing);
+
+    private HashMap<GameObjectType, Integer> inventory = new HashMap<>();
 
     public Player(User user) {
         this.user = user;
@@ -70,5 +75,13 @@ public class Player {
 
     public void setFishingSkill(Skill fishingSkill) {
         this.fishingSkill = fishingSkill;
+    }
+
+    public HashMap<GameObjectType, Integer> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(HashMap<GameObjectType, Integer> inventory) {
+        this.inventory = inventory;
     }
 }
