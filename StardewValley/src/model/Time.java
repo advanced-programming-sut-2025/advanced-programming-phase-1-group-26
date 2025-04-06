@@ -1,0 +1,43 @@
+package model;
+
+public class Time
+{
+    private int hour = 9;
+    private int day = 1;
+    private Season season = Season.Spring;
+
+    public void update()
+    {
+        hour += 1;
+        if (hour == 22)
+        {
+            endDay();
+        }
+    }
+
+    private void endDay()
+    {
+        hour = 9;
+        day += 1;
+        if (day > 28)
+        {
+            day = 1;
+            season = season.next();
+        }
+    }
+
+    public int getHour()
+    {
+        return hour;
+    }
+
+    public int getDay()
+    {
+        return day;
+    }
+
+    public Season getSeason()
+    {
+        return season;
+    }
+}

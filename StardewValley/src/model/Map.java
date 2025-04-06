@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Map
 {
-    private int height;
-    private int width;
+    private final int height;
+    private final int width;
     private ArrayList<Tile> tiles = new ArrayList<>();
 
     public Map(int width, int height)
