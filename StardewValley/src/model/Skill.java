@@ -1,21 +1,21 @@
 package model;
-import model.enums.LevelType;
+import model.enums.SkillType;
 
 public class Skill {
 
-    private final LevelType type;
+    private final SkillType type;
     private int level;
     private int unit;
     private final static int maxLevel = 4;
 
-    public Skill(LevelType type) {
+    public Skill(SkillType type) {
         this.type = type;
         this.level = 0;
         this.unit = 0;
 
     }
 
-    public LevelType getType() {
+    public SkillType getType() {
         return type;
     }
 

@@ -12,6 +12,13 @@ public class Game
     private Weather currentWeather = Weather.Sunny;
     private Weather tomorrowWeather = Weather.Sunny;
     private ArrayList<NPC> NPCs = new ArrayList<>();
+    private Map map;
+
+    public Game(ArrayList<Player> players, int height, int width)
+    {
+        this.players = players;
+        this.map = new Map(height, width);
+    }
 
     public Time getCurrentTime()
     {
