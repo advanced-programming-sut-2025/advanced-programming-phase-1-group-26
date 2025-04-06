@@ -2,7 +2,7 @@ package model;
 
 import model.enums.LevelType;
 
-public class Player extends User{
+public class Player {
 
     User user;
 
