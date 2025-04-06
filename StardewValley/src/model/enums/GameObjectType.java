@@ -128,6 +128,20 @@ public enum GameObjectType {
     SNOW_YAM_FORAGING_CROP("Snow Yam"),
     WINTER_ROOT_FORAGING_CROP("Winter Root"),
 
+    APRICOT_TREE("Apricot Tree"),
+    CHERRY_TREE("Cherry Tree"),
+    BANANA_TREE("Banana Tree"),
+    MANGO_TREE("Mango Tree"),
+    ORANGE_TREE("Orange Tree"),
+    PEACH_TREE("Peach Tree"),
+    APPLE_TREE("Apple Tree"),
+    POMEGRANATE_TREE("Pomegranate Tree"),
+    OAK_TREE("Oak Tree"),
+    MAPLE_TREE("Maple Tree"),
+    PINE_TREE("Pine Tree"),
+    MAHOGANY_TREE("Mahogany Tree"),
+    MUSHROOM_TREE("Mushroom Tree"),
+    MYSTIC_TREE("Mystic Tree")
     ;
 
     private final String name;
