@@ -9,7 +9,7 @@ public enum BlacksmithItem {
     private final String name;
     private final String description;
     private final int price;
-    private final int dailyLimit; // -1 means unlimited
+    private final int dailyLimit;
 
     BlacksmithItem(String name, String description, int price, int dailyLimit) {
         this.name = name;

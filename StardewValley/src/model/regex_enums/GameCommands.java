@@ -4,6 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameCommands implements Command{
+    /* NPC Commands */
+    MEET_NPC(""),
+    GIFT_NPC(""),
+    FRIENDSHIP_NPC_LIST(""),
+    QUESTS_LIST(""),
+    QUESTS_FINISH(""),
 
     ;
 

@@ -2,6 +2,7 @@ package model;
 
 import model.enums.Weather;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,6 +11,7 @@ public class Game
     private Time currentTime = new Time();
     private Weather currentWeather = Weather.Sunny;
     private Weather tomorrowWeather = Weather.Sunny;
+    private ArrayList<NPC> NPCs = new ArrayList<>();
 
     public Time getCurrentTime()
     {
@@ -24,6 +26,13 @@ public class Game
     public Weather getTomorrowWeather()
     {
         return tomorrowWeather;
+    }
+
+    public ArrayList<NPC> getNPCs() {
+        return NPCs;
+    }
+    public void setNPCs(ArrayList<NPC> NPCs) {
+        this.NPCs = NPCs;
     }
 
     public void updateTime()

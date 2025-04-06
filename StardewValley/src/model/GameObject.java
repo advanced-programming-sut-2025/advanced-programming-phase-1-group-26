@@ -1,4 +1,4 @@
 package model;
 
-public class Object {
+public class GameObject {
 }

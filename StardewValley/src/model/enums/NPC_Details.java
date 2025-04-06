@@ -3,7 +3,7 @@ package model.enums;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public enum NPC_name {
+public enum NPC_Details {
     Sebastian("Sebastian", new ArrayList<>(), new HashMap<>(), new HashMap<>()),
     Abigail("Abigail", new ArrayList<>(), new HashMap<>(), new HashMap<>()),
     Harvey("Harvey", new ArrayList<>(), new HashMap<>(), new HashMap<>()),
@@ -14,8 +14,8 @@ public enum NPC_name {
     private final ArrayList<GameObjectType> favorites;
     private final HashMap<GameObjectType, Integer> requests;
     private final HashMap<GameObjectType, Integer> rewards;
-    NPC_name(String name, ArrayList<GameObjectType> favorites,
-             HashMap<GameObjectType, Integer> requests, HashMap<GameObjectType, Integer> rewards) {
+    NPC_Details(String name, ArrayList<GameObjectType> favorites,
+                HashMap<GameObjectType, Integer> requests, HashMap<GameObjectType, Integer> rewards) {
 
         this.name = name;
         this.favorites = favorites;
@@ -26,15 +26,12 @@ public enum NPC_name {
     public String getName() {
         return name;
     }
-
     public ArrayList<GameObjectType> getFavorites() {
         return favorites;
     }
-
     public HashMap<GameObjectType, Integer> getRequests() {
         return requests;
     }
-
     public HashMap<GameObjectType, Integer> getRewards() {
         return rewards;
     }
