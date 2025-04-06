@@ -1,5 +1,7 @@
 package model;
 
+import model.enums.LevelType;
+
 public class Player extends User{
 
     User user;
@@ -8,10 +10,10 @@ public class Player extends User{
     private final static int maxEnergy = 200;
     /*TEMP*/ private boolean fainted;
 
-    private Skill farmingSkill = new Skill<>(Leveltype.Farming);
-    private Skill miningSkill = new Skill<>(Leveltype.Mining);
-    private Skill gashtogozarSkill = new Skill<>(LevelType.Gashtogozar);
-    private Skill fishingSkill = new Skill<>(LevelType.Fishing);
+    private Skill farmingSkill = new Skill(LevelType.Farming);
+    private Skill miningSkill = new Skill(LevelType.Mining);
+    private Skill gashtogozarSkill = new Skill(LevelType.Gashtogozar);
+    private Skill fishingSkill = new Skill(LevelType.Fishing);
 
     public Player(User user) {
         this.user = user;

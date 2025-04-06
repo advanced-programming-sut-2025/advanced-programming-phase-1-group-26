@@ -1,8 +1,7 @@
 package model;
+import model.enums.LevelType;
 
-
-
-public class Skill<LevelType> {
+public class Skill {
 
     private final LevelType type;
     private int level;
