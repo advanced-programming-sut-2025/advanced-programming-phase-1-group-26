@@ -7,6 +7,12 @@ import java.util.List;
 
 public class ForagingSeed extends GameObject
 {
-    private ForagingSeedType seedType;
-    private List<Season> seasons;
+    private final ForagingSeedType seedType;
+    private final List<Season> seasons;
+
+    public ForagingSeed(ForagingSeedType seedType)
+    {
+        this.seedType = seedType;
+        this.seasons = seedType.getSeasons();
+    }
 }
