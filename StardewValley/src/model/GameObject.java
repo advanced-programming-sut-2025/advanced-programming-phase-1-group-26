@@ -4,15 +4,15 @@ import model.enums.GameObjectType;
 
 public class GameObject
 {
-    protected GameObjectType type;
+    protected GameObjectType ObjectType;
 
-    public GameObjectType getType()
+    public GameObjectType getObjectType()
     {
-        return type;
+        return ObjectType;
     }
 
-    public void setType(GameObjectType type)
+    public void setObjectType(GameObjectType objectType)
     {
-        this.type = type;
+        this.ObjectType = objectType;
     }
 }

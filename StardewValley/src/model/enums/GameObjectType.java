@@ -84,7 +84,27 @@ public enum GameObjectType {
     YAM_CROP("Yam"),
     SWEET_GEM_BERRY_CROP("Sweet Gem Berry"),
     POWDERMELON_CROP("Powdermelon"),
-    ANCIENT_FRUIT_CROP("Ancient Fruit");
+    ANCIENT_FRUIT_CROP("Ancient Fruit"),
+
+    QUARTZ_MINERAL("Quartz"),
+    EARTH_CRYSTAL_MINERAL("Earth Crystal"),
+    FROZEN_TEAR_MINERAL("Frozen Tear"),
+    FIRE_QUARTZ_MINERAL("Fire Quartz"),
+    EMERALD_MINERAL("Emerald"),
+    AQUAMARINE_MINERAL("Aquamarine"),
+    RUBY_MINERAL("Ruby"),
+    AMETHYST_MINERAL("Amethyst"),
+    TOPAZ_MINERAL("Topaz"),
+    JADE_MINERAL("Jade"),
+    DIAMOND_MINERAL("Diamond"),
+    PRISMATIC_SHARD_MINERAL("Prismatic Shard"),
+    COPPER_MINERAL("Copper"),
+    IRON_MINERAL("Iron"),
+    GOLD_MINERAL("Gold"),
+    IRIDIUM_MINERAL("Iridium"),
+    COAL_MINERAL("Coal"),
+
+    ;
 
     private final String name;
 
