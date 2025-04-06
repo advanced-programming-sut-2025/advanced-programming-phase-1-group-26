@@ -19,7 +19,7 @@ public class Player extends User{
         this.fainted = false;
 
     }
-    
+
 
     public int getEnergy() {
         return energy;
