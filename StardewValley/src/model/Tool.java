@@ -7,5 +7,4 @@ public abstract class Tool extends GameObject {
      String name;
 
 
-
 }
