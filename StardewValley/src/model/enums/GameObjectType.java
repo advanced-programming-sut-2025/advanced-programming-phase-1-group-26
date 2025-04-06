@@ -104,16 +104,36 @@ public enum GameObjectType {
     IRIDIUM_MINERAL("Iridium"),
     COAL_MINERAL("Coal"),
 
+    COMMON_MUSHROOM_FORAGING_CROP("Common Mushroom"),
+    DAFFODIL_FORAGING_CROP("Daffodil"),
+    DANDELION_FORAGING_CROP("Dandelion"),
+    LEEK_FORAGING_CROP("Leek"),
+    MOREL_FORAGING_CROP("Morel"),
+    SALMONBERRY_FORAGING_CROP("Salmonberry"),
+    SPRING_ONION_FORAGING_CROP("Spring Onion"),
+    WILD_HORSERADISH_FORAGING_CROP("Wild Horseradish"),
+    FIDDLEHEAD_FERN_FORAGING_CROP("Fiddlehead Fern"),
+    GRAPE_FORAGING_CROP("Grape"),
+    RED_MUSHROOM_FORAGING_CROP("Red Mushroom"),
+    SPICE_BERRY_FORAGING_CROP("Spice Berry"),
+    SWEET_PEA_FORAGING_CROP("Sweet Pea"),
+    BLACKBERRY_FORAGING_CROP("Blackberry"),
+    CHANTERELLE_FORAGING_CROP("Chanterelle"),
+    HAZELNUT_FORAGING_CROP("Hazelnut"),
+    PURPLE_MUSHROOM_FORAGING_CROP("Purple Mushroom"),
+    WILD_PLUM_FORAGING_CROP("Wild Plum"),
+    CROCUS_FORAGING_CROP("Crocus"),
+    CRYSTAL_FRUIT_FORAGING_CROP("Crystal Fruit"),
+    HOLLY_FORAGING_CROP("Holly"),
+    SNOW_YAM_FORAGING_CROP("Snow Yam"),
+    WINTER_ROOT_FORAGING_CROP("Winter Root"),
+
     ;
 
     private final String name;
 
     GameObjectType(String name) {
         this.name = name;
-    }
-
-    public String getDisplayName() {
-        return name;
     }
 
     @Override
