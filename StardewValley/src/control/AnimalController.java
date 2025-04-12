@@ -1,6 +1,6 @@
 package control;
 
-public class animalController {
+public class AnimalController {
     public void build() {}
 
     public void tame() {}
