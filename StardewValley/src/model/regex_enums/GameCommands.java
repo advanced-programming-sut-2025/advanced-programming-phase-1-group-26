@@ -10,6 +10,11 @@ public enum GameCommands implements Command{
     FRIENDSHIP_NPC_LIST(""),
     QUESTS_LIST(""),
     QUESTS_FINISH(""),
+    /* Marketing Commands*/
+    SHOW_ALL_PRODUCTS(""),
+    SHOW_AVAILABLE_PRODUCTS(""),
+    PURCHASE(""),
+    SELL(""),
 
     ;
 
