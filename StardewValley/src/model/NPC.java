@@ -1,7 +1,7 @@
 package model;
 
 import model.enums.GameObjectType;
-import model.enums.NPC_Details;
+import model.enums.NpcDetails;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,13 +10,13 @@ public class NPC {
     private Tile location;
     private int friendship;
     private int levelOfFriendship;
-    public NPC_Details npcDetails;
+    public NpcDetails npcDetails;
     private String name;
     private ArrayList<GameObjectType> favorites;
     private HashMap<GameObjectType, Integer> requests;
     private HashMap<GameObjectType, Integer> rewards;
 
-    public NPC(NPC_Details npcDetails, Tile location, int friendship, int levelOfFriendship) {
+    public NPC(NpcDetails npcDetails, Tile location, int friendship, int levelOfFriendship) {
         this.location = location;
         this.friendship = friendship;
         this.levelOfFriendship = levelOfFriendship;
@@ -27,7 +27,7 @@ public class NPC {
         this.rewards = npcDetails.getRewards();
     }
 
-    public NPC_Details getNpcDetails() {
+    public NpcDetails getNpcDetails() {
         return npcDetails;
     }
 

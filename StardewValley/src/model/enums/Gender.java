@@ -4,7 +4,7 @@ public enum Gender
 {
     MALE("male"),
     FEMALE("female"),
-    NON_Binary("non-binary");
+    ;
 
     private final String name;
 

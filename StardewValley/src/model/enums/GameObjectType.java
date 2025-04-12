@@ -273,7 +273,6 @@ public enum GameObjectType
     FISH("Fish"),
     FLOWER("Flower"),
     HEART("Heart"),
-
     ;
 
     private final String name;

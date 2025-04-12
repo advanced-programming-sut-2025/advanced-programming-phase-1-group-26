@@ -1,5 +1,9 @@
 package model;
 
+import model.animal.Animal;
+import model.player_data.FriendshipData;
+import model.player_data.Skill;
+import model.player_data.Trade;
 import model.enums.GameObjectType;
 import model.enums.SkillType;
 
@@ -14,7 +18,7 @@ public class Player {
     private final static int maxEnergy = 200;
     /*TEMP*/ private boolean fainted;
 
-    private  Skill farmingSkill = new Skill(SkillType.Farming);
+    private Skill farmingSkill = new Skill(SkillType.Farming);
     private  Skill miningSkill = new Skill(SkillType.Mining);
     private  Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
     private  Skill fishingSkill = new Skill(SkillType.Fishing);
@@ -24,6 +28,8 @@ public class Player {
     private ArrayList<Trade> requestTrades = new ArrayList<>();
     private ArrayList<Trade> offerTrades = new ArrayList<>();
     private Player zeidy;
+
+    private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
 
     public Player(User user) {
         this.user = user;
