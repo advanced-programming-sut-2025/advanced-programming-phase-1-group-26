@@ -3,6 +3,7 @@ package model;
 import model.enums.GameObjectType;
 import model.enums.SkillType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
@@ -13,17 +14,28 @@ public class Player {
     private final static int maxEnergy = 200;
     /*TEMP*/ private boolean fainted;
 
-    private Skill farmingSkill = new Skill(SkillType.Farming);
-    private Skill miningSkill = new Skill(SkillType.Mining);
-    private Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
-    private Skill fishingSkill = new Skill(SkillType.Fishing);
+    private  Skill farmingSkill = new Skill(SkillType.Farming);
+    private  Skill miningSkill = new Skill(SkillType.Mining);
+    private  Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
+    private  Skill fishingSkill = new Skill(SkillType.Fishing);
 
     private HashMap<GameObjectType, Integer> inventory = new HashMap<>();
+    private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
+    private ArrayList<Trade> requestTrades = new ArrayList<>();
+    private ArrayList<Trade> offerTrades = new ArrayList<>();
+    private Player zeidy;
 
     public Player(User user) {
         this.user = user;
         this.energy = 200;
         this.fainted = false;
+
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
+            this.friendships.put(player, newFriendshipData);
+        }
+
+        this.zeidy = null;
 
     }
     
@@ -49,39 +61,40 @@ public class Player {
         return farmingSkill;
     }
 
-    public void setFarmingSkill(Skill farmingSkill) {
-        this.farmingSkill = farmingSkill;
-    }
-
     public Skill getMiningSkill() {
         return miningSkill;
-    }
-
-    public void setMiningSkill(Skill miningSkill) {
-        this.miningSkill = miningSkill;
     }
 
     public Skill getGashtogozarSkill() {
         return gashtogozarSkill;
     }
 
-    public void setGashtogozarSkill(Skill gashtogozarSkill) {
-        this.gashtogozarSkill = gashtogozarSkill;
-    }
-
     public Skill getFishingSkill() {
         return fishingSkill;
     }
 
-    public void setFishingSkill(Skill fishingSkill) {
-        this.fishingSkill = fishingSkill;
-    }
 
     public HashMap<GameObjectType, Integer> getInventory() {
         return inventory;
     }
 
-    public void setInventory(HashMap<GameObjectType, Integer> inventory) {
-        this.inventory = inventory;
+    public HashMap<Player, FriendshipData> getFriendships() {
+        return friendships;
+    }
+
+    public ArrayList<Trade> getRequestTrades() {
+        return requestTrades;
+    }
+
+    public ArrayList<Trade> getOfferTrades() {
+        return offerTrades;
+    }
+
+    public Player getZeidy() {
+        return zeidy;
+    }
+
+    public void setZeidy(Player zeidy) {
+        this.zeidy = zeidy;
     }
 }

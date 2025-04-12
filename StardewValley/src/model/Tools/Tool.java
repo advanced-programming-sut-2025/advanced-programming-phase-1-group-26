@@ -1,6 +1,7 @@
-package model;
+package model.Tools;
 
-import model.enums.ToolType;
+import model.GameObject;
+import model.enums.ToolEnums.ToolType;
 
 public abstract class Tool extends GameObject {
      ToolType type;
