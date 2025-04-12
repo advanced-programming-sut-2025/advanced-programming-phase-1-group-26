@@ -14,6 +14,7 @@ public class Game
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
     private Map map;
+    private Player currentPlayer;
 
     public Game(ArrayList<Player> players, int height, int width)
     {
@@ -41,6 +42,14 @@ public class Game
     }
     public void setNPCs(ArrayList<NPC> NPCs) {
         this.NPCs = NPCs;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public void updateTime()
