@@ -1,6 +1,11 @@
 package control;
 
-public class MainMenuController {
-    public void goToProfileMenu(){}
-    public void goToGameMenu(){}
+import model.Result;
+
+public class MainMenuController
+{
+    public Result logout()
+    {
+        return null;
+    }
 }
