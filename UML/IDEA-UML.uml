@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>D:/SUT/Term_2/AP/Java/advanced-programming-phase-1-group-26/StardewValley/src</OriginalElement>
+  <nodes>
+    <node x="1418.0" y="478.0">model.enums.building_enums.RecipeItem</node>
+    <node x="272.5" y="4383.0">model.enums.regex_enums.InputFormats</node>
+    <node x="578.5" y="4383.0">model.enums.regex_enums.ProfileCommands</node>
+    <node x="1210.5" y="2738.0">model.enums.resources_enums.TreeType</node>
+    <node x="1250.5" y="818.0">model.enums.resources_enums.ResourceItem</node>
+    <node x="74.0" y="5279.5">model.resources.ForagingSeed</node>
+    <node x="1432.5" y="3675.0">model.enums.tool_enums.PickaxeLevel</node>
+    <node x="361.5" y="4799.5">model.resources.CraftItem</node>
+    <node x="71.0" y="5518.5">model.tools.FishingPole</node>
+    <node x="-22.5" y="3527.0">view.MainMenu</node>
+    <node x="1212.5" y="3895.0">model.enums.resources_enums.FallStock</node>
+    <node x="886.0" y="4395.0">control.RegisterController</node>
+    <node x="271.0" y="4899.5">model.resources.Tree</node>
+    <node x="984.5" y="2258.0">model.enums.animal_enums.FarmBuilding</node>
+    <node x="1313.0" y="11.0">control.game.activities.CraftingController</node>
+    <node x="1164.0" y="239.0">control.game.activities.PlantsController</node>
+    <node x="1051.5" y="502.0">model.enums.resources_enums.ForagingCropType</node>
+    <node x="894.5" y="818.0">model.enums.resources_enums.WinterStock</node>
+    <node x="1058.0" y="4135.0">control.game.activities.ArtisanUsingController</node>
+    <node x="932.5" y="3846.5">model.App</node>
+    <node x="769.5" y="4559.0">control.game.activities.CookingController</node>
+    <node x="1647.0" y="5063.0">model.enums.Weather</node>
+    <node x="-79.5" y="5279.5">model.tools.Tool</node>
+    <node x="1181.0" y="4583.0">model.enums.regex_enums.LoginCommands</node>
+    <node x="764.0" y="2714.0">model.enums.resources_enums.CropType</node>
+    <node x="1333.0" y="4383.0">model.enums.regex_enums.RegisterCommands</node>
+    <node x="1500.5" y="4583.0">model.enums.regex_enums.GameCommands</node>
+    <node x="941.5" y="3687.0">control.MainMenuController</node>
+    <node x="661.0" y="3675.0">model.enums.tool_enums.FishingPoleLevel</node>
+    <node x="1376.5" y="5075.0">model.enums.animal_enums.AnimalType</node>
+    <node x="231.0" y="5778.5">model.tools.Axe</node>
+    <node x="1583.5" y="1314.0">model.enums.resources_enums.SeasonalCrop</node>
+    <node x="563.0" y="3527.0">Main</node>
+    <node x="1438.5" y="1822.0">model.Game</node>
+    <node x="506.5" y="2270.5">model.player_data.Trade</node>
+    <node x="766.0" y="4111.0">model.enums.Menu</node>
+    <node x="1251.0" y="5243.0">model.enums.Gender</node>
+    <node x="391.0" y="5494.5">model.tools.Shear</node>
+    <node x="688.0" y="526.0">model.enums.resources_enums.MixedSeedType</node>
+    <node x="1124.5" y="5075.0">model.enums.animal_enums.FishType</node>
+    <node x="437.5" y="3687.0">view.ExitMenu</node>
+    <node x="535.5" y="818.0">model.player_data.FriendshipData</node>
+    <node x="1232.0" y="1338.5">model.User</node>
+    <node x="389.5" y="502.5">model.NPC</node>
+    <node x="591.5" y="3907.0">model.Shop</node>
+    <node x="837.5" y="3527.0">view.RegisterMenu</node>
+    <node x="598.5" y="5814.5">model.tools.BackPack</node>
+    <node x="403.5" y="4595.0">model.enums.resources_enums.SpringStock</node>
+    <node x="711.0" y="5518.5">model.tools.Pickaxe</node>
+    <node x="995.0" y="10.0">model.enums.resources_enums.ForagingTreeType</node>
+    <node x="1050.0" y="1858.0">model.enums.animal_enums.FarmAnimalType</node>
+    <node x="-22.5" y="3359.5">view.AppMenu</node>
+    <node x="882.0" y="1338.0">model.enums.animal_enums.AnimalShopItem</node>
+    <node x="725.5" y="1822.0">model.enums.animal_enums.FishingItem</node>
+    <node x="334.0" y="1182.0">model.Player</node>
+    <node x="236.0" y="2799.0">control.game.activities.CommunicateController</node>
+    <node x="216.0" y="1919.0">control.game.activities.AnimalController</node>
+    <node x="871.0" y="5754.5">model.tools.MilkPail</node>
+    <node x="-16.5" y="2318.0">model.enums.NpcDetails</node>
+    <node x="836.5" y="226.0">model.enums.tool_enums.WateringCanLevel</node>
+    <node x="1077.5" y="3527.0">view.LoginMenu</node>
+    <node x="1661.5" y="4383.0">model.enums.regex_enums.MenuCommands</node>
+    <node x="58.0" y="4595.0">model.enums.resources_enums.SummerStock</node>
+    <node x="672.5" y="23.0">control.LoginController</node>
+    <node x="432.0" y="4135.0">model.enums.animal_enums.AnimalBuildingType</node>
+    <node x="163.5" y="4799.5">model.animal.AnimalBuilding</node>
+    <node x="1031.0" y="5542.5">model.tools.Seythe</node>
+    <node x="276.0" y="3503.0">model.enums.DayOfWeek</node>
+    <node x="213.0" y="866.0">model.enums.Season</node>
+    <node x="521.0" y="239.0">control.GameController</node>
+    <node x="83.0" y="550.0">model.enums.tool_enums.ToolType</node>
+    <node x="-110.5" y="2882.0">model.player_data.Skill</node>
+    <node x="82.0" y="4899.5">model.Map</node>
+    <node x="-117.0" y="879.0">control.ProfileController</node>
+    <node x="99.0" y="3675.0">model.enums.GameObjectType</node>
+    <node x="1.0" y="1338.0">model.enums.resources_enums.YearRoundStock</node>
+    <node x="1009.5" y="5230.0">model.Result</node>
+    <node x="1388.0" y="4135.5">model.enums.regex_enums.Command</node>
+    <node x="1197.5" y="3687.0">view.GameMenu</node>
+    <node x="-108.0" y="4899.5">model.GameObject</node>
+    <node x="305.0" y="3846.0">model.enums.tool_enums.AxeLevel</node>
+    <node x="909.0" y="5099.5">model.resources.Crop</node>
+    <node x="395.0" y="-14.0">model.enums.resources_enums.MineralType</node>
+    <node x="146.0" y="4110.0">model.enums.tool_enums.BackPackLevel</node>
+    <node x="-113.5" y="1846.0">model.Time</node>
+    <node x="-114.0" y="3687.0">view.AppView</node>
+    <node x="696.5" y="5279.5">model.resources.ForagingTree</node>
+    <node x="218.0" y="250.0">model.enums.tool_enums.TrashCanLevel</node>
+    <node x="1534.0" y="5279.5">model.resources.Mineral</node>
+    <node x="1317.5" y="3527.0">view.ProfileMenu</node>
+    <node x="1191.0" y="5790.5">model.tools.TrashCan</node>
+    <node x="45.0" y="35.0">model.enums.SecurityQuestionType</node>
+    <node x="1351.0" y="5518.5">model.tools.WateringCan</node>
+    <node x="-89.0" y="5778.5">model.tools.Hoe</node>
+    <node x="551.0" y="5099.5">model.resources.MixedSeed</node>
+    <node x="1587.5" y="5802.0">model.animal.Animal</node>
+    <node x="8.5" y="3883.0">model.enums.building_enums.CraftItemType</node>
+    <node x="424.5" y="5255.0">model.enums.SkillType</node>
+    <node x="-106.0" y="250.0">model.enums.resources_enums.ForagingSeedType</node>
+    <node x="235.0" y="5099.5">model.resources.ForagingCrop</node>
+    <node x="-116.0" y="4086.0">model.enums.tool_enums.HoeLevel</node>
+    <node x="4.0" y="4799.5">model.Tile</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="view.ProfileMenu" target="view.AppMenu" relationship="REALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="1406.0" y="3491.0" />
+      <point x="66.0" y="3491.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="model.resources.Crop" target="model.GameObject" relationship="GENERALIZATION">
+      <point x="0.0" y="-31.5" />
+      <point x="986.0" y="5051.0" />
+      <point x="-34.0" y="5051.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="view.ExitMenu" target="view.AppMenu" relationship="REALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="526.0" y="3491.0" />
+      <point x="66.0" y="3491.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="view.GameMenu" target="view.AppMenu" relationship="REALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="1286.0" y="3491.0" />
+      <point x="66.0" y="3491.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="model.tools.BackPack" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-56.5" />
+      <point x="686.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="view.MainMenu" target="view.AppMenu" relationship="REALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="view.LoginMenu" target="view.AppMenu" relationship="REALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="1166.0" y="3491.0" />
+      <point x="66.0" y="3491.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="model.tools.Pickaxe" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-92.5" />
+      <point x="846.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="model.enums.regex_enums.InputFormats" target="model.enums.regex_enums.Command" relationship="REALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="386.0" y="4351.0" />
+      <point x="1466.0" y="4351.0" />
+      <point x="1466.0" y="4271.0" />
+      <point x="1506.0" y="4271.0" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="model.enums.regex_enums.MenuCommands" target="model.enums.regex_enums.Command" relationship="REALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="1786.0" y="4351.0" />
+      <point x="1466.0" y="4351.0" />
+      <point x="1466.0" y="4271.0" />
+      <point x="1506.0" y="4271.0" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="model.enums.regex_enums.RegisterCommands" target="model.enums.regex_enums.Command" relationship="REALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="1466.0" y="4271.0" />
+      <point x="1506.0" y="4271.0" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="model.tools.Hoe" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-92.5" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="model.enums.regex_enums.GameCommands" target="model.enums.regex_enums.Command" relationship="REALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="1626.0" y="4351.0" />
+      <point x="1466.0" y="4351.0" />
+      <point x="1466.0" y="4271.0" />
+      <point x="1506.0" y="4271.0" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="model.tools.FishingPole" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-92.5" />
+      <point x="206.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="model.tools.WateringCan" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-92.5" />
+      <point x="1486.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="model.enums.regex_enums.ProfileCommands" target="model.enums.regex_enums.Command" relationship="REALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="706.0" y="4351.0" />
+      <point x="1466.0" y="4351.0" />
+      <point x="1466.0" y="4271.0" />
+      <point x="1506.0" y="4271.0" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="model.resources.Mineral" target="model.GameObject" relationship="GENERALIZATION">
+      <point x="0.0" y="-31.5" />
+      <point x="1626.0" y="5051.0" />
+      <point x="-34.0" y="5051.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="model.enums.regex_enums.LoginCommands" target="model.enums.regex_enums.Command" relationship="REALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="1306.0" y="4351.0" />
+      <point x="1466.0" y="4351.0" />
+      <point x="1466.0" y="4271.0" />
+      <point x="1506.0" y="4271.0" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="model.tools.TrashCan" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-80.5" />
+      <point x="1326.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="model.tools.Axe" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-92.5" />
+      <point x="366.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="model.tools.Seythe" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-68.5" />
+      <point x="1166.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="model.tools.Shear" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-116.5" />
+      <point x="526.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+    <edge source="view.RegisterMenu" target="view.AppMenu" relationship="REALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="926.0" y="3491.0" />
+      <point x="66.0" y="3491.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="model.tools.Tool" target="model.GameObject" relationship="GENERALIZATION">
+      <point x="0.0" y="-31.5" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="model.resources.ForagingSeed" target="model.GameObject" relationship="GENERALIZATION">
+      <point x="0.0" y="-31.5" />
+      <point x="206.0" y="5051.0" />
+      <point x="-34.0" y="5051.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="model.tools.MilkPail" target="model.tools.Tool" relationship="GENERALIZATION">
+      <point x="0.0" y="-116.5" />
+      <point x="1006.0" y="5471.0" />
+      <point x="46.0" y="5471.0" />
+      <point x="46.0" y="5251.0" />
+      <point x="-34.0" y="5251.0" />
+      <point x="0.0" y="-31.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.1461308535370309" showDependencies="false" x="906.9999999999995" y="2997.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
