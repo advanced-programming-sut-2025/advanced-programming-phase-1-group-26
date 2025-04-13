@@ -1,6 +1,7 @@
 package model.enums.building_enums;
 
-public enum RecipeItem {
+public enum RecipeItem
+{
     HASHBROWNS("Hashbrowns Recipe", "A recipe to make Hashbrowns.", 50, 1),
     OMELET("Omelet Recipe", "A recipe to make Omelet.", 100, 1),
     PANCAKES("Pancakes Recipe", "A recipe to make Pancakes.", 100, 1),
