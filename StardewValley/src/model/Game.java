@@ -15,6 +15,7 @@ public class Game
     private ArrayList<Player> players = new ArrayList<>();
     private Map map;
     private Player currentPlayer;
+    private GreenHouse greenHouse;
 
     public Game(ArrayList<Player> players, int height, int width)
     {

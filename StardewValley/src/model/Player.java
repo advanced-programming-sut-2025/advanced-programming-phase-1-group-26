@@ -19,9 +19,9 @@ public class Player {
     /*TEMP*/ private boolean fainted;
 
     private Skill farmingSkill = new Skill(SkillType.Farming);
-    private  Skill miningSkill = new Skill(SkillType.Mining);
-    private  Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
-    private  Skill fishingSkill = new Skill(SkillType.Fishing);
+    private Skill miningSkill = new Skill(SkillType.Mining);
+    private Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
+    private Skill fishingSkill = new Skill(SkillType.Fishing);
 
     private HashMap<GameObjectType, Integer> inventory = new HashMap<>();
     private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
