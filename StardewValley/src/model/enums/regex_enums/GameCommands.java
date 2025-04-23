@@ -15,6 +15,16 @@ public enum GameCommands implements Command{
     SHOW_AVAILABLE_PRODUCTS(""),
     PURCHASE(""),
     SELL(""),
+    /* Player Commands */
+    ENERGY_SHOW("energy show"),
+    INVENTORY_SHOW("inventory show"),
+    INVENTORY_TRASH("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
+
+
+    /* cheat codes */
+    ENERGY_SET("energy set -v (?<value>\\d+)"),
+    ENERGY_UNLIMITED("energy unlimited"),
+
 
     ;
 
