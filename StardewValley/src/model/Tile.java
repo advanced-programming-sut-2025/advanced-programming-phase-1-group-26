@@ -16,6 +16,21 @@ public class Tile
         this.x = x;
     }
 
+    public int getY()
+    {
+        return y;
+    }
+
+    public int getX()
+    {
+        return x;
+    }
+
+    public boolean isHitByThunder()
+    {
+        return hitByThunder;
+    }
+
     public void hitByThunder()
     {
         hitByThunder = true;

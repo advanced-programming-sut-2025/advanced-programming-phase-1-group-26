@@ -21,4 +21,9 @@ public class Map
             }
         }
     }
+
+    public ArrayList<Tile> getTiles()
+    {
+        return tiles;
+    }
 }

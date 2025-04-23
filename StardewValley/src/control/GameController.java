@@ -1,10 +1,9 @@
 package control;
 
-import model.App;
-import model.Result;
-import model.Time;
+import model.*;
 import model.enums.DayOfWeek;
 import model.enums.Season;
+import model.enums.Weather;
 
 public class GameController
 {
@@ -76,6 +75,58 @@ public class GameController
     {
         Season season = App.getCurrentGame().getCurrentTime().getSeason();
         return new Result(true, "You're currently in " + season.toString() + ".");
+    }
+
+    public Result showWeather()
+    {
+        Time gameTime = App.getCurrentGame().getCurrentTime();
+
+        return new Result(true, "Today's weather is " + gameTime.getCurrentWeather() + ".");
+    }
+
+    public Result showTomorrowWeather()
+    {
+        Time gameTime = App.getCurrentGame().getCurrentTime();
+
+        return new Result(true, "Tomorrow's weather would be " + gameTime.getTomorrowWeather() + ".");
+    }
+
+    public Result cheatChangeTomorrowWeather(String weatherType)
+    {
+        Weather weather = Weather.getWeather(weatherType);
+
+        if (weather == null)
+        {
+            return new Result(false, "Invalid weather. Try again!");
+        }
+
+        Time gameTime = App.getCurrentGame().getCurrentTime();
+        gameTime.setTomorrowWeather(weather);
+
+        return new Result(true, "You're a Wizard!\nTomorrow's weather changed to " + weather + ".");
+    }
+
+    public Result cheatHitThunder(String inputX, String inputY)
+    {
+        int x = Integer.parseInt(inputX);
+        int y = Integer.parseInt(inputY);
+
+        Game game = App.getCurrentGame();
+        Tile tile = game.findTile(x, y);
+
+        if (tile == null)
+        {
+            return new Result(false, "Tile with x: " + x + " and y: " + y + " does not exist.");
+        }
+
+        if (tile.isHitByThunder())
+        {
+            return new Result(true, "This unlucky tile has already been hit by thunder.");
+        }
+
+        tile.hitByThunder();
+
+        return new Result(true, "By the might of Thor, son of Odin, this tile has been struck by lightning!");
     }
 
     public Result createNewGame(String[] usernames)

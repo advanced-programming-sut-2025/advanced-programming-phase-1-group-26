@@ -2,12 +2,19 @@ package model;
 
 import model.enums.DayOfWeek;
 import model.enums.Season;
+import model.enums.Weather;
+
+import java.util.List;
+import java.util.Random;
 
 public class Time
 {
     private int hour = 9;
     private int day = 1;
     private Season season = Season.Spring;
+
+    private Weather currentWeather = Weather.Sunny;
+    private Weather tomorrowWeather = Weather.Sunny;
 
     public void updateHour(int hourNum)
     {
@@ -29,6 +36,7 @@ public class Time
             day = ((day - 29) % 28) + 1;
             season = season.update(seasonNum);
         }
+        updateWeather();
     }
 
     public int getHour()
@@ -46,12 +54,27 @@ public class Time
         return season;
     }
 
-    public DayOfWeek getDayOfWeek()
+    public Weather getCurrentWeather()
     {
-        return DayOfWeek.values()[(day - 1) % DayOfWeek.values().length];
+        return currentWeather;
     }
 
-    public void advanceHour(int amount) {}
+    public Weather getTomorrowWeather()
+    {
+        return tomorrowWeather;
+    }
 
-    public void advanceDay(int amount) {}
+    public void setTomorrowWeather(Weather tomorrowWeather)
+    {
+        this.tomorrowWeather = tomorrowWeather;
+    }
+
+    private void updateWeather()
+    {
+        currentWeather = tomorrowWeather;
+
+        Random random = new Random();
+        List<Weather> list = season.getWeatherTypes();
+        tomorrowWeather = list.get(random.nextInt(list.size()));
+    }
 }

@@ -39,6 +39,25 @@ public class GameMenu implements AppMenu
         {
             String date = matcher.group("date");
             System.out.println(controller.cheatAdvanceDate(date));
+        } else if (GameCommands.SHOW_WEATHER.getMatcher(input) != null)
+        {
+            System.out.println(controller.showWeather());
+        } else if (GameCommands.SHOW_TOMORROW_WEATHER.getMatcher(input) != null)
+        {
+            System.out.println(controller.showTomorrowWeather());
+        } else if ((matcher = GameCommands.CHEAT_CODE_SET_TOMORROW_WEATHER.getMatcher(input)) != null)
+        {
+            String type = matcher.group("type");
+            System.out.println(controller.cheatChangeTomorrowWeather(type));
+        } else if ((matcher = GameCommands.CHEAT_CODE_HIT_THUNDER.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x");
+            String y = matcher.group("y");
+            System.out.println(controller.cheatHitThunder(x,y));
+        }
+        else
+        {
+            System.out.println("invalid command");
         }
     }
 }

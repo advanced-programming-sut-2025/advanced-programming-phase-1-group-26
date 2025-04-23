@@ -9,16 +9,16 @@ import java.util.Random;
 public class Game
 {
     private Time currentTime = new Time();
-    private Weather currentWeather = Weather.Sunny;
-    private Weather tomorrowWeather = Weather.Sunny;
+
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
     private Map map;
     private Player currentPlayer;
-    private GreenHouse greenHouse;
+    private GreenHouse greenHouse = null;
 
-    public Game()
+    public Game() //TODO: this is only for test, should be removed later
     {
+        this.map = new Map(20, 20);
     }
 
     public Game(ArrayList<Player> players, int height, int width)
@@ -30,16 +30,6 @@ public class Game
     public Time getCurrentTime()
     {
         return currentTime;
-    }
-
-    public Weather getCurrentWeather()
-    {
-        return currentWeather;
-    }
-
-    public Weather getTomorrowWeather()
-    {
-        return tomorrowWeather;
     }
 
     public ArrayList<NPC> getNPCs() {
@@ -57,13 +47,16 @@ public class Game
         return currentPlayer;
     }
 
-    public void updateTime()
+    public Tile findTile(int x, int y)
     {
-        currentTime.updateHour(1);
-        currentWeather = tomorrowWeather;
+        for (Tile tile : map.getTiles())
+        {
+            if (tile.getX() == x && tile.getY() == y)
+            {
+                return tile;
+            }
+        }
 
-        Random random = new Random();
-        List<Weather> list = currentTime.getSeason().getWeatherTypes();
-        tomorrowWeather = list.get(random.nextInt(list.size()));
+        return null;
     }
 }
