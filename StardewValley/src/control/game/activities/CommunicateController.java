@@ -20,6 +20,13 @@ public class CommunicateController
     }
 
     public boolean checkFriendship (Player player1, Player player2, String command) { //TODO: might change string to command
+
+        switch (player1.getFriendships().get(player2).getLevel()) {
+            case 0:
+                if (command.equals("talk")) {
+                    return true;
+                }
+        }
         return true;
     }
 

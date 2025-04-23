@@ -17,11 +17,11 @@ public enum PickaxeLevel {
         this.failedEnergyUsage = Math.max(baseEnergyUsage - 1, 0);
     }
 
-    public int getFailedEnergyUsage() {
-        return failedEnergyUsage;
-    }
-
     public int getBaseEnergyUsage() {
         return baseEnergyUsage;
+    }
+
+    public int getFailedEnergyUsage() {
+        return failedEnergyUsage;
     }
 }

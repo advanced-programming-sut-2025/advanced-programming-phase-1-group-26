@@ -15,9 +15,8 @@ import java.util.Map;
 public class Player {
 
     User user;
-
     private int energy;
-    private final static int maxEnergy = 200;
+    private int maxEnergy = 200;
     /*TEMP*/ private boolean fainted;
 
     private Skill farmingSkill = new Skill(SkillType.Farming);
@@ -25,25 +24,28 @@ public class Player {
     private  Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
     private  Skill fishingSkill = new Skill(SkillType.Fishing);
 
-    private HashMap<GameObject, Integer> inventory = new HashMap<>();
+    private HashMap<Integer, GameObject> inventory = new HashMap<>();
     private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
     private ArrayList<Trade> requestTrades = new ArrayList<>();
     private ArrayList<Trade> offerTrades = new ArrayList<>();
     private Player zeidy;
+
     private Tool currentTool;
 
     private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
 
     public Player(User user) {
         this.user = user;
-        this.energy = 200;
+        this.energy = maxEnergy;
         this.fainted = false;
 
         for (Player player : App.getCurrentGame().getPlayers()) {
             FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
             this.friendships.put(player, newFriendshipData);
         }
+
         this.zeidy = null;
+
     }
     
 
@@ -51,12 +53,20 @@ public class Player {
         return energy;
     }
 
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
     public void increaseEnergy(int energy) {
         this.energy += energy;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
+    public int getMaxEnergy() {
+        return this.maxEnergy;
+    }
+
+    public void setMaxEnergy(int maxEnergy) {
+        this.maxEnergy = maxEnergy;
     }
 
     public boolean isFainted() {
@@ -83,8 +93,15 @@ public class Player {
         return fishingSkill;
     }
 
+    public Tool getCurrentTool() {
+        return currentTool;
+    }
 
-    public HashMap<GameObject, Integer> getInventory() {
+    public void setCurrentTool(Tool currentTool) {
+        this.currentTool = currentTool;
+    }
+
+    public HashMap<Integer, GameObject> getInventory() {
         return inventory;
     }
 
@@ -108,18 +125,11 @@ public class Player {
         this.zeidy = zeidy;
     }
 
-    public Tool getCurrentTool() {
-        return currentTool;
-    }
-
-    public void setCurrentTool(Tool currentTool) {
-        this.currentTool = currentTool;
-    }
-
-    public ArrayList<GameObject> getInventoryItems() {
+    public ArrayList<GameObject> getInventoryItems () {
         ArrayList<GameObject> temp = new ArrayList<>();
-        for (Map.Entry<GameObject, Integer> entry : this.getInventory().entrySet()) {
-            temp.add(entry.getKey());
+        for (Map.Entry<Integer, GameObject> entry : this.getInventory().entrySet()) {
+            GameObject type = entry.getValue();
+            temp.add(type);
         }
         return temp;
     }
