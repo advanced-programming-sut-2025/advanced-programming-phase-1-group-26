@@ -9,23 +9,25 @@ public class Time
     private int day = 1;
     private Season season = Season.Spring;
 
-    public void update()
+    public void updateHour(int hourNum)
     {
-        hour += 1;
-        if (hour == 22)
+        hour += hourNum;
+        if (hour >= 23)
         {
-            endDay();
+            int dayNum = ((hour - 23) / 14) + 1;
+            hour = ((hour - 23) % 14) + 9;
+            updateDay(dayNum);
         }
     }
 
-    private void endDay()
+    public void updateDay(int dayNum)
     {
-        hour = 9;
-        day += 1;
-        if (day > 28)
+        day += dayNum;
+        if (day >= 29)
         {
-            day = 1;
-            season = season.next();
+            int seasonNum = ((day - 29) / 28) + 1;
+            day = ((day - 29) % 28) + 1;
+            season = season.update(seasonNum);
         }
     }
 

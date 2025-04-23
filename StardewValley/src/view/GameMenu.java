@@ -1,10 +1,44 @@
 package view;
 
+import control.GameController;
+import model.enums.regex_enums.GameCommands;
+
 import java.util.Scanner;
+import java.util.regex.Matcher;
 
-public class GameMenu implements AppMenu {
+public class GameMenu implements AppMenu
+{
+    GameController controller = new GameController();
+
     @Override
-    public void check(Scanner scanner) {
+    public void check(Scanner scanner)
+    {
+        String input = scanner.nextLine().trim();
+        Matcher matcher;
 
+        if (GameCommands.SHOW_TIME.getMatcher(input) != null)
+        {
+            System.out.println(controller.showTime());
+        } else if (GameCommands.SHOW_DATE.getMatcher(input) != null)
+        {
+            System.out.println(controller.showDate());
+        } else if (GameCommands.SHOW_DATE_TIME.getMatcher(input) != null)
+        {
+            System.out.println(controller.showDateAndTime());
+        } else if (GameCommands.SHOW_DAY_OF_WEEK.getMatcher(input) != null)
+        {
+            System.out.println(controller.showDayOfWeek());
+        } else if (GameCommands.SHOW_SEASON.getMatcher(input) != null)
+        {
+            System.out.println(controller.showSeason());
+        } else if ((matcher = GameCommands.CHEAT_CODE_ADVANCE_TIME.getMatcher(input)) != null)
+        {
+            String time = matcher.group("time");
+            System.out.println(controller.cheatAdvanceTime(time));
+        } else if ((matcher = GameCommands.CHEAT_CODE_ADVANCE_DATE.getMatcher(input)) != null)
+        {
+            String date = matcher.group("date");
+            System.out.println(controller.cheatAdvanceDate(date));
+        }
     }
 }

@@ -17,6 +17,10 @@ public class Game
     private Player currentPlayer;
     private GreenHouse greenHouse;
 
+    public Game()
+    {
+    }
+
     public Game(ArrayList<Player> players, int height, int width)
     {
         this.players = players;
@@ -55,7 +59,7 @@ public class Game
 
     public void updateTime()
     {
-        currentTime.update();
+        currentTime.updateHour(1);
         currentWeather = tomorrowWeather;
 
         Random random = new Random();
