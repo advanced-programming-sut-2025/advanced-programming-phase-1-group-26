@@ -6,6 +6,8 @@ import model.player_data.Skill;
 import model.player_data.Trade;
 import model.enums.GameObjectType;
 import model.enums.SkillType;
+import model.tools.Tool;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,8 @@ public class Player {
     private ArrayList<Trade> requestTrades = new ArrayList<>();
     private ArrayList<Trade> offerTrades = new ArrayList<>();
     private Player zeidy;
+
+    private Tool currentTool;
 
     private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
 
@@ -89,6 +93,13 @@ public class Player {
         return fishingSkill;
     }
 
+    public Tool getCurrentTool() {
+        return currentTool;
+    }
+
+    public void setCurrentTool(Tool currentTool) {
+        this.currentTool = currentTool;
+    }
 
     public HashMap<Integer, GameObject> getInventory() {
         return inventory;
