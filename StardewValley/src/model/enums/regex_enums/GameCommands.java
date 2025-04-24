@@ -30,7 +30,7 @@ public enum GameCommands implements Command
     SHOW_TOMORROW_WEATHER("weather\\s+forecast"),
 
     CHEAT_CODE_SET_TOMORROW_WEATHER("cheat\\s+weather\\s+set\\s+(?<type>\\S+)"),
-    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<x>-?\\d+)\\s+(?<x>-?\\d+)"),
+    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<y>-?\\d+)\\s+(?<x>-?\\d+)"),
 
     ;
 

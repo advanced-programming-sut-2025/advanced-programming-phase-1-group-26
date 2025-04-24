@@ -1,6 +1,8 @@
 package view;
 
 import control.GameController;
+import model.App;
+import model.Point;
 import model.enums.regex_enums.GameCommands;
 
 import java.util.Scanner;
@@ -15,6 +17,12 @@ public class GameMenu implements AppMenu
     {
         String input = scanner.nextLine().trim();
         Matcher matcher;
+
+        if (input.equals("map"))
+        {
+            App.getCurrentGame().getFarm().initializeFarm();
+            System.out.println(App.getCurrentGame().getFarm().getMapString(new Point(0, 0), 70, 70));
+        }
 
         if (GameCommands.SHOW_TIME.getMatcher(input) != null)
         {

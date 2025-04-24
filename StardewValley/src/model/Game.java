@@ -1,5 +1,6 @@
 package model;
 
+import model.enums.FarmTypes;
 import model.enums.Weather;
 
 import java.util.ArrayList;
@@ -16,15 +17,21 @@ public class Game
     private Player currentPlayer;
     private GreenHouse greenHouse = null;
 
+    private Farm farm = new Farm(0, FarmTypes.STANDARD);
+
+    public Farm getFarm()
+    {
+        return farm;
+    }
+
     public Game() //TODO: this is only for test, should be removed later
     {
-        this.map = new Map(20, 20);
+
     }
 
     public Game(ArrayList<Player> players, int height, int width)
     {
         this.players = players;
-        this.map = new Map(height, width);
     }
 
     public Time getCurrentTime()
@@ -47,16 +54,55 @@ public class Game
         return currentPlayer;
     }
 
-    public Tile findTile(int x, int y)
+    public Tile findTile(int y, int x)
     {
-        for (Tile tile : map.getTiles())
+        return farm.getMap().get(y).get(x);
+    }
+
+    public void endDay()
+    {
+        // TODO: add this methods later
+        // resetPlayersEnergy();
+        // growPlants();
+        // respawnPlayers();
+    }
+
+    public void nextTurn()
+    {
+        int currentIndex = players.indexOf(currentPlayer);
+        int index = currentIndex;
+
+        // loop over players until reaches one that hasn't fainted yet (has enough energy)
+
+        do
         {
-            if (tile.getX() == x && tile.getY() == y)
+            if (index == players.size() - 1)
             {
-                return tile;
+                index = 0;
+                currentTime.updateHour(1);
+            } else
+            {
+                index += 1;
             }
+
+            currentPlayer = players.get(index);
+
+            if (currentPlayer.getEnergy() > 0)
+            {
+                break;
+            }
+
+        } while (index != currentIndex);
+
+        // if it reaches the original player again, the day is ended, and things are reset
+        if (index == currentIndex)
+        {
+            currentTime.updateHour(23 - currentTime.getHour());
         }
 
-        return null;
+        if (currentTime.getHour() == 9)
+        {
+            endDay();
+        }
     }
 }
