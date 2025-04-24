@@ -12,9 +12,10 @@ public class NPC {
     private int levelOfFriendship;
     public NpcDetails npcDetails;
     private String name;
-    private ArrayList<GameObjectType> favorites;
-    private HashMap<GameObjectType, Integer> requests;
-    private HashMap<GameObjectType, Integer> rewards;
+    private ArrayList<String> dialogues = new ArrayList<>();
+    private ArrayList<GameObjectType> favorites = new ArrayList<>();
+    private HashMap<GameObjectType, Integer> requests = new HashMap<>();
+    private HashMap<GameObjectType, Integer> rewards = new HashMap<>();
 
     public NPC(NpcDetails npcDetails, Tile location, int friendship, int levelOfFriendship) {
         this.location = location;

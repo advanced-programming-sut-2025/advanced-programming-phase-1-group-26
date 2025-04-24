@@ -1,57 +1,57 @@
 package model.enums.animal_enums;
 
-import model.enums.GameObjectType;
+import model.enums.resources_enums.ResourceItem;
 
 import java.util.Map;
 import java.util.HashMap;
 
-public enum FarmBuilding {
+public enum FarmBuilding
+{
     BARN("Barn", "Houses 4 barn-dwelling animals.", 6000, mapOf(
-            GameObjectType.WOOD, 350,
-            GameObjectType.STONE, 150
-    ), "7x4", 1),
+            ResourceItem.WOOD, 350,
+            ResourceItem.STONE, 150), "7x4", 1),
 
     BIG_BARN("Big Barn", "Houses 8 barn-dwelling animals. Unlocks goats.", 12000, mapOf(
-            GameObjectType.WOOD, 450,
-            GameObjectType.STONE, 200
+            ResourceItem.WOOD, 450,
+            ResourceItem.STONE, 200
     ), "7x4", 1),
 
     DELUXE_BARN("Deluxe Barn", "Houses 12 barn-dwelling animals. Unlocks sheep and pigs.", 25000, mapOf(
-            GameObjectType.WOOD, 550,
-            GameObjectType.STONE, 300
+            ResourceItem.WOOD, 550,
+            ResourceItem.STONE, 300
     ), "7x4", 1),
 
     COOP("Coop", "Houses 4 coop-dwelling animals.", 4000, mapOf(
-            GameObjectType.WOOD, 300,
-            GameObjectType.STONE, 100
+            ResourceItem.WOOD, 300,
+            ResourceItem.STONE, 100
     ), "6x3", 1),
 
     BIG_COOP("Big Coop", "Houses 8 coop-dwelling animals. Unlocks ducks.", 10000, mapOf(
-            GameObjectType.WOOD, 400,
-            GameObjectType.STONE, 150
+            ResourceItem.WOOD, 400,
+            ResourceItem.STONE, 150
     ), "6x3", 1),
 
     DELUXE_COOP("Deluxe Coop", "Houses 12 coop-dwelling animals. Unlocks rabbits.", 20000, mapOf(
-            GameObjectType.WOOD, 500,
-            GameObjectType.STONE, 200
+            ResourceItem.WOOD, 500,
+            ResourceItem.STONE, 200
     ), "6x3", 1),
 
     WELL("Well", "Provides a place for you to refill your watering can.", 1000, mapOf(
-            GameObjectType.STONE, 75
+            ResourceItem.STONE, 75
     ), "3x3", 1),
 
     SHIPPING_BIN("Shipping Bin", "Items placed in it will be included in the nightly shipment.", 250, mapOf(
-            GameObjectType.WOOD, 150
+            ResourceItem.WOOD, 150
     ), "1x1", -1);
 
     private final String name;
     private final String description;
     private final int price;
-    private final Map<GameObjectType, Integer> materials;
+    private final Map<ResourceItem, Integer> materials;
     private final String size;
     private final int dailyLimit;
 
-    FarmBuilding(String name, String description, int price, Map<GameObjectType, Integer> materials, String size, int dailyLimit) {
+    FarmBuilding(String name, String description, int price, Map<ResourceItem, Integer> materials, String size, int dailyLimit) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -72,7 +72,7 @@ public enum FarmBuilding {
         return price;
     }
 
-    public Map<GameObjectType, Integer> getMaterials() {
+    public Map<ResourceItem, Integer> getMaterials() {
         return materials;
     }
 
@@ -84,10 +84,10 @@ public enum FarmBuilding {
         return dailyLimit;
     }
 
-    private static Map<GameObjectType, Integer> mapOf(Object... entries) {
-        Map<GameObjectType, Integer> map = new HashMap<>();
+    private static Map<ResourceItem, Integer> mapOf(Object... entries) {
+        Map<ResourceItem, Integer> map = new HashMap<>();
         for (int i = 0; i < entries.length; i += 2) {
-            map.put((GameObjectType) entries[i], (Integer) entries[i + 1]);
+            map.put((ResourceItem) entries[i], (Integer) entries[i + 1]);
         }
         return map;
     }
