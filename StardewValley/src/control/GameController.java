@@ -4,8 +4,6 @@ import model.App;
 import model.GameObject;
 import model.Player;
 import model.Result;
-import model.enums.tool_enums.AxeLevel;
-import model.enums.tool_enums.ToolType;
 import model.tools.*;
 
 import java.util.ArrayList;
