@@ -41,7 +41,7 @@ public class Tile
         return texture;
     }
 
-    public void setTexture(TileTexture texture)
+    public void setType(TileTexture texture)
     {
         this.texture = texture;
     }
@@ -49,5 +49,10 @@ public class Tile
     public GameObject getObject()
     {
         return object;
+    }
+
+    public void setObject(GameObject object)
+    {
+        this.object = object;
     }
 }

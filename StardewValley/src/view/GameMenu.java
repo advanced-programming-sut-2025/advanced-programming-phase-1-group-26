@@ -2,7 +2,9 @@ package view;
 
 import control.GameController;
 import model.App;
+import model.Farm;
 import model.Point;
+import model.enums.FarmTypes;
 import model.enums.regex_enums.GameCommands;
 
 import java.util.Scanner;
@@ -18,11 +20,7 @@ public class GameMenu implements AppMenu
         String input = scanner.nextLine().trim();
         Matcher matcher;
 
-        if (input.equals("map"))
-        {
-            App.getCurrentGame().getFarm().initializeFarm();
-            System.out.println(App.getCurrentGame().getFarm().getMapString(new Point(0, 0), 70, 70));
-        }
+
 
         if (GameCommands.SHOW_TIME.getMatcher(input) != null)
         {
@@ -63,6 +61,44 @@ public class GameMenu implements AppMenu
             String y = matcher.group("y");
             System.out.println(controller.cheatHitThunder(x,y));
         }
+
+        else if (input.equals("1"))
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                Farm farm = new Farm(FarmTypes.STANDARD);
+                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+            }
+        }
+
+        else if (input.equals("2"))
+        {
+            for (int i = 0; i < 100; i++)
+            {
+
+                Farm farm = new Farm(FarmTypes.RIVERLAND);
+                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+            }
+        }
+
+        else if (input.equals("3"))
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                Farm farm = new Farm(FarmTypes.HILL_TOP);
+                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+            }
+        }
+
+        else if (input.equals("4"))
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                Farm farm = new Farm(FarmTypes.BEACH);
+                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+            }
+        }
+
         else
         {
             System.out.println("invalid command");

@@ -1,11 +1,13 @@
 package model.resources;
 
+import model.Game;
+import model.GameObject;
 import model.enums.resources_enums.ForagingTreeType;
 import model.enums.Season;
 
 import java.util.List;
 
-public class ForagingTree
+public class ForagingTree extends GameObject
 {
     private final ForagingTreeType treeType;
     private List<Season> seasons;
@@ -14,5 +16,6 @@ public class ForagingTree
     {
         this.treeType = type;
         this.seasons = treeType.getSeasons();
+        this.type = type.getType();
     }
 }

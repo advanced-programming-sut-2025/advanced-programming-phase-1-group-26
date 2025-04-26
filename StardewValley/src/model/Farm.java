@@ -2,140 +2,123 @@ package model;
 
 import model.enums.FarmTypes;
 import model.enums.TileTexture;
+import model.enums.resources_enums.*;
+import model.resources.ForagingCrop;
+import model.resources.ForagingSeed;
+import model.resources.ForagingTree;
+import model.resources.Tree;
+import model.tools.Tool;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-public class Farm
-{
+public class Farm {
     private final int height = 70;
     private final int width = 70;
 
-    private final int farmId;
-    private final FarmTypes type;
+    private final FarmTypes farmType;
+    private Map<String, List<Point>> mapData;
+    private Tile[][] tiles;
+    private static final int WIDTH = 70;
+    private static final int HEIGHT = 70;
 
-    private ArrayList<ArrayList<Tile>> map = new ArrayList<>();
-    private ArrayList<Point> exitPoints = new ArrayList<>();
-
-    public Farm(int farmId, FarmTypes farmType)
+    public Farm(FarmTypes farmType)
     {
-        this.farmId = farmId;
-        this.type = farmType;
-    }
+        this.farmType = farmType;
+        this.tiles = new Tile[WIDTH][HEIGHT];
 
-    public void initializeFarm()
-    {
-        makeFarm();
-
-        makeInMap(type.getCabinPoint(), type.getCabinLength(), type.getCabinWidth(), TileTexture.CABIN);
-        makeInMap(type.getFirstLakePoint(), type.getFirstLakeLength(), type.getFirstLakeWidth(), TileTexture.LAKE);
-        if (type.getSecondLakePoint() != null)
+        for (int y = 0; y < HEIGHT; y++)
         {
-            makeInMap(type.getSecondLakePoint(), type.getSecondLakeLength(), type.getSecondLakeWidth(), TileTexture.LAKE);
-        }
-        makeInMap(type.getQuarryPoint(), type.getQuarryLength(), type.getQuarryWidth(), TileTexture.QUARRY);
-        makeInMap(type.getGreenHousePoint(), type.getGreenHouseLength(), type.getGreenHouseWidth(), TileTexture.GREEN_HOUSE);
-
-        exitPoints = new ArrayList<>(type.getExitPoints());
-        setBorder();
-        setPlainTiles();
-    }
-
-    private void makeFarm()
-    {
-        for (int y = 0; y < height; y++)
-        {
-            ArrayList<Tile> row = new ArrayList<>();
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < WIDTH; x++)
             {
-                row.add(new Tile(new Point(x, y)));
-            }
-            map.add(row);
-        }
-    }
-
-    private void makeInMap(Point location, int length, int width, TileTexture texture)
-    {
-        for (int y = location.getY(); y < location.getY() + width; y++)
-        {
-            for (int x = location.getX(); x < location.getX() + length; x++)
-            {
-                Tile tile = map.get(y).get(x);
-                tile.setTexture(texture);
+                tiles[y][x] = new Tile(new Point(y, x));
+                tiles[y][x].setType(TileTexture.LAND);
             }
         }
+
+        this.mapData = MapLoader.loadMap(farmType.getMapPath());
+        if (mapData == null)
+        {
+            throw new IllegalStateException("Failed to load farm map: " + farmType.getName());
+        }
+
+        applyMap();
+        setRandomItems();
     }
 
-    public void setPlainTiles()
+    private void applyMap()
     {
-        for (int y = 0; y < height; y++)
+        for (String typeName : mapData.keySet())
         {
-            for (int x = 0; x < width; x++)
+            TileTexture texture = mapTypeNameToTexture(typeName);
+            if (texture == null) continue;
+
+            List<Point> points = mapData.get(typeName);
+            for (Point p : points)
             {
-                Tile tile = map.get(y).get(x);
-                if (tile.getTexture() == null)
-                {
-                    tile.setTexture(TileTexture.LAND);
+                if (isInBounds(p.getY(), p.getX())) {
+                    tiles[p.getY()][p.getX()].setType(texture);
                 }
             }
         }
     }
 
-    public void setBorder()
+    private boolean isInBounds(int y, int x)
     {
-        for (int y = 0; y < height; y++)
-        {
-            map.get(y).get(0).setTexture(TileTexture.GRASS);
-            map.get(y).get(1).setTexture(TileTexture.GRASS);
-            map.get(y).get(width - 2).setTexture(TileTexture.GRASS);
-            map.get(y).get(width - 1).setTexture(TileTexture.GRASS);
-        }
-
-        for (int x = 0; x < width; x++)
-        {
-            map.get(0).get(x).setTexture(TileTexture.GRASS);
-            map.get(1).get(x).setTexture(TileTexture.GRASS);
-            map.get(height - 2).get(x).setTexture(TileTexture.GRASS);
-            map.get(height - 1).get(x).setTexture(TileTexture.GRASS);
-        }
-
-        for (int y = 0; y < 2; y++)
-        {
-            map.get(y).get(exitPoints.get(0).getX()).setTexture(TileTexture.LAND);
-            map.get(height - 1 - y).get(exitPoints.get(1).getX()).setTexture(TileTexture.LAND);
-        }
+        return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
     }
 
-    public Tile getRandomFreeTile()
+    private TileTexture mapTypeNameToTexture(String typeName)
     {
-        while (true)
+        return switch (typeName.toLowerCase())
         {
-            int y = (int) (Math.random() * height);
-            int x = (int) (Math.random() * width);
-            Tile tile = map.get(y).get(x);
-            if (tile.getTexture() == TileTexture.LAND)
-            {
-                return tile;
-            }
+            case "lake" -> TileTexture.LAKE;
+            case "grass" -> TileTexture.GRASS;
+            case "cabin" -> TileTexture.CABIN;
+            case "greenhouse" -> TileTexture.GREEN_HOUSE;
+            case "quarry" -> TileTexture.QUARRY;
+            default -> null;
+        };
+    }
+
+    public Tile getTile(int y, int x)
+    {
+        if (isInBounds(y, x))
+        {
+            return tiles[y][x];
         }
+        return null;
     }
 
     public String getMapString(Point location, int length, int width)
     {
         StringBuilder output = new StringBuilder();
-        for (int y = 0; y < height; y++)
+        for (int y = 0; y < length; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                Tile tile = map.get(y).get(x);
-                if (tile.getObject() == null)
-                {
+                Tile tile = tiles[y][x];
                     switch (tile.getTexture())
                     {
                         case CABIN:
-                            output.append(Color.YELLOW + "CC" + Color.RESET);
+                            output.append(Color.RED + "CC" + Color.RESET);
                             break;
                         case LAND:
-                            output.append(Color.BROWN + "LL" + Color.RESET);
+                            if (tile.getObject() == null)
+                            {
+                                output.append(Color.YELLOW + "LL" + Color.RESET);
+                            } else
+                            {
+                                switch (tile.getObject())
+                                {
+                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    default: output.append(Color.YELLOW + "LL" + Color.RESET); break;
+                                }
+                            }
                             break;
                         case LAKE:
                             output.append(Color.BLUE + "OO" + Color.RESET);
@@ -147,24 +130,107 @@ public class Farm
                             output.append(Color.DARK_GREEN + "GG" + Color.RESET);
                             break;
                         case GRASS:
-                            output.append(Color.GREEN + "GG" + Color.RESET);
+                            if (tile.getObject() == null)
+                            {
+                                output.append(Color.GREEN + "GG" + Color.RESET);
+                            } else
+                            {
+                                switch (tile.getObject())
+                                {
+                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    default: output.append(Color.GREEN + "GG" + Color.RESET); break;
+                                }
+                            }
                             break;
                         default:
                             output.append(Color.RED + "##" + Color.RESET);
                             break;
                     }
-                } else
-                {
-
-                }
             }
             output.append("\n");
         }
         return output.toString();
     }
 
-    public ArrayList<ArrayList<Tile>> getMap()
+    public Tile getRandomFreeTile()
     {
-        return map;
+        while (true)
+        {
+            int y = (int) (Math.random() * height);
+            int x = (int) (Math.random() * width);
+            Tile tile = tiles[y][x];
+            if ((tile.getTexture() == TileTexture.LAND) || (tile.getTexture() == TileTexture.GRASS))
+            {
+                return tile;
+            }
+        }
+    }
+
+    public int getFreeTilesNum()
+    {
+        int count = 0;
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Tile tile = tiles[y][x];
+                if ((tile.getTexture() == TileTexture.LAND) || (tile.getTexture() == TileTexture.GRASS))
+                {
+                    count += 1;
+                }
+            }
+        }
+        return count;
+    }
+
+    public static <T extends Enum<T>> T randomItem(Class<T> clazz)
+    {
+        T[] constants = clazz.getEnumConstants();
+        return constants[new java.util.Random().nextInt(constants.length)];
+    }
+
+
+    public void setRandomItems()
+    {
+        int randomItemsCount = getFreeTilesNum() / 8;
+
+        for (int i = 0; i < randomItemsCount / 5; i++)
+        {
+            Tile random = getRandomFreeTile();
+            TreeType type = randomItem(TreeType.class);
+            random.setObject(new Tree(type));
+        }
+
+        for (int i = 0; i < randomItemsCount / 5; i++)
+        {
+            Tile random = getRandomFreeTile();
+            ResourceItem type = randomItem(ResourceItem.class);
+            random.setObject(new Resource(type));
+        }
+
+        for (int i = 0; i < randomItemsCount / 5; i++)
+        {
+            Tile random = getRandomFreeTile();
+            ForagingCropType type = randomItem(ForagingCropType.class);
+            random.setObject(new ForagingCrop(type));
+        }
+
+        for (int i = 0; i < randomItemsCount / 5; i++)
+        {
+            Tile random = getRandomFreeTile();
+            ForagingSeedType type = randomItem(ForagingSeedType.class);
+            random.setObject(new ForagingSeed(type));
+        }
+
+        for (int i = 0; i < randomItemsCount / 5; i++)
+        {
+            Tile random = getRandomFreeTile();
+            ForagingTreeType type = randomItem(ForagingTreeType.class);
+            random.setObject(new ForagingTree(type));
+        }
     }
 }

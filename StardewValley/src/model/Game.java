@@ -13,16 +13,8 @@ public class Game
 
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
-    private Map map;
     private Player currentPlayer;
     private GreenHouse greenHouse = null;
-
-    private Farm farm = new Farm(0, FarmTypes.STANDARD);
-
-    public Farm getFarm()
-    {
-        return farm;
-    }
 
     public Game() //TODO: this is only for test, should be removed later
     {
@@ -56,7 +48,8 @@ public class Game
 
     public Tile findTile(int y, int x)
     {
-        return farm.getMap().get(y).get(x);
+//        return farm.getMap().get(y).get(x);
+    return null;
     }
 
     public void endDay()
