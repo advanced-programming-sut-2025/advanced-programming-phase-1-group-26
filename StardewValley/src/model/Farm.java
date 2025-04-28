@@ -7,7 +7,6 @@ import model.resources.ForagingCrop;
 import model.resources.ForagingSeed;
 import model.resources.ForagingTree;
 import model.resources.Tree;
-import model.tools.Tool;
 
 import java.util.List;
 import java.util.Map;
@@ -156,7 +155,7 @@ public class Farm {
         return output.toString();
     }
 
-    public Tile getRandomFreeTile()
+    private Tile getRandomFreeTile()
     {
         while (true)
         {
@@ -170,7 +169,7 @@ public class Farm {
         }
     }
 
-    public int getFreeTilesNum()
+    private int getFreeTilesNum()
     {
         int count = 0;
         for (int y = 0; y < height; y++)
@@ -187,16 +186,15 @@ public class Farm {
         return count;
     }
 
-    public static <T extends Enum<T>> T randomItem(Class<T> clazz)
+    private static <T extends Enum<T>> T randomItem(Class<T> clazz)
     {
         T[] constants = clazz.getEnumConstants();
         return constants[new java.util.Random().nextInt(constants.length)];
     }
 
-
-    public void setRandomItems()
+    private void setRandomItems()
     {
-        int randomItemsCount = getFreeTilesNum() / 8;
+        int randomItemsCount = getFreeTilesNum() / 8; //TODO: used some hard coded constants here
 
         for (int i = 0; i < randomItemsCount / 5; i++)
         {
@@ -233,4 +231,6 @@ public class Farm {
             random.setObject(new ForagingTree(type));
         }
     }
+
+
 }

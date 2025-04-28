@@ -1,11 +1,6 @@
 package model;
 
-import model.enums.FarmTypes;
-import model.enums.Weather;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Game
 {
@@ -21,7 +16,7 @@ public class Game
 
     }
 
-    public Game(ArrayList<Player> players, int height, int width)
+    public Game(ArrayList<Player> players)
     {
         this.players = players;
     }

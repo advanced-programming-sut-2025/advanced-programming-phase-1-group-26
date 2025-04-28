@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Player {
 
     private final User user;
-    private final int farmId;
+    private final Farm farm;
 
     private int energy;
     private final static int maxEnergy = 200;
@@ -32,9 +32,9 @@ public class Player {
 
     private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
 
-    public Player(User user, int farmId) {
+    public Player(User user, Farm farm) {
         this.user = user;
-        this.farmId = farmId;
+        this.farm = farm;
         this.energy = 200;
         this.fainted = false;
 

@@ -35,4 +35,9 @@ public class App {
     {
         App.currentMenu = currentMenu;
     }
+
+    public static void addGame(Game game)
+    {
+        games.add(game);
+    }
 }

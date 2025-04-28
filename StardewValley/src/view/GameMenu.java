@@ -104,4 +104,9 @@ public class GameMenu implements AppMenu
             System.out.println("invalid command");
         }
     }
+
+    public static void println(String output)
+    {
+        System.out.println(output);
+    }
 }
