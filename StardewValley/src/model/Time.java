@@ -2,6 +2,10 @@ package model;
 
 import model.enums.DayOfWeek;
 import model.enums.Season;
+import model.enums.Weather;
+
+import java.util.List;
+import java.util.Random;
 
 public class Time
 {
@@ -9,27 +13,32 @@ public class Time
     private int day = 1;
     private Season season = Season.Spring;
 
-    public void update()
+    private Weather currentWeather = Weather.Sunny;
+    private Weather tomorrowWeather = Weather.Sunny;
+
+    public void updateHour(int hourNum)
     {
-        hour += 1;
-        if (hour == 22)
+        hour += hourNum;
+        if (hour >= 23)
         {
-            endDay();
+            int dayNum = ((hour - 23) / 14) + 1;
+            hour = ((hour - 23) % 14) + 9;
+            updateDay(dayNum);
         }
     }
 
-    private void endDay()
+    public void updateDay(int dayNum)
     {
-        hour = 9;
-        day += 1;
-        if (day > 28)
-        {
-            day = 1;
-            season = season.next();
-        }
         //setting energies to maximum
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.setEnergy(player.getMaxEnergy());
+        }
+        day += dayNum;
+        if (day >= 29)
+        {
+            int seasonNum = ((day - 29) / 28) + 1;
+            day = ((day - 29) % 28) + 1;
+            season = season.update(seasonNum);
         }
     }
 
@@ -48,12 +57,27 @@ public class Time
         return season;
     }
 
-    public DayOfWeek getDayOfWeek()
+    public Weather getCurrentWeather()
     {
-        return DayOfWeek.values()[(day - 1) % DayOfWeek.values().length];
+        return currentWeather;
     }
 
-    public void advanceHour(int amount) {}
+    public Weather getTomorrowWeather()
+    {
+        return tomorrowWeather;
+    }
 
-    public void advanceDay(int amount) {}
+    public void setTomorrowWeather(Weather tomorrowWeather)
+    {
+        this.tomorrowWeather = tomorrowWeather;
+    }
+
+    private void updateWeather()
+    {
+        currentWeather = tomorrowWeather;
+
+        Random random = new Random();
+        List<Weather> list = season.getWeatherTypes();
+        tomorrowWeather = list.get(random.nextInt(list.size()));
+    }
 }

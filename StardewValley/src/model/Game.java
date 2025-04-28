@@ -1,41 +1,29 @@
 package model;
 
-import model.enums.Weather;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Game
 {
     private Time currentTime = new Time();
-    private Weather currentWeather = Weather.Sunny;
-    private Weather tomorrowWeather = Weather.Sunny;
+
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
-    private Map map;
     private Player currentPlayer;
-    private GreenHouse greenHouse;
+    private GreenHouse greenHouse = null;
 
-    public Game(ArrayList<Player> players, int height, int width)
+    public Game() //TODO: this is only for test, should be removed later
+    {
+
+    }
+
+    public Game(ArrayList<Player> players)
     {
         this.players = players;
-        this.map = new Map(height, width);
     }
 
     public Time getCurrentTime()
     {
         return currentTime;
-    }
-
-    public Weather getCurrentWeather()
-    {
-        return currentWeather;
-    }
-
-    public Weather getTomorrowWeather()
-    {
-        return tomorrowWeather;
     }
 
     public ArrayList<NPC> getNPCs() {
@@ -53,13 +41,56 @@ public class Game
         return currentPlayer;
     }
 
-    public void updateTime()
+    public Tile findTile(int y, int x)
     {
-        currentTime.update();
-        currentWeather = tomorrowWeather;
+//        return farm.getMap().get(y).get(x);
+    return null;
+    }
 
-        Random random = new Random();
-        List<Weather> list = currentTime.getSeason().getWeatherTypes();
-        tomorrowWeather = list.get(random.nextInt(list.size()));
+    public void endDay()
+    {
+        // TODO: add this methods later
+        // resetPlayersEnergy();
+        // growPlants();
+        // respawnPlayers();
+    }
+
+    public void nextTurn()
+    {
+        int currentIndex = players.indexOf(currentPlayer);
+        int index = currentIndex;
+
+        // loop over players until reaches one that hasn't fainted yet (has enough energy)
+
+        do
+        {
+            if (index == players.size() - 1)
+            {
+                index = 0;
+                currentTime.updateHour(1);
+            } else
+            {
+                index += 1;
+            }
+
+            currentPlayer = players.get(index);
+
+            if (currentPlayer.getEnergy() > 0)
+            {
+                break;
+            }
+
+        } while (index != currentIndex);
+
+        // if it reaches the original player again, the day is ended, and things are reset
+        if (index == currentIndex)
+        {
+            currentTime.updateHour(23 - currentTime.getHour());
+        }
+
+        if (currentTime.getHour() == 9)
+        {
+            endDay();
+        }
     }
 }

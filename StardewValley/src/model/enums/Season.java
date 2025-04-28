@@ -26,9 +26,9 @@ public enum Season
         return name;
     }
 
-    public Season next()
+    public Season update(int num)
     {
-        return values()[(this.id + 1) % values().length];
+        return values()[(this.id + num) % values().length];
     }
 
     public List<Weather> getWeatherTypes()

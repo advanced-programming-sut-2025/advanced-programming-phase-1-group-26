@@ -1,0 +1,15 @@
+package model;
+
+import model.enums.GameObjectType;
+import model.enums.resources_enums.ResourceItem;
+
+public class Resource extends GameObject
+{
+    private final ResourceItem resourceType;
+
+    public Resource(ResourceItem type)
+    {
+        this.resourceType = type;
+        this.type = type.getType();
+    }
+}

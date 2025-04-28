@@ -14,7 +14,12 @@ import java.util.Map;
 
 public class Player {
 
-    User user;
+    private final User user;
+    private final Farm farm;
+
+    private Point location = null;
+    private Farm currentFarm = null;
+
     private int energy;
     private int maxEnergy = 200;
     /*TEMP*/ private boolean fainted;
@@ -34,16 +39,19 @@ public class Player {
 
     private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
 
-    public Player(User user) {
+    public Player(User user, Farm farm) {
         this.user = user;
-        this.energy = maxEnergy;
+        this.farm = farm;
+        this.energy = 200;
         this.fainted = false;
 
         for (Player player : App.getCurrentGame().getPlayers()) {
             FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
             this.friendships.put(player, newFriendshipData);
         }
+
         this.zeidy = null;
+        this.location = farm.getStartingPoint();
     }
     
 
@@ -135,5 +143,25 @@ public class Player {
     @Override
     public String toString() {
         return user.getNickname();
+    }
+
+    public Point getLocation()
+    {
+        return location;
+    }
+
+    public Farm getCurrentFarm()
+    {
+        return currentFarm;
+    }
+
+    public void setLocation(Point location)
+    {
+        this.location = location;
+    }
+
+    public void setCurrentFarm(Farm currentFarm)
+    {
+        this.currentFarm = currentFarm;
     }
 }

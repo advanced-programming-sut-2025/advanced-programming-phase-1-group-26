@@ -4,17 +4,31 @@ import model.enums.TileTexture;
 
 public class Tile
 {
-    private final int y;
-    private final int x;
-    private GameObject object;
+    private final Point point;
 
     private boolean hitByThunder = false;
-    private TileTexture texture;
+    private TileTexture texture = null;
 
-    public Tile(int y, int x)
+    private GameObject object = null;
+
+    public Tile(Point point)
     {
-        this.y = y;
-        this.x = x;
+        this.point = point;
+    }
+
+    public int getY()
+    {
+        return point.getY();
+    }
+
+    public int getX()
+    {
+        return point.getX();
+    }
+
+    public boolean isHitByThunder()
+    {
+        return hitByThunder;
     }
 
     public void hitByThunder()
@@ -27,16 +41,23 @@ public class Tile
         return texture;
     }
 
-    public void setTexture(TileTexture texture)
+    public void setType(TileTexture texture)
     {
         this.texture = texture;
     }
 
-    public GameObject getObject() {
+    public GameObject getObject()
+    {
         return object;
     }
 
-    public void setObject(GameObject object) {
+    public void setObject(GameObject object)
+    {
         this.object = object;
+    }
+
+    public Point getPoint()
+    {
+        return point;
     }
 }
