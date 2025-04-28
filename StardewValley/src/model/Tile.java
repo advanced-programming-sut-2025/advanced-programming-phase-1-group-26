@@ -55,4 +55,9 @@ public class Tile
     {
         this.object = object;
     }
+
+    public Point getPoint()
+    {
+        return point;
+    }
 }

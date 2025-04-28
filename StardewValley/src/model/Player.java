@@ -15,6 +15,9 @@ public class Player {
     private final User user;
     private final Farm farm;
 
+    private Point location = null;
+    private Farm currentFarm = null;
+
     private int energy;
     private final static int maxEnergy = 200;
     /*TEMP*/ private boolean fainted;
@@ -44,6 +47,7 @@ public class Player {
         }
 
         this.zeidy = null;
+        this.location = farm.getStartingPoint();
     }
     
 
@@ -103,5 +107,25 @@ public class Player {
 
     public void setZeidy(Player zeidy) {
         this.zeidy = zeidy;
+    }
+
+    public Point getLocation()
+    {
+        return location;
+    }
+
+    public Farm getCurrentFarm()
+    {
+        return currentFarm;
+    }
+
+    public void setLocation(Point location)
+    {
+        this.location = location;
+    }
+
+    public void setCurrentFarm(Farm currentFarm)
+    {
+        this.currentFarm = currentFarm;
     }
 }
