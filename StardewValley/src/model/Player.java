@@ -43,9 +43,7 @@ public class Player {
             FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
             this.friendships.put(player, newFriendshipData);
         }
-
         this.zeidy = null;
-
     }
     
 
@@ -132,5 +130,10 @@ public class Player {
             temp.add(type);
         }
         return temp;
+    }
+
+    @Override
+    public String toString() {
+        return user.getNickname();
     }
 }
