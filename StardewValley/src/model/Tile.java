@@ -9,6 +9,7 @@ public class Tile
 
     private boolean hitByThunder = false;
     private TileTexture texture;
+    private GameObject object;
 
     public Tile(int y, int x)
     {
@@ -29,5 +30,13 @@ public class Tile
     public void setTexture(TileTexture texture)
     {
         this.texture = texture;
+    }
+
+    public GameObject getObject() {
+        return object;
+    }
+
+    public void setObject(GameObject object) {
+        this.object = object;
     }
 }
