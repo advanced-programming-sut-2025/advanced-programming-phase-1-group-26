@@ -6,6 +6,7 @@ public class Tile
 {
     private final int y;
     private final int x;
+    private GameObject object;
 
     private boolean hitByThunder = false;
     private TileTexture texture;

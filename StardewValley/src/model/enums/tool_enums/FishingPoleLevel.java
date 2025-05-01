@@ -17,4 +17,16 @@ public enum FishingPoleLevel {
         this.price = price;
         this.baseLevel = baseLevel;
     }
+
+    public int getBaseEnergyUsage() {
+        return baseEnergyUsage;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getBaseLevel() {
+        return baseLevel;
+    }
 }

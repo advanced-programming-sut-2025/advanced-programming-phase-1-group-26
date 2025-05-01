@@ -25,6 +25,33 @@ public class Skill {
 
     public void addLevel() {
         this.level ++;
+        setUnit(0);
+    }
+
+    public boolean checkLevel() {
+        switch (level) {
+            case 0:
+                if (unit >= 50) {
+                    return true;
+                }
+                break;
+            case 1:
+                if (unit >= 150) {
+                    return true;
+                }
+                break;
+            case 2:
+                if (unit >= 250) {
+                    return true;
+                }
+                break;
+            case 3:
+                if (unit >= 350) {
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
 
     public int getUnit() {
@@ -35,5 +62,7 @@ public class Skill {
         this.unit += unit;
     }
 
-
+    public void setUnit(int unit) {
+        this.unit = unit;
+    }
 }

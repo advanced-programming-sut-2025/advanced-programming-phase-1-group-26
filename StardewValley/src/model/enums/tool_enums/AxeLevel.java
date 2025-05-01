@@ -14,7 +14,6 @@ public enum AxeLevel {
     AxeLevel(int baseEnergyUsage) {
         this.baseEnergyUsage = baseEnergyUsage;
         this.failedEnergyUsage = baseEnergyUsage - 1;
-
     }
 
     public int getBaseEnergyUsage() {

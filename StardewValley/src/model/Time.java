@@ -27,6 +27,10 @@ public class Time
             day = 1;
             season = season.next();
         }
+        //setting energies to maximum
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            player.setEnergy(player.getMaxEnergy());
+        }
     }
 
     public int getHour()
