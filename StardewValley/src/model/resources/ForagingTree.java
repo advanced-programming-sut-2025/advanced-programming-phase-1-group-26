@@ -16,6 +16,6 @@ public class ForagingTree extends GameObject
     {
         this.treeType = type;
         this.seasons = treeType.getSeasons();
-        this.type = type.getType();
+        this.ObjectType = type.getType();
     }
 }

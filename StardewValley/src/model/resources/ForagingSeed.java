@@ -15,6 +15,6 @@ public class ForagingSeed extends GameObject
     {
         this.seedType = seedType;
         this.seasons = seedType.getSeasons();
-        this.type = seedType.getType();
+        this.ObjectType = seedType.getType();
     }
 }

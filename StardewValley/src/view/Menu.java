@@ -1,6 +1,10 @@
 package view;
 
+import model.Result;
+
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 abstract class Menu
 {
@@ -11,7 +15,7 @@ abstract class Menu
     private static final ExitMenu leaderboardMenu = new ExitMenu();
     protected static Scanner mainScanner;
 
-    abstract CommandResult executeCommands(String command);
+    abstract Result executeCommands(String command);
 
     static class Command {
         String name;

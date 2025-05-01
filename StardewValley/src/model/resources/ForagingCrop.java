@@ -21,6 +21,6 @@ public class ForagingCrop extends GameObject
         this.seasons = type.getSeasons();
         this.baseSellPrice = type.getBaseSellPrice();
         this.energy = type.getEnergy();
-        this.type = type.getType();
+        this.ObjectType = type.getType();
     }
 }

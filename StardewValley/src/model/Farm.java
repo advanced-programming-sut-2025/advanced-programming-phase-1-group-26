@@ -8,7 +8,6 @@ import model.resources.ForagingSeed;
 import model.resources.ForagingTree;
 import model.resources.Tree;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.*;
 import java.util.Map;
 
@@ -17,7 +16,7 @@ public class Farm {
     private final int width = 70;
 
     private final FarmTypes farmType;
-    private Map<String, List<Point>> mapData;
+    private final Map<String, List<Point>> mapData;
     private Tile[][] tiles;
     private static final int WIDTH = 70;
     private static final int HEIGHT = 70;
@@ -116,11 +115,11 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    case Tree _: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop _ : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed _ : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree _ : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource _ : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
                                     default: output.append(Color.YELLOW + "LL" + Color.RESET); break;
                                 }
                             }
@@ -142,11 +141,11 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    case Tree _ : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop _ : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed _ : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree _ : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource _ : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
                                     default: output.append(Color.GREEN + "GG" + Color.RESET); break;
                                 }
                             }
@@ -250,12 +249,11 @@ public class Farm {
 
         if (tile.getObject() != null)
         {
-            switch (tile.getObject())
+            return switch (tile.getObject())
             {
-                case Tree a : return false;
-                case Resource a : return false;
-                default: return true;
-            }
+                case Tree _, Resource _ -> false;
+                default -> true;
+            };
         }
 
         return true;
@@ -307,7 +305,7 @@ public class Farm {
         while (!queue.isEmpty())
         {
             ArrayList<Point> path = queue.poll();
-            Point current = path.get(path.size() - 1);
+            Point current = path.getLast();
 
             if (current.equals(to))
             {
@@ -362,7 +360,7 @@ public class Farm {
 
     public Point findFurthestAvailablePoint(Point origin, Point destination, int availableEnergy)
     {
-        ArrayList<Point> availablePoints = findShortestPath(origin, destination);
+        ArrayList<Point> path = findShortestPath(origin, destination);
 
         if (path == null || path.isEmpty()) return null;
 
@@ -409,5 +407,10 @@ public class Farm {
     public Point getStartingPoint()
     {
         return startingPoint;
+    }
+
+    public FarmTypes getFarmType()
+    {
+        return farmType;
     }
 }

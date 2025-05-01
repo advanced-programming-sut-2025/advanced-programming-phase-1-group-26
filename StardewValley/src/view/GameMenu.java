@@ -1,7 +1,6 @@
 package view;
 
 import control.GameController;
-import model.App;
 import model.Farm;
 import model.Point;
 import model.enums.FarmTypes;

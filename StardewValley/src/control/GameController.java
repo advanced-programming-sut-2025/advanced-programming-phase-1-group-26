@@ -9,7 +9,7 @@ import model.tools.*;
 import javax.tools.Tool;
 import java.util.ArrayList;
 
-import static model.enums.Menu.GameMenu;
+import view.GameMenu;
 
 public class GameController {
     public Result energyShow() {
@@ -29,8 +29,7 @@ public class GameController {
 
     public void inventoryShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        ArrayList<GameObject> inventory = new ArrayList<>();
-        inventory.addAll(currentPlayer.getInventoryItems());
+        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventoryItems());
         for (GameObject object : inventory) {
             System.out.println(object.getObjectType().name() + " x" + object.getNumber());
         }
@@ -58,7 +57,7 @@ public class GameController {
         for (GameObject object : currentPlayer.getInventoryItems()) {
             if (object.getObjectType().name().equals(toolName)) {
                 if (object instanceof Tool) {
-                    currentPlayer.setCurrentTool((Tool) object);
+                    currentPlayer.setCurrentTool((model.tools.Tool) object);
                     return new Result(true, "tool set successfully");
                 } else {
                     return new Result(false, "this object is not a tool");
@@ -106,7 +105,7 @@ public class GameController {
 
     public void toolsUse(String direction) { //might change to enum direction
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        Tool tool = App.getCurrentGame().getCurrentPlayer().getCurrentTool();
+        Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
             System.out.println("you don't have any tool equipped");
         } else {
@@ -247,7 +246,7 @@ public class GameController {
         int y = Integer.parseInt(inputY);
 
         Game game = App.getCurrentGame();
-        Tile tile = game.findTile(x, y);
+        Tile tile = game.findTile(y, x);
 
         if (tile == null)
         {
