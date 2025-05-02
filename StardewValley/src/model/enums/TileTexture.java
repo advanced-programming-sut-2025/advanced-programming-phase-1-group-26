@@ -2,8 +2,10 @@ package model.enums;
 
 public enum TileTexture
 {
-    DIRT,
+    LAND,
     GRASS,
     LAKE,
-    BUILDING;
+    CABIN,
+    GREEN_HOUSE,
+    QUARRY;
 }

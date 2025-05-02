@@ -30,4 +30,14 @@ public class App {
     {
         return currentMenu;
     }
+
+    public static void setCurrentMenu(Menu currentMenu)
+    {
+        App.currentMenu = currentMenu;
+    }
+
+    public static void addGame(Game game)
+    {
+        games.add(game);
+    }
 }

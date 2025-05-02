@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Axe extends Tool {
     private AxeLevel level;
-
+    private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public Axe() {
         super.type = ToolType.Axe;
@@ -28,5 +28,8 @@ public class Axe extends Tool {
         this.level = level;
     }
 
+    public ArrayList<GameObjectType> getUsage() {
+        return usage;
+    }
 }
 

@@ -19,9 +19,8 @@ public enum DayOfWeek
         this.name = name;
     }
 
-    @Override
-    public String toString()
+    public static String getDayOfWeek(int id)
     {
-        return name;
+        return DayOfWeek.values()[id].name();
     }
 }

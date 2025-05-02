@@ -1,11 +1,12 @@
 package model.resources;
 
+import model.GameObject;
 import model.enums.Season;
 import model.enums.resources_enums.TreeType;
 
 import java.util.List;
 
-public class Tree
+public class Tree extends GameObject
 {
     private final TreeType treeType;
     private String source;
