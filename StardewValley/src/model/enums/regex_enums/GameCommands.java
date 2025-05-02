@@ -11,10 +11,10 @@ public enum GameCommands implements Command{
     QUESTS_LIST(""),
     QUESTS_FINISH(""),
     /* Marketing Commands*/
-    SHOW_ALL_PRODUCTS(""),
-    SHOW_AVAILABLE_PRODUCTS(""),
-    PURCHASE(""),
-    SELL(""),
+    SHOW_ALL_PRODUCTS("show all products"),
+    SHOW_AVAILABLE_PRODUCTS("show available products"),
+    PURCHASE("purchase (?<name>.*) ([-n (?<count>\\d+)]?)"),
+    SELL("sell (?<name>.*) ([-n (?<count>\\d+)]?)"),
     /* Player Commands */
     ENERGY_SHOW("energy show"),
     INVENTORY_SHOW("inventory show"),
@@ -29,6 +29,7 @@ public enum GameCommands implements Command{
     /* cheat codes */
     ENERGY_SET("energy set -v (?<value>\\d+)"),
     ENERGY_UNLIMITED("energy unlimited"),
+    ADD_MONEY("cheat add (?<count>\\d+) dollars"),
 
 
     ;

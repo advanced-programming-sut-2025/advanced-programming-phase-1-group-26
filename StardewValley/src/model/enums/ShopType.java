@@ -3,7 +3,7 @@ package model.enums;
 public enum ShopType
 {
     BLACK_SMITH("Blacksmith"),
-    JOJO_MART("Jojo Mart"),
+    JOJA_MART("Joja Mart"),
     PIERRE_GENERAL_STORE("Pierre's General Store"),
     CARPENTER_SHOP("Carpenter's Shop"),
     FISH_SHOP("Fish Shop"),
