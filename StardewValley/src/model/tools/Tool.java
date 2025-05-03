@@ -1,9 +1,10 @@
 package model.tools;
 
 import model.GameObject;
+import model.enums.GameObjectType;
 import model.enums.tool_enums.ToolType;
 
-public abstract class Tool extends GameObject {
+public class Tool extends GameObject {
      ToolType type;
      String name;
 

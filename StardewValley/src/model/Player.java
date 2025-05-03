@@ -5,11 +5,13 @@ import model.enums.GameObjectType;
 import model.player_data.FriendshipData;
 import model.player_data.Skill;
 import model.player_data.Trade;
+import model.enums.GameObjectType;
 import model.enums.SkillType;
 import model.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Player {
 
@@ -32,6 +34,7 @@ public class Player {
     private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
     private ArrayList<Trade> sentTrades = new ArrayList<>();
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
+    private ArrayList<Trade> archiveTrades = new ArrayList<>();
     private Player zeidy;
 
     private Tool currentTool;
@@ -54,7 +57,7 @@ public class Player {
         this.zeidy = null;
         this.location = farm.getStartingPoint();
     }
-
+    
 
     public int getEnergy() {
         return energy;
@@ -136,6 +139,10 @@ public class Player {
         return receivedTrades;
     }
 
+    public ArrayList<Trade> getArchiveTrades() {
+        return archiveTrades;
+    }
+
     public Player getZeidy() {
         return zeidy;
     }
@@ -175,11 +182,6 @@ public class Player {
     public void setCurrentFarm(Farm currentFarm)
     {
         this.currentFarm = currentFarm;
-    }
-
-    public Farm getFarm()
-    {
-        return farm;
     }
 
     public GameObject findObjectType(Enum<?> type)

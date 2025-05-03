@@ -164,6 +164,7 @@ public class GameController {
 
                 currentPlayer.increaseEnergy(-((WateringCan) tool).getLevel().getBaseEnergyUsage());
             } else if (tool instanceof FishingPole) {
+
                 currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
             } else if (tool instanceof BackPack) {
                 //doesn't use energy

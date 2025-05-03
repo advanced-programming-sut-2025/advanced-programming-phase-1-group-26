@@ -16,12 +16,6 @@ public enum CommunicateCommands implements Command {
     FLOWER("flower (?<username>.*)"),
     ASK_MARRIAGE("ask marriage -u (?<username>.*) -r (?<ring>.*)"),
     RESPOND("respond -(?<respond>accept|reject) -u (?<username>.*)"),
-    START_TRADE("start trade"),
-    TRADE("trade -u (?<username>.*) -t (?<type>.*) -i (?<item>.*) -a (?<amount>\\d+) " +
-            "(-p (?<price>\\d+)|-ti (?<targetItem>.*) -ta (?<targetAmount>)\\d+))"),
-    TRADE_LIST("trade list"),
-    TRADE_RESPOND("trade respond -(?<respond>accept|reject) -i (?<id>\\d+)"),
-    TRADE_HISTORY("trade history"),
 
     ;
 
