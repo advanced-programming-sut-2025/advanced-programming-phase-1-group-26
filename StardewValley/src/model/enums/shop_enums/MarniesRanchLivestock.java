@@ -1,7 +1,5 @@
 package model.enums.shop_enums;
 
-import model.enums.animal_enums.AnimalBuildingType;
-
 public enum MarniesRanchLivestock {
     CHICKEN("Chicken", "Well cared-for chickens lay eggs every day. Lives in the coop.",
             800, CarpentersShopFarmBuilding.COOP, 2),

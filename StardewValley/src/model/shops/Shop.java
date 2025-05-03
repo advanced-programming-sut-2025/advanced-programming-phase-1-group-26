@@ -1,5 +1,7 @@
 package model.shops;
 
+import model.GameObject;
+import model.Time;
 import model.enums.GameObjectType;
 import model.enums.ShopType;
 
@@ -9,7 +11,10 @@ public abstract class Shop {
     private String salesManName;
     private int startWork;
     private int endWork;
-    public void workability(GameObjectType gameObjectType){}
+    public String showProducts(){return "products:\n";}
+    public String showAvailableProducts(){return "available products:\n";}
+    public void purchase(GameObject gameObject) {}
+
 
     public Shop(ShopType type, String shopName, String salesManName, int startWork, int endWork) {
         this.type = type;
@@ -17,5 +22,9 @@ public abstract class Shop {
         this.salesManName = salesManName;
         this.startWork = startWork;
         this.endWork = endWork;
+    }
+
+    public boolean isOpen(Time currentTime) {
+        return currentTime.getHour() >= startWork && currentTime.getHour() <= endWork;
     }
 }

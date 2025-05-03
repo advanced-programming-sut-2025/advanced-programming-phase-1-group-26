@@ -12,10 +12,10 @@ public enum GameCommands implements Command
     QUESTS_LIST(""),
     QUESTS_FINISH(""),
     /* Marketing Commands*/
-    SHOW_ALL_PRODUCTS(""),
-    SHOW_AVAILABLE_PRODUCTS(""),
-    PURCHASE(""),
-    SELL(""),
+    SHOW_ALL_PRODUCTS("show all products"),
+    SHOW_AVAILABLE_PRODUCTS("show available products"),
+    PURCHASE("purchase (?<name>.*) ([-n (?<count>\\d+)]?)"),
+    SELL("sell (?<name>.*) ([-n (?<count>\\d+)]?)"),
     /* Player Commands */
     ENERGY_SHOW("energy show"),
     INVENTORY_SHOW("inventory show"),
@@ -30,6 +30,7 @@ public enum GameCommands implements Command
     /* cheat codes */
     ENERGY_SET("energy set -v (?<value>\\d+)"),
     ENERGY_UNLIMITED("energy unlimited"),
+    ADD_MONEY("cheat add (?<count>\\d+) dollars"),
 
 
     SHOW_TIME("time"),
@@ -49,23 +50,15 @@ public enum GameCommands implements Command
 
     ;
 
-    private final String pattern;
-
-    GameCommands(String regex)
-    {
-        this.pattern = regex;
+    private final Pattern pattern;
+    GameCommands(String regex) {
+        this.pattern = Pattern.compile(regex);
     }
 
     @Override
-    public Matcher getMatcher(String input)
-    {
-        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
-
-        if (matcher.matches())
-        {
-            return matcher;
-        }
-
-        return null;
+    public Matcher getMatcher(String input) {
+        Matcher matcher = pattern.matcher(input);
+        matcher.matches();
+        return matcher;
     }
 }
