@@ -4,6 +4,8 @@ import model.*;
 import model.enums.DayOfWeek;
 import model.enums.Season;
 import model.enums.Weather;
+import model.resources.Mineral;
+import model.resources.Tree;
 import model.tools.*;
 
 import javax.tools.Tool;
@@ -29,7 +31,7 @@ public class GameController {
 
     public void inventoryShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventoryItems());
+        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventory());
         for (GameObject object : inventory) {
             System.out.println(object.getObjectType().name() + " x" + object.getNumber());
         }
@@ -38,7 +40,7 @@ public class GameController {
     public void inventoryTrash(String name, int number) {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameObject object = null;
-        for (GameObject gameObject : currentPlayer.getInventoryItems()) {
+        for (GameObject gameObject : currentPlayer.getInventory()) {
             if (gameObject.getObjectType().name().equals(name)) {
                 object = gameObject;
             }
@@ -54,7 +56,7 @@ public class GameController {
 
     public Result toolsEquip(String toolName) {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        for (GameObject object : currentPlayer.getInventoryItems()) {
+        for (GameObject object : currentPlayer.getInventory()) {
             if (object.getObjectType().name().equals(toolName)) {
                 if (object instanceof Tool) {
                     currentPlayer.setCurrentTool((model.tools.Tool) object);
@@ -81,7 +83,7 @@ public class GameController {
 
     public void toolsShowAvailable() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        for (GameObject object : currentPlayer.getInventoryItems()) {
+        for (GameObject object : currentPlayer.getInventory()) {
             System.out.println(object.getObjectType().name());
         }
     }
@@ -90,7 +92,7 @@ public class GameController {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         //check if in blacksmith
 
-        for (GameObject object : currentPlayer.getInventoryItems()) {
+        for (GameObject object : currentPlayer.getInventory()) {
             if (object.getObjectType().name().equals(toolName)) {
                 if (object instanceof Tool) {
                     if (object instanceof Axe) {
@@ -105,21 +107,78 @@ public class GameController {
 
     public void toolsUse(String direction) { //might change to enum direction
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        Farm farm = currentPlayer.getCurrentFarm();
+        Tile targetTile = null;
+        switch (direction) {
+            case "W":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY(),
+                        currentPlayer.getLocation().getX() - 1);
+                break;
+            case "E":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY(),
+                        currentPlayer.getLocation().getX() + 1);
+                break;
+            case "N":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY() - 1,
+                        currentPlayer.getLocation().getX());
+                break;
+            case "S":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY() + 1,
+                        currentPlayer.getLocation().getX());
+                break;
+            case "NW":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY() - 1,
+                        currentPlayer.getLocation().getX() - 1);
+                break;
+            case "NE":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY() - 1,
+                        currentPlayer.getLocation().getX() + 1);
+                break;
+            case "SW":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY() + 1,
+                        currentPlayer.getLocation().getX() - 1);
+                break;
+            case "SE":
+                targetTile = farm.getTile(currentPlayer.getLocation().getY() + 1,
+                        currentPlayer.getLocation().getX() + 1);
+                break;
+        }
+        if (targetTile == null) {
+            System.out.println("you didn't choose a valid direction");
+            return;
+        }
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
             System.out.println("you don't have any tool equipped");
         } else {
             if (tool instanceof Axe) {
-                currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.getObject() instanceof Tree) {
+                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
+                } else {
+                    System.out.println("you can't use axe on this tile");
+                    return;
+                }
             } else if (tool instanceof Hoe) {
-
-                currentPlayer.increaseEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.getObject() == null) {
+                    currentPlayer.increaseEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
+                } else {
+                    System.out.println("you can't use hoe on this tile");
+                    return;
+                }
             } else if (tool instanceof MilkPail) {
+                //TODO: use near animal
                 //doesn't have level
 
             } else if (tool instanceof Pickaxe) {
-
-                currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.getObject() instanceof Mineral) {
+                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                } else if (targetTile.getObject() == null) {
+                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                } //items on the tile
+                else {
+                    System.out.println("you can't use pickaxe on this tile");
+                    return;
+                }
             } else if (tool instanceof Seythe) {
                 //doesn't have level
 

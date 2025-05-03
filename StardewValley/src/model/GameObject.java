@@ -7,6 +7,14 @@ public class GameObject
     protected GameObjectType ObjectType;
     protected int number;
 
+    public GameObject(GameObjectType objectType, int number) {
+        ObjectType = objectType;
+        this.number = number;
+    }
+
+    public GameObject() {
+    }
+
     public GameObjectType getObjectType()
     {
         return ObjectType;
@@ -21,7 +29,7 @@ public class GameObject
         return number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void addNumber(int number) {
+        this.number += number;
     }
 }
