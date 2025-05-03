@@ -2,46 +2,49 @@ package model.enums.resources_enums;
 
 import model.enums.GameObjectType;
 import model.enums.Season;
+import model.resources.Tree;
 
 import java.util.List;
 
 public enum TreeType
 {
-    APRICOT_TREE(GameObjectType.APRICOT_TREE, "Apricot Sapling", List.of(7, 7, 7, 7), 28, "Apricot", 1, 59, true, 38, List.of(Season.Spring)),
-    CHERRY_TREE(GameObjectType.CHERRY_TREE, "Cherry Sapling", List.of(7, 7, 7, 7), 28, "Cherry", 1, 80, true, 38, List.of(Season.Spring)),
-    BANANA_TREE(GameObjectType.BANANA_TREE, "Banana Sapling", List.of(7, 7, 7, 7), 28, "Banana", 1, 150, true, 75, List.of(Season.Summer)),
-    MANGO_TREE(GameObjectType.MANGO_TREE, "Mango Sapling", List.of(7, 7, 7, 7), 28, "Mango", 1, 130, true, 100, List.of(Season.Summer)),
-    ORANGE_TREE(GameObjectType.ORANGE_TREE, "Orange Sapling", List.of(7, 7, 7, 7), 28, "Orange", 1, 100, true, 38, List.of(Season.Summer)),
-    PEACH_TREE(GameObjectType.PEACH_TREE, "Peach Sapling", List.of(7, 7, 7, 7), 28, "Peach", 1, 140, true, 38, List.of(Season.Summer)),
-    APPLE_TREE(GameObjectType.APPLE_TREE, "Apple Sapling", List.of(7, 7, 7, 7), 28, "Apple", 1, 100, true, 38, List.of(Season.Fall)),
-    POMEGRANATE_TREE(GameObjectType.POMEGRANATE_TREE, "Pomegranate Sapling", List.of(7, 7, 7, 7), 28, "Pomegranate", 1, 140, true, 38, List.of(Season.Fall)),
-    OAK_TREE(GameObjectType.OAK_TREE, "Acorns", List.of(7, 7, 7, 7), 28, "Oak Resin", 7, 150, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
-    MAPLE_TREE(GameObjectType.MAPLE_TREE, "Maple Seeds", List.of(7, 7, 7, 7), 28, "Maple Syrup", 9, 200, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
-    PINE_TREE(GameObjectType.PINE_TREE, "Pine Cones", List.of(7, 7, 7, 7), 28, "Pine Tar", 5, 100, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
-    MAHOGANY_TREE(GameObjectType.MAHOGANY_TREE, "Mahogany Seeds", List.of(7, 7, 7, 7), 28, "Sap", 1, 2, true, -2, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
-    MUSHROOM_TREE(GameObjectType.MUSHROOM_TREE, "Mushroom Tree Seeds", List.of(7, 7, 7, 7), 28, "Common Mushroom", 1, 40, true, 38, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
-    MYSTIC_TREE(GameObjectType.MYSTIC_TREE, "Mystic Tree Seeds", List.of(7, 7, 7, 7), 28, "Mystic Syrup", 7, 1000, true, 500, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter));
+    APRICOT_TREE(GameObjectType.APRICOT_TREE, "Apricot Tree", TreeSeedType.Apricot_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Apricot, 1, 59, true, 38, List.of(Season.Spring)),
+    CHERRY_TREE(GameObjectType.CHERRY_TREE, "Cherry Tree", TreeSeedType.Cherry_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Cherry, 1, 80, true, 38, List.of(Season.Spring)),
+    BANANA_TREE(GameObjectType.BANANA_TREE, "Banana Tree", TreeSeedType.Banana_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Banana, 1, 150, true, 75, List.of(Season.Summer)),
+    MANGO_TREE(GameObjectType.MANGO_TREE, "Mango Tree", TreeSeedType.Mango_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Mango, 1, 130, true, 100, List.of(Season.Summer)),
+    ORANGE_TREE(GameObjectType.ORANGE_TREE, "Orange Tree", TreeSeedType.Orange_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Orange, 1, 100, true, 38, List.of(Season.Summer)),
+    PEACH_TREE(GameObjectType.PEACH_TREE, "Peach Tree", TreeSeedType.Peach_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Peach, 1, 140, true, 38, List.of(Season.Summer)),
+    APPLE_TREE(GameObjectType.APPLE_TREE, "Apple Tree", TreeSeedType.Apple_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Apple, 1, 100, true, 38, List.of(Season.Fall)),
+    POMEGRANATE_TREE(GameObjectType.POMEGRANATE_TREE,  "Pomegranate Tree",  TreeSeedType.Pomegranate_Sapling, List.of(7, 7, 7, 7), 28, FruitType.Pomegranate, 1, 140, true, 38, List.of(Season.Fall)),
+    OAK_TREE(GameObjectType.OAK_TREE, "Oak Tree", TreeSeedType.Acorns, List.of(7, 7, 7, 7), 28, FruitType.Oak_Resin, 7, 150, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    MAPLE_TREE(GameObjectType.MAPLE_TREE, "Maple Tree", TreeSeedType.Maple_Seeds, List.of(7, 7, 7, 7), 28, FruitType.Maple_Syrup, 9, 200, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    PINE_TREE(GameObjectType.PINE_TREE, "Pine Tree", TreeSeedType.Pine_Cones, List.of(7, 7, 7, 7), 28, FruitType.Pine_Tar, 5, 100, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    MAHOGANY_TREE(GameObjectType.MAHOGANY_TREE, "Mahogany Tree", TreeSeedType.Mahogany_Seeds, List.of(7, 7, 7, 7), 28, FruitType.Sap, 1, 2, true, -2, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    MUSHROOM_TREE(GameObjectType.MUSHROOM_TREE, "Mushroom Tree", TreeSeedType.Mushroom_Tree_Seeds, List.of(7, 7, 7, 7), 28, FruitType.Common_Mushroom, 1, 40, true, 38, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    MYSTIC_TREE(GameObjectType.MYSTIC_TREE, "Mystic Tree", TreeSeedType.Mystic_Tree_Seed, List.of(7, 7, 7, 7), 28, FruitType.Mystic_Syrup, 7, 1000, true, 500, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter));
     ;
 
     private final GameObjectType type;
-    private final String source;
+    private final String name;
+    private final TreeSeedType source;
     private final List<Integer> stages;
     private final int totalHarvestTime;
-    private final String fruitName;
+    private final FruitType fruit;
     private final int fruitHarvestCycle;
     private final int fruitBaseSellPrice;
     private final boolean isEdible;
     private final int energy;
     private final List<Season> seasons;
 
-    TreeType(GameObjectType type, String source, List<Integer> stages, int totalHarvestTime, String fruitName,
+    TreeType(GameObjectType type, String name, TreeSeedType source, List<Integer> stages, int totalHarvestTime, FruitType fruit,
              int fruitHarvestCycle, int fruitBaseSellPrice, boolean isEdible, int energy, List<Season> seasons)
     {
         this.type = type;
+        this.name = name;
         this.source = source;
         this.stages = stages;
         this.totalHarvestTime = totalHarvestTime;
-        this.fruitName = fruitName;
+        this.fruit = fruit;
         this.fruitHarvestCycle = fruitHarvestCycle;
         this.fruitBaseSellPrice = fruitBaseSellPrice;
         this.isEdible = isEdible;
@@ -49,7 +52,7 @@ public enum TreeType
         this.seasons = seasons;
     }
 
-    public String getSource()
+    public TreeSeedType getSource()
     {
         return source;
     }
@@ -64,9 +67,9 @@ public enum TreeType
         return totalHarvestTime;
     }
 
-    public String getFruitName()
+    public FruitType getFruit()
     {
-        return fruitName;
+        return fruit;
     }
 
     public int getFruitHarvestCycle()
@@ -92,5 +95,10 @@ public enum TreeType
     public List<Season> getSeasons()
     {
         return seasons;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }
