@@ -7,6 +7,15 @@ public class GameObject
     protected GameObjectType ObjectType;
     protected int number;
 
+    public GameObject(GameObjectType objectType, int number) {
+        ObjectType = objectType;
+        this.number = number;
+    }
+
+    public GameObject()
+    {
+    }
+
     public GameObjectType getObjectType()
     {
         return ObjectType;
