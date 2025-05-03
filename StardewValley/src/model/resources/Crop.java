@@ -1,6 +1,7 @@
 package model.resources;
 
 import model.enums.resources_enums.CropType;
+import model.enums.resources_enums.ForagingSeedType;
 
 public class Crop extends CropsAndTrees
 {

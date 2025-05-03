@@ -9,7 +9,6 @@ public class Game
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private GreenHouse greenHouse = null;
 
     public Game() //TODO: this is only for test, should be removed later
     {
@@ -53,6 +52,15 @@ public class Game
         // resetPlayersEnergy();
         // growPlants();
         // respawnPlayers();
+        distributeForagingItems();
+    }
+
+    public void distributeForagingItems()
+    {
+        for (Farm farm : getFarms())
+        {
+            farm.setRandomForagingItems();
+        }
     }
 
     public void nextTurn()
@@ -92,5 +100,40 @@ public class Game
         {
             endDay();
         }
+    }
+
+    public ArrayList<Farm> getFarms()
+    {
+        ArrayList<Farm> farms = new ArrayList<>();
+        for (Player player : players)
+        {
+            farms.add(player.getFarm());
+        }
+        return farms;
+    }
+    
+    public Tile getTileFromDirection(String direction)
+    {
+        Farm farm = currentPlayer.getCurrentFarm();
+        return switch (direction)
+        {
+            case "W" -> farm.getTile(currentPlayer.getLocation().getY(),
+                    currentPlayer.getLocation().getX() - 1);
+            case "E" -> farm.getTile(currentPlayer.getLocation().getY(),
+                    currentPlayer.getLocation().getX() + 1);
+            case "N" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
+                    currentPlayer.getLocation().getX());
+            case "S" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
+                    currentPlayer.getLocation().getX());
+            case "NW" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
+                    currentPlayer.getLocation().getX() - 1);
+            case "NE" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
+                    currentPlayer.getLocation().getX() + 1);
+            case "SW" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
+                    currentPlayer.getLocation().getX() - 1);
+            case "SE" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
+                    currentPlayer.getLocation().getX() + 1);
+            default -> null;
+        };
     }
 }

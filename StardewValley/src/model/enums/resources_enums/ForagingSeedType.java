@@ -86,4 +86,16 @@ public enum ForagingSeedType
     {
         return name;
     }
+
+    public static ForagingSeedType getSeedType(String name)
+    {
+        for (ForagingSeedType type : ForagingSeedType.values())
+        {
+            if (type.getName().equalsIgnoreCase(name))
+            {
+                return type;
+            }
+        }
+        return null;
+    }
 }

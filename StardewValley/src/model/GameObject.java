@@ -24,4 +24,9 @@ public class GameObject
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public Enum<?> getType()
+    {
+        return null;
+    }
 }

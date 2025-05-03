@@ -10,6 +10,7 @@ public class Tile
     private TileTexture texture = null;
 
     private GameObject object = null;
+    private boolean isPloughed = false;
 
     public Tile(Point point)
     {
@@ -59,5 +60,15 @@ public class Tile
     public Point getPoint()
     {
         return point;
+    }
+
+    public void plough()
+    {
+        isPloughed = true;
+    }
+
+    public boolean isPloughed()
+    {
+        return isPloughed;
     }
 }

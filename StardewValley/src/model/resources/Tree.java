@@ -11,7 +11,6 @@ public class Tree extends CropsAndTrees
 {
     private FruitType fruit;
     private int fruitHarvestCycle;
-    private List<Season> seasons;
 
     public Tree(TreeType treeType)
     {

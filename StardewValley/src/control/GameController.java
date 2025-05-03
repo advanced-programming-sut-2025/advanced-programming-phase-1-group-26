@@ -5,6 +5,12 @@ import model.enums.DayOfWeek;
 import model.enums.Season;
 import model.enums.Weather;
 import model.enums.resources_enums.CropType;
+import model.enums.resources_enums.ForagingSeedType;
+import model.enums.resources_enums.FruitType;
+import model.enums.resources_enums.TreeType;
+import model.resources.Crop;
+import model.resources.Mineral;
+import model.resources.Tree;
 import model.tools.*;
 
 import javax.tools.Tool;
@@ -30,7 +36,7 @@ public class GameController {
 
     public void inventoryShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventoryItems());
+        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventory());
         for (GameObject object : inventory) {
             System.out.println(object.getObjectType().name() + " x" + object.getNumber());
         }
@@ -39,7 +45,7 @@ public class GameController {
     public void inventoryTrash(String name, int number) {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameObject object = null;
-        for (GameObject gameObject : currentPlayer.getInventoryItems()) {
+        for (GameObject gameObject : currentPlayer.getInventory()) {
             if (gameObject.getObjectType().name().equals(name)) {
                 object = gameObject;
             }
@@ -55,7 +61,7 @@ public class GameController {
 
     public Result toolsEquip(String toolName) {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        for (GameObject object : currentPlayer.getInventoryItems()) {
+        for (GameObject object : currentPlayer.getInventory()) {
             if (object.getObjectType().name().equals(toolName)) {
                 if (object instanceof Tool) {
                     currentPlayer.setCurrentTool((model.tools.Tool) object);
@@ -82,7 +88,7 @@ public class GameController {
 
     public void toolsShowAvailable() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        for (GameObject object : currentPlayer.getInventoryItems()) {
+        for (GameObject object : currentPlayer.getInventory()) {
             System.out.println(object.getObjectType().name());
         }
     }
@@ -91,7 +97,7 @@ public class GameController {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         //check if in blacksmith
 
-        for (GameObject object : currentPlayer.getInventoryItems()) {
+        for (GameObject object : currentPlayer.getInventory()) {
             if (object.getObjectType().name().equals(toolName)) {
                 if (object instanceof Tool) {
                     if (object instanceof Axe) {
@@ -104,23 +110,47 @@ public class GameController {
         }
     }
 
-    public void toolsUse(String direction) { //might change to enum direction
+    public void toolsUse(String direction) { // might change to enum direction
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        Tile targetTile = App.getCurrentGame().getTileFromDirection(direction);
+
+        if (targetTile == null) {
+            System.out.println("you didn't choose a valid direction");
+            return;
+        }
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
             System.out.println("you don't have any tool equipped");
         } else {
             if (tool instanceof Axe) {
-                currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.getObject() instanceof Tree) {
+                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
+                } else {
+                    System.out.println("you can't use axe on this tile");
+                    return;
+                }
             } else if (tool instanceof Hoe) {
-
-                currentPlayer.increaseEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.getObject() == null && !targetTile.isPloughed()) {
+                    targetTile.plough();
+                    currentPlayer.increaseEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
+                } else {
+                    System.out.println("you can't use hoe on this tile");
+                    return;
+                }
             } else if (tool instanceof MilkPail) {
+                //TODO: use near animal
                 //doesn't have level
 
             } else if (tool instanceof Pickaxe) {
-
-                currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.getObject() instanceof Mineral) {
+                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                } else if (targetTile.getObject() == null) {
+                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                } //items on the tile
+                else {
+                    System.out.println("you can't use pickaxe on this tile");
+                    return;
+                }
             } else if (tool instanceof Seythe) {
                 //doesn't have level
 
@@ -134,7 +164,6 @@ public class GameController {
 
                 currentPlayer.increaseEnergy(-((WateringCan) tool).getLevel().getBaseEnergyUsage());
             } else if (tool instanceof FishingPole) {
-
                 currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
             } else if (tool instanceof BackPack) {
                 //doesn't use energy
@@ -347,13 +376,64 @@ public class GameController {
 
     public Result showCraftInfo(String craftName)
     {
-        CropType type = CropType.getCropType(craftName);
-        if (type == null)
+        CropType cropType = CropType.getCropType(craftName);
+        TreeType treeType = TreeType.getTreeType(craftName);
+
+        if (cropType == null && treeType == null)
         {
             return new Result(false, "Craft with name " + craftName + " does not exist.");
         }
 
-        return new Result(true, type.getCraftInfo());
+        if (cropType != null)
+        {
+            return new Result(true, cropType.getCraftInfo());
+        }
+
+        if (treeType != null)
+        {
+            return new Result(true, treeType.getCraftInfo());
+        }
+
+        return new Result(false, "ERROR");
+    }
+
+    public Result plantSeed(String seedName, String direction)
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        ForagingSeedType seedType = ForagingSeedType.getSeedType(seedName);
+        if (seedType == null)
+        {
+            return new Result(false, "There's no such kind of seed.");
+        }
+
+        Tile tile = App.getCurrentGame().getTileFromDirection(direction);
+        if (tile == null)
+        {
+            return new Result(false, "Tile with this path does not exist.");
+        }
+
+        if (!tile.isPloughed())
+        {
+            return new Result(false, "Tile is not ploughed :(");
+        }
+
+        if (tile.getObject() != null)
+        {
+            return new Result(false, "This tile is not empty.");
+        }
+
+        GameObject seed = player.findObjectType(seedType);
+        if (seed == null)
+        {
+            return new Result(false, "You don't have this type of seed.");
+        }
+
+        CropType cropType = CropType.getCropFromSeed((ForagingSeedType) seed.getType());
+        Crop crop = new Crop(cropType);
+
+        tile.setObject(crop);
+        return new Result(true, "You have successfully planted " + cropType.getCraftInfo() + ".");
     }
 
     public Result createNewGame(String[] usernames)

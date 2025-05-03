@@ -175,9 +175,9 @@ public class Farm {
         }
     }
 
-    private int getFreeTilesNum()
+    private ArrayList<Tile> getFreeTiles()
     {
-        int count = 0;
+        ArrayList<Tile> freeTiles = new ArrayList<>();
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -185,11 +185,11 @@ public class Farm {
                 Tile tile = tiles[y][x];
                 if ((tile.getTexture() == TileTexture.LAND) || (tile.getTexture() == TileTexture.GRASS))
                 {
-                    count += 1;
+                    freeTiles.add(tile);
                 }
             }
         }
-        return count;
+        return freeTiles;
     }
 
     private static <T extends Enum<T>> T randomItem(Class<T> clazz)
@@ -200,37 +200,23 @@ public class Farm {
 
     private void setRandomItems()
     {
-        int randomItemsCount = getFreeTilesNum() / 8; //TODO: used some hard coded constants here
+        int randomItemsCount = getFreeTiles().size() / 10; //TODO: used some hard coded constants here
 
-        for (int i = 0; i < randomItemsCount / 5; i++)
+        for (int i = 0; i < randomItemsCount / 3; i++)
         {
             Tile random = getRandomFreeTile();
             TreeType type = randomItem(TreeType.class);
             random.setObject(new Tree(type));
         }
 
-        for (int i = 0; i < randomItemsCount / 5; i++)
+        for (int i = 0; i < randomItemsCount / 3; i++)
         {
             Tile random = getRandomFreeTile();
             ResourceItem type = randomItem(ResourceItem.class);
             random.setObject(new Resource(type));
         }
 
-        for (int i = 0; i < randomItemsCount / 5; i++)
-        {
-            Tile random = getRandomFreeTile();
-            ForagingCropType type = randomItem(ForagingCropType.class);
-            random.setObject(new ForagingCrop(type));
-        }
-
-        for (int i = 0; i < randomItemsCount / 5; i++)
-        {
-            Tile random = getRandomFreeTile();
-            ForagingSeedType type = randomItem(ForagingSeedType.class);
-            random.setObject(new ForagingSeed(type));
-        }
-
-        for (int i = 0; i < randomItemsCount / 5; i++)
+        for (int i = 0; i < randomItemsCount / 3; i++)
         {
             Tile random = getRandomFreeTile();
             ForagingTreeType type = randomItem(ForagingTreeType.class);
@@ -412,5 +398,25 @@ public class Farm {
     public FarmTypes getFarmType()
     {
         return farmType;
+    }
+
+    public void setRandomForagingItems()
+    {
+        ArrayList<Tile> freeTiles = getFreeTiles();
+        for (Tile tile : freeTiles)
+        {
+            if (Math.random() < 0.01)
+            {
+                if (Math.random() < 0.5)
+                {
+                    ForagingCropType type = randomItem(ForagingCropType.class);
+                    tile.setObject(new ForagingCrop(type));
+                } else if (tile.isPloughed())
+                {
+                    ForagingSeedType type = randomItem(ForagingSeedType.class);
+                    tile.setObject(new ForagingSeed(type));
+                }
+            }
+        }
     }
 }

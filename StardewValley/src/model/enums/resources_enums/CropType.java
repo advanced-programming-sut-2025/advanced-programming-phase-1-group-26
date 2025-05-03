@@ -6,6 +6,7 @@ import model.enums.GameObjectType;
 import model.enums.Season;
 
 import java.util.List;
+import java.util.Random;
 
 public enum CropType
 {
@@ -179,6 +180,27 @@ public enum CropType
                 return cropType;
             }
         }
+        return null;
+    }
+
+    private static final Random RANDOM = new Random();
+
+    public static CropType getCropFromSeed(ForagingSeedType seedType)
+    {
+        if (seedType.getName().equals(ForagingSeedType.MIXED_SEEDS.getName()))
+        {
+            CropType random = CropType.values()[RANDOM.nextInt(CropType.values().length)];
+            return random;
+        }
+
+        for (CropType cropType : CropType.values())
+        {
+            if (cropType.getName().equals(seedType.getName()))
+            {
+                return cropType;
+            }
+        }
+
         return null;
     }
 }

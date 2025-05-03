@@ -28,4 +28,9 @@ public enum TreeSeedType
         this.type = type;
         this.name = name;
     }
+
+    public String getName()
+    {
+        return name;
+    }
 }

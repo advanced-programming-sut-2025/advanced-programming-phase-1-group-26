@@ -5,6 +5,7 @@ import model.enums.Season;
 import model.resources.Tree;
 
 import java.util.List;
+import java.util.Stack;
 
 public enum TreeType
 {
@@ -100,5 +101,45 @@ public enum TreeType
     public String getName()
     {
         return name;
+    }
+
+    public String getCraftInfo()
+    {
+        StringBuilder output = new StringBuilder();
+        output.append("Name: ").append(name).append("\n");
+        output.append("Source: ").append(source.getName()).append("\n");
+        output.append("Fruit: ").append(fruit.getName()).append("\n");
+        output.append("Fruit Harvest Cycle: ").append(fruitHarvestCycle).append("\n");
+
+        output.append("Stages: ");
+        for (int i = 0; i < getStages().size(); i++)
+        {
+            output.append(getStages().get(i)).append(i == getStages().size() - 1 ? "\n" : " - ");
+        }
+
+        output.append("Total Harvest Time: ").append(totalHarvestTime).append("\n");
+        output.append("Fruit Base Sell Price: ").append(fruitBaseSellPrice).append("\n");
+        output.append("Is Fruit Edible: ").append(isEdible ? "TRUE" : "FALSE").append("\n");
+        output.append("Fruit Base Energy: ").append(energy).append("\n");
+
+        output.append("Season(s): ");
+        for (int i = 0; i < getSeasons().size(); i++)
+        {
+            output.append(getSeasons().get(i).getName()).append(i == getSeasons().size() - 1 ? "\n" : ", ");
+        }
+
+        return output.toString().trim();
+    }
+
+    public static TreeType getTreeType(String name)
+    {
+        for (TreeType type : TreeType.values())
+        {
+            if (type.getName().equalsIgnoreCase(name))
+            {
+                return type;
+            }
+        }
+        return null;
     }
 }

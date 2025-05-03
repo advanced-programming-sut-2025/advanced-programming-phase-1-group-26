@@ -1,16 +1,15 @@
 package model;
 
 import model.animal.Animal;
+import model.enums.GameObjectType;
 import model.player_data.FriendshipData;
 import model.player_data.Skill;
 import model.player_data.Trade;
-import model.enums.GameObjectType;
 import model.enums.SkillType;
 import model.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Player {
 
@@ -29,13 +28,14 @@ public class Player {
     private Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
     private Skill fishingSkill = new Skill(SkillType.Fishing);
 
-    private HashMap<Integer, GameObject> inventory = new HashMap<>();
+    private ArrayList<GameObject> inventory = new ArrayList<>();
     private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
-    private ArrayList<Trade> requestTrades = new ArrayList<>();
-    private ArrayList<Trade> offerTrades = new ArrayList<>();
+    private ArrayList<Trade> sentTrades = new ArrayList<>();
+    private ArrayList<Trade> receivedTrades = new ArrayList<>();
     private Player zeidy;
 
     private Tool currentTool;
+    private double money;
 
     private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
 
@@ -44,6 +44,7 @@ public class Player {
         this.farm = farm;
         this.energy = 200;
         this.fainted = false;
+        this.money = 0;
 
         for (Player player : App.getCurrentGame().getPlayers()) {
             FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
@@ -53,7 +54,7 @@ public class Player {
         this.zeidy = null;
         this.location = farm.getStartingPoint();
     }
-    
+
 
     public int getEnergy() {
         return energy;
@@ -107,7 +108,19 @@ public class Player {
         this.currentTool = currentTool;
     }
 
-    public HashMap<Integer, GameObject> getInventory() {
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public void increaseMoney(double money) {
+        this.money += money;
+    }
+
+    public ArrayList<GameObject> getInventory() {
         return inventory;
     }
 
@@ -115,12 +128,12 @@ public class Player {
         return friendships;
     }
 
-    public ArrayList<Trade> getRequestTrades() {
-        return requestTrades;
+    public ArrayList<Trade> getSentTrades() {
+        return sentTrades;
     }
 
-    public ArrayList<Trade> getOfferTrades() {
-        return offerTrades;
+    public ArrayList<Trade> getReceivedTrades() {
+        return receivedTrades;
     }
 
     public Player getZeidy() {
@@ -131,13 +144,12 @@ public class Player {
         this.zeidy = zeidy;
     }
 
-    public ArrayList<GameObject> getInventoryItems () {
-        ArrayList<GameObject> temp = new ArrayList<>();
-        for (Map.Entry<Integer, GameObject> entry : this.getInventory().entrySet()) {
-            GameObject type = entry.getValue();
-            temp.add(type);
-        }
-        return temp;
+    public User getUser() {
+        return user;
+    }
+
+    public String getNickName() {
+        return user.getNickname();
     }
 
     @Override
@@ -163,5 +175,42 @@ public class Player {
     public void setCurrentFarm(Farm currentFarm)
     {
         this.currentFarm = currentFarm;
+    }
+
+    public Farm getFarm()
+    {
+        return farm;
+    }
+
+    public GameObject findObjectType(Enum<?> type)
+    {
+        for (GameObject obj : inventory)
+        {
+            Enum<?> inventoryItemType = obj.getType();
+
+            if (inventoryItemType.equals(type))
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    public Trade getTradeById (int id) {
+        for (Trade trade : this.getReceivedTrades()) {
+            if (trade.getId() == id) {
+                return trade;
+            }
+        }
+        return null;
+    }
+
+    public GameObject getItemInInventory(GameObjectType objectType) {
+        for (GameObject object : this.inventory) {
+            if (object.getObjectType().equals(objectType)) {
+                return object;
+            }
+        }
+        return null;
     }
 }
