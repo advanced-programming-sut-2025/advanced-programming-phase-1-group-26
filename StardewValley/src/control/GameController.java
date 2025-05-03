@@ -4,6 +4,7 @@ import model.*;
 import model.enums.DayOfWeek;
 import model.enums.Season;
 import model.enums.Weather;
+import model.enums.resources_enums.CropType;
 import model.tools.*;
 
 import javax.tools.Tool;
@@ -342,6 +343,17 @@ public class GameController {
             return new Result(true, "You have successfully get to this place.");
         }
         return new Result(false, "OK");
+    }
+
+    public Result showCraftInfo(String craftName)
+    {
+        CropType type = CropType.getCropType(craftName);
+        if (type == null)
+        {
+            return new Result(false, "Craft with name " + craftName + " does not exist.");
+        }
+
+        return new Result(true, type.getCraftInfo());
     }
 
     public Result createNewGame(String[] usernames)

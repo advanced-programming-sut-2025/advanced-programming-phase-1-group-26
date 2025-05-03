@@ -34,5 +34,6 @@ public class Crop extends GameObject
         this.energy = cropType.getEnergy();
         this.seasons = cropType.getSeasons();
         this.canBecomeGiant = cropType.isCanBecomeGiant();
+        this.ObjectType = cropType.getT
     }
 }

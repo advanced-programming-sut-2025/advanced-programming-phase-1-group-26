@@ -1,15 +1,15 @@
 package model.resources;
 
 import model.GameObject;
-import model.enums.resources_enums.MineralType;
+import model.enums.resources_enums.ForagingMineralType;
 
 public class Mineral extends GameObject
 {
-    private final MineralType type;
+    private final ForagingMineralType type;
     private String description;
     private int sellPrice;
 
-    public Mineral(MineralType type)
+    public Mineral(ForagingMineralType type)
     {
         this.type = type;
         this.description = type.getDescription();

@@ -1,6 +1,5 @@
 package model.enums.resources_enums;
 
-import model.GameObject;
 import model.enums.GameObjectType;
 import model.enums.Season;
 
@@ -8,59 +7,61 @@ import java.util.List;
 
 public enum ForagingSeedType
 {
-    JAZZ_SEEDS(GameObjectType.JAZZ_SEEDS, List.of(Season.Spring)),
-    CARROT_SEEDS(GameObjectType.CARROT_SEEDS, List.of(Season.Spring)),
-    CAULIFLOWER_SEEDS(GameObjectType.CAULIFLOWER_SEEDS, List.of(Season.Spring)),
-    COFFEE_BEAN(GameObjectType.COFFEE_BEAN, List.of(Season.Spring)),
-    GARLIC_SEEDS(GameObjectType.GARLIC_SEEDS, List.of(Season.Spring)),
-    BEAN_STARTER(GameObjectType.BEAN_STARTER, List.of(Season.Spring)),
-    KALE_SEEDS(GameObjectType.KALE_SEEDS, List.of(Season.Spring)),
-    PARSNIP_SEEDS(GameObjectType.PARSNIP_SEEDS, List.of(Season.Spring)),
-    POTATO_SEEDS(GameObjectType.POTATO_SEEDS, List.of(Season.Spring)),
-    RHUBARB_SEEDS(GameObjectType.RHUBARB_SEEDS, List.of(Season.Spring)),
-    STRAWBERRY_SEEDS(GameObjectType.STRAWBERRY_SEEDS, List.of(Season.Spring)),
-    TULIP_BULB(GameObjectType.TULIP_BULB, List.of(Season.Spring)),
-    RICE_SHOOT(GameObjectType.RICE_SHOOT, List.of(Season.Spring)),
+    JAZZ_SEEDS("Jazz Seeds", GameObjectType.JAZZ_SEEDS, List.of(Season.Spring)),
+    CARROT_SEEDS("Carrot Seeds", GameObjectType.CARROT_SEEDS, List.of(Season.Spring)),
+    CAULIFLOWER_SEEDS("Cauliflower Seeds", GameObjectType.CAULIFLOWER_SEEDS, List.of(Season.Spring)),
+    COFFEE_BEAN("Coffee Bean", GameObjectType.COFFEE_BEAN, List.of(Season.Spring)),
+    GARLIC_SEEDS("Garlic Seeds", GameObjectType.GARLIC_SEEDS, List.of(Season.Spring)),
+    BEAN_STARTER("Bean Starter", GameObjectType.BEAN_STARTER, List.of(Season.Spring)),
+    KALE_SEEDS("Kale Seeds", GameObjectType.KALE_SEEDS, List.of(Season.Spring)),
+    PARSNIP_SEEDS("Parsnip Seeds", GameObjectType.PARSNIP_SEEDS, List.of(Season.Spring)),
+    POTATO_SEEDS("Potato Seeds", GameObjectType.POTATO_SEEDS, List.of(Season.Spring)),
+    RHUBARB_SEEDS("Rhubarb Seeds", GameObjectType.RHUBARB_SEEDS, List.of(Season.Spring)),
+    STRAWBERRY_SEEDS("Strawberry Seeds", GameObjectType.STRAWBERRY_SEEDS, List.of(Season.Spring)),
+    TULIP_BULB("Tulip Bulb", GameObjectType.TULIP_BULB, List.of(Season.Spring)),
+    RICE_SHOOT("Rice Shoot", GameObjectType.RICE_SHOOT, List.of(Season.Spring)),
 
-    BLUEBERRY_SEEDS(GameObjectType.BLUEBERRY_SEEDS, List.of(Season.Summer)),
-    CORN_SEEDS(GameObjectType.CORN_SEEDS, List.of(Season.Summer)),
-    HOPS_STARTER(GameObjectType.HOPS_STARTER, List.of(Season.Summer)),
-    PEPPER_SEEDS(GameObjectType.PEPPER_SEEDS, List.of(Season.Summer)),
-    MELON_SEEDS(GameObjectType.MELON_SEEDS, List.of(Season.Summer)),
-    POPPY_SEEDS(GameObjectType.POPPY_SEEDS, List.of(Season.Summer)),
-    RADISH_SEEDS(GameObjectType.RADISH_SEEDS, List.of(Season.Summer)),
-    RED_CABBAGE_SEEDS(GameObjectType.RED_CABBAGE_SEEDS, List.of(Season.Summer)),
-    STARFRUIT_SEEDS(GameObjectType.STARFRUIT_SEEDS, List.of(Season.Summer)),
-    SPANGLE_SEEDS(GameObjectType.SPANGLE_SEEDS, List.of(Season.Summer)),
-    SUMMER_SQUASH_SEEDS(GameObjectType.SUMMER_SQUASH_SEEDS, List.of(Season.Summer)),
-    SUNFLOWER_SEEDS(GameObjectType.SUNFLOWER_SEEDS, List.of(Season.Summer)),
-    TOMATO_SEEDS(GameObjectType.TOMATO_SEEDS, List.of(Season.Summer)),
-    WHEAT_SEEDS(GameObjectType.WHEAT_SEEDS, List.of(Season.Summer)),
+    BLUEBERRY_SEEDS("Blueberry Seeds", GameObjectType.BLUEBERRY_SEEDS, List.of(Season.Summer)),
+    CORN_SEEDS("Corn Seeds", GameObjectType.CORN_SEEDS, List.of(Season.Summer)),
+    HOPS_STARTER("Hops Starter", GameObjectType.HOPS_STARTER, List.of(Season.Summer)),
+    PEPPER_SEEDS("Pepper Seeds", GameObjectType.PEPPER_SEEDS, List.of(Season.Summer)),
+    MELON_SEEDS("Melon Seeds", GameObjectType.MELON_SEEDS, List.of(Season.Summer)),
+    POPPY_SEEDS("Poppy Seeds", GameObjectType.POPPY_SEEDS, List.of(Season.Summer)),
+    RADISH_SEEDS("Radish Seeds", GameObjectType.RADISH_SEEDS, List.of(Season.Summer)),
+    RED_CABBAGE_SEEDS("Red Cabbage Seeds", GameObjectType.RED_CABBAGE_SEEDS, List.of(Season.Summer)),
+    STARFRUIT_SEEDS("Starfruit Seeds", GameObjectType.STARFRUIT_SEEDS, List.of(Season.Summer)),
+    SPANGLE_SEEDS("Spangle Seeds", GameObjectType.SPANGLE_SEEDS, List.of(Season.Summer)),
+    SUMMER_SQUASH_SEEDS("Summer Squash Seeds", GameObjectType.SUMMER_SQUASH_SEEDS, List.of(Season.Summer)),
+    SUNFLOWER_SEEDS("Sunflower Seeds", GameObjectType.SUNFLOWER_SEEDS, List.of(Season.Summer)),
+    TOMATO_SEEDS("Tomato Seeds", GameObjectType.TOMATO_SEEDS, List.of(Season.Summer)),
+    WHEAT_SEEDS("Wheat Seeds", GameObjectType.WHEAT_SEEDS, List.of(Season.Summer)),
 
-    AMARANTH_SEEDS(GameObjectType.AMARANTH_SEEDS, List.of(Season.Fall)),
-    ARTICHOKE_SEEDS(GameObjectType.ARTICHOKE_SEEDS, List.of(Season.Fall)),
-    BEET_SEEDS(GameObjectType.BEET_SEEDS, List.of(Season.Fall)),
-    BOK_CHOY_SEEDS(GameObjectType.BOK_CHOY_SEEDS, List.of(Season.Fall)),
-    BROCCOLI_SEEDS(GameObjectType.BROCCOLI_SEEDS, List.of(Season.Fall)),
-    CRANBERRY_SEEDS(GameObjectType.CRANBERRY_SEEDS, List.of(Season.Fall)),
-    EGGPLANT_SEEDS(GameObjectType.EGGPLANT_SEEDS, List.of(Season.Fall)),
-    FAIRY_SEEDS(GameObjectType.FAIRY_SEEDS, List.of(Season.Fall)),
-    GRAPE_STARTER(GameObjectType.GRAPE_STARTER, List.of(Season.Fall)),
-    PUMPKIN_SEEDS(GameObjectType.PUMPKIN_SEEDS, List.of(Season.Fall)),
-    YAM_SEEDS(GameObjectType.YAM_SEEDS, List.of(Season.Fall)),
-    RARE_SEED(GameObjectType.RARE_SEED, List.of(Season.Fall)),
+    AMARANTH_SEEDS("Amaranth Seeds", GameObjectType.AMARANTH_SEEDS, List.of(Season.Fall)),
+    ARTICHOKE_SEEDS("Artichoke Seeds", GameObjectType.ARTICHOKE_SEEDS, List.of(Season.Fall)),
+    BEET_SEEDS("Beet Seeds", GameObjectType.BEET_SEEDS, List.of(Season.Fall)),
+    BOK_CHOY_SEEDS("Bok Choy Seeds", GameObjectType.BOK_CHOY_SEEDS, List.of(Season.Fall)),
+    BROCCOLI_SEEDS("Broccoli Seeds", GameObjectType.BROCCOLI_SEEDS, List.of(Season.Fall)),
+    CRANBERRY_SEEDS("Cranberry Seeds", GameObjectType.CRANBERRY_SEEDS, List.of(Season.Fall)),
+    EGGPLANT_SEEDS("Eggplant Seeds", GameObjectType.EGGPLANT_SEEDS, List.of(Season.Fall)),
+    FAIRY_SEEDS("Fairy Seeds", GameObjectType.FAIRY_SEEDS, List.of(Season.Fall)),
+    GRAPE_STARTER("Grape Starter", GameObjectType.GRAPE_STARTER, List.of(Season.Fall)),
+    PUMPKIN_SEEDS("Pumpkin Seeds", GameObjectType.PUMPKIN_SEEDS, List.of(Season.Fall)),
+    YAM_SEEDS("Yam Seeds", GameObjectType.YAM_SEEDS, List.of(Season.Fall)),
+    RARE_SEED("Rare Seed", GameObjectType.RARE_SEED, List.of(Season.Fall)),
 
-    POWERDMELON_SEEDS(GameObjectType.POWERDMELON_SEEDS, List.of(Season.Winter)),
+    POWERDMELON_SEEDS("Powdermelon Seeds", GameObjectType.POWERDMELON_SEEDS, List.of(Season.Winter)),
 
-    ANCIENT_SEEDS(GameObjectType.ANCIENT_SEEDS, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
-    MIXED_SEEDS(GameObjectType.MIXED_SEEDS, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    ANCIENT_SEEDS("Ancient Seeds", GameObjectType.ANCIENT_SEEDS, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    MIXED_SEEDS("Mixed Seeds", GameObjectType.MIXED_SEEDS, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter));
     ;
 
+    private final String name;
     private final GameObjectType type;
     private final List<Season> seasons;
 
-    ForagingSeedType(GameObjectType type, List<Season> seasons)
+    ForagingSeedType(String name, GameObjectType type, List<Season> seasons)
     {
+        this.name = name;
         this.type = type;
         this.seasons = seasons;
     }
@@ -79,5 +80,10 @@ public enum ForagingSeedType
     public String toString()
     {
         return type.toString();
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }

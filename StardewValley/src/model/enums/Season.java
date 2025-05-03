@@ -35,4 +35,9 @@ public enum Season
     {
         return weatherTypes;
     }
+
+    public String getName()
+    {
+        return name;
+    }
 }
