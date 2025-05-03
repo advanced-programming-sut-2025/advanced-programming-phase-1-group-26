@@ -59,6 +59,22 @@ public class GameMenu implements AppMenu
             String x = matcher.group("x");
             String y = matcher.group("y");
             System.out.println(controller.cheatHitThunder(x,y));
+        } else if ((matcher = GameCommands.CAN_WALK.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x");
+            String y = matcher.group("y");
+            System.out.println(controller.canWalk(x,y));
+        } else if ((matcher = GameCommands.WALK.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x");
+            String y = matcher.group("y");
+            System.out.println(controller.walk(x,y));
+        } else if ((matcher = GameCommands.PRINT_MAP.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x");
+            String y = matcher.group("y");
+            String size = matcher.group("size");
+
         }
 
         else if (input.equals("1"))

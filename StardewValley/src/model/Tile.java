@@ -7,8 +7,10 @@ public class Tile
     private final Point point;
 
     private boolean hitByThunder = false;
-    private TileTexture texture;
-    private GameObject object;
+    private TileTexture texture = null;
+
+    private GameObject object = null;
+    private boolean isPloughed = false;
 
     public Tile(Point point)
     {
@@ -58,5 +60,15 @@ public class Tile
     public Point getPoint()
     {
         return point;
+    }
+
+    public void plough()
+    {
+        isPloughed = true;
+    }
+
+    public boolean isPloughed()
+    {
+        return isPloughed;
     }
 }

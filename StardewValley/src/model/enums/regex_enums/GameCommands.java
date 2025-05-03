@@ -20,7 +20,7 @@ public enum GameCommands implements Command
     ENERGY_SHOW("energy show"),
     INVENTORY_SHOW("inventory show"),
     INVENTORY_TRASH("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
-    TOOLS_EQUIP ("tools equip (?<name>.*)"),
+    TOOLS_EQUIP("tools equip (?<name>.*)"),
     TOOLS_SHOW_CURRENT("tools show current"),
     TOOLS_SHOW_AVAILABLE("tools show available"),
     TOOLS_UPGRADE("tools upgrade (?<tool_name>.*)"),
@@ -46,7 +46,12 @@ public enum GameCommands implements Command
     SHOW_TOMORROW_WEATHER("weather\\s+forecast"),
 
     CHEAT_CODE_SET_TOMORROW_WEATHER("cheat\\s+weather\\s+set\\s+(?<type>\\S+)"),
-    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<y>-?\\d+)\\s+(?<x>-?\\d+)"),
+    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
+
+    CAN_WALK("can\\s+walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
+    WALK("walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
+    PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
+    HELP_READ_MAP("help\\s+reading\\s+map"),
 
     ;
 

@@ -17,4 +17,10 @@ public class ForagingSeed extends GameObject
         this.seasons = seedType.getSeasons();
         this.ObjectType = seedType.getType();
     }
+
+    @Override
+    public Enum<?> getType()
+    {
+        return seedType;
+    }
 }
