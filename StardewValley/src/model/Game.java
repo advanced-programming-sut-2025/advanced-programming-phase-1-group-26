@@ -107,7 +107,7 @@ public class Game
         ArrayList<Farm> farms = new ArrayList<>();
         for (Player player : players)
         {
-            farms.add(player.getFarm());
+            farms.add(player.getCurrentFarm());
         }
         return farms;
     }

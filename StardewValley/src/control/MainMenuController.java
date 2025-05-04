@@ -1,6 +1,5 @@
 package control;
 
-import com.sun.tools.javac.Main;
 import model.*;
 import model.enums.FarmTypes;
 import model.enums.Menu;

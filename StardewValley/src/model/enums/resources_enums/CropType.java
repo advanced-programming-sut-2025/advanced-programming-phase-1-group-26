@@ -1,7 +1,5 @@
 package model.enums.resources_enums;
 
-import model.Game;
-import model.GameObject;
 import model.enums.GameObjectType;
 import model.enums.Season;
 

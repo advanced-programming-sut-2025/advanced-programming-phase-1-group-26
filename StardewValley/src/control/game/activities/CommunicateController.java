@@ -1,8 +1,9 @@
 package control.game.activities;
 
-import model.*;
+import model.App;
+import model.GameObject;
+import model.Player;
 import model.player_data.FriendshipData;
-import model.player_data.Trade;
 import model.enums.GameObjectType;
 
 import java.util.Map;
@@ -29,36 +30,37 @@ public class CommunicateController
 
         switch (mainPlayer.getFriendships().get(player2).getLevel()) {
             case 0:
-                if (currentLevel.getXp() >= 100) {
+                while (currentLevel.getXp() >= 100) {
                     currentLevel.addLevel();
-                    currentLevel.setXp(0);
+                    currentLevel.setXp(currentLevel.getXp() - 100);
                     otherLevel.addLevel();
-                    otherLevel.setXp(0);
+                    otherLevel.setXp(currentLevel.getXp() - 100);
                     System.out.println("your friendship with " + player2 +
                             " upgraded to level: " + currentLevel.getLevel());
                 }
                 break;
             case 1:
-                if (currentLevel.getXp() >= 200) {
+                while (currentLevel.getXp() >= 200) {
                     currentLevel.addLevel();
-                    currentLevel.setXp(0);
+                    currentLevel.setXp(currentLevel.getXp() - 200);
                     otherLevel.addLevel();
-                    otherLevel.setXp(0);
+                    otherLevel.setXp(currentLevel.getXp() - 200);
                     System.out.println("your friendship with " + player2 +
                             " upgraded to level: " + currentLevel.getLevel());
                 }
                 break;
             case 2:
-                if (currentLevel.getXp() >= 300) {
+                while (currentLevel.getXp() >= 300) {
                     if (currentLevel.isBouquetBought()) {
                         currentLevel.addLevel();
-                        currentLevel.setXp(0);
+                        currentLevel.setXp(currentLevel.getXp() - 300);
                         otherLevel.addLevel();
-                        otherLevel.setXp(0);
+                        otherLevel.setXp(currentLevel.getXp() - 300);
                         System.out.println("your friendship with " + player2 +
                                 " upgraded to level: " + currentLevel.getLevel());
                     } else {
                         System.out.println("buy bouquet to upgrade your friendship with " + player2);
+                        break;
                     }
                 }
                 break;
@@ -69,10 +71,10 @@ public class CommunicateController
                         currentLevel.setXp(0);
                         otherLevel.addLevel();
                         otherLevel.setXp(0);
-                    } else {
                         System.out.println("your friendship with " + player2 +
-                                " upgraded to level: " + currentLevel.getLevel() + "\n" +
-                                "propose to marry each other");
+                                " upgraded to level: " + currentLevel.getLevel());
+                    } else {
+                        System.out.println("you should marry each other to upgrade your friendship");
                     }
                 }
                 break;
@@ -127,33 +129,6 @@ public class CommunicateController
         for (String message : data1.getMessageHistory()) {
             System.out.println(message);
         }
-    }
-
-    //Trade methods
-
-    public void showCurrentTrades () {
-
-    }
-
-    public void tradeWith(Player player, GameObjectType object, int amount, double price, GameObjectType other, int otherAmount) { //overload for price or item
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        boolean isTradeSuccessful = true;
-
-        //check logics ....
-
-
-        // add to trade lists
-        Trade newTrade = new Trade(player, object, amount, price, other, otherAmount);
-        currentPlayer.getOfferTrades().add(newTrade);
-        player.getRequestTrades().add(newTrade);
-    }
-
-    public void responseTrade (boolean answer, int id) {
-
-    }
-
-    public void tradeHistory () {
-
     }
 
     //gifting methods

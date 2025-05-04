@@ -12,15 +12,15 @@ public enum GameCommands implements Command
     QUESTS_LIST(""),
     QUESTS_FINISH(""),
     /* Marketing Commands*/
-    SHOW_ALL_PRODUCTS("show all products"),
-    SHOW_AVAILABLE_PRODUCTS("show available products"),
-    PURCHASE("purchase (?<name>.*) ([-n (?<count>\\d+)]?)"),
-    SELL("sell (?<name>.*) ([-n (?<count>\\d+)]?)"),
+    SHOW_ALL_PRODUCTS(""),
+    SHOW_AVAILABLE_PRODUCTS(""),
+    PURCHASE(""),
+    SELL(""),
     /* Player Commands */
     ENERGY_SHOW("energy show"),
     INVENTORY_SHOW("inventory show"),
     INVENTORY_TRASH("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
-    TOOLS_EQUIP("tools equip (?<name>.*)"),
+    TOOLS_EQUIP ("tools equip (?<name>.*)"),
     TOOLS_SHOW_CURRENT("tools show current"),
     TOOLS_SHOW_AVAILABLE("tools show available"),
     TOOLS_UPGRADE("tools upgrade (?<tool_name>.*)"),
@@ -30,7 +30,6 @@ public enum GameCommands implements Command
     /* cheat codes */
     ENERGY_SET("energy set -v (?<value>\\d+)"),
     ENERGY_UNLIMITED("energy unlimited"),
-    ADD_MONEY("cheat add (?<count>\\d+) dollars"),
 
 
     SHOW_TIME("time"),
@@ -46,24 +45,32 @@ public enum GameCommands implements Command
     SHOW_TOMORROW_WEATHER("weather\\s+forecast"),
 
     CHEAT_CODE_SET_TOMORROW_WEATHER("cheat\\s+weather\\s+set\\s+(?<type>\\S+)"),
-    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
+    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<y>-?\\d+)\\s+(?<x>-?\\d+)"),
+
 
     CAN_WALK("can\\s+walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     WALK("walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
     HELP_READ_MAP("help\\s+reading\\s+map"),
-
     ;
 
-    private final Pattern pattern;
-    GameCommands(String regex) {
-        this.pattern = Pattern.compile(regex);
+    private final String pattern;
+
+    GameCommands(String regex)
+    {
+        this.pattern = regex;
     }
 
     @Override
-    public Matcher getMatcher(String input) {
-        Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+    public Matcher getMatcher(String input)
+    {
+        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
+
+        if (matcher.matches())
+        {
+            return matcher;
+        }
+
+        return null;
     }
 }

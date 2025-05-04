@@ -6,16 +6,15 @@ import model.enums.Season;
 import model.enums.Weather;
 import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingSeedType;
-import model.enums.resources_enums.FruitType;
 import model.enums.resources_enums.TreeType;
 import model.resources.Crop;
 import model.resources.Mineral;
 import model.resources.Tree;
-import model.tools.*;
 
 import javax.tools.Tool;
 import java.util.ArrayList;
 
+import model.tools.*;
 import view.GameMenu;
 
 public class GameController {
@@ -164,6 +163,7 @@ public class GameController {
 
                 currentPlayer.increaseEnergy(-((WateringCan) tool).getLevel().getBaseEnergyUsage());
             } else if (tool instanceof FishingPole) {
+
                 currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
             } else if (tool instanceof BackPack) {
                 //doesn't use energy

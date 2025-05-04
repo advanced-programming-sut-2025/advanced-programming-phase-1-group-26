@@ -12,8 +12,7 @@ public class GameObject
         this.number = number;
     }
 
-    public GameObject()
-    {
+    public GameObject() {
     }
 
     public GameObjectType getObjectType()
@@ -30,8 +29,8 @@ public class GameObject
         return number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void addNumber(int number) {
+        this.number += number;
     }
 
     public Enum<?> getType()
