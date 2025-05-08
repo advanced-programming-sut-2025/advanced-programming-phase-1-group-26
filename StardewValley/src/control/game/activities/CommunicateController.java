@@ -23,7 +23,7 @@ public class CommunicateController
 
     }
 
-    public void upgradeFriendshipLevel (Player mainPlayer, Player player2) {
+    public static void upgradeFriendshipLevel (Player mainPlayer, Player player2) {
         FriendshipData currentLevel = mainPlayer.getFriendships().get(player2);
         FriendshipData otherLevel = player2.getFriendships().get(mainPlayer);
 
@@ -82,7 +82,7 @@ public class CommunicateController
         }
     }
 
-    public boolean checkFriendship (Player player1, Player player2, String command) { //TODO: might change string to command
+    public static boolean checkFriendship (Player player1, Player player2, String command) { //TODO: might change string to command
 
         int level = player1.getFriendships().get(player2).getLevel();
 
@@ -133,27 +133,90 @@ public class CommunicateController
     //gifting methods
 
     public void gift (Player player, GameObjectType item, int amount) {
-        
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (checkFriendship(currentPlayer, player, "gift")) {
+            if (currentPlayer.getItemInInventory(item) == null ||
+                    currentPlayer.getItemInInventory(item).getNumber() < amount) {
+                System.out.println("you don't have enough number this item in your inventory!");
+            } else {
+                currentPlayer.getItemInInventory(item).addNumber(-amount);
+                if (currentPlayer.getItemInInventory(item).getNumber() < 1) {
+                    currentPlayer.getInventory().remove(item);
+                }
+
+                GameObject newObject = new GameObject(item, amount);
+                Gift newGift = new Gift(newObject, currentPlayer, player);
+
+                if (player.getItemInInventory(item) == null) {
+                    player.getInventory().add(newObject);
+                } else {
+                    player.getItemInInventory(item).addNumber(amount);
+                }
+
+                player.getNewGifts().add(newGift);
+                player.getArchiveGifts().add(newGift);
+                currentPlayer.getGivenGifts().add(newGift);
+            }
+        } else {
+            System.out.println("you can't give each other gifts at this level!");
+        }
     }
 
 
     public void giftList () {
-
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        System.out.println("your gifts: ");
+        for (Gift object : currentPlayer.getArchiveGifts()) {
+            System.out.println("id: " + object.getId() +
+                    " item: " + object.getGameObject().getObjectType().name() +
+                    " amount: " + object.getGameObject().getNumber());
+            System.out.println("----");
+        }
     }
 
-    public void giftRate () {
+    public void giftRate (int id, int rate) {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        Gift targetGift = currentPlayer.getGiftById(id);
+        if (targetGift == null) {
+            System.out.println("there's no gift with this id");
+            return;
+        } else if (rate < 1 || rate > 5) {
+            System.out.println("your rate should be between 1 to 5");
+            return;
+        }
+
+        targetGift.setRate(rate);
+        int friendship = ((rate - 3) * 30) + 15;
+        Player giver = targetGift.getGiver();
+
+        giver.getFriendships().get(currentPlayer).addXp(friendship);
+        currentPlayer.getFriendships().get(giver).addXp(friendship);
+        upgradeFriendshipLevel(currentPlayer, giver);
 
     }
 
     public void giftHistory () {
-
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        System.out.println("gits given: ");
+        for (Gift object : currentPlayer.getGivenGifts())  {
+            System.out.println("id: " + object.getId() +
+                    " item: " + object.getGameObject().getObjectType().name() +
+                    " amount: " + object.getGameObject().getNumber());
+            System.out.println("----");
+        }
+        System.out.println("gifts taken: ");
+        for (Gift object : currentPlayer.getArchiveGifts()) {
+            System.out.println("id: " + object.getId() +
+                    " item: " + object.getGameObject().getObjectType().name() +
+                    " amount: " + object.getGameObject().getNumber());
+            System.out.println("----");
+        }
     }
 
 
     //hugging
 
     public void giveHug (Player player) {
-
     }
 
     //flowering

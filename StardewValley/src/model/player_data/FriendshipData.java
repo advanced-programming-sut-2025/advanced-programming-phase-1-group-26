@@ -30,7 +30,6 @@ public class FriendshipData {
 
     public void addXp(int xp) {
         this.xp += xp;
-
         //check if xp changes level
     }
 

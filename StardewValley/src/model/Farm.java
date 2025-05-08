@@ -115,11 +115,11 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree _: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop _ : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed _ : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree _ : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource _ : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    case Tree a: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
                                     default: output.append(Color.YELLOW + "LL" + Color.RESET); break;
                                 }
                             }
@@ -141,11 +141,11 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree _ : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop _ : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed _ : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree _ : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource _ : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
                                     default: output.append(Color.GREEN + "GG" + Color.RESET); break;
                                 }
                             }
@@ -227,8 +227,8 @@ public class Farm {
     private boolean isWalkable(Tile tile)
     {
         if (tile.getTexture() == TileTexture.LAKE ||
-        tile.getTexture() == TileTexture.GREEN_HOUSE ||
-        tile.getTexture() == TileTexture.CABIN)
+                tile.getTexture() == TileTexture.GREEN_HOUSE ||
+                tile.getTexture() == TileTexture.CABIN)
         {
             return false;
         }
@@ -237,7 +237,8 @@ public class Farm {
         {
             return switch (tile.getObject())
             {
-                case Tree _, Resource _ -> false;
+                case Tree a -> false;
+                case Resource b -> false;
                 default -> true;
             };
         }

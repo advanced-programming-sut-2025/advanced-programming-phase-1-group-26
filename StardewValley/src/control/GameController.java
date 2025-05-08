@@ -21,24 +21,40 @@ import view.GameMenu;
 public class GameController {
     public Result energyShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        return new Result(true, "" + currentPlayer.getEnergy());
+        if (currentPlayer.getEnergy() == -1) {
+            return new Result(true, "Your Energy is unlimited!");
+        }
+        return new Result(true, "Your Energy: " + currentPlayer.getEnergy());
     }
 
     public void energySet(int value) {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (currentPlayer.getEnergy() == -1) {
+            System.out.println("your energy is unlimited yohahahahaha");
+            return;
+        } else if (value < 1) {
+            System.out.println("you should set your energy to a positive number!");
+            return;
+        }
         currentPlayer.setEnergy(value);
+        System.out.println("your energy set to : " + currentPlayer.getEnergy());
     }
 
     public void energyUnlimited() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        currentPlayer.setEnergy(2147483647); //might change later
+        currentPlayer.setEnergy(-1); //might change later
+        System.out.println("your energy is now unlimited eshghohal");
+
     }
 
     public void inventoryShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventory());
+        System.out.println("your items:");
+        System.out.println("----");
         for (GameObject object : inventory) {
             System.out.println(object.getObjectType().name() + " x" + object.getNumber());
+            System.out.println("----");
         }
     }
 

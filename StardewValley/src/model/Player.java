@@ -35,6 +35,10 @@ public class Player {
     private ArrayList<Trade> sentTrades = new ArrayList<>();
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
     private ArrayList<Trade> archiveTrades = new ArrayList<>();
+
+    private ArrayList<Gift> newGifts = new ArrayList<>();
+    private ArrayList<Gift> archiveGifts = new ArrayList<>();
+    private ArrayList<Gift> givenGifts = new ArrayList<>();
     private Player zeidy;
 
     private Tool currentTool;
@@ -143,6 +147,18 @@ public class Player {
         return archiveTrades;
     }
 
+    public ArrayList<Gift> getNewGifts() {
+        return newGifts;
+    }
+
+    public ArrayList<Gift> getArchiveGifts() {
+        return archiveGifts;
+    }
+
+    public ArrayList<Gift> getGivenGifts() {
+        return givenGifts;
+    }
+
     public Player getZeidy() {
         return zeidy;
     }
@@ -211,6 +227,15 @@ public class Player {
         for (GameObject object : this.inventory) {
             if (object.getObjectType().equals(objectType)) {
                 return object;
+            }
+        }
+        return null;
+    }
+
+    public Gift getGiftById(int id) {
+        for (Gift gift : this.archiveGifts) {
+            if (gift.getId() == id) {
+                return gift;
             }
         }
         return null;
