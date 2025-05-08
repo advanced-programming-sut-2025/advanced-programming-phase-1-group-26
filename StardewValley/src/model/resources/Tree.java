@@ -3,7 +3,7 @@ package model.resources;
 import model.enums.resources_enums.FruitType;
 import model.enums.resources_enums.TreeType;
 
-public class Tree extends CropsAndTrees
+public class Tree extends Plant
 {
     private FruitType fruit;
     private int fruitHarvestCycle;

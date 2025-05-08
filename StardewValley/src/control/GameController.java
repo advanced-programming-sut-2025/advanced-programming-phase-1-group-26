@@ -9,6 +9,7 @@ import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingSeedType;
 import model.enums.resources_enums.TreeType;
 import model.resources.Crop;
+import model.resources.Plant;
 import model.resources.Mineral;
 import model.resources.Tree;
 
@@ -162,8 +163,12 @@ public class GameController
                 currentPlayer.increaseEnergy(((TrashCan) tool).getLevel().getBaseEnergyUsage());
 
             } else if (tool instanceof WateringCan) {
-
                 currentPlayer.increaseEnergy(-((WateringCan) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.hasPlants())
+                {
+                    Plant plant = (Plant) targetTile.getObject();
+                    plant.water();
+                }
             } else if (tool instanceof FishingPole) {
 
                 currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());

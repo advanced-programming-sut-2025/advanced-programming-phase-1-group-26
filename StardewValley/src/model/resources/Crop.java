@@ -2,7 +2,7 @@ package model.resources;
 
 import model.enums.resources_enums.CropType;
 
-public class Crop extends CropsAndTrees
+public class Crop extends Plant
 {
     private boolean oneTime;
     private int growthTime;

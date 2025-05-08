@@ -3,7 +3,6 @@ package control;
 import model.*;
 import model.enums.FarmTypes;
 import model.enums.Menu;
-import view.GameMenu;
 import view.MainMenu;
 
 import java.util.ArrayList;
