@@ -2,10 +2,8 @@ package model.enums.resources_enums;
 
 import model.enums.GameObjectType;
 import model.enums.Season;
-import model.resources.Tree;
 
 import java.util.List;
-import java.util.Stack;
 
 public enum TreeType
 {

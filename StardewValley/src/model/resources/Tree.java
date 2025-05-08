@@ -1,13 +1,9 @@
 package model.resources;
 
-import model.GameObject;
-import model.enums.Season;
 import model.enums.resources_enums.FruitType;
 import model.enums.resources_enums.TreeType;
 
-import java.util.List;
-
-public class Tree extends CropsAndTrees
+public class Tree extends Plant
 {
     private FruitType fruit;
     private int fruitHarvestCycle;

@@ -1,8 +1,9 @@
 package control.game.activities;
 
-import model.*;
+import model.App;
+import model.GameObject;
+import model.Player;
 import model.player_data.FriendshipData;
-import model.player_data.Trade;
 import model.enums.GameObjectType;
 
 import java.util.Map;
