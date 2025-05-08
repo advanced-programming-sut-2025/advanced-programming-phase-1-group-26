@@ -1,6 +1,8 @@
 package model;
 
 import model.enums.TileTexture;
+import model.resources.Crop;
+import model.resources.Tree;
 
 public class Tile
 {
@@ -11,6 +13,7 @@ public class Tile
 
     private GameObject object = null;
     private boolean isPloughed = false;
+    private boolean isFertilized = false;
 
     public Tile(Point point)
     {
@@ -70,5 +73,28 @@ public class Tile
     public boolean isPloughed()
     {
         return isPloughed;
+    }
+
+    public boolean isFertilized()
+    {
+        return isFertilized;
+    }
+
+    public void fertilize()
+    {
+        isFertilized = true;
+    }
+
+    public boolean hasPlants()
+    {
+        if (object != null)
+        {
+            if (object instanceof Tree || object instanceof Crop)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -2,6 +2,7 @@ package control;
 
 import model.*;
 import model.enums.DayOfWeek;
+import model.enums.GameObjectType;
 import model.enums.Season;
 import model.enums.Weather;
 import model.enums.resources_enums.CropType;
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 import model.tools.*;
 import view.GameMenu;
 
-public class GameController {
+public class GameController
+{
     public Result energyShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         return new Result(true, "" + currentPlayer.getEnergy());
@@ -415,7 +417,7 @@ public class GameController {
 
         if (!tile.isPloughed())
         {
-            return new Result(false, "Tile is not ploughed :(");
+            return new Result(false, "This tile is not ploughed :(");
         }
 
         if (tile.getObject() != null)
@@ -432,8 +434,41 @@ public class GameController {
         CropType cropType = CropType.getCropFromSeed((ForagingSeedType) seed.getType());
         Crop crop = new Crop(cropType);
 
+        player.removeFromInventory(seed);
+
         tile.setObject(crop);
         return new Result(true, "You have successfully planted " + cropType.getCraftInfo() + ".");
+    }
+
+    public Result fertilize(String fertilizerName, String direction)
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        GameObject fertilizer = player.getItemInInventory(GameObjectType.FERTILIZER);
+        if (fertilizer == null)
+        {
+            return new Result(false, "You don't have any fertilizer :(");
+        }
+
+        Tile tile = App.getCurrentGame().getTileFromDirection(direction);
+        if (tile == null)
+        {
+            return new Result(false, "Tile with this path does not exist.");
+        }
+
+        if (tile.isFertilized())
+        {
+            return new Result(false, "This tile has alreaady been fertilized.");
+        }
+
+        if (tile.getObject() == null || !tile.hasPlants())
+        {
+            return new Result(false, "There are no plants in this tile :(");
+        }
+
+        tile.fertilize();
+        return new Result(true, "You have successfully fertilized " +
+                "tile ( " + tile.getX() + ", " + tile.getY() + ".");
     }
 
     public Result createNewGame(String[] usernames)

@@ -106,6 +106,7 @@ public class Farm {
                     {
                         case CABIN:
                             output.append(Color.RED + "CC" + Color.RESET);
+//                            output.append("\uD83C\uDFE0");
                             break;
                         case LAND:
                             if (tile.getObject() == null)
@@ -129,6 +130,7 @@ public class Farm {
                             break;
                         case QUARRY:
                             output.append(Color.DARK_GREY + "QQ" + Color.RESET);
+//                            output.append("\uD83E\uDEA8");
                             break;
                         case GREEN_HOUSE:
                             output.append(Color.DARK_GREEN + "GG" + Color.RESET);
