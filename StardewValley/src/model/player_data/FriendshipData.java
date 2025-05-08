@@ -24,6 +24,10 @@ public class FriendshipData {
         this.level ++;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public int getXp() {
         return xp;
     }

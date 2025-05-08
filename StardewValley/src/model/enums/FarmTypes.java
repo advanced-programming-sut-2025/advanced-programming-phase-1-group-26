@@ -2,10 +2,10 @@ package model.enums;
 
 
 public enum FarmTypes {
-    STANDARD("standard", "resources/map/standard.json"),
-    RIVERLAND("riverland", "resources/map/river.json"),
-    HILL_TOP("hilltop", "resources/map/hilltop.json"),
-    BEACH("four_corners", "resources/map/beach.json");
+    STANDARD("standard", "StardewValley/resources/map/standard.json"),
+    RIVERLAND("riverland", "StardewValley/resources/map/river.json"),
+    HILL_TOP("hilltop", "StardewValley/resources/map/hilltop.json"),
+    BEACH("four_corners", "StardewValley/resources/map/beach.json");
 
     private final String name;
     private final String mapPath;

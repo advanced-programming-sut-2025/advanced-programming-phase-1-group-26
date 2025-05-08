@@ -39,6 +39,8 @@ public class Player {
     private ArrayList<Gift> newGifts = new ArrayList<>();
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
+
+    private HashMap<Player, GameObject> purposeList = new HashMap<>();
     private Player zeidy;
 
     private Tool currentTool;
@@ -116,7 +118,10 @@ public class Player {
     }
 
     public double getMoney() {
-        return money;
+        if (this.zeidy == null) {
+            return money;
+        }
+        return money + zeidy.money;
     }
 
     public void setMoney(double money) {
@@ -157,6 +162,10 @@ public class Player {
 
     public ArrayList<Gift> getGivenGifts() {
         return givenGifts;
+    }
+
+    public HashMap<Player, GameObject> getPurposeList() {
+        return purposeList;
     }
 
     public Player getZeidy() {

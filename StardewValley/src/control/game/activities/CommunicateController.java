@@ -271,11 +271,41 @@ public class CommunicateController
             System.out.println("you can't purpose ask doost pesaret");
         } else if (!checkFriendship(currentPlayer, player, "marriage")) {
             System.out.println("your friendship is not good enough to marry each other!");
+        } else {
+            //check ring in inventory
+            player.getPurposeList().put(currentPlayer, ring);
         }
 
     }
 
     public void purposeRespond (Player player, boolean answer) {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        GameObject ring = currentPlayer.getPurposeList().get(player);
+
+        if (answer) {
+            currentPlayer.getInventory().remove(ring);
+            player.getInventory().add(ring);
+            player.setZeidy(currentPlayer);
+            currentPlayer.setZeidy(player);
+            player.getFriendships().get(currentPlayer).setMarried(true);
+            currentPlayer.getFriendships().get(player).setMarried(true);
+            upgradeFriendshipLevel(currentPlayer, player);
+            System.out.println("you are husband and wife now");
+            //add energy things
+        } else {
+            FriendshipData data1 =currentPlayer.getFriendships().get(player);
+            FriendshipData data2 =player.getFriendships().get(currentPlayer);
+            data1.setLevel(0);
+            data1.setXp(0);
+            data1.setBouquetBought(false);
+            data2.setLevel(0);
+            data2.setXp(0);
+            data2.setBouquetBought(false);
+            System.out.println("go kill yourself");
+        }
+
+        currentPlayer.getPurposeList().remove(player);
+
 
     }
 
