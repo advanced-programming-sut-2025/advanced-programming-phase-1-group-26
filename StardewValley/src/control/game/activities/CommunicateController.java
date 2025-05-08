@@ -1,6 +1,7 @@
 package control.game.activities;
 
 import model.*;
+import model.enums.Gender;
 import model.player_data.FriendshipData;
 import model.player_data.Trade;
 import model.enums.GameObjectType;
@@ -20,7 +21,6 @@ public class CommunicateController
             int xp = entry.getValue().getXp();
             System.out.printf("%s: Level: %d XP: %d\n", otherPlayer, level, xp);
         }
-
     }
 
     public static void upgradeFriendshipLevel (Player mainPlayer, Player player2) {
@@ -186,12 +186,13 @@ public class CommunicateController
         }
 
         targetGift.setRate(rate);
-        int friendship = ((rate - 3) * 30) + 15;
         Player giver = targetGift.getGiver();
-
-        giver.getFriendships().get(currentPlayer).addXp(friendship);
-        currentPlayer.getFriendships().get(giver).addXp(friendship);
-        upgradeFriendshipLevel(currentPlayer, giver);
+        if (!currentPlayer.getFriendships().get(giver).isIntrcatedToday()) {
+            int friendship = ((rate - 3) * 30) + 15;
+            giver.getFriendships().get(currentPlayer).addXp(friendship);
+            currentPlayer.getFriendships().get(giver).addXp(friendship);
+            upgradeFriendshipLevel(currentPlayer, giver);
+        }
 
     }
 
@@ -217,17 +218,60 @@ public class CommunicateController
     //hugging
 
     public void giveHug (Player player) {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (checkFriendship(currentPlayer, player, "hug")) {
+            if (!currentPlayer.getFriendships().get(player).isIntrcatedToday()) {
+                player.getFriendships().get(currentPlayer).addXp(60);
+                currentPlayer.getFriendships().get(player).addXp(60);
+                upgradeFriendshipLevel(currentPlayer, player);
+                currentPlayer.getFriendships().get(player).setIntrcatedToday(true);
+            }
+            System.out.println("you gave " + player.getUser().getNickname() + " a hug");
+        }
+
     }
 
     //flowering
 
     public void giveFlower (Player player) {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (checkFriendship(currentPlayer, player, "flower")) {
+            if (currentPlayer.getItemInInventory(GameObjectType.FLOWER) != null) {
+                currentPlayer.getItemInInventory(GameObjectType.FLOWER).addNumber(-1);
+                if (currentPlayer.getItemInInventory(GameObjectType.FLOWER).getNumber() < 1) {
+                    currentPlayer.getInventory().remove(currentPlayer.getItemInInventory(GameObjectType.FLOWER));
+                }
 
+                if (player.getItemInInventory(GameObjectType.FLOWER) != null) {
+                    player.getItemInInventory(GameObjectType.FLOWER).addNumber(1);
+                } else {
+                    player.getInventory().add(new GameObject(GameObjectType.FLOWER, 1));
+                }
+
+                if (!currentPlayer.getFriendships().get(player).isIntrcatedToday()) {
+                    currentPlayer.getFriendships().get(player).setBouquetBought(true);
+                    player.getFriendships().get(currentPlayer).setBouquetBought(true);
+                    upgradeFriendshipLevel(currentPlayer, player);
+                }
+            } else {
+                System.out.println("you don't have flower in your inventory!");
+            }
+        } else {
+            System.out.println("your friendship is not good enough to give each other flowers");
+        }
     }
 
     //marriage
 
     public void purposeAsk (Player player, GameObject ring) {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+
+
+        if (currentPlayer.getUser().getGender().equals(Gender.FEMALE)) {
+            System.out.println("you can't purpose ask doost pesaret");
+        } else if (!checkFriendship(currentPlayer, player, "marriage")) {
+            System.out.println("your friendship is not good enough to marry each other!");
+        }
 
     }
 

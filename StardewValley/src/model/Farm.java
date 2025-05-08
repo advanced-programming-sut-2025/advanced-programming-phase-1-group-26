@@ -115,7 +115,7 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree a: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
                                     case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
                                     case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
                                     case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
