@@ -1,10 +1,7 @@
 package control;
 
 import model.*;
-import model.enums.DayOfWeek;
-import model.enums.GameObjectType;
-import model.enums.Season;
-import model.enums.Weather;
+import model.enums.*;
 import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingSeedType;
 import model.enums.resources_enums.TreeType;
@@ -112,32 +109,29 @@ public class GameController
         }
     }
 
-    public void toolsUse(String direction) { // might change to enum direction
+    public Result toolsUse(String direction) { // might change to enum direction
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Tile targetTile = App.getCurrentGame().getTileFromDirection(direction);
 
         if (targetTile == null) {
-            System.out.println("you didn't choose a valid direction");
-            return;
+            return new Result(false, "you didn't choose a valid direction");
         }
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
-            System.out.println("you don't have any tool equipped");
+            GameMenu.println("you don't have any tool equipped");
         } else {
             if (tool instanceof Axe) {
                 if (targetTile.getObject() instanceof Tree) {
                     currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
                 } else {
-                    System.out.println("you can't use axe on this tile");
-                    return;
+                    return new Result(false, "you can't use axe on this tile");
                 }
             } else if (tool instanceof Hoe) {
                 if (targetTile.getObject() == null && !targetTile.isPloughed()) {
                     targetTile.plough();
                     currentPlayer.increaseEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
                 } else {
-                    System.out.println("you can't use hoe on this tile");
-                    return;
+                    return new Result(false, "you can't use hoe on this tile");
                 }
             } else if (tool instanceof MilkPail) {
                 //TODO: use near animal
@@ -150,8 +144,7 @@ public class GameController
                     currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
                 } //items on the tile
                 else {
-                    System.out.println("you can't use pickaxe on this tile");
-                    return;
+                    return new Result(false, "you can't use pickaxe on this tile");
                 }
             } else if (tool instanceof Seythe) {
                 //doesn't have level
@@ -167,7 +160,15 @@ public class GameController
                 if (targetTile.hasPlants())
                 {
                     Plant plant = (Plant) targetTile.getObject();
+                    if (((WateringCan) tool).getCurrentVolume() == 0)
+                    {
+                        return new Result(true, "You should refill your watering can.");
+                    }
+                    ((WateringCan) tool).decreaseVolume(1);
                     plant.water();
+                } else if (targetTile.getTexture().equals(TileTexture.LAKE))
+                {
+                    ((WateringCan) tool).addVolume(5); // TODO: HARD-CODED here, should change later
                 }
             } else if (tool instanceof FishingPole) {
 
@@ -176,6 +177,8 @@ public class GameController
                 //doesn't use energy
             }
         }
+
+        return new Result(true, "WE SHOULD CHANGE THIS PART OF CODE!!!");
     }
 
     public Result showTime()
