@@ -232,6 +232,18 @@ public class Player {
         return null;
     }
 
+    public void removeFromInventory(GameObject object)
+    {
+        if (this.inventory.contains(object))
+        {
+            object.addNumber(-1);
+            if (object.number == 0)
+            {
+                this.inventory.remove(object);
+            }
+        }
+    }
+
     public Gift getGiftById(int id) {
         for (Gift gift : this.archiveGifts) {
             if (gift.getId() == id) {

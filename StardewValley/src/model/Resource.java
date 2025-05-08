@@ -1,6 +1,5 @@
 package model;
 
-import model.enums.GameObjectType;
 import model.enums.resources_enums.ResourceItem;
 
 public class Resource extends GameObject

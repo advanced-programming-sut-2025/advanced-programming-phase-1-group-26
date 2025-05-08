@@ -106,6 +106,7 @@ public class Farm {
                     {
                         case CABIN:
                             output.append(Color.RED + "CC" + Color.RESET);
+//                            output.append("\uD83C\uDFE0");
                             break;
                         case LAND:
                             if (tile.getObject() == null)
@@ -115,7 +116,7 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case Tree a: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
                                     case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
                                     case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
                                     case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
@@ -129,6 +130,7 @@ public class Farm {
                             break;
                         case QUARRY:
                             output.append(Color.DARK_GREY + "QQ" + Color.RESET);
+//                            output.append("\uD83E\uDEA8");
                             break;
                         case GREEN_HOUSE:
                             output.append(Color.DARK_GREEN + "GG" + Color.RESET);
@@ -227,8 +229,8 @@ public class Farm {
     private boolean isWalkable(Tile tile)
     {
         if (tile.getTexture() == TileTexture.LAKE ||
-                tile.getTexture() == TileTexture.GREEN_HOUSE ||
-                tile.getTexture() == TileTexture.CABIN)
+        tile.getTexture() == TileTexture.GREEN_HOUSE ||
+        tile.getTexture() == TileTexture.CABIN)
         {
             return false;
         }

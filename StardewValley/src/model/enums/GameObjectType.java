@@ -301,6 +301,8 @@ public enum GameObjectType
     Mahogany_Seeds("mahogany seeds"),
     Mushroom_Tree_Seeds("mushroom tree seeds"),
     Mystic_Tree_Seed("mystic tree seed"),
+
+    FERTILIZER("fertilizer"),
     ;
 
     private final String name;

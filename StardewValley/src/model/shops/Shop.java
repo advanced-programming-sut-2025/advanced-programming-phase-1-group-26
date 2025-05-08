@@ -2,7 +2,6 @@ package model.shops;
 
 import model.GameObject;
 import model.Time;
-import model.enums.GameObjectType;
 import model.enums.ShopType;
 
 public abstract class Shop {

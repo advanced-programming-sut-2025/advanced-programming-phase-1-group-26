@@ -5,7 +5,7 @@ import model.enums.Season;
 
 import java.util.List;
 
-public class CropsAndTrees extends GameObject
+public class Plant extends GameObject
 {
     protected String name;
     protected Object type;
@@ -16,4 +16,10 @@ public class CropsAndTrees extends GameObject
     protected boolean isEdible;
     protected int energy;
     protected List<Season> seasons;
+
+    protected int lastWatered;
+    public void water()
+    {
+        lastWatered = 0;
+    }
 }
