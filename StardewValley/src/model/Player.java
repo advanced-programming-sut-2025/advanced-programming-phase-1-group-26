@@ -36,6 +36,12 @@ public class Player {
     private ArrayList<Trade> sentTrades = new ArrayList<>();
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
     private ArrayList<Trade> archiveTrades = new ArrayList<>();
+
+    private ArrayList<Gift> newGifts = new ArrayList<>();
+    private ArrayList<Gift> archiveGifts = new ArrayList<>();
+    private ArrayList<Gift> givenGifts = new ArrayList<>();
+
+    private HashMap<Player, GameObject> purposeList = new HashMap<>();
     private Player zeidy;
 
     private Tool currentTool;
@@ -113,7 +119,10 @@ public class Player {
     }
 
     public double getMoney() {
-        return money;
+        if (this.zeidy == null) {
+            return money;
+        }
+        return money + zeidy.money;
     }
 
     public void setMoney(double money) {
@@ -142,6 +151,22 @@ public class Player {
 
     public ArrayList<Trade> getArchiveTrades() {
         return archiveTrades;
+    }
+
+    public ArrayList<Gift> getNewGifts() {
+        return newGifts;
+    }
+
+    public ArrayList<Gift> getArchiveGifts() {
+        return archiveGifts;
+    }
+
+    public ArrayList<Gift> getGivenGifts() {
+        return givenGifts;
+    }
+
+    public HashMap<Player, GameObject> getPurposeList() {
+        return purposeList;
     }
 
     public Player getZeidy() {
@@ -227,6 +252,15 @@ public class Player {
                 this.inventory.remove(object);
             }
         }
+    }
+
+    public Gift getGiftById(int id) {
+        for (Gift gift : this.archiveGifts) {
+            if (gift.getId() == id) {
+                return gift;
+            }
+        }
+        return null;
     }
 
     public Tool getTool(ToolType type)
