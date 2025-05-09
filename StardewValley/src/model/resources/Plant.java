@@ -21,6 +21,8 @@ public class Plant extends GameObject
     protected int currentStage = 0;
     protected int lastHarvested = -1;
 
+    protected int harvestWaitTime;
+
     public void water()
     {
         lastWatered = 0;
@@ -38,12 +40,14 @@ public class Plant extends GameObject
     {
         grow();
         lastWatered += 1;
-        lastHarvested += 1;
+        if (currentStage == totalHarvestTime)
+        {
+            lastHarvested += 1;
+        }
     }
 
-    public GameObject harvest()
+    public boolean canHarvest() // would be overridden
     {
-        lastWatered = 0;
-        return null;
+        return false;
     }
 }

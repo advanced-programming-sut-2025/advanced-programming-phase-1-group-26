@@ -3,10 +3,7 @@ package model;
 import model.enums.FarmTypes;
 import model.enums.TileTexture;
 import model.enums.resources_enums.*;
-import model.resources.ForagingCrop;
-import model.resources.ForagingSeed;
-import model.resources.ForagingTree;
-import model.resources.Tree;
+import model.resources.*;
 
 import java.util.*;
 import java.util.Map;
@@ -421,5 +418,30 @@ public class Farm {
                 }
             }
         }
+    }
+
+    public ArrayList<Plant> getPlants()
+    {
+        ArrayList<Plant> plants = new ArrayList<>();
+
+        for (int i = 0; i < HEIGHT; i++)
+        {
+            for (int j = 0; j < WIDTH; j++)
+            {
+                Tile tile = getTile(i, j);
+                if (tile.getObject() != null)
+                {
+                    if (tile.getObject() instanceof Tree)
+                    {
+                        plants.add((Tree) tile.getObject());
+                    } else if (tile.getObject() instanceof Crop)
+                    {
+                        plants.add((Crop) tile.getObject());
+                    }
+                }
+            }
+        }
+
+        return plants;
     }
 }

@@ -97,4 +97,11 @@ public class Tile
 
         return false;
     }
+
+    public void unPlant()
+    {
+        object = null;
+        isPloughed = false;
+        isFertilized = false;
+    }
 }

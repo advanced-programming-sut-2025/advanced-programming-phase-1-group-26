@@ -22,11 +22,37 @@ public class Crop extends Plant
         this.energy = cropType.getEnergy();
         this.seasons = cropType.getSeasons();
         this.canBecomeGiant = cropType.isCanBecomeGiant();
-//        this.ObjectType = cropType.getT
+        this.ObjectType = cropType.getType();
+
+        this.harvestWaitTime = totalHarvestTime;
     }
 
     public String getName()
     {
         return this.name;
+    }
+
+    @Override
+    public boolean canHarvest()
+    {
+        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
+    }
+
+    public CropType getCropType()
+    {
+        return (CropType) type;
+    }
+
+    public boolean harvest()
+    {
+        if (oneTime)
+        {
+            return true;
+        }
+
+        lastHarvested = 0;
+        harvestWaitTime = growthTime;
+
+        return false;
     }
 }

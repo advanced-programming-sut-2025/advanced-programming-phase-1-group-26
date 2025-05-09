@@ -2,6 +2,7 @@ package model;
 
 import model.animal.Animal;
 import model.enums.GameObjectType;
+import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.Skill;
 import model.player_data.Trade;
@@ -226,5 +227,25 @@ public class Player {
                 this.inventory.remove(object);
             }
         }
+    }
+
+    public Tool getTool(ToolType type)
+    {
+        for (GameObject object : inventory)
+        {
+            if (object instanceof Tool tool)
+            {
+                if (tool.getType().equals(type))
+                {
+                    return tool;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void addToInventory(GameObject object)
+    {
+        inventory.add(object);
     }
 }

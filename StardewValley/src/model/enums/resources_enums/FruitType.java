@@ -33,4 +33,9 @@ public enum FruitType
     {
         return name;
     }
+
+    public GameObjectType getType()
+    {
+        return type;
+    }
 }

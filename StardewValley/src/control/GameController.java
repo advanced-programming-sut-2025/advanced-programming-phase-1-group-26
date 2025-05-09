@@ -5,12 +5,13 @@ import model.enums.*;
 import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingSeedType;
 import model.enums.resources_enums.TreeType;
+import model.enums.tool_enums.ToolType;
 import model.resources.Crop;
 import model.resources.Plant;
 import model.resources.Mineral;
 import model.resources.Tree;
 
-import javax.tools.Tool;
+import model.tools.Tool;
 import java.util.ArrayList;
 
 import model.tools.*;
@@ -147,7 +148,37 @@ public class GameController
                     return new Result(false, "you can't use pickaxe on this tile");
                 }
             } else if (tool instanceof Seythe) {
-                //doesn't have level
+                if (!targetTile.hasPlants())
+                {
+                    return new Result(false, "There are no plants in this tile :(");
+                }
+
+                Plant plant = (Plant) targetTile.getObject();
+                if (!plant.canHarvest())
+                {
+                    return new Result(false, "You can't harvest this tile yet :(");
+                }
+
+                if (plant instanceof Tree)
+                {
+                    Tree tree = (Tree) plant;
+                    GameObject fruit = new GameObject(tree.getFruit().getType(), 1);
+                    currentPlayer.addToInventory(fruit);
+                    tree.harvest();
+                    return new Result(true, "you harvested one " + fruit.getObjectType().name() + ".");
+                } else if (plant instanceof Crop)
+                {
+                    Crop crop = (Crop) plant;
+                    GameObject cropResult = new GameObject(crop.getCropType().getType(), 1);
+                    currentPlayer.addToInventory(cropResult);
+
+                    if (crop.harvest())
+                    {
+                        targetTile.unPlant();
+                    }
+
+                    return new Result(true, "you harvested one " + crop.getObjectType().name() + ".");
+                }
 
             } else if (tool instanceof Shear) {
                 //doesn't have level
@@ -477,6 +508,22 @@ public class GameController
         tile.fertilize();
         return new Result(true, "You have successfully fertilized " +
                 "tile ( " + tile.getX() + ", " + tile.getY() + ".");
+    }
+
+    public Result howMuchWater()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        Tool tool = player.getTool(ToolType.WateringCan);
+        if (tool == null)
+        {
+            return new Result(false, "What kind of gardener are you? You don't even have a watering can.");
+        }
+
+        WateringCan wateringCan = (WateringCan) tool;
+        return new Result(true, "Your watering can currently has " + wateringCan.getCurrentVolume() + "" +
+                " units of water.\n" +
+                "Tip: You can refill it near tiles that contain water.");
     }
 
     public Result createNewGame(String[] usernames)
