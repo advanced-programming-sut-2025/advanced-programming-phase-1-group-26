@@ -163,7 +163,16 @@ public class GameController
                 else {
                     return new Result(false, "you can't use pickaxe on this tile");
                 }
-            } else if (tool instanceof Seythe) {
+            } else if (tool instanceof Seythe)
+            {
+                currentPlayer.increaseEnergy(-((Seythe) tool).getEnergyUsage());
+
+                if (targetTile.getTexture().equals(TileTexture.GRASS) && targetTile.getObject() == null)
+                {
+                    targetTile.setType(TileTexture.LAND);
+                    return new Result(true, "You can now plant seeds in this tile.");
+                }
+
                 if (!targetTile.hasPlants())
                 {
                     return new Result(false, "There are no plants in this tile :(");

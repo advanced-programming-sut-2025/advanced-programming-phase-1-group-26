@@ -1,8 +1,8 @@
 package model;
 
 import model.enums.TileTexture;
-import model.resources.Crop;
-import model.resources.Tree;
+import model.enums.resources_enums.ResourceItem;
+import model.resources.*;
 
 public class Tile
 {
@@ -14,6 +14,8 @@ public class Tile
     private GameObject object = null;
     private boolean isPloughed = false;
     private boolean isFertilized = false;
+
+    private boolean isImmuneFromCrows = false;
 
     public Tile(Point point)
     {
@@ -103,5 +105,100 @@ public class Tile
         object = null;
         isPloughed = false;
         isFertilized = false;
+    }
+
+    public String getAppearance()
+    {
+        // TODO: uncomment this later
+//        if (App.getCurrentGame().getCurrentPlayer().getLocation().equals(point))
+//        {
+//            return "\uD83E\uDD13"; // nerd face
+//        }
+
+        if (object == null)
+        {
+            if (texture.equals(TileTexture.LAND))
+            {
+                if (isPloughed)
+                {
+                    return "\uD83D\uDFEB";
+                } else
+                {
+                    return "\uD83D\uDFE8";
+                }
+            } else if (texture.equals(TileTexture.LAKE))
+            {
+                if (Math.random() < 0.5)
+                {
+                    return "\uD83C\uDF0A"; // wave emoji
+                } else
+                {
+                    return "\uD83D\uDFE6";
+                }
+            } else if (texture.equals(TileTexture.GRASS))
+            {
+                return "\uD83D\uDFE9";
+            } else if (texture.equals(TileTexture.CABIN))
+            {
+                return "\uD83C\uDFE0"; // maybe (?)
+            } else if (texture.equals(TileTexture.GREEN_HOUSE))
+            {
+                return "\uD83E\uDE9F"; // glass emoji, maybe change later
+            } else if (texture.equals(TileTexture.QUARRY))
+            {
+                return "\uD83E\uDEA8"; // rock emoji
+            } else
+            {
+                return "\uD83D\uDFE5"; // ERROR
+            }
+        } else
+        {
+            if (object instanceof Tree)
+            {
+                if (Math.random() < 0.5)
+                {
+                    return "\uD83C\uDF32"; // tree emoji type 1
+                } else
+                {
+                    return "\uD83C\uDF33"; // tree emoji type 2
+                }
+            } else if (object instanceof Crop)
+            {
+                return "\uD83C\uDF31"; // seed emoji
+            } else if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof ForagingTree)
+            {
+                return "\uD83C\uDF32";
+            } else if (object instanceof Resource)
+            {
+                Resource r = (Resource) object;
+                if (r.getResourceType().equals(ResourceItem.STONE))
+                {
+                    return "\uD83E\uDEA8"; // rock emoji
+                } else if (r.getResourceType().equals(ResourceItem.WOOD))
+                {
+                    return "\uD83E\uDEB5"; // wood emoji
+                }
+            } else
+            {
+                return "\uD83D\uDFE5"; // ERROR
+            }
+        }
+
+        return "\uD83D\uDFE5"; // ERROR
+    }
+
+    public boolean isImmuneFromCrows()
+    {
+        return isImmuneFromCrows;
+    }
+
+    public void makeImmuneFromCrows()
+    {
+        isImmuneFromCrows = true;
+    }
+
+    public void setImmunityFromCrows()
+    {
+        isImmuneFromCrows = false;
     }
 }

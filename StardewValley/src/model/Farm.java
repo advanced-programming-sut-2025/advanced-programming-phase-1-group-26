@@ -8,7 +8,8 @@ import model.resources.*;
 import java.util.*;
 import java.util.Map;
 
-public class Farm {
+public class Farm extends model.Map
+{
     private final int height = 70;
     private final int width = 70;
 
@@ -29,8 +30,8 @@ public class Farm {
         {
             for (int x = 0; x < WIDTH; x++)
             {
-                tiles[y][x] = new Tile(new Point(y, x));
-                tiles[y][x].setType(TileTexture.LAND);
+                tiles[x][y] = new Tile(new Point(y, x));
+                tiles[x][y].setType(TileTexture.LAND);
             }
         }
 
@@ -55,14 +56,15 @@ public class Farm {
             List<Point> points = mapData.get(typeName);
             for (Point p : points)
             {
-                if (isInBounds(p.getY(), p.getX())) {
-                    tiles[p.getY()][p.getX()].setType(texture);
+                if (isInBounds(p.getY(), p.getX()))
+                {
+                    tiles[p.getX()][p.getY()].setType(texture);
                 }
             }
         }
     }
 
-    private boolean isInBounds(int y, int x)
+    public boolean isInBounds(int x, int y)
     {
         return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
     }
@@ -80,11 +82,11 @@ public class Farm {
         };
     }
 
-    public Tile getTile(int y, int x)
+    public Tile getTile(int x, int y)
     {
-        if (isInBounds(y, x))
+        if (isInBounds(x, y))
         {
-            return tiles[y][x];
+            return tiles[x][y];
         }
         return null;
     }
@@ -99,60 +101,7 @@ public class Farm {
                 if (isInBounds(y, x))
                 {
                     Tile tile = tiles[y][x];
-                    switch (tile.getTexture())
-                    {
-                        case CABIN:
-                            output.append(Color.RED + "CC" + Color.RESET);
-//                            output.append("\uD83C\uDFE0");
-                            break;
-                        case LAND:
-                            if (tile.getObject() == null)
-                            {
-                                output.append(Color.YELLOW + "LL" + Color.RESET);
-                            } else
-                            {
-                                switch (tile.getObject())
-                                {
-                                    case Tree a: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
-                                    default: output.append(Color.YELLOW + "LL" + Color.RESET); break;
-                                }
-                            }
-                            break;
-                        case LAKE:
-                            output.append(Color.BLUE + "OO" + Color.RESET);
-                            break;
-                        case QUARRY:
-                            output.append(Color.DARK_GREY + "QQ" + Color.RESET);
-//                            output.append("\uD83E\uDEA8");
-                            break;
-                        case GREEN_HOUSE:
-                            output.append(Color.DARK_GREEN + "GG" + Color.RESET);
-                            break;
-                        case GRASS:
-                            if (tile.getObject() == null)
-                            {
-                                output.append(Color.GREEN + "GG" + Color.RESET);
-                            } else
-                            {
-                                switch (tile.getObject())
-                                {
-                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
-                                    default: output.append(Color.GREEN + "GG" + Color.RESET); break;
-                                }
-                            }
-                            break;
-                        default:
-                            output.append(Color.RED + "##" + Color.RESET);
-                            break;
-                    }
+                    output.append(tile.getAppearance());
                 }
             }
             output.append("\n");
@@ -226,8 +175,8 @@ public class Farm {
     private boolean isWalkable(Tile tile)
     {
         if (tile.getTexture() == TileTexture.LAKE ||
-        tile.getTexture() == TileTexture.GREEN_HOUSE ||
-        tile.getTexture() == TileTexture.CABIN)
+                tile.getTexture() == TileTexture.GREEN_HOUSE ||
+                tile.getTexture() == TileTexture.CABIN)
         {
             return false;
         }
@@ -331,10 +280,10 @@ public class Farm {
         int turns = 0;
         for (int i = 2; i < path.size(); i++)
         {
-            int dx1 = path.get(i-1).getX() - path.get(i-2).getX();
-            int dy1 = path.get(i-1).getY() - path.get(i-2).getY();
-            int dx2 = path.get(i).getX() - path.get(i-1).getX();
-            int dy2 = path.get(i).getY() - path.get(i-1).getY();
+            int dx1 = path.get(i - 1).getX() - path.get(i - 2).getX();
+            int dy1 = path.get(i - 1).getY() - path.get(i - 2).getY();
+            int dx2 = path.get(i).getX() - path.get(i - 1).getX();
+            int dy2 = path.get(i).getY() - path.get(i - 1).getY();
 
             if (dx1 != dx2 || dy1 != dy2)
             {
@@ -443,5 +392,28 @@ public class Farm {
         }
 
         return plants;
+    }
+
+    public String showAround(Point location)
+    {
+        StringBuilder output = new StringBuilder();
+
+        int x = location.getX();
+        int y = location.getY();
+
+        for (int i = 3; i >= -3; i--)
+        {
+            for (int j = -3; j <= 3; j++)
+            {
+                if (isInBounds(x + j, y + i))
+                {
+                    Tile tile = getTile(x + j, y + i);
+                    output.append(tile.getAppearance());
+                }
+            }
+            output.append("\n");
+        }
+
+        return output.toString();
     }
 }

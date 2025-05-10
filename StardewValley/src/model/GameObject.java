@@ -5,7 +5,8 @@ import model.enums.GameObjectType;
 public class GameObject
 {
     protected GameObjectType ObjectType;
-    protected int number;
+    protected int number = 0;
+    protected String appearance;
 
     public GameObject(GameObjectType objectType, int number) {
         ObjectType = objectType;
