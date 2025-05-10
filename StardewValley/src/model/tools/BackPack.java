@@ -16,10 +16,6 @@ public class BackPack extends Tool {
         this.level = BackPackLevel.base;
     }
 
-    public ArrayList<GameObject> getInventory() {
-        return inventory;
-    }
-
     public BackPackLevel getLevel() {
         return level;
     }
@@ -27,8 +23,6 @@ public class BackPack extends Tool {
     public void setLevel(BackPackLevel level) {
         this.level = level;
     }
-
-    private ArrayList<GameObject> inventory = new ArrayList<>();
 
     public ArrayList<GameObject> getInventory()
     {

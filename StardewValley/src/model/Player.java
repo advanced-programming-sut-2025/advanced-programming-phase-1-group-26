@@ -34,7 +34,7 @@ public class Player {
     private Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
     private Skill fishingSkill = new Skill(SkillType.Fishing);
 
-    BackPack currentBackPack = new BackPack();
+    BackPack currentBackPack;
     private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
     private ArrayList<Trade> sentTrades = new ArrayList<>();
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
@@ -155,9 +155,6 @@ public class Player {
         this.money += money;
     }
 
-    public ArrayList<GameObject> getInventory() {
-        return currentBackPack.getInventory();
-    }
 
     public HashMap<Player, FriendshipData> getFriendships() {
         return friendships;
@@ -436,19 +433,4 @@ public class Player {
         return capacity - currentBackPack.getSize();
     }
 
-    public ArrayList<Gift> getNewGifts() {
-        return newGifts;
-    }
-
-    public ArrayList<Gift> getArchiveGifts() {
-        return archiveGifts;
-    }
-
-    public ArrayList<Gift> getGivenGifts() {
-        return givenGifts;
-    }
-
-    public HashMap<Player, GameObject> getPurposeList() {
-        return purposeList;
-    }
 }
