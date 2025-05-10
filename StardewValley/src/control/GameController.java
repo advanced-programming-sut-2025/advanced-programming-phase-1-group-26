@@ -15,6 +15,7 @@ import model.resources.Tree;
 
 import javax.tools.Tool;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 import model.tools.*;
 import view.GameMenu;
@@ -23,35 +24,35 @@ public class GameController
 {
     public Result energyShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        if (currentPlayer.getEnergy() == -1) {
+        if (currentPlayer.getTurnEnergy() == -1)
             return new Result(true, "Your Energy is unlimited!");
-        }
-        return new Result(true, "Your Energy: " + currentPlayer.getEnergy());
+        return new Result(true,
+                "Your Energy: " + currentPlayer.getEnergy() +
+                "\nthis turn energy: " + currentPlayer.getTurnEnergy());
     }
 
-    public void energySet(int value) {
+    public Result energySet(Matcher matcher) {
+        int value = Integer.parseInt(matcher.group("value"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        if (currentPlayer.getEnergy() == -1) {
-            System.out.println("your energy is unlimited yohahahahaha");
-            return;
+        if (currentPlayer.getTurnEnergy() == -1) {
+            return new Result(false, "your energy is unlimited yohahahahaha");
         } else if (value < 1) {
-            System.out.println("you should set your energy to a positive number!");
-            return;
+            return new Result(false,"you should set your energy to a positive number!");
         }
-        currentPlayer.setEnergy(value);
-        System.out.println("your energy set to : " + currentPlayer.getEnergy());
+        currentPlayer.setTurnEnergy(value);
+        return new Result(true,"your energy set to : " + currentPlayer.getTurnEnergy());
     }
 
-    public void energyUnlimited() {
+    public Result energyUnlimited() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        currentPlayer.setEnergy(-1); //might change later
-        System.out.println("your energy is now unlimited eshghohal");
+        currentPlayer.setTurnEnergy(-1); //might change later
+        return new Result(true,"your energy is now unlimited eshghohal");
 
     }
 
     public void inventoryShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventory());
+        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getCurrentBackPack().getInventory());
         System.out.println("your items:");
         System.out.println("----");
         for (GameObject object : inventory) {
@@ -60,26 +61,34 @@ public class GameController
         }
     }
 
-    public void inventoryTrash(String name, int number) {
+    public Result inventoryTrash(Matcher matcher) {
+        String name = matcher.group("name");
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameObject object = null;
-        for (GameObject gameObject : currentPlayer.getInventory()) {
+        for (GameObject gameObject : currentPlayer.getCurrentBackPack().getInventory()) {
             if (gameObject.getObjectType().name().equals(name)) {
                 object = gameObject;
             }
         }
 
         if (object == null) {
-            System.out.println("you don't have this item in your inventory!");
-        } else {
-            currentPlayer.getInventory().remove(object);
-            System.out.println("item deleted successfully");
+            return new Result(false, "you don't have this item in your inventory!");
         }
+
+        int number = object.getNumber();
+        try {
+            number = Integer.parseInt(matcher.group("number"));
+        } catch (Exception ignored) {}
+
+        object.addNumber(-number);
+        if (object.getNumber() < 1) currentPlayer.getCurrentBackPack().getInventory().remove(object);
+        return new Result(true, "item deleted successfully");
     }
 
-    public Result toolsEquip(String toolName) {
+    public Result toolsEquip(Matcher matcher) {
+        String toolName = matcher.group("toolName");
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        for (GameObject object : currentPlayer.getInventory()) {
+        for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
             if (object.getObjectType().name().equals(toolName)) {
                 if (object instanceof Tool) {
                     currentPlayer.setCurrentTool((model.tools.Tool) object);
@@ -106,54 +115,54 @@ public class GameController
 
     public void toolsShowAvailable() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        for (GameObject object : currentPlayer.getInventory()) {
+        for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
             System.out.println(object.getObjectType().name());
         }
     }
 
-    public void toolsUpgrade(String toolName) { //TODO: add later
+    public Result toolsUpgrade(Matcher matcher) { //TODO: add later
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        String toolName = matcher.group("toolName");
         //check if in blacksmith
 
-        for (GameObject object : currentPlayer.getInventory()) {
+        for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
             if (object.getObjectType().name().equals(toolName)) {
                 if (object instanceof Tool) {
                     if (object instanceof Axe) {
 
                     }
-
+                } else {
+                    return new Result(false, "pick a valid tool name");
                 }
-
             }
         }
+        return new Result(true, "");
     }
 
-    public void toolsUse(String direction) { // might change to enum direction
+    public Result toolsUse(Matcher matcher) { // might change to enum direction
+        String direction = matcher.group("direction");
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Tile targetTile = App.getCurrentGame().getTileFromDirection(direction);
 
         if (targetTile == null) {
-            System.out.println("you didn't choose a valid direction");
-            return;
+            return new Result(false, "you didn't choose a valid direction");
         }
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
-            System.out.println("you don't have any tool equipped");
+            return new Result(false, "you don't have any tool equipped");
         } else {
             if (tool instanceof Axe) {
                 if (targetTile.getObject() instanceof Tree) {
                     currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
                 } else {
-                    System.out.println("you can't use axe on this tile");
-                    return;
+                    return new Result(false, "you can't use axe on this tile");
                 }
             } else if (tool instanceof Hoe) {
                 if (targetTile.getObject() == null && !targetTile.isPloughed()) {
                     targetTile.plough();
-                    currentPlayer.increaseEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseTurnEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
                 } else {
-                    System.out.println("you can't use hoe on this tile");
-                    return;
+                    return new Result(false, "you can't use hoe on this tile");
                 }
             } else if (tool instanceof MilkPail) {
                 //TODO: use near animal
@@ -166,8 +175,7 @@ public class GameController
                     currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
                 } //items on the tile
                 else {
-                    System.out.println("you can't use pickaxe on this tile");
-                    return;
+                    return new Result(false, "you can't use pickaxe on this tile");
                 }
             } else if (tool instanceof Seythe) {
                 //doesn't have level
@@ -191,7 +199,10 @@ public class GameController
             } else if (tool instanceof BackPack) {
                 //doesn't use energy
             }
+
+            currentPlayer.checkEnergy();
         }
+        return new Result(true, "");
     }
 
     public Result showTime()

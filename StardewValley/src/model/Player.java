@@ -7,6 +7,7 @@ import model.player_data.Skill;
 import model.player_data.Trade;
 import model.enums.GameObjectType;
 import model.enums.SkillType;
+import model.tools.BackPack;
 import model.tools.Tool;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Player {
 
     private int energy;
     private int maxEnergy = 200;
+    private int turnEnergy;
     /*TEMP*/ private boolean fainted;
 
     private Skill farmingSkill = new Skill(SkillType.Farming);
@@ -30,11 +32,13 @@ public class Player {
     private Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
     private Skill fishingSkill = new Skill(SkillType.Fishing);
 
-    private ArrayList<GameObject> inventory = new ArrayList<>();
+    private BackPack currentBackPack;
     private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
     private ArrayList<Trade> sentTrades = new ArrayList<>();
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
     private ArrayList<Trade> archiveTrades = new ArrayList<>();
+
+    private boolean newMessage;
 
     private ArrayList<Gift> newGifts = new ArrayList<>();
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
@@ -52,6 +56,7 @@ public class Player {
         this.user = user;
         this.farm = farm;
         this.energy = 200;
+        this.turnEnergy = 50;
         this.fainted = false;
         this.money = 0;
 
@@ -62,6 +67,8 @@ public class Player {
 
         this.zeidy = null;
         this.location = farm.getStartingPoint();
+        this.currentBackPack = new BackPack();
+        this.newMessage = false;
     }
     
 
@@ -75,6 +82,18 @@ public class Player {
 
     public void increaseEnergy(int energy) {
         this.energy += energy;
+    }
+
+    public int getTurnEnergy() {
+        return turnEnergy;
+    }
+
+    public void setTurnEnergy(int turnEnergy) {
+        this.turnEnergy = turnEnergy;
+    }
+
+    public void increaseTurnEnergy(int turnEnergy) {
+        this.turnEnergy += turnEnergy;
     }
 
     public int getMaxEnergy() {
@@ -132,8 +151,8 @@ public class Player {
         this.money += money;
     }
 
-    public ArrayList<GameObject> getInventory() {
-        return inventory;
+    public BackPack getCurrentBackPack() {
+        return currentBackPack;
     }
 
     public HashMap<Player, FriendshipData> getFriendships() {
@@ -146,6 +165,14 @@ public class Player {
 
     public ArrayList<Trade> getReceivedTrades() {
         return receivedTrades;
+    }
+
+    public boolean isNewMessage() {
+        return newMessage;
+    }
+
+    public void setNewMessage(boolean newMessage) {
+        this.newMessage = newMessage;
     }
 
     public ArrayList<Trade> getArchiveTrades() {
@@ -211,7 +238,7 @@ public class Player {
 
     public GameObject findObjectType(Enum<?> type)
     {
-        for (GameObject obj : inventory)
+        for (GameObject obj : currentBackPack.getInventory())
         {
             Enum<?> inventoryItemType = obj.getType();
 
@@ -233,7 +260,7 @@ public class Player {
     }
 
     public GameObject getItemInInventory(GameObjectType objectType) {
-        for (GameObject object : this.inventory) {
+        for (GameObject object : this.currentBackPack.getInventory()) {
             if (object.getObjectType().equals(objectType)) {
                 return object;
             }
@@ -243,12 +270,12 @@ public class Player {
 
     public void removeFromInventory(GameObject object)
     {
-        if (this.inventory.contains(object))
+        if (this.currentBackPack.getInventory().contains(object))
         {
             object.addNumber(-1);
             if (object.number == 0)
             {
-                this.inventory.remove(object);
+                this.currentBackPack.getInventory().remove(object);
             }
         }
     }
@@ -260,5 +287,34 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public void checkEnergy() {
+        if (this.turnEnergy < 1) {
+            this.setFainted(true);
+        }
+    }
+
+    public boolean isNear(Point location)
+    {
+        Point point = this.location;
+        int playerX = point.getX();
+        int playerY = point.getY();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x != 0 && y != 0)
+                {
+                    if (location.getX() == playerX + x && location.getY() == playerY + y)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

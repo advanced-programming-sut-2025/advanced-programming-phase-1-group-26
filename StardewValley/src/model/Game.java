@@ -136,4 +136,13 @@ public class Game
             default -> null;
         };
     }
+
+    public Player getPlayerByNickname(String nickname) {
+        for (Player player : this.players) {
+            if (player.getUser().getNickname().equals(nickname)) {
+                return player;
+            }
+        }
+        return null;
+    }
 }

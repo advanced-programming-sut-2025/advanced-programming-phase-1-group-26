@@ -15,7 +15,7 @@ public enum CommunicateCommands implements Command {
     HUG("hug (?<username>.*)"),
     FLOWER("flower (?<username>.*)"),
     ASK_MARRIAGE("ask marriage -u (?<username>.*) -r (?<ring>.*)"),
-    RESPOND("respond -(?<respond>accept|reject) -u (?<username>.*)"),
+    RESPOND("respond -(?<respond>I do|cancel) -u (?<username>.*)"),
 
     ;
 

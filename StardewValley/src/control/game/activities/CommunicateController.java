@@ -2,11 +2,13 @@ package control.game.activities;
 
 import model.*;
 import model.enums.Gender;
+import model.enums.shop_enums.PierresGeneralStoreYearRoundStock;
 import model.player_data.FriendshipData;
 import model.player_data.Trade;
 import model.enums.GameObjectType;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 
 public class CommunicateController
 {
@@ -95,7 +97,7 @@ public class CommunicateController
                 return true;
             }
         } if (level >= 2) {
-            if (command.equals("hug")) {
+            if (command.equals("hug") || command.equals("flower")) {
                 return true;
             }
         } if (level >= 3) {
@@ -106,23 +108,30 @@ public class CommunicateController
         return false;
     }
 
-    public void talk (Player player, String message) {
+    public Result talk (Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        String message = matcher.group("message");
 
-        FriendshipData data1 = currentPlayer.getFriendships().get(player);
-        FriendshipData data2 = player.getFriendships().get(currentPlayer);
-        data1.getMessageHistory().add(message);
-        data2.getMessageHistory().add(message);
+        if (currentPlayer.isNear(player.getLocation())) {
+            FriendshipData data1 = currentPlayer.getFriendships().get(player);
+            FriendshipData data2 = player.getFriendships().get(currentPlayer);
+            data1.getMessageHistory().add(message);
+            data2.getMessageHistory().add(message);
 
-        if (!data1.isIntrcatedToday()) {
-            data1.addXp(20);
-            data2.addXp(20);
-            data1.setIntrcatedToday(true);
-            data2.setIntrcatedToday(true);
+            if (!data1.isIntrcatedToday()) {
+                data1.addXp(20);
+                data2.addXp(20);
+                data1.setIntrcatedToday(true);
+                data2.setIntrcatedToday(true);
+            }
+            return new Result(true, "you talked to " + player.getUser().getNickname());
         }
+        return new Result(false, "you can't talk to someone who's not near you!");
     }
 
-    public void talkHistory(Player player) {
+    public void talkHistory(Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         FriendshipData data1 = currentPlayer.getFriendships().get(player);
         for (String message : data1.getMessageHistory()) {
@@ -130,35 +139,57 @@ public class CommunicateController
         }
     }
 
+    public Result newMessages() {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (currentPlayer.isNewMessage()) {
+            return new Result(true, "you have some new messages! check them");
+        } else {
+            return new Result(false, "you don't have any new message");
+        }
+    }
+
     //gifting methods
 
-    public void gift (Player player, GameObjectType item, int amount) {
+    public void gift (Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
+        String itemName = matcher.group("item");
+        int amount = Integer.parseInt(matcher.group("amount"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        if (checkFriendship(currentPlayer, player, "gift")) {
-            if (currentPlayer.getItemInInventory(item) == null ||
-                    currentPlayer.getItemInInventory(item).getNumber() < amount) {
-                System.out.println("you don't have enough number this item in your inventory!");
-            } else {
-                currentPlayer.getItemInInventory(item).addNumber(-amount);
-                if (currentPlayer.getItemInInventory(item).getNumber() < 1) {
-                    currentPlayer.getInventory().remove(item);
-                }
-
-                GameObject newObject = new GameObject(item, amount);
-                Gift newGift = new Gift(newObject, currentPlayer, player);
-
-                if (player.getItemInInventory(item) == null) {
-                    player.getInventory().add(newObject);
+        GameObjectType item = null;
+        for (GameObjectType type : GameObjectType.values()) {
+            if (type.name().equals(itemName)) {
+                item = type;
+            }
+        }
+        if (currentPlayer.isNear(player.getLocation())) {
+            if (checkFriendship(currentPlayer, player, "gift")) {
+                if (currentPlayer.getItemInInventory(item) == null ||
+                        currentPlayer.getItemInInventory(item).getNumber() < amount) {
+                    System.out.println("you don't have enough number this item in your inventory!");
                 } else {
-                    player.getItemInInventory(item).addNumber(amount);
-                }
+                    currentPlayer.getItemInInventory(item).addNumber(-amount);
+                    if (currentPlayer.getItemInInventory(item).getNumber() < 1) {
+                        currentPlayer.getCurrentBackPack().getInventory().remove(item);
+                    }
 
-                player.getNewGifts().add(newGift);
-                player.getArchiveGifts().add(newGift);
-                currentPlayer.getGivenGifts().add(newGift);
+                    GameObject newObject = new GameObject(item, amount);
+                    Gift newGift = new Gift(newObject, currentPlayer, player);
+
+                    if (player.getItemInInventory(item) == null) {
+                        player.getCurrentBackPack().getInventory().add(newObject);
+                    } else {
+                        player.getItemInInventory(item).addNumber(amount);
+                    }
+
+                    player.getNewGifts().add(newGift);
+                    player.getArchiveGifts().add(newGift);
+                    currentPlayer.getGivenGifts().add(newGift);
+                }
+            } else {
+                System.out.println("you can't give each other gifts at this level!");
             }
         } else {
-            System.out.println("you can't give each other gifts at this level!");
+            System.out.println("you can't give gift to someone who's not near you!");
         }
     }
 
@@ -174,7 +205,9 @@ public class CommunicateController
         }
     }
 
-    public void giftRate (int id, int rate) {
+    public void giftRate (Matcher matcher) {
+        int id = Integer.parseInt(matcher.group("id"));
+        int rate = Integer.parseInt(matcher.group("rate"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Gift targetGift = currentPlayer.getGiftById(id);
         if (targetGift == null) {
@@ -196,95 +229,128 @@ public class CommunicateController
 
     }
 
-    public void giftHistory () {
+    public void giftHistory (Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         System.out.println("gits given: ");
         for (Gift object : currentPlayer.getGivenGifts())  {
-            System.out.println("id: " + object.getId() +
-                    " item: " + object.getGameObject().getObjectType().name() +
-                    " amount: " + object.getGameObject().getNumber());
-            System.out.println("----");
+            if (object.getTaker().getNickName().equals(player.getNickName())) {
+                System.out.println("id: " + object.getId() +
+                        " item: " + object.getGameObject().getObjectType().name() +
+                        " amount: " + object.getGameObject().getNumber());
+                System.out.println("----");
+            }
         }
         System.out.println("gifts taken: ");
         for (Gift object : currentPlayer.getArchiveGifts()) {
-            System.out.println("id: " + object.getId() +
-                    " item: " + object.getGameObject().getObjectType().name() +
-                    " amount: " + object.getGameObject().getNumber());
-            System.out.println("----");
+            if (object.getGiver().getNickName().equals(player.getNickName())) {
+                System.out.println("id: " + object.getId() +
+                        " item: " + object.getGameObject().getObjectType().name() +
+                        " amount: " + object.getGameObject().getNumber());
+                System.out.println("----");
+            }
+        }
+    }
+
+    public Result newGifts() {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (!currentPlayer.getNewGifts().isEmpty()) {
+            return new Result(true, "you have received new gifts");
+        } else {
+            return new Result(false, "you didn't receive gifts loser");
         }
     }
 
 
     //hugging
 
-    public void giveHug (Player player) {
+    public void giveHug (Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        if (checkFriendship(currentPlayer, player, "hug")) {
-            if (!currentPlayer.getFriendships().get(player).isIntrcatedToday()) {
-                player.getFriendships().get(currentPlayer).addXp(60);
-                currentPlayer.getFriendships().get(player).addXp(60);
-                upgradeFriendshipLevel(currentPlayer, player);
-                currentPlayer.getFriendships().get(player).setIntrcatedToday(true);
+        if (currentPlayer.isNear(player.getLocation())) {
+            if (checkFriendship(currentPlayer, player, "hug")) {
+                if (!currentPlayer.getFriendships().get(player).isIntrcatedToday()) {
+                    player.getFriendships().get(currentPlayer).addXp(60);
+                    currentPlayer.getFriendships().get(player).addXp(60);
+                    upgradeFriendshipLevel(currentPlayer, player);
+                    currentPlayer.getFriendships().get(player).setIntrcatedToday(true);
+                }
+                System.out.println("you gave " + player.getUser().getNickname() + " a hug");
             }
-            System.out.println("you gave " + player.getUser().getNickname() + " a hug");
+        } else {
+            System.out.println("you can't hug someone who's not near you!");
         }
-
     }
 
     //flowering
 
-    public void giveFlower (Player player) {
+    public void giveFlower (Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        if (checkFriendship(currentPlayer, player, "flower")) {
-            if (currentPlayer.getItemInInventory(GameObjectType.FLOWER) != null) {
-                currentPlayer.getItemInInventory(GameObjectType.FLOWER).addNumber(-1);
-                if (currentPlayer.getItemInInventory(GameObjectType.FLOWER).getNumber() < 1) {
-                    currentPlayer.getInventory().remove(currentPlayer.getItemInInventory(GameObjectType.FLOWER));
-                }
+        if (currentPlayer.isNear(player.getLocation())) {
+            if (checkFriendship(currentPlayer, player, "flower")) { //TODO: change all flowers to bouquet;
+                if (currentPlayer.getItemInInventory(GameObjectType.FLOWER) != null) {
+                    currentPlayer.getItemInInventory(GameObjectType.FLOWER).addNumber(-1);
+                    if (currentPlayer.getItemInInventory(GameObjectType.FLOWER).getNumber() < 1) {
+                        currentPlayer.getCurrentBackPack().getInventory().
+                                remove(currentPlayer.getItemInInventory(GameObjectType.FLOWER));
+                    }
 
-                if (player.getItemInInventory(GameObjectType.FLOWER) != null) {
-                    player.getItemInInventory(GameObjectType.FLOWER).addNumber(1);
+                    if (player.getItemInInventory(GameObjectType.FLOWER) != null) {
+                        player.getItemInInventory(GameObjectType.FLOWER).addNumber(1);
+                    } else {
+                        player.getCurrentBackPack().getInventory().add(new GameObject(GameObjectType.FLOWER, 1));
+                    }
+
+                    if (!currentPlayer.getFriendships().get(player).isIntrcatedToday()) {
+                        currentPlayer.getFriendships().get(player).setBouquetBought(true);
+                        player.getFriendships().get(currentPlayer).setBouquetBought(true);
+                        upgradeFriendshipLevel(currentPlayer, player);
+                    }
                 } else {
-                    player.getInventory().add(new GameObject(GameObjectType.FLOWER, 1));
-                }
-
-                if (!currentPlayer.getFriendships().get(player).isIntrcatedToday()) {
-                    currentPlayer.getFriendships().get(player).setBouquetBought(true);
-                    player.getFriendships().get(currentPlayer).setBouquetBought(true);
-                    upgradeFriendshipLevel(currentPlayer, player);
+                    System.out.println("you don't have flower in your inventory!");
                 }
             } else {
-                System.out.println("you don't have flower in your inventory!");
+                System.out.println("your friendship is not good enough to give each other flowers");
             }
         } else {
-            System.out.println("your friendship is not good enough to give each other flowers");
+            System.out.println("you can't give flower to someone who's not near you!");
         }
     }
 
     //marriage
 
-    public void purposeAsk (Player player, GameObject ring) {
+    public void purposeAsk (Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
+        GameObject ring = null; //TODO: change
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-
-
-        if (currentPlayer.getUser().getGender().equals(Gender.FEMALE)) {
-            System.out.println("you can't purpose ask doost pesaret");
-        } else if (!checkFriendship(currentPlayer, player, "marriage")) {
-            System.out.println("your friendship is not good enough to marry each other!");
+        if (currentPlayer.isNear(player.getLocation())) {
+            if (currentPlayer.getUser().getGender().equals(Gender.FEMALE)) {
+                System.out.println("you can't purpose ask doost pesaret");
+            } else if (!checkFriendship(currentPlayer, player, "marriage")) {
+                System.out.println("your friendship is not good enough to marry each other!");
+//            } else if (currentPlayer.getItemInInventory(PierresGeneralStoreYearRoundStock.WEDDING_RING)) {
+                
+            } else {
+                
+                player.getPurposeList().put(currentPlayer, ring);
+            }
         } else {
-            //check ring in inventory
-            player.getPurposeList().put(currentPlayer, ring);
+            System.out.println("you can't purpose to someone who's not near you!");
         }
-
     }
 
-    public void purposeRespond (Player player, boolean answer) {
+    public void purposeRespond (Matcher matcher) {
+        Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
+        boolean answer = true;
+        String respond = matcher.group("respond");
+        if (respond.equals("cancel")) answer = false;
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameObject ring = currentPlayer.getPurposeList().get(player);
 
         if (answer) {
-            currentPlayer.getInventory().remove(ring);
-            player.getInventory().add(ring);
+            currentPlayer.getCurrentBackPack().getInventory().remove(ring);
+            player.getCurrentBackPack().getInventory().add(ring);
             player.setZeidy(currentPlayer);
             currentPlayer.setZeidy(player);
             player.getFriendships().get(currentPlayer).setMarried(true);
