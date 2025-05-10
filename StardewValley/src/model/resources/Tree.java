@@ -21,5 +21,24 @@ public class Tree extends Plant
         this.isEdible = treeType.isEdible();
         this.energy = treeType.getEnergy();
         this.seasons = treeType.getSeasons();
+
+        harvestWaitTime = this.totalHarvestTime;
+    }
+
+    @Override
+    public boolean canHarvest()
+    {
+        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
+    }
+
+    public void harvest()
+    {
+        lastHarvested = 0;
+        harvestWaitTime = fruitHarvestCycle;
+    }
+
+    public FruitType getFruit()
+    {
+        return fruit;
     }
 }

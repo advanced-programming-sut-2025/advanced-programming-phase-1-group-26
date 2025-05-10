@@ -2,6 +2,8 @@ package model;
 
 import model.animal.Animal;
 import model.enums.GameObjectType;
+import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.Skill;
 import model.player_data.Trade;
@@ -32,7 +34,7 @@ public class Player {
     private Skill gashtogozarSkill = new Skill(SkillType.Gashtogozar);
     private Skill fishingSkill = new Skill(SkillType.Fishing);
 
-    private BackPack currentBackPack;
+    BackPack currentBackPack = new BackPack();
     private HashMap<Player, FriendshipData> friendships = new HashMap<>(); //TODO: might change to nested hashmap
     private ArrayList<Trade> sentTrades = new ArrayList<>();
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
@@ -51,6 +53,8 @@ public class Player {
     private double money;
 
     private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
+
+    private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
     public Player(User user, Farm farm) {
         this.user = user;
@@ -151,8 +155,8 @@ public class Player {
         this.money += money;
     }
 
-    public BackPack getCurrentBackPack() {
-        return currentBackPack;
+    public ArrayList<GameObject> getInventory() {
+        return currentBackPack.getInventory();
     }
 
     public HashMap<Player, FriendshipData> getFriendships() {
@@ -316,5 +320,135 @@ public class Player {
         }
 
         return false;
+    }
+
+    public Tool getTool(ToolType type)
+    {
+        for (GameObject object : currentBackPack.getInventory())
+        {
+            if (object instanceof Tool tool)
+            {
+                if (tool.getType().equals(type))
+                {
+                    return tool;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void addToInventory(GameObject object)
+    {
+        currentBackPack.getInventory().add(object);
+    }
+
+    public ArrayList<CraftingRecipeEnums> getCraftingRecipes()
+    {
+        return craftingRecipes;
+    }
+
+    public boolean hasEnoughInInventory(GameObjectType objectType, int amount)
+    {
+        for (GameObject object : currentBackPack.getInventory())
+        {
+            if (object.getObjectType().equals(objectType) && object.getNumber() >= amount)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int howManyInInventory(GameObjectType objectType)
+    {
+        for (GameObject object : currentBackPack.getInventory())
+        {
+            if (object.getObjectType().equals(objectType))
+            {
+                return object.getNumber();
+            }
+        }
+        return 0;
+    }
+
+    public void removeAmountFromInventory(GameObjectType objectType, int amount)
+    {
+        for (GameObject object : currentBackPack.getInventory())
+        {
+            if (object.getObjectType().equals(objectType))
+            {
+                object.addNumber(-amount);
+                if (object.number <= 0)
+                {
+                    this.currentBackPack.getInventory().remove(object);
+                }
+            }
+        }
+    }
+
+    public boolean inventoryHasCapacity()
+    {
+       int capacity = currentBackPack.getCapacity();
+
+       if (capacity == -1) // unlimited
+       {
+           return true;
+       }
+
+       if (capacity > currentBackPack.getSize())
+       {
+           return true;
+       }
+
+       return false;
+    }
+
+    public BackPack getCurrentBackPack()
+    {
+        return currentBackPack;
+    }
+
+    public void addToInventory(GameObjectType objectType, int amount)
+    {
+        GameObject object = getItemInInventory(objectType);
+        if (object != null)
+        {
+            object.addNumber(amount);
+        } else
+        {
+            if (inventoryHasCapacity())
+            {
+                GameObject newObject = new GameObject(objectType, amount);
+                currentBackPack.getInventory().add(newObject);
+            }
+        }
+    }
+
+    public int getInventoryCapacity()
+    {
+        int capacity = currentBackPack.getCapacity();
+
+        if (capacity == -1) // unlimited
+        {
+            return -1;
+        }
+
+        return capacity - currentBackPack.getSize();
+    }
+
+    public ArrayList<Gift> getNewGifts() {
+        return newGifts;
+    }
+
+    public ArrayList<Gift> getArchiveGifts() {
+        return archiveGifts;
+    }
+
+    public ArrayList<Gift> getGivenGifts() {
+        return givenGifts;
+    }
+
+    public HashMap<Player, GameObject> getPurposeList() {
+        return purposeList;
     }
 }

@@ -23,4 +23,9 @@ public class Seythe extends Tool {
     public ArrayList<GameObjectType> getUsage() {
         return usage;
     }
+
+    public int getEnergyUsage()
+    {
+        return energyUsage;
+    }
 }

@@ -1,12 +1,12 @@
 package model.resources;
 
-import model.enums.building_enums.CraftItemType;
+import model.enums.building_enums.CraftingRecipeEnums;
 
 public class CraftItem
 {
-    private final CraftItemType type;
+    private final CraftingRecipeEnums type;
 
-    public CraftItem(CraftItemType type)
+    public CraftItem(CraftingRecipeEnums type)
     {
         this.type = type;
     }

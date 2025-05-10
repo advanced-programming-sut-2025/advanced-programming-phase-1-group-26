@@ -21,4 +21,16 @@ public enum ToolType {
     public String getName() {
         return name;
     }
+
+    public static ToolType getToolType(String name)
+    {
+        for (ToolType toolType : ToolType.values())
+        {
+            if (toolType.getName().equals(name))
+            {
+                return toolType;
+            }
+        }
+        return null;
+    }
 }

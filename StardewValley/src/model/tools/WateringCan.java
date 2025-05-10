@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public class WateringCan extends Tool {
     private WateringCanLevel level;
-    private final ArrayList<GameObjectType> usage = new ArrayList<>();
+    private final int maxVolume = 20; // TODO: might change value later
+    private int currentVolume = 20;
 
     public WateringCan() {
         super.type = ToolType.WateringCan;
@@ -30,7 +31,18 @@ public class WateringCan extends Tool {
         this.level = level;
     }
 
-    public ArrayList<GameObjectType> getUsage() {
-        return usage;
+    public int getCurrentVolume()
+    {
+        return currentVolume;
+    }
+
+    public void addVolume(int volume)
+    {
+        currentVolume = Math.max(currentVolume + volume, maxVolume);
+    }
+
+    public void decreaseVolume(int volume)
+    {
+        currentVolume -= volume;
     }
 }

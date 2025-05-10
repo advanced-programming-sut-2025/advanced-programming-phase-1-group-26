@@ -27,4 +27,21 @@ public class BackPack extends Tool {
     public void setLevel(BackPackLevel level) {
         this.level = level;
     }
+
+    private ArrayList<GameObject> inventory = new ArrayList<>();
+
+    public ArrayList<GameObject> getInventory()
+    {
+        return inventory;
+    }
+
+    public int getCapacity()
+    {
+        return level.getCapacity();
+    }
+
+    public int getSize()
+    {
+        return inventory.size();
+    }
 }

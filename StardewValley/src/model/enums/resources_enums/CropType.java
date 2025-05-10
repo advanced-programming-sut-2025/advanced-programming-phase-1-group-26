@@ -201,4 +201,9 @@ public enum CropType
 
         return null;
     }
+
+    public GameObjectType getType()
+    {
+        return type;
+    }
 }
