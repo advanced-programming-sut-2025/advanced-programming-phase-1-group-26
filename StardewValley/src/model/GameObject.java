@@ -6,6 +6,7 @@ public class GameObject
 {
     protected GameObjectType ObjectType;
     protected int number;
+    protected String appearance;
 
     public GameObject(GameObjectType objectType, int number) {
         ObjectType = objectType;
