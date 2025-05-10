@@ -303,6 +303,11 @@ public enum GameObjectType
     Mystic_Tree_Seed("mystic tree seed"),
 
     FERTILIZER("fertilizer"),
+    WOOL("wool"),
+    GOLD_COIN("gold coin"),
+    Automating_Iridium_WateringCan("automating iridium watering can"),
+    HARD_WOOD("hard wood"),
+    SALMON_DINNER_RECIPE("salmon dinner recipe"),
     ;
 
     private final String name;
