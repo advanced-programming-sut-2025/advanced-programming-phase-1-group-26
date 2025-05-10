@@ -87,23 +87,22 @@ public enum GameObjectType
     POWDERMELON_CROP("Powdermelon"),
     ANCIENT_FRUIT_CROP("Ancient Fruit"),
 
-    QUARTZ_MINERAL("Quartz"),
-    EARTH_CRYSTAL_MINERAL("Earth Crystal"),
-    FROZEN_TEAR_MINERAL("Frozen Tear"),
-    FIRE_QUARTZ_MINERAL("Fire Quartz"),
-    EMERALD_MINERAL("Emerald"),
-    AQUAMARINE_MINERAL("Aquamarine"),
-    RUBY_MINERAL("Ruby"),
-    AMETHYST_MINERAL("Amethyst"),
-    TOPAZ_MINERAL("Topaz"),
-    JADE_MINERAL("Jade"),
-    DIAMOND_MINERAL("Diamond"),
-    PRISMATIC_SHARD_MINERAL("Prismatic Shard"),
-    COPPER_MINERAL("Copper"),
-    IRON_MINERAL("Iron"),
-    GOLD_MINERAL("Gold"),
-    IRIDIUM_MINERAL("Iridium"),
-    COAL_MINERAL("Coal"),
+    QUARTZ("Quartz"),
+    EARTH_CRYSTAL("Earth Crystal"),
+    FROZEN_TEAR("Frozen Tear"),
+    FIRE_QUARTZ("Fire Quartz"),
+    EMERALD("Emerald"),
+    AQUAMARINE("Aquamarine"),
+    RUBY("Ruby"),
+    AMETHYST("Amethyst"),
+    TOPAZ("Topaz"),
+    JADE("Jade"),
+    DIAMOND("Diamond"),
+    PRISMATIC_SHARD("Prismatic Shard"),
+    COPPER("Copper"),
+    IRON("Iron"),
+    GOLD("Gold"),
+    IRIDIUM("Iridium"),
 
     COMMON_MUSHROOM_FORAGING_CROP("Common Mushroom"),
     DAFFODIL_FORAGING_CROP("Daffodil"),
@@ -303,6 +302,29 @@ public enum GameObjectType
     Mystic_Tree_Seed("mystic tree seed"),
 
     FERTILIZER("fertilizer"),
+
+    CHERRY_BOMB_RECIPE("Cherry Bomb"),
+    BOMB_RECIPE("Bomb"),
+    MEGA_BOMB_RECIPE("Mega Bomb"),
+    SPRINKLER_RECIPE("Sprinkler"),
+    QUALITY_SPRINKLER_RECIPE("Quality Sprinkler"),
+    IRIDIUM_SPRINKLER_RECIPE("Iridium Sprinkler"),
+    CHARCOAL_KILN_RECIPE("Charcoal Klin"),
+    FURNACE_RECIPE("Furnace"),
+    SCARECROW_RECIPE("Scarecrow"),
+    DELUXE_SCARECROW_RECIPE("Deluxe Scarecrow"),
+    BEE_HOUSE_RECIPE("Bee House"),
+    CHEESE_PRESS_RECIPE("Cheese Press"),
+    KEG_RECIPE("Keg"),
+    LOOM_RECIPE("Loom"),
+    MAYONNAISE_MACHINE_RECIPE("Mayonnaise Machine"),
+    OIL_MAKER_RECIPE("Oil Maker"),
+    PRESERVES_JAR_RECIPE("Preserves Jar"),
+    DEHYDRATOR_RECIPE("Dehydrator"),
+    GRASS_STARTER_RECIPE("Grass Starter"),
+    FISH_SMOKER_RECIPE("Fish Smoker"),
+    MYSTIC_TREE_SEED_RECIPE("Mystic Tree Seed");
+
     ;
 
     private final String name;
@@ -316,5 +338,17 @@ public enum GameObjectType
     public String toString()
     {
         return name;
+    }
+
+    public static GameObjectType getGameObjectType(String name)
+    {
+        for (GameObjectType gameObjectType : GameObjectType.values())
+        {
+            if (gameObjectType.name().equalsIgnoreCase(name))
+            {
+                return gameObjectType;
+            }
+        }
+        return null;
     }
 }

@@ -15,6 +15,8 @@ public class Tile
     private boolean isPloughed = false;
     private boolean isFertilized = false;
 
+    private boolean isImmuneFromCrows = false;
+
     public Tile(Point point)
     {
         this.point = point;
@@ -183,5 +185,20 @@ public class Tile
         }
 
         return "\uD83D\uDFE5"; // ERROR
+    }
+
+    public boolean isImmuneFromCrows()
+    {
+        return isImmuneFromCrows;
+    }
+
+    public void makeImmuneFromCrows()
+    {
+        isImmuneFromCrows = true;
+    }
+
+    public void setImmunityFromCrows()
+    {
+        isImmuneFromCrows = false;
     }
 }
