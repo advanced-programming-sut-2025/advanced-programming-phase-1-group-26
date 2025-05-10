@@ -43,6 +43,7 @@ public class Player {
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
 
+    private HashMap<Player, GameObject> purposeList = new HashMap<>();
     private Player zeidy;
 
     private Tool currentTool;
@@ -359,5 +360,21 @@ public class Player {
         }
 
         return capacity - currentBackPack.getSize();
+    }
+
+    public ArrayList<Gift> getNewGifts() {
+        return newGifts;
+    }
+
+    public ArrayList<Gift> getArchiveGifts() {
+        return archiveGifts;
+    }
+
+    public ArrayList<Gift> getGivenGifts() {
+        return givenGifts;
+    }
+
+    public HashMap<Player, GameObject> getPurposeList() {
+        return purposeList;
     }
 }
