@@ -301,6 +301,11 @@ public enum GameObjectType
     Mahogany_Seeds("mahogany seeds"),
     Mushroom_Tree_Seeds("mushroom tree seeds"),
     Mystic_Tree_Seed("mystic tree seed"),
+    WOOL("wool"),
+    GOLD_COIN("gold coin"),
+    Automating_Iridium_WateringCan("automating iridium watering can"),
+    HARD_WOOD("hard wood"),
+    SALMON_DINNER_RECIPE("salmon dinner recipe"),
     ;
 
     private final String name;
