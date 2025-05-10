@@ -1,44 +1,60 @@
 package control;
 
 import model.*;
-import model.enums.DayOfWeek;
-import model.enums.Season;
-import model.enums.Weather;
+import model.enums.*;
 import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingSeedType;
-import model.enums.resources_enums.FruitType;
 import model.enums.resources_enums.TreeType;
+import model.enums.tool_enums.ToolType;
 import model.resources.Crop;
+import model.resources.Plant;
 import model.resources.Mineral;
 import model.resources.Tree;
-import model.tools.*;
 
-import javax.tools.Tool;
+import model.tools.Tool;
 import java.util.ArrayList;
 
+import model.tools.*;
 import view.GameMenu;
 
-public class GameController {
+public class GameController
+{
     public Result energyShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        return new Result(true, "" + currentPlayer.getEnergy());
+        if (currentPlayer.getEnergy() == -1) {
+            return new Result(true, "Your Energy is unlimited!");
+        }
+        return new Result(true, "Your Energy: " + currentPlayer.getEnergy());
     }
 
     public void energySet(int value) {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (currentPlayer.getEnergy() == -1) {
+            System.out.println("your energy is unlimited yohahahahaha");
+            return;
+        } else if (value < 1) {
+            System.out.println("you should set your energy to a positive number!");
+            return;
+        }
         currentPlayer.setEnergy(value);
+        System.out.println("your energy set to : " + currentPlayer.getEnergy());
     }
 
     public void energyUnlimited() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        currentPlayer.setEnergy(2147483647); //might change later
+        currentPlayer.setEnergy(-1); //might change later
+        System.out.println("your energy is now unlimited eshghohal");
+
     }
 
     public void inventoryShow() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getInventory());
+        System.out.println("your items:");
+        System.out.println("----");
         for (GameObject object : inventory) {
             System.out.println(object.getObjectType().name() + " x" + object.getNumber());
+            System.out.println("----");
         }
     }
 
@@ -110,32 +126,29 @@ public class GameController {
         }
     }
 
-    public void toolsUse(String direction) { // might change to enum direction
+    public Result toolsUse(String direction) { // might change to enum direction
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Tile targetTile = App.getCurrentGame().getTileFromDirection(direction);
 
         if (targetTile == null) {
-            System.out.println("you didn't choose a valid direction");
-            return;
+            return new Result(false, "you didn't choose a valid direction");
         }
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
-            System.out.println("you don't have any tool equipped");
+            GameMenu.println("you don't have any tool equipped");
         } else {
             if (tool instanceof Axe) {
                 if (targetTile.getObject() instanceof Tree) {
                     currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
                 } else {
-                    System.out.println("you can't use axe on this tile");
-                    return;
+                    return new Result(false, "you can't use axe on this tile");
                 }
             } else if (tool instanceof Hoe) {
                 if (targetTile.getObject() == null && !targetTile.isPloughed()) {
                     targetTile.plough();
                     currentPlayer.increaseEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
                 } else {
-                    System.out.println("you can't use hoe on this tile");
-                    return;
+                    return new Result(false, "you can't use hoe on this tile");
                 }
             } else if (tool instanceof MilkPail) {
                 //TODO: use near animal
@@ -148,11 +161,40 @@ public class GameController {
                     currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
                 } //items on the tile
                 else {
-                    System.out.println("you can't use pickaxe on this tile");
-                    return;
+                    return new Result(false, "you can't use pickaxe on this tile");
                 }
             } else if (tool instanceof Seythe) {
-                //doesn't have level
+                if (!targetTile.hasPlants())
+                {
+                    return new Result(false, "There are no plants in this tile :(");
+                }
+
+                Plant plant = (Plant) targetTile.getObject();
+                if (!plant.canHarvest())
+                {
+                    return new Result(false, "You can't harvest this tile yet :(");
+                }
+
+                if (plant instanceof Tree)
+                {
+                    Tree tree = (Tree) plant;
+                    GameObject fruit = new GameObject(tree.getFruit().getType(), 1);
+                    currentPlayer.addToInventory(fruit);
+                    tree.harvest();
+                    return new Result(true, "you harvested one " + fruit.getObjectType().name() + ".");
+                } else if (plant instanceof Crop)
+                {
+                    Crop crop = (Crop) plant;
+                    GameObject cropResult = new GameObject(crop.getCropType().getType(), 1);
+                    currentPlayer.addToInventory(cropResult);
+
+                    if (crop.harvest())
+                    {
+                        targetTile.unPlant();
+                    }
+
+                    return new Result(true, "you harvested one " + crop.getObjectType().name() + ".");
+                }
 
             } else if (tool instanceof Shear) {
                 //doesn't have level
@@ -161,8 +203,20 @@ public class GameController {
                 currentPlayer.increaseEnergy(((TrashCan) tool).getLevel().getBaseEnergyUsage());
 
             } else if (tool instanceof WateringCan) {
-
                 currentPlayer.increaseEnergy(-((WateringCan) tool).getLevel().getBaseEnergyUsage());
+                if (targetTile.hasPlants())
+                {
+                    Plant plant = (Plant) targetTile.getObject();
+                    if (((WateringCan) tool).getCurrentVolume() == 0)
+                    {
+                        return new Result(true, "You should refill your watering can.");
+                    }
+                    ((WateringCan) tool).decreaseVolume(1);
+                    plant.water();
+                } else if (targetTile.getTexture().equals(TileTexture.LAKE))
+                {
+                    ((WateringCan) tool).addVolume(5); // TODO: HARD-CODED here, should change later
+                }
             } else if (tool instanceof FishingPole) {
 
                 currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
@@ -170,6 +224,8 @@ public class GameController {
                 //doesn't use energy
             }
         }
+
+        return new Result(true, "WE SHOULD CHANGE THIS PART OF CODE!!!");
     }
 
     public Result showTime()
@@ -416,7 +472,7 @@ public class GameController {
 
         if (!tile.isPloughed())
         {
-            return new Result(false, "Tile is not ploughed :(");
+            return new Result(false, "This tile is not ploughed :(");
         }
 
         if (tile.getObject() != null)
@@ -433,8 +489,57 @@ public class GameController {
         CropType cropType = CropType.getCropFromSeed((ForagingSeedType) seed.getType());
         Crop crop = new Crop(cropType);
 
+        player.removeFromInventory(seed);
+
         tile.setObject(crop);
         return new Result(true, "You have successfully planted " + cropType.getCraftInfo() + ".");
+    }
+
+    public Result fertilize(String fertilizerName, String direction)
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        GameObject fertilizer = player.getItemInInventory(GameObjectType.FERTILIZER);
+        if (fertilizer == null)
+        {
+            return new Result(false, "You don't have any fertilizer :(");
+        }
+
+        Tile tile = App.getCurrentGame().getTileFromDirection(direction);
+        if (tile == null)
+        {
+            return new Result(false, "Tile with this path does not exist.");
+        }
+
+        if (tile.isFertilized())
+        {
+            return new Result(false, "This tile has alreaady been fertilized.");
+        }
+
+        if (tile.getObject() == null || !tile.hasPlants())
+        {
+            return new Result(false, "There are no plants in this tile :(");
+        }
+
+        tile.fertilize();
+        return new Result(true, "You have successfully fertilized " +
+                "tile ( " + tile.getX() + ", " + tile.getY() + ".");
+    }
+
+    public Result howMuchWater()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        Tool tool = player.getTool(ToolType.WateringCan);
+        if (tool == null)
+        {
+            return new Result(false, "What kind of gardener are you? You don't even have a watering can.");
+        }
+
+        WateringCan wateringCan = (WateringCan) tool;
+        return new Result(true, "Your watering can currently has " + wateringCan.getCurrentVolume() + "" +
+                " units of water.\n" +
+                "Tip: You can refill it near tiles that contain water.");
     }
 
     public Result createNewGame(String[] usernames)
@@ -461,4 +566,6 @@ public class GameController {
     {
         return null;
     }
+
+
 }

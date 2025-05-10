@@ -42,7 +42,7 @@ public class Game
 
     public Tile findTile(int y, int x)
     {
-//        return farm.getMap().get(y).get(x);
+        //return farm.getMap().get(y).get(x);
     return null;
     }
 
@@ -107,7 +107,7 @@ public class Game
         ArrayList<Farm> farms = new ArrayList<>();
         for (Player player : players)
         {
-            farms.add(player.getFarm());
+            farms.add(player.getCurrentFarm());
         }
         return farms;
     }

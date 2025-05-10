@@ -1,7 +1,6 @@
 package model.shops;
 
 import model.enums.ShopType;
-import model.enums.shop_enums.JojaMartPermanentStock;
 import model.enums.shop_enums.MarniesRanchLivestock;
 import model.enums.shop_enums.MarniesRanchShopInventory;
 

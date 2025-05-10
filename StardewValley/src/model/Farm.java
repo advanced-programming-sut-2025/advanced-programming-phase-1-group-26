@@ -3,10 +3,7 @@ package model;
 import model.enums.FarmTypes;
 import model.enums.TileTexture;
 import model.enums.resources_enums.*;
-import model.resources.ForagingCrop;
-import model.resources.ForagingSeed;
-import model.resources.ForagingTree;
-import model.resources.Tree;
+import model.resources.*;
 
 import java.util.*;
 import java.util.Map;
@@ -106,6 +103,7 @@ public class Farm {
                     {
                         case CABIN:
                             output.append(Color.RED + "CC" + Color.RESET);
+//                            output.append("\uD83C\uDFE0");
                             break;
                         case LAND:
                             if (tile.getObject() == null)
@@ -115,11 +113,11 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree _: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop _ : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed _ : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree _ : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource _ : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    case Tree a: output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
                                     default: output.append(Color.YELLOW + "LL" + Color.RESET); break;
                                 }
                             }
@@ -129,6 +127,7 @@ public class Farm {
                             break;
                         case QUARRY:
                             output.append(Color.DARK_GREY + "QQ" + Color.RESET);
+//                            output.append("\uD83E\uDEA8");
                             break;
                         case GREEN_HOUSE:
                             output.append(Color.DARK_GREEN + "GG" + Color.RESET);
@@ -141,11 +140,11 @@ public class Farm {
                             {
                                 switch (tile.getObject())
                                 {
-                                    case Tree _ : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
-                                    case ForagingCrop _ : output.append(Color.BROWN + "FC" + Color.RESET); break;
-                                    case ForagingSeed _ : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
-                                    case ForagingTree _ : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
-                                    case Resource _ : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
+                                    case Tree a : output.append(Color.DARK_GREEN + "TT" + Color.RESET); break;
+                                    case ForagingCrop a : output.append(Color.BROWN + "FC" + Color.RESET); break;
+                                    case ForagingSeed a : output.append(Color.DARK_GREEN + "FS" + Color.RESET); break;
+                                    case ForagingTree a : output.append(Color.DARK_GREEN + "FT" + Color.RESET); break;
+                                    case Resource a : output.append(Color.DARK_GREY + "RR" + Color.RESET); break;
                                     default: output.append(Color.GREEN + "GG" + Color.RESET); break;
                                 }
                             }
@@ -237,7 +236,8 @@ public class Farm {
         {
             return switch (tile.getObject())
             {
-                case Tree _, Resource _ -> false;
+                case Tree a -> false;
+                case Resource b -> false;
                 default -> true;
             };
         }
@@ -418,5 +418,30 @@ public class Farm {
                 }
             }
         }
+    }
+
+    public ArrayList<Plant> getPlants()
+    {
+        ArrayList<Plant> plants = new ArrayList<>();
+
+        for (int i = 0; i < HEIGHT; i++)
+        {
+            for (int j = 0; j < WIDTH; j++)
+            {
+                Tile tile = getTile(i, j);
+                if (tile.getObject() != null)
+                {
+                    if (tile.getObject() instanceof Tree)
+                    {
+                        plants.add((Tree) tile.getObject());
+                    } else if (tile.getObject() instanceof Crop)
+                    {
+                        plants.add((Crop) tile.getObject());
+                    }
+                }
+            }
+        }
+
+        return plants;
     }
 }

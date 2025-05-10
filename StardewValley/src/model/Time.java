@@ -1,6 +1,5 @@
 package model;
 
-import model.enums.DayOfWeek;
 import model.enums.Season;
 import model.enums.TimeOfDay;
 import model.enums.Weather;

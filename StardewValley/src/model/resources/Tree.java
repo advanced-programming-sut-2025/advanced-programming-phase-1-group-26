@@ -1,13 +1,9 @@
 package model.resources;
 
-import model.GameObject;
-import model.enums.Season;
 import model.enums.resources_enums.FruitType;
 import model.enums.resources_enums.TreeType;
 
-import java.util.List;
-
-public class Tree extends CropsAndTrees
+public class Tree extends Plant
 {
     private FruitType fruit;
     private int fruitHarvestCycle;
@@ -25,5 +21,24 @@ public class Tree extends CropsAndTrees
         this.isEdible = treeType.isEdible();
         this.energy = treeType.getEnergy();
         this.seasons = treeType.getSeasons();
+
+        harvestWaitTime = this.totalHarvestTime;
+    }
+
+    @Override
+    public boolean canHarvest()
+    {
+        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
+    }
+
+    public void harvest()
+    {
+        lastHarvested = 0;
+        harvestWaitTime = fruitHarvestCycle;
+    }
+
+    public FruitType getFruit()
+    {
+        return fruit;
     }
 }

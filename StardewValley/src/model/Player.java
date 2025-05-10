@@ -2,6 +2,7 @@ package model;
 
 import model.animal.Animal;
 import model.enums.GameObjectType;
+import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.Skill;
 import model.player_data.Trade;

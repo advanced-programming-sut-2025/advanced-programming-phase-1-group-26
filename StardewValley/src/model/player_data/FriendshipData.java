@@ -24,13 +24,16 @@ public class FriendshipData {
         this.level ++;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public int getXp() {
         return xp;
     }
 
     public void addXp(int xp) {
         this.xp += xp;
-
         //check if xp changes level
     }
 

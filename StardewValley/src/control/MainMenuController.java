@@ -1,10 +1,8 @@
 package control;
 
-import com.sun.tools.javac.Main;
 import model.*;
 import model.enums.FarmTypes;
 import model.enums.Menu;
-import view.GameMenu;
 import view.MainMenu;
 
 import java.util.ArrayList;

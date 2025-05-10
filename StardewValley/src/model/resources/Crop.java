@@ -1,9 +1,8 @@
 package model.resources;
 
 import model.enums.resources_enums.CropType;
-import model.enums.resources_enums.ForagingSeedType;
 
-public class Crop extends CropsAndTrees
+public class Crop extends Plant
 {
     private boolean oneTime;
     private int growthTime;
@@ -23,11 +22,37 @@ public class Crop extends CropsAndTrees
         this.energy = cropType.getEnergy();
         this.seasons = cropType.getSeasons();
         this.canBecomeGiant = cropType.isCanBecomeGiant();
-//        this.ObjectType = cropType.getT
+        this.ObjectType = cropType.getType();
+
+        this.harvestWaitTime = totalHarvestTime;
     }
 
     public String getName()
     {
         return this.name;
+    }
+
+    @Override
+    public boolean canHarvest()
+    {
+        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
+    }
+
+    public CropType getCropType()
+    {
+        return (CropType) type;
+    }
+
+    public boolean harvest()
+    {
+        if (oneTime)
+        {
+            return true;
+        }
+
+        lastHarvested = 0;
+        harvestWaitTime = growthTime;
+
+        return false;
     }
 }

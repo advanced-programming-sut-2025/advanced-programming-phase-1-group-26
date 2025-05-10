@@ -102,8 +102,13 @@ public class TradeController {
                     }
                 }
                 System.out.println("trade was successful");
+                currentPlayer.getFriendships().get(otherPlayer).addXp(50);
+                otherPlayer.getFriendships().get(currentPlayer).addXp(50);
+                CommunicateController.upgradeFriendshipLevel(currentPlayer, otherPlayer);
             } else {
                 System.out.println(currentPlayer.getNickName() + " rejected " + otherPlayer.getNickName() + "'s trade");
+                currentPlayer.getFriendships().get(otherPlayer).addXp(-30);
+                otherPlayer.getFriendships().get(currentPlayer).addXp(-30);
             }
         } else {
             if (answer) {
