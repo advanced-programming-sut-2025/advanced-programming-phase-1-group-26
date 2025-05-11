@@ -12,18 +12,27 @@ public enum ProfileCommands implements Command
             "-o\\s+(?<oldPassword>\\S+)"),
     SET_PASSWORD_TO_RANDOM("set\\s+random\\s+password\\s+" +
             "-o\\s+(?<oldPassword>\\S+)"),
-    CHANGE_NICKNAME(""),
-    CHANGE_EMAIL(""),
-    USER_INFO(""),
-
+    CHANGE_NICKNAME("change\\s+nickname\\s+" +
+            "-u\\s+(?<newNickname>\\S+)"),
+    CHANGE_EMAIL("change\\s+email\\s+" +
+            "-e\\s+(?<newEmail>\\S+)"),
+    CHANGE_GENDER("change\\s+gender\\s+" +
+            "-g\\s+(?<newGender>\\S+)"),
+    USER_INFO("user\\s+info"),
+    EXIT_MENU("exit\\s+menu"),
+    SHOW_CURRENT_MENU("show\\s+current\\s+menu"),
     ;
 
     private final Pattern pattern;
-    ProfileCommands(String regex) {
+
+    ProfileCommands(String regex)
+    {
         this.pattern = Pattern.compile(regex);
     }
+
     @Override
-    public Matcher getMatcher(String input) {
+    public Matcher getMatcher(String input)
+    {
         Matcher matcher = pattern.matcher(input);
         matcher.matches();
         return matcher;

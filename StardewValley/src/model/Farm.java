@@ -76,7 +76,7 @@ public class Farm extends model.Map
 
     private void setRandomItems()
     {
-        int randomItemsCount = getFreeTiles().size() / 10; //TODO: used some hard coded constants here
+        int randomItemsCount = getFreeTiles().size() / 20; //TODO: used some hard coded constants here
 
         for (int i = 0; i < randomItemsCount / 3; i++)
         {

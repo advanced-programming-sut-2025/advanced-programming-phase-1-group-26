@@ -3,6 +3,7 @@ package model;
 import model.enums.Gender;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class User {
     private String username;
@@ -86,5 +87,15 @@ public class User {
     public void addMoneyGame(int amount)
     {
         this.gameMoney.add(amount);
+    }
+
+    public int getMaxMoney()
+    {
+        if (gameMoney.isEmpty())
+        {
+            return 0;
+        }
+
+        return Collections.max(gameMoney);
     }
 }

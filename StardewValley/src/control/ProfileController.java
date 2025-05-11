@@ -3,6 +3,8 @@ package control;
 import model.App;
 import model.Result;
 import model.User;
+import model.enums.Gender;
+import model.enums.Menu;
 import model.enums.regex_enums.RegexCommands;
 import view.MainMenu;
 import view.ProfileMenu;
@@ -135,12 +137,81 @@ public class ProfileController
 
     public Result changeNickName(String newNickName)
     {
-        return null;
+        User user = App.getCurrentUser();
+        if (user.getNickname().equals(newNickName))
+        {
+            return new Result(false, "Plz enter a new nickname.");
+        }
+
+        user.setNickname(newNickName);
+        return new Result(true, "Your new nickname has been successfully changed.");
     }
 
     public Result changeEmail(String newEmail)
     {
-        return null;
+        User user = App.getCurrentUser();
+
+        if (user.getEmail().equals(newEmail))
+        {
+            return new Result(false, "You must enter a new email.");
+        }
+
+        if (!validEmail(newEmail))
+        {
+            return new Result(false, "Your email format is incorrect.");
+        }
+
+        user.setEmail(newEmail);
+        return new Result(true, "Your email has been successfully changed.");
+    }
+
+    public Result changeGender(String newGender)
+    {
+        User user = App.getCurrentUser();
+        Gender gender = Gender.getGender(newGender);
+
+        if (gender == null)
+        {
+            return new Result(false, "invalid gender :(");
+        }
+
+        if (user.getGender().equals(gender))
+        {
+            return new Result(false, "You already are " + gender + ".");
+        }
+
+        user.setGender(gender);
+        return new Result(true, """
+                It is mentioned in the phase 1 doc that gender can not be changed.
+                Honestly, I think that doesn't make much sense.
+                So I just put it here.
+                Protect the Dolls.""");
+    }
+
+    public Result userInfo()
+    {
+        StringBuilder output = new StringBuilder();
+        User user = App.getCurrentUser();
+
+        output.append(user.getNickname()).append("'s Profile");
+        output.append("username: ").append(user.getUsername()).append("\n");
+        output.append("email: ").append(user.getEmail()).append("\n");
+        output.append("gender: ").append(user.getGender()).append("\n");
+        output.append("number of games: ").append(user.getNumberOfGames()).append("\n");
+        output.append("max money in a game: ").append(user.getMaxMoney()).append("\n");
+
+        return new Result(true, output.toString().trim());
+    }
+
+    public Result exitMenu()
+    {
+        App.setCurrentMenu(Menu.MainMenu);
+        return new Result(true, "Redirecting to main menu...");
+    }
+
+    public Result showCurrentMenu()
+    {
+        return new Result(true, "You are currently in your profile menu.");
     }
 
     public Result showUserInfo()
@@ -228,5 +299,18 @@ public class ProfileController
     private boolean containsDigit(String password)
     {
         return password.matches(".*\\d.*");
+    }
+
+    private boolean validEmail(String email)
+    {
+        String EMAIL_REGEX =
+                "^(?=.{1,32}@)" +                                 // Limit local part to 64 characters
+                        "[a-zA-Z0-9](?!.*\\.\\.)[a-zA-Z0-9._-]{0,62}[a-zA-Z0-9]" + // local part: no starting/ending dot, no ".."
+                        "@" +
+                        "(?=.{3,255}$)" +                                  // total domain length max 255
+                        "[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?" +         // subdomain start and end with alnum
+                        "(\\.[a-zA-Z]{2,})+$";                             // at least one dot and TLD (e.g., .com, .ir)
+
+        return EMAIL_REGEX.matches(email);
     }
 }
