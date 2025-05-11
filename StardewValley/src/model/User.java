@@ -10,6 +10,7 @@ public class User {
     private Gender gender;
     private int question;
     private int answer;
+    private boolean stay;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -66,6 +67,14 @@ public class User {
     }
     public void setAnswer(int answer) {
         this.answer = answer;
+    }
+
+    public boolean isStay() {
+        return stay;
+    }
+
+    public void setStay(boolean stay) {
+        this.stay = stay;
     }
 }
 

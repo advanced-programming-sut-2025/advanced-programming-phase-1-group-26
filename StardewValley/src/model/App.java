@@ -22,6 +22,14 @@ public class App {
         App.currentGame = currentGame;
     }
 
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        App.currentUser = currentUser;
+    }
+
     public static Menu getCurrentMenu()
     {
         return currentMenu;

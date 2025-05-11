@@ -4,10 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum LoginCommands implements Command{
-    LOGIN(""),
-    FORGET_PASSWORD(""),
-    ANSWER(""),
-
+    LOGIN("^login -u (?<username>\\S+) -p (?<password>\\S+)(?: (?<flag>-stay-logged-in))?$"),
+    FORGET_PASSWORD("^forget password -u (?<username>\\S+)$"),
+    GO_TO_REGISTER("go to register menu"),
     ;
 
     private final Pattern pattern;
@@ -17,7 +16,6 @@ public enum LoginCommands implements Command{
     @Override
     public Matcher getMatcher(String input) {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        return matcher.matches() ? matcher : null;
     }
 }

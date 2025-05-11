@@ -4,13 +4,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum RegisterCommands implements Command{
-    REGISTER("register -u (?<username>.*) -p (random password|(?<password>.*) (?<passwordConfirm>.*))" +
-            " -n (?<nickname>.*) -e (?<email>.*) -g (?<gender>.*)"),
+    REGISTER("register -u (?<username>\\S+) -p (?<password>\\S+) (?<passwordConfirm>\\S+)" +
+            " -n (?<nickname>.*?) -e (?<email>\\S+) -g (?<gender>\\S+)"),
     CHECK_USERNAME("^[a-zA-Z0-9-]+$"),
     CHECK_PASSWORD("^[a-zA-Z0-9!#$%^&*)(=+}{\\]\\[|\\/:;'\",><?]+$"),
     CHECK_EMAIL("^[a-zA-Z0-9](?!.*\\.\\.)[a-zA-Z0-9._-]*[a-zA-Z0-9]@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$"),
     PICK_QUESTION("pick question -q (?<questionNumber>\\d+) -a (?<answer>\\d+) -c (?<answerConfirm>\\d+)"),
-    ;
+    GO_TO_LOGIN("go to login menu");
 
     private final Pattern pattern;
     RegisterCommands(String regex) {

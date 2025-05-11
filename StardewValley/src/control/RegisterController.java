@@ -4,6 +4,7 @@ import model.App;
 import model.Result;
 import model.User;
 import model.enums.Gender;
+import model.enums.Menu;
 import model.enums.regex_enums.RegisterCommands;
 
 import java.security.SecureRandom;
@@ -12,8 +13,6 @@ import java.util.regex.Matcher;
 
 public class RegisterController
 {
-    private static final String ALLOWED_CHARS =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%^&*)(=+}{][|\\/:;'\",><?";
     private static final SecureRandom random = new SecureRandom();
     private static User newUser = null;
 
@@ -21,9 +20,9 @@ public class RegisterController
     {
         String username = matcher.group("username");
         String password = matcher.group("password");
-        String passwordConfirm = "";
-        String input = "";
-        if (password.equals("random password")) {
+        String passwordConfirm = matcher.group("passwordConfirm");
+        String input;
+        if (password.equals("random") && passwordConfirm.equals("password")) {
             do {
                 password = generatePassword();
                 passwordConfirm = password;
@@ -38,9 +37,6 @@ public class RegisterController
                 }
 
             } while (input.equalsIgnoreCase("n"));
-
-        } else {
-            passwordConfirm = matcher.group("passwordConfirm");
         }
         String nickName = matcher.group("nickname");
         String email = matcher.group("email");
@@ -49,29 +45,35 @@ public class RegisterController
         if (genderName.equals("female")) {
             gender = Gender.FEMALE;
         }
-        if (!RegisterCommands.CHECK_USERNAME.matches(username)) {
+
+        if (RegisterCommands.CHECK_USERNAME.getMatcher(username) == null) {
             return new Result(false, "username is not valid!");
         } else if (App.getPlayerByUsername(username) != null) {
             return new Result(false, "username is already taken!");
-        } else if (!RegisterCommands.CHECK_PASSWORD.matches(password)) {
-            return new Result(false, "password is invalid!");
-        } else if (password.length() < 8) {
-            return new Result(false, "password is short!");
-        } else if (!password.matches(".*[a-z].*")) {
-            return new Result(false, "your password should include small letters!");
-        } else if (!password.matches(".*[A-Z].*")) {
-            return new Result(false, "your password should include capital letters!");
-        } else if (!password.matches(".*[0-9].*")) {
-            return new Result(false, "your password should include numbers!");
-        } else if (!password.matches(".*[!#$%^&*)(=+}{\\[\\]|\\\\/:;'\",><?].*")) {
-            return new Result(false, "your password should include special character!");
-        } else if (!password.matches(passwordConfirm)) {
-            return new Result(false, "your password doesn't match confirm password!");
-        } else if (!RegisterCommands.CHECK_EMAIL.matches(email)) {
+        }
+        if (!(password.equals("random") && passwordConfirm.equals("password"))) {
+            if (RegisterCommands.CHECK_PASSWORD.getMatcher(password) == null) {
+                return new Result(false, "password is invalid!");
+            } else if (password.length() < 8) {
+                return new Result(false, "password is short!");
+            } else if (!password.matches(".*[a-z].*")) {
+                return new Result(false, "your password should include small letters!");
+            } else if (!password.matches(".*[A-Z].*")) {
+                return new Result(false, "your password should include capital letters!");
+            } else if (!password.matches(".*[0-9].*")) {
+                return new Result(false, "your password should include numbers!");
+            } else if (!password.matches(".*[!#$%^&*)(=+}{\\[\\]|\\\\/:;'\",><?].*")) {
+                return new Result(false, "your password should include special character!");
+            } else if (!password.equals(passwordConfirm)) {
+                return new Result(false, "your password doesn't match confirm password!");
+            }
+        }
+        if (RegisterCommands.CHECK_EMAIL.getMatcher(email) == null) {
             return new Result(false, "email is invalid!");
         }
         newUser = new User(username, password, nickName, email, gender);
         App.getUsers().add(newUser);
+        App.setCurrentMenu(Menu.MainMenu);
         return new Result(true, "user created successfully!");
     }
 
@@ -97,13 +99,21 @@ public class RegisterController
         return new Result(true, "");
     }
 
+    public Result goToLogin() {
+        App.setCurrentMenu(Menu.LoginMenu);
+        return new Result(true, "you are in login menu");
+    }
+
 
     public static String generatePassword() {
+        String specialChars = "!@#$%^&*-_=+{};:,.<>?";
+        String allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" + specialChars;
+
         int length = 8 + random.nextInt(9);
         StringBuilder password = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            int index = random.nextInt(ALLOWED_CHARS.length());
-            password.append(ALLOWED_CHARS.charAt(index));
+            int index = random.nextInt(allowedChars.length());
+            password.append(allowedChars.charAt(index));
         }
         return password.toString();
     }
