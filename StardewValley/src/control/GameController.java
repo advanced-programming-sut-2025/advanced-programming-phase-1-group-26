@@ -672,4 +672,45 @@ public class GameController
     {
         return new Result(true, App.getCurrentGame().getCurrentPlayer().getUser().getNickname());
     }
+
+    public Result helpReadMap()
+    {
+        StringBuilder help = new StringBuilder();
+
+        help.append("📖 Reading the Map:\n");
+
+        help.append("\n== Basic Tile Textures ==\n");
+        help.append(Color.YELLOW).append("🟨 Unploughed Land").append(Color.RESET).append("\n");
+        help.append(Color.BROWN).append("🟫 Ploughed Land").append(Color.RESET).append("\n");
+        help.append(Color.BLUE).append("🌊 / 🟦 Lake / Water").append(Color.RESET).append("\n");
+        help.append(Color.GREEN).append("🟩 Grass, Village Grass, or Floor").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🏠 Cabin").append(Color.RESET).append("\n");
+        help.append(Color.CYAN).append("🪟 Greenhouse / Building").append(Color.RESET).append("\n");
+        help.append(Color.DARK_GREY).append("🪨 Quarry (Rock)").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("⬜ Fence").append(Color.RESET).append("\n");
+        help.append(Color.BLUE).append("🔷 Road").append(Color.RESET).append("\n");
+        help.append(Color.RED).append("🚪 Shop Door").append(Color.RESET).append("\n");
+        help.append(Color.RED).append("🟥 City Board").append(Color.RESET).append("\n");
+        help.append(Color.YELLOW).append("📚 Book").append(Color.RESET).append("\n");
+        help.append(Color.YELLOW).append("💡 Lamp").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🛋️ Table").append(Color.RESET).append("\n");
+        help.append(Color.CYAN).append("💻 Computer").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🛏️ Bed Tile").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🏬 Shop Floor").append(Color.RESET).append("\n");
+        help.append(Color.YELLOW).append("🧠 NPC in Shop").append(Color.RESET).append("\n");
+        help.append(Color.DARK_GREY).append("🧱 Cabin Wall / Wall").append(Color.RESET).append("\n");
+
+        help.append("\n== Planted Objects ==\n");
+        help.append(Color.GREEN).append("🌳 / 🌴 Tree").append(Color.RESET).append("\n");
+        help.append(Color.LIME_GREEN).append("🌱 Crop").append(Color.RESET).append("\n");
+        help.append(Color.OLIVE_GREEN).append("🌳 Foraging Crop / Tree / Seed").append(Color.RESET).append("\n");
+        help.append(Color.DARK_GREY).append("🪨 Stone Resource").append(Color.RESET).append("\n");
+        help.append(Color.BROWN).append("🪵 Wood Resource").append(Color.RESET).append("\n");
+
+        help.append("\n== Other ==\n");
+        help.append(Color.RESET).append("🤓 Current Player Location").append(Color.RESET).append("\n");
+        help.append(Color.RED).append("🟥 Unknown/Error Tile").append(Color.RESET).append("\n");
+
+        return new Result(true, help.toString().trim());
+    }
 }

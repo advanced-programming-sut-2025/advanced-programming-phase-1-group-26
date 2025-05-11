@@ -115,6 +115,9 @@ public class GameMenu implements AppMenu
         } else if ((matcher = GameCommands.WHOAMI.getMatcher(input)) != null)
         {
             System.out.println(controller.whoAmI());
+        } else if ((matcher = GameCommands.HELP_READ_MAP.getMatcher(input)) != null)
+        {
+            System.out.println(controller.helpReadMap());
         }
 
         else if (input.equals("1"))
