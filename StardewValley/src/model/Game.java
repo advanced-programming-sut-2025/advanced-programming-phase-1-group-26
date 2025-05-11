@@ -1,5 +1,7 @@
 package model;
 
+import model.enums.NpcDetails;
+
 import java.util.ArrayList;
 
 public class Game
@@ -28,8 +30,10 @@ public class Game
     public ArrayList<NPC> getNPCs() {
         return NPCs;
     }
-    public void setNPCs(ArrayList<NPC> NPCs) {
-        this.NPCs = NPCs;
+    public void setNPCs() { //TODO, should add where the game starts
+        for(NpcDetails npcDetails : NpcDetails.values()) {
+            NPCs.add(new NPC(npcDetails));
+        }
     }
 
     public ArrayList<Player> getPlayers() {

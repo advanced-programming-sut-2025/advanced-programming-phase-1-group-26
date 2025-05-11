@@ -3,15 +3,14 @@ package model;
 import model.enums.GameObjectType;
 import model.enums.NpcDetails;
 import model.enums.Season;
+import model.player_data.FriendshipWithNpcData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class NPC {
-    private Tile location;
-    private int friendship;
-    private int levelOfFriendship;
+    private Point location;
     public NpcDetails npcDetails;
     private String name;
     private ArrayList<String> dialogues = new ArrayList<>();
@@ -19,13 +18,20 @@ public class NPC {
     private List<GameObject> requests;
     private List<GameObject> rewards;
     private ArrayList<GameObject> openQuests = new ArrayList<>();
+    private FriendshipWithNpcData friendshipWithNpcData;
 
-    public NPC(NpcDetails npcDetails, Tile location) {
-        this.location = location;
-        this.friendship = 0;
-        this.levelOfFriendship = 0;
+    public NPC(NpcDetails npcDetails) {
+        this.friendshipWithNpcData.setXp(0);
+        this.friendshipWithNpcData.setLevel(0);
         this.npcDetails = npcDetails;
         this.name = npcDetails.getName();
+        switch (name) {
+            case "Robin" -> App.getCurrentGame().getCurrentPlayer().setRobinFriendship(friendshipWithNpcData);
+            case "Abigail" -> App.getCurrentGame().getCurrentPlayer().setAbigailFriendship(friendshipWithNpcData);
+            case "Sebastian" -> App.getCurrentGame().getCurrentPlayer().setSebastianFriendship(friendshipWithNpcData);
+            case "Harvey" -> App.getCurrentGame().getCurrentPlayer().setHarveyFriendship(friendshipWithNpcData);
+            case "Lia" -> App.getCurrentGame().getCurrentPlayer().setLiaFriendship(friendshipWithNpcData);
+        }
         this.favorites = npcDetails.getFavorites();
         this.requests = npcDetails.getRequests();
         this.rewards = npcDetails.getRewards();
@@ -36,63 +42,39 @@ public class NPC {
         return npcDetails;
     }
 
-    public Tile getLocation() {
+    public Point getLocation() {
         return location;
     }
-    public void setLocation(Tile location) {
+    public void setLocation(Point location) {
         this.location = location;
     }
 
-    public int getFriendship() {
-        return friendship;
-    }
-    public void setFriendship(int friendship) {
-        this.friendship = friendship;
-    }
-    public void increaseFriendship(int amount) {
-        this.friendship += amount;
-        if(friendship > 200) {
-            setFriendship(0);
-            increaseLevelOfFriendship();
-        }
-    }
-
-    public int getLevelOfFriendship() {
-        return levelOfFriendship;
-    }
-    public void setLevelOfFriendship(int levelOfFriendship) {
-        this.levelOfFriendship = levelOfFriendship;
-    }
-    public void increaseLevelOfFriendship() {
-        if(levelOfFriendship == 799) return;
-        this.levelOfFriendship++;
-    }
-
-    public boolean isNearPlayer(Tile npcLocation, Tile playerLocation) {
+    public boolean isNearPlayer(Point npcLocation, Point playerLocation) {
         int xDiff = npcLocation.getX() - playerLocation.getX();
         int yDiff = npcLocation.getY() - playerLocation.getY();
         return xDiff >= -1 && xDiff <= 1 && yDiff >= -1 && yDiff <= 1;
     }
 
+    public boolean isQuestFinish = false;
     public boolean isTalked = false;
     public boolean isGift = false; //TODO, should be reset everyday
     public String talk(Boolean isTalked, Time currentTime) {
         if(!isTalked) {
-            increaseFriendship(20);
+            friendshipWithNpcData.increaseXp(20);
         }
         return this.getNpcDetails().getDialogue(currentTime.getSeason(), currentTime.getTimeOfDay());
     }
     public void giftNPC(boolean isGift, GameObjectType gift) {
         if(!isGift) {
-            increaseFriendship(50);
+            friendshipWithNpcData.increaseXp(50);
         }
         if(favorites.contains(gift)) {
-            increaseFriendship(200);
+            friendshipWithNpcData.increaseXp(200);
         }
     }
 
     public ArrayList<GameObject> updateQuests(Season season, Time currentTime) {
-        if(levelOfFriendship == 1) {
+        if(friendshipWithNpcData.getLevel() == 1) {
             if(!openQuests.contains(requests.get(1))) openQuests.add(requests.get(1));
         }
         if(season != currentTime.getSeason()) {
@@ -100,5 +82,16 @@ public class NPC {
         }
 
         return openQuests;
+    }
+
+    public void removeQuest(int index) {
+        openQuests.remove(index);
+    }
+
+    public FriendshipWithNpcData getFriendshipWithNpcData() {
+        return friendshipWithNpcData;
+    }
+    public void setFriendshipWithNpcData(FriendshipWithNpcData friendshipWithNpcData) {
+        this.friendshipWithNpcData = friendshipWithNpcData;
     }
 }

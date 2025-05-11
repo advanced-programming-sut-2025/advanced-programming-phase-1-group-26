@@ -5,16 +5,15 @@ import model.enums.GameObjectType;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
+import model.player_data.FriendshipWithNpcData;
 import model.player_data.Skill;
 import model.player_data.Trade;
-import model.enums.GameObjectType;
 import model.enums.SkillType;
 import model.tools.BackPack;
 import model.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Player {
 
@@ -42,6 +41,12 @@ public class Player {
     private ArrayList<Gift> newGifts = new ArrayList<>();
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
+
+    private FriendshipWithNpcData SebastianFriendship = new FriendshipWithNpcData();
+    private FriendshipWithNpcData AbigailFriendship = new FriendshipWithNpcData();
+    private FriendshipWithNpcData HarveyFriendship = new FriendshipWithNpcData();
+    private FriendshipWithNpcData LiaFriendship = new FriendshipWithNpcData();
+    private FriendshipWithNpcData RobinFriendship = new FriendshipWithNpcData();
 
     private HashMap<Player, GameObject> purposeList = new HashMap<>();
     private Player zeidy;
@@ -376,5 +381,45 @@ public class Player {
 
     public HashMap<Player, GameObject> getPurposeList() {
         return purposeList;
+    }
+
+    public FriendshipWithNpcData getSebastianFriendship() {
+        return SebastianFriendship;
+    }
+
+    public void setSebastianFriendship(FriendshipWithNpcData sebastianFriendship) {
+        SebastianFriendship = sebastianFriendship;
+    }
+
+    public FriendshipWithNpcData getAbigailFriendship() {
+        return AbigailFriendship;
+    }
+
+    public void setAbigailFriendship(FriendshipWithNpcData abigailFriendship) {
+        AbigailFriendship = abigailFriendship;
+    }
+
+    public FriendshipWithNpcData getHarveyFriendship() {
+        return HarveyFriendship;
+    }
+
+    public void setHarveyFriendship(FriendshipWithNpcData harveyFriendship) {
+        HarveyFriendship = harveyFriendship;
+    }
+
+    public FriendshipWithNpcData getLiaFriendship() {
+        return LiaFriendship;
+    }
+
+    public void setLiaFriendship(FriendshipWithNpcData liaFriendship) {
+        LiaFriendship = liaFriendship;
+    }
+
+    public FriendshipWithNpcData getRobinFriendship() {
+        return RobinFriendship;
+    }
+
+    public void setRobinFriendship(FriendshipWithNpcData robinFriendship) {
+        RobinFriendship = robinFriendship;
     }
 }
