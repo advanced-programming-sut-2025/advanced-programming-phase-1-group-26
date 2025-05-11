@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public enum CommunicateCommands implements Command {
 
-    FRIENDSHIP("friendship"),
+    FRIENDSHIP("^friendship$"),
     TALK("talk -u (?<username>.*) -m (?<message>.*)"),
     TALK_HISTORY("talk history -u (?<username>.*)"),
     GIFT("gift -u (?<username>.*) -i (?<item>.*) -a (?<amount>\\d+)"),
@@ -26,7 +26,6 @@ public enum CommunicateCommands implements Command {
     @Override
     public Matcher getMatcher(String input) {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        return matcher.matches() ? matcher : null;
     }
 }

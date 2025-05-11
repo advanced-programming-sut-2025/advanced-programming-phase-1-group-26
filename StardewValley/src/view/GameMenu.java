@@ -21,6 +21,7 @@ public class GameMenu implements AppMenu
     {
         String input = scanner.nextLine().trim();
         Matcher matcher;
+        Matcher comMatcher;
 
         //TODO: add checkFainted in game menu
 
@@ -137,7 +138,7 @@ public class GameMenu implements AppMenu
             System.out.println(controller.toolsUpgrade(matcher));
         } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
             controller.toolsUse(matcher);
-        } else if ((matcher = CommunicateCommands.FRIENDSHIP.getMatcher(input)) != null) { //TODO: why?!
+        } else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) { //TODO: why?!
             comController.friendships();
         } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
             System.out.println(comController.talk(matcher));
@@ -145,7 +146,7 @@ public class GameMenu implements AppMenu
             comController.talkHistory(matcher);
         } else if ((matcher = CommunicateCommands.GIFT.getMatcher(input)) != null) {
             comController.gift(matcher);
-        } else if ((matcher = CommunicateCommands.GIFT_LIST.getMatcher(input)) != null) {
+        } else if (CommunicateCommands.GIFT_LIST.getMatcher(input) != null) {
             comController.giftList();
         } else if ((matcher = CommunicateCommands.GIFT_RATE.getMatcher(input)) != null) {
             comController.giftRate(matcher);
