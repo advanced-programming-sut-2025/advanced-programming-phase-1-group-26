@@ -80,12 +80,16 @@ public abstract class Map
 
         if (tile.getObject() != null)
         {
-            return switch (tile.getObject())
+            if (tile.getObject() instanceof Tree)
             {
-                case Tree a -> false;
-                case Resource b -> false;
-                default -> true;
-            };
+                return false;
+            } else if (tile.getObject() instanceof Resource)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
         }
 
         return true;

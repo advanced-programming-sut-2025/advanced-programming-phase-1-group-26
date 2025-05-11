@@ -171,7 +171,7 @@ public class Tile
                 return "\uD83D\uDFE9";
             } else if (texture.equals(TileTexture.ROAD))
             {
-                return "⬛";
+                return "\uD83D\uDD33";
             } else if (texture.equals(TileTexture.FENCE))
             {
                 return "⬜";
@@ -210,7 +210,7 @@ public class Tile
                     texture.equals(TileTexture.SHOP_PIERRE) ||
                     texture.equals(TileTexture.SHOP_CARPENTER))
             {
-                return "\uD83D\uDFEA";
+                return "\uD83D\uDFE7";
             }else if (texture.equals(TileTexture.NPC_BLACKSMITH) ||
                     texture.equals(TileTexture.NPC_JOJAMART) ||
                     texture.equals(TileTexture.NPC_SALOON) ||

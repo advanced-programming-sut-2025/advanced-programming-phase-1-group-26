@@ -115,30 +115,34 @@ public class Game
         }
         return farms;
     }
-    
+
     public Tile getTileFromDirection(String direction)
     {
         Farm farm = currentPlayer.getCurrentFarm();
-        return switch (direction)
+        int x = currentPlayer.getLocation().getX();
+        int y = currentPlayer.getLocation().getY();
+
+        switch (direction)
         {
-            case "W" -> farm.getTile(currentPlayer.getLocation().getY(),
-                    currentPlayer.getLocation().getX() - 1);
-            case "E" -> farm.getTile(currentPlayer.getLocation().getY(),
-                    currentPlayer.getLocation().getX() + 1);
-            case "N" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
-                    currentPlayer.getLocation().getX());
-            case "S" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
-                    currentPlayer.getLocation().getX());
-            case "NW" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
-                    currentPlayer.getLocation().getX() - 1);
-            case "NE" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
-                    currentPlayer.getLocation().getX() + 1);
-            case "SW" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
-                    currentPlayer.getLocation().getX() - 1);
-            case "SE" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
-                    currentPlayer.getLocation().getX() + 1);
-            default -> null;
-        };
+            case "W":
+                return farm.getTile(y, x - 1);
+            case "E":
+                return farm.getTile(y, x + 1);
+            case "N":
+                return farm.getTile(y - 1, x);
+            case "S":
+                return farm.getTile(y + 1, x);
+            case "NW":
+                return farm.getTile(y - 1, x - 1);
+            case "NE":
+                return farm.getTile(y - 1, x + 1);
+            case "SW":
+                return farm.getTile(y + 1, x - 1);
+            case "SE":
+                return farm.getTile(y + 1, x + 1);
+            default:
+                return null;
+        }
     }
 
     public Player getPlayerByNickname(String nickname) {
