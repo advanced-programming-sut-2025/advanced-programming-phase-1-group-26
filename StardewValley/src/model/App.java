@@ -10,12 +10,8 @@ public class App {
     private static User currentUser = null;
     private static Menu currentMenu = Menu.RegisterMenu;
 
-    public ArrayList<User> getUsers() {
+    public static ArrayList<User> getUsers() {
         return users;
-    }
-
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
     }
 
     public static Game getCurrentGame() {
@@ -39,5 +35,14 @@ public class App {
     public static void addGame(Game game)
     {
         games.add(game);
+    }
+
+    public static User getPlayerByUsername(String username) {
+        for (User user : App.getUsers()) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 }
