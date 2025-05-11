@@ -14,10 +14,6 @@ public class App {
         return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
-    }
-
     public static Game getCurrentGame() {
         return currentGame;
     }
@@ -39,5 +35,10 @@ public class App {
     public static void addGame(Game game)
     {
         games.add(game);
+    }
+
+    public static void setCurrentUser(User currentUser)
+    {
+        App.currentUser = currentUser;
     }
 }

@@ -2,12 +2,18 @@ package model;
 
 import model.enums.Gender;
 
+import java.util.ArrayList;
+
 public class User {
     private String username;
     private String password;
     private String nickname;
     private String email;
     private Gender gender;
+
+    private int numberOfGames = 0;
+    private boolean hasCurrentGame = false;
+    private ArrayList<Integer> gameMoney = new ArrayList<>();
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -50,5 +56,35 @@ public class User {
     }
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public int getNumberOfGames()
+    {
+        return numberOfGames;
+    }
+
+    public boolean isHasCurrentGame()
+    {
+        return hasCurrentGame;
+    }
+
+    public ArrayList<Integer> getGameMoney()
+    {
+        return gameMoney;
+    }
+
+    public void setCurrentGame(boolean hasCurrentGame)
+    {
+        this.hasCurrentGame = hasCurrentGame;
+    }
+
+    public void addToNumberOfGames()
+    {
+        this.numberOfGames += 1;
+    }
+
+    public void addMoneyGame(int amount)
+    {
+        this.gameMoney.add(amount);
     }
 }
