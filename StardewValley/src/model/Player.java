@@ -1,8 +1,10 @@
 package model;
 
 import model.animal.Animal;
+import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
@@ -13,6 +15,7 @@ import model.tools.BackPack;
 import model.tools.Tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Player {
@@ -60,6 +63,12 @@ public class Player {
     private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
+
+    private ArrayList<KitchenItems> cookingRecipes = new ArrayList<>(
+            Arrays.asList(KitchenItems.FRIED_EGG,
+                    KitchenItems.BAKED_FISH,
+                    KitchenItems.SALAD));
+    private ArrayList<EdibleThing> refrigerator = new ArrayList<>();
 
     public Player(User user, Farm farm) {
         this.user = user;
@@ -387,6 +396,7 @@ public class Player {
                 {
                     this.currentBackPack.getInventory().remove(object);
                 }
+                break;
             }
         }
     }
@@ -479,5 +489,77 @@ public class Player {
 
     public void setRobinFriendship(FriendshipWithNpcData robinFriendship) {
         RobinFriendship = robinFriendship;
+    }
+
+    public ArrayList<EdibleThing> getRefrigerator()
+    {
+        return refrigerator;
+    }
+
+    public ArrayList<KitchenItems> getCookingRecipes()
+    {
+        return cookingRecipes;
+    }
+
+    public boolean isNear(Point location)
+    {
+        int playerX = location.getX();
+        int playerY = location.getY();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x != 0 && y != 0)
+                {
+                    if (location.getX() == playerX + x && location.getY() == playerY + y)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public EdibleThing getFromRefrigerator (GameObjectType type)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                return thing;
+            }
+        }
+        return null;
+    }
+
+    public int howManyInRefrigerator(GameObjectType type)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                return thing.getNumber();
+            }
+        }
+        return 0;
+    }
+
+    public void removeAmountFromRefrigerator(GameObjectType type, int amount)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                thing.addNumber(-1 * amount);
+                if (thing.getNumber() <= 0)
+                {
+                    refrigerator.remove(thing);
+                }
+                break;
+            }
+        }
     }
 }

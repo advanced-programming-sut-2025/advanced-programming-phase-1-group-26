@@ -28,7 +28,8 @@ public enum SkillType
     Foraging(new HashMap<>() {{
         put(CraftingRecipeEnums.CHARCOAL_KILN_RECIPE, 1);
         put(CraftingRecipeEnums.MYSTIC_TREE_SEED_RECIPE, 4);
-    }});
+    }}),
+    Max_Energy(new HashMap<>() {{}});
 
     private final HashMap<CraftingRecipeEnums, Integer> craftingRecipes;
 

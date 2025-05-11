@@ -1,7 +1,7 @@
 package control;
 
 import model.*;
-import model.enums.FarmTypes;
+import model.enums.MapTypes;
 import model.enums.Menu;
 import view.MainMenu;
 
@@ -21,11 +21,11 @@ public class MainMenuController
 
     private void chooseMaps(ArrayList<User> users)
     {
-        final int farmOptionsNum = FarmTypes.values().length;
+        final int farmOptionsNum = MapTypes.values().length;
         MainMenu.println("Farm Options: ");
         for (int i = 0; i < farmOptionsNum; i++)
         {
-            FarmTypes farm = FarmTypes.values()[i];
+            MapTypes farm = MapTypes.values()[i];
             MainMenu.println("\t" + (i + 1) + "- " + farm);
         }
 
@@ -49,7 +49,7 @@ public class MainMenuController
                         MainMenu.println("Please enter a valid number.");
                     } else
                     {
-                        FarmTypes type = FarmTypes.values()[number - 1];
+                        MapTypes type = MapTypes.values()[number - 1];
                         Player player = new Player(users.get(i), new Farm(type));
                         players.add(player);
                         break;

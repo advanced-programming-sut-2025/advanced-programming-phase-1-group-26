@@ -1,11 +1,6 @@
 package view;
 
-import control.GameController;
 import control.game.activities.HomeController;
-import model.Farm;
-import model.Point;
-import model.enums.FarmTypes;
-import model.enums.regex_enums.GameCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
