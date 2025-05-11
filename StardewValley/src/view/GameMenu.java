@@ -1,9 +1,8 @@
 package view;
 
 import control.GameController;
-import model.Farm;
-import model.Point;
-import model.enums.FarmTypes;
+import model.*;
+import model.enums.MapTypes;
 import model.enums.regex_enums.GameCommands;
 
 import java.util.Scanner;
@@ -81,7 +80,7 @@ public class GameMenu implements AppMenu
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.STANDARD);
+                Farm farm = new Farm(MapTypes.STANDARD);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
         }
@@ -91,7 +90,7 @@ public class GameMenu implements AppMenu
             for (int i = 0; i < 100; i++)
             {
 
-                Farm farm = new Farm(FarmTypes.RIVERLAND);
+                Farm farm = new Farm(MapTypes.RIVERLAND);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
         }
@@ -100,7 +99,7 @@ public class GameMenu implements AppMenu
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.HILL_TOP);
+                Farm farm = new Farm(MapTypes.HILL_TOP);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
         }
@@ -109,9 +108,33 @@ public class GameMenu implements AppMenu
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.BEACH);
+                Farm farm = new Farm(MapTypes.BEACH);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
+        }
+
+        else if (input.equals("5"))
+        {
+            Cabin cabin = new Cabin();
+            System.out.println(cabin.getMapString(new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
+        }
+
+        else if (input.equals("6"))
+        {
+            GreenHouse greenHouse = new GreenHouse();
+            System.out.println(greenHouse.getMapString(new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
+        }
+
+        else if (input.equals("7"))
+        {
+            City city = new City();
+            System.out.println(city.getMapString(new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
+        }
+
+        else if (input.equals("8"))
+        {
+            ShopMap shop = new ShopMap();
+            System.out.println(shop.getMapString(new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
         }
 
         else

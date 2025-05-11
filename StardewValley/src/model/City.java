@@ -3,15 +3,13 @@ package model;
 import model.enums.MapTypes;
 import model.enums.TileTexture;
 
-import java.util.ArrayList;
-
-public class GreenHouse extends Map
+public class City extends Map
 {
     private final String mapPath;
 
-    public GreenHouse()
+    public City()
     {
-        this.mapType = MapTypes.GREEN_HOUSE;
+        this.mapType = MapTypes.CITY;
         this.mapPath = mapType.getMapPath();
         initialize();
     }
@@ -23,7 +21,7 @@ public class GreenHouse extends Map
 
         if (mapData == null)
         {
-            throw new IllegalStateException("Failed to load green house map: " + mapPath);
+            throw new IllegalStateException("Failed to load city map: " + mapPath);
         }
 
         this.WIDTH = dims[0];
@@ -35,22 +33,22 @@ public class GreenHouse extends Map
             for (int x = 0; x < WIDTH; x++)
             {
                 tiles[y][x] = new Tile(new Point(x, y));
-                tiles[y][x].setType(TileTexture.GREEN_HOUSE_FLOOR);
+                tiles[y][x].setType(TileTexture.VILLAGE_GRASS);
             }
         }
 
         applyMap();
-        this.startingPoint = findDoor();
+        this.startingPoint = findStartingPoint();
     }
 
-    private Point findDoor()
+    private Point findStartingPoint()
     {
         for (int y = 0; y < HEIGHT; y++)
         {
             for (int x = 0; x < WIDTH; x++)
             {
                 Tile tile = tiles[y][x];
-                if (tile.getTexture().equals(TileTexture.SHOP_DOOR))
+                if (tile.getTexture().equals(TileTexture.ROAD))
                 {
                     return tile.getPoint();
                 }
