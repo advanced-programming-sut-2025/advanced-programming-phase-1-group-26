@@ -1,5 +1,7 @@
 package model.enums;
 
+import java.util.ArrayList;
+
 public enum MapTypes
 {
     STANDARD("standard", "StardewValley/resources/map/standard.json"),
@@ -30,6 +32,16 @@ public enum MapTypes
     public String getMapPath()
     {
         return mapPath;
+    }
+
+    public static ArrayList<MapTypes> farmTypes()
+    {
+        ArrayList<MapTypes> farmTypes = new ArrayList<MapTypes>();
+        farmTypes.add(STANDARD);
+        farmTypes.add(RIVERLAND);
+        farmTypes.add(HILL_TOP);
+        farmTypes.add(BEACH);
+        return farmTypes;
     }
 
     public MapTypes getFarmType(String name)

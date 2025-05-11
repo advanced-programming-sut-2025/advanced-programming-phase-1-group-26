@@ -214,11 +214,6 @@ public class ProfileController
         return new Result(true, "You are currently in your profile menu.");
     }
 
-    public Result showUserInfo()
-    {
-        return null;
-    }
-
     private boolean uniqueUsername(String newUsername)
     {
         for (User user : App.getUsers())

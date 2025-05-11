@@ -11,6 +11,7 @@ public class Game
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
+    private Player oppenheimer; // I actually wanted to call this "opener", but thought it would be funnier this way
 
     public Game() //TODO: this is only for test, should be removed later
     {
@@ -152,5 +153,41 @@ public class Game
             }
         }
         return null;
+    }
+
+    public User getCreator()
+    {
+        return players.get(0).getUser();
+    }
+
+    public Player getOppenheimer()
+    {
+        if (oppenheimer == null)
+        {
+            return players.get(0);
+        }
+        return oppenheimer;
+    }
+
+    public void setOppenheimer(Player oppenheimer)
+    {
+        this.oppenheimer = oppenheimer;
+    }
+
+    public Player getPlayerFromUser(User user)
+    {
+        for (Player player : this.players)
+        {
+            if (player.getUser().equals(user))
+            {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer)
+    {
+        this.currentPlayer = currentPlayer;
     }
 }

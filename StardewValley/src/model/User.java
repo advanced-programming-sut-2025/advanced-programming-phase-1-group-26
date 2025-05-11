@@ -13,8 +13,21 @@ public class User {
     private Gender gender;
 
     private int numberOfGames = 0;
-    private boolean hasCurrentGame = false;
+    private Game currentGame = null;
     private ArrayList<Integer> gameMoney = new ArrayList<>();
+
+    public User(String nickname)
+    {
+        this.nickname = nickname;
+
+        if (Math.random() < 0.5)
+        {
+            this.gender = Gender.MALE;
+        } else
+        {
+            this.gender = Gender.FEMALE;
+        }
+    }
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -64,9 +77,9 @@ public class User {
         return numberOfGames;
     }
 
-    public boolean isHasCurrentGame()
+    public boolean hasCurrentGame()
     {
-        return hasCurrentGame;
+        return (currentGame != null);
     }
 
     public ArrayList<Integer> getGameMoney()
@@ -74,9 +87,9 @@ public class User {
         return gameMoney;
     }
 
-    public void setCurrentGame(boolean hasCurrentGame)
+    public void setCurrentGame(Game game)
     {
-        this.hasCurrentGame = hasCurrentGame;
+        this.currentGame = game;
     }
 
     public void addToNumberOfGames()
@@ -97,5 +110,10 @@ public class User {
         }
 
         return Collections.max(gameMoney);
+    }
+
+    public Game getCurrentGame()
+    {
+        return currentGame;
     }
 }
