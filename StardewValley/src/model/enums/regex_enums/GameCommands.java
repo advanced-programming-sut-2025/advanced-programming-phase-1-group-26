@@ -64,8 +64,11 @@ public enum GameCommands implements Command
             "-d\\s+(?<direction>.*)"),
     FERTILIZE("fertilize\\s+" +
             "-f\\s+(?<fertilizer>.*)\\s+" +
-            "-d\\s+(?<direction>\n"),
+            "-d\\s+(?<direction>)"),
     HOW_MUCH_WATER("how\\s+much\\s+water"),
+
+    GO_TO_CABIN("go\\s+to\\s+cabin"),
+    WHOAMI("whoami"),
     ;
 
     private final String pattern;

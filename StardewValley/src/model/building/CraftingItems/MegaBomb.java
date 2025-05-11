@@ -2,7 +2,6 @@ package model.building.CraftingItems;
 
 import model.*;
 import model.enums.building_enums.CraftingRecipeEnums;
-import model.enums.building_enums.RecipeItem;
 
 public class MegaBomb extends CraftingItem
 {
@@ -15,7 +14,7 @@ public class MegaBomb extends CraftingItem
     public void doItsThing()
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Map map = player.getCurrentFarm();
+        Map map = player.getCurrentMap();
         Point location = player.getLocation();
         int x = location.getX();
         int y = location.getY();

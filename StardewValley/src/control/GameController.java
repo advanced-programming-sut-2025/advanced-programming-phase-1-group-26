@@ -383,9 +383,9 @@ public class GameController
 
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm();
+        Map map = player.getCurrentMap();
 
-        int requiredEnergy = farm.calculateEnergy(player.getLocation(), destination);
+        int requiredEnergy = map.calculateEnergy(player.getLocation(), destination);
         int energy = player.getEnergy();
 
         if (requiredEnergy == -1)
@@ -413,9 +413,9 @@ public class GameController
 
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm();
+        Map map = player.getCurrentMap();
 
-        int requiredEnergy = farm.calculateEnergy(player.getLocation(), destination);
+        int requiredEnergy = map.calculateEnergy(player.getLocation(), destination);
         int energy = player.getEnergy();
 
         if (requiredEnergy < energy)
@@ -437,7 +437,7 @@ public class GameController
             return new Result(false, "OK");
         }
 
-        Point canGetTo = farm.findFurthestAvailablePoint(player.getLocation(), destination, energy);
+        Point canGetTo = map.findFurthestAvailablePoint(player.getLocation(), destination, energy);
 
         GameMenu.println("You can't go all the way...");
         GameMenu.println("But we have a special offer for you: ");
@@ -646,6 +646,25 @@ public class GameController
 
     public Result nextTurn()
     {
-        return null;
+        return null; // TODO: add later
+    }
+
+    public Result cheatNextTurn()
+    {
+        return null; // TODO: add later
+    }
+
+    public Result goToCabin()
+    {
+        Game game = App.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        player.goToCabin();
+        App.setCurrentMenu(Menu.HomeMenu);
+        return new Result(true, "Going to cabin...");
+    }
+
+    public Result whoAmI()
+    {
+        return new Result(true, App.getCurrentGame().getCurrentPlayer().getUser().getNickname());
     }
 }

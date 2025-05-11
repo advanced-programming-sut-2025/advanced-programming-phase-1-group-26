@@ -2,15 +2,14 @@ package control.game.activities;
 
 import model.*;
 import model.building.Cooking.EdibleThing;
-import model.building.CraftingItems.CherryBomb;
 import model.building.CraftingItems.CraftingItem;
 import model.building.CraftingItems.CraftingItemCreator;
 import model.enums.GameObjectType;
+import model.enums.Menu;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
 import view.HomeMenu;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -138,7 +137,7 @@ public class HomeController
         return new Result(true, "Successfully placed " + itemName + " on the tile.");
     }
 
-    public Result CHEAT_ADD_ITEM(String itemName, String count)
+    public Result cheatAddItem(String itemName, String count)
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
         GameObjectType type = GameObjectType.getGameObjectType(itemName);
@@ -357,5 +356,14 @@ public class HomeController
         player.increaseEnergy(kitchenItem.getEnergy());
 
         return new Result(true, "Yum Yum, you just ate " + kitchenItem.getType());
+    }
+
+    public Result goOut()
+    {
+        Game game = App.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        player.goToFarm();
+        App.setCurrentMenu(Menu.GameMenu);
+        return new Result(true, "Going to farm...");
     }
 }

@@ -17,15 +17,16 @@ import model.tools.Tool;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class Player {
 
     private final User user;
     private final Farm farm;
+    private final Cabin cabin;
+    private final GreenHouse greenHouse;
 
     private Point location = null;
-    private Farm currentFarm = null;
+    private Map currentMap = null;
 
     private int energy;
     private int maxEnergy = 200;
@@ -74,6 +75,9 @@ public class Player {
     public Player(User user, Farm farm) {
         this.user = user;
         this.farm = farm;
+        this.cabin = new Cabin();
+        this.greenHouse = new GreenHouse();
+        this.currentMap = this.farm;
         this.energy = 200;
         this.turnEnergy = 50;
         this.fainted = false;
@@ -240,9 +244,9 @@ public class Player {
         return location;
     }
 
-    public Farm getCurrentFarm()
+    public Map getCurrentMap()
     {
-        return currentFarm;
+        return currentMap;
     }
 
     public void setLocation(Point location)
@@ -250,9 +254,9 @@ public class Player {
         this.location = location;
     }
 
-    public void setCurrentFarm(Farm currentFarm)
+    public void setCurrentMap(Map currentMap)
     {
-        this.currentFarm = currentFarm;
+        this.currentMap = currentMap;
     }
 
     public GameObject findObjectType(Enum<?> type)
@@ -546,5 +550,38 @@ public class Player {
     {
         if (!(o instanceof Player player)) return false;
         return user.getUsername().equals(((Player) o).getUser().getUsername());
+    }
+
+    public Farm getFarm()
+    {
+        return farm;
+    }
+
+    public Cabin getCabin()
+    {
+        return cabin;
+    }
+
+    public GreenHouse getGreenHouse()
+    {
+        return greenHouse;
+    }
+
+    public void goToFarm()
+    {
+        this.currentMap = this.farm;
+        this.location = farm.getStartingPoint();
+    }
+
+    public void goToCabin()
+    {
+        this.currentMap = this.cabin;
+        this.location = cabin.getStartingPoint();
+    }
+
+    public void goToGreenHouse()
+    {
+        this.currentMap = this.greenHouse;
+        this.location = greenHouse.getStartingPoint();
     }
 }

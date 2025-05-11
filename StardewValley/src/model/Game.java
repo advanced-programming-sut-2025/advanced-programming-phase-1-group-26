@@ -112,35 +112,35 @@ public class Game
         ArrayList<Farm> farms = new ArrayList<>();
         for (Player player : players)
         {
-            farms.add(player.getCurrentFarm());
+            farms.add(player.getFarm());
         }
         return farms;
     }
 
     public Tile getTileFromDirection(String direction)
     {
-        Farm farm = currentPlayer.getCurrentFarm();
+        Map map = currentPlayer.getCurrentMap();
         int x = currentPlayer.getLocation().getX();
         int y = currentPlayer.getLocation().getY();
 
         switch (direction)
         {
             case "W":
-                return farm.getTile(y, x - 1);
+                return map.getTile(y, x - 1);
             case "E":
-                return farm.getTile(y, x + 1);
+                return map.getTile(y, x + 1);
             case "N":
-                return farm.getTile(y - 1, x);
+                return map.getTile(y - 1, x);
             case "S":
-                return farm.getTile(y + 1, x);
+                return map.getTile(y + 1, x);
             case "NW":
-                return farm.getTile(y - 1, x - 1);
+                return map.getTile(y - 1, x - 1);
             case "NE":
-                return farm.getTile(y - 1, x + 1);
+                return map.getTile(y - 1, x + 1);
             case "SW":
-                return farm.getTile(y + 1, x - 1);
+                return map.getTile(y + 1, x - 1);
             case "SE":
-                return farm.getTile(y + 1, x + 1);
+                return map.getTile(y + 1, x + 1);
             default:
                 return null;
         }
