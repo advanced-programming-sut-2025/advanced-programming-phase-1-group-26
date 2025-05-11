@@ -93,6 +93,9 @@ public class User {
     public boolean isStay() {
         return stay;
     }
+    public void setStay(boolean stay) {
+        this.stay = stay;
+    }
 
     public int getNumberOfGames()
     {
