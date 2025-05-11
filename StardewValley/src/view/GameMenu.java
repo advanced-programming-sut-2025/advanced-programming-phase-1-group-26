@@ -22,6 +22,7 @@ public class GameMenu implements AppMenu
     {
         String input = scanner.nextLine().trim();
         Matcher matcher;
+        Matcher comMatcher;
 
         //TODO: add checkFainted in game menu
 
@@ -188,7 +189,7 @@ public class GameMenu implements AppMenu
             comController.talkHistory(matcher);
         } else if ((matcher = CommunicateCommands.GIFT.getMatcher(input)) != null) {
             comController.gift(matcher);
-        } else if ((matcher = CommunicateCommands.GIFT_LIST.getMatcher(input)) != null) {
+        } else if (CommunicateCommands.GIFT_LIST.getMatcher(input) != null) {
             comController.giftList();
         } else if ((matcher = CommunicateCommands.GIFT_RATE.getMatcher(input)) != null) {
             comController.giftRate(matcher);

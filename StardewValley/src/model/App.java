@@ -16,10 +16,6 @@ public class App
         return users;
     }
 
-    public static User getCurrentUser()
-    {
-        return currentUser;
-    }
 
     public static Game getCurrentGame() {
         return currentGame;
@@ -27,6 +23,14 @@ public class App
 
     public static void setCurrentGame(Game currentGame) {
         App.currentGame = currentGame;
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        App.currentUser = currentUser;
     }
 
     public static Menu getCurrentMenu()
@@ -44,8 +48,12 @@ public class App
         games.add(game);
     }
 
-    public static void setCurrentUser(User currentUser)
-    {
-        App.currentUser = currentUser;
+    public static User getPlayerByUsername(String username) {
+        for (User user : App.getUsers()) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

@@ -90,7 +90,6 @@ public class Player {
 
         this.zeidy = null;
         this.location = farm.getStartingPoint();
-        this.currentBackPack = new BackPack();
         this.newMessage = false;
     }
     

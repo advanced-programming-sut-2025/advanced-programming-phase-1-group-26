@@ -11,6 +11,9 @@ public class User {
     private String nickname;
     private String email;
     private Gender gender;
+    private int question;
+    private int answer;
+    private boolean stay;
 
     private int numberOfGames = 0;
     private Game currentGame = null;
@@ -73,6 +76,27 @@ public class User {
         this.gender = gender;
     }
 
+    public int getQuestion() {
+        return question;
+    }
+    public void setQuestion(int question) {
+        this.question = question;
+    }
+
+    public int getAnswer() {
+        return answer;
+    }
+    public void setAnswer(int answer) {
+        this.answer = answer;
+    }
+
+    public boolean isStay() {
+        return stay;
+    }
+    public void setStay(boolean stay) {
+        this.stay = stay;
+    }
+
     public int getNumberOfGames()
     {
         return numberOfGames;
@@ -118,3 +142,5 @@ public class User {
         return currentGame;
     }
 }
+
+
