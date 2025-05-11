@@ -3,7 +3,7 @@ package model.enums.regex_enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum MainMenuCommands implements Command
+public enum MainCommands implements Command
 {
     USER_LOGOUT("user\\s+logout"),
     MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
@@ -14,7 +14,7 @@ public enum MainMenuCommands implements Command
     ;
     private final Pattern pattern;
 
-    MainMenuCommands(String regex)
+    MainCommands(String regex)
     {
         this.pattern = Pattern.compile(regex);
     }
