@@ -13,9 +13,9 @@ public enum NpcDetails {
             List.of(new GameObject(GameObjectType.IRON_BAR, 50),
                     new GameObject(GameObjectType.PUMPKIN_PIE, 1),
                     new GameObject(GameObjectType.STONE, 150)),
-            List.of(new GameObject(GameObjectType.DIAMOND_MINERAL, 2),
+            List.of(new GameObject(GameObjectType.DIAMOND, 2),
                     new GameObject(GameObjectType.GOLD_COIN, 5000),
-                    new GameObject(GameObjectType.QUARTZ_MINERAL, 50)),
+                    new GameObject(GameObjectType.QUARTZ, 50)),
             createDialogues(Map.of(
                     Season.Spring, Map.of(
                             TimeOfDay.MORNING, "Spring mornings are too bright for me...",
@@ -41,7 +41,7 @@ public enum NpcDetails {
     ),
 
     Abigail("Abigail",
-            List.of(GameObjectType.STONE, GameObjectType.IRON_MINERAL, GameObjectType.COFFEE),
+            List.of(GameObjectType.STONE, GameObjectType.IRON, GameObjectType.COFFEE),
             List.of(new GameObject(GameObjectType.GOLD_BAR, 1),
                     new GameObject(GameObjectType.PUMPKIN, 1),
                     new GameObject(GameObjectType.WHEAT, 50)),

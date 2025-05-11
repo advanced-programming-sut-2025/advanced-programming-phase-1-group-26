@@ -11,4 +11,9 @@ public class Resource extends GameObject
         this.resourceType = type;
         this.ObjectType = type.getType();
     }
+
+    public ResourceItem getResourceType()
+    {
+        return resourceType;
+    }
 }
