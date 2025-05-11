@@ -19,7 +19,8 @@ public enum GameCommands implements Command
     /* Player Commands */
     ENERGY_SHOW("energy show"),
     INVENTORY_SHOW("inventory show"),
-    INVENTORY_TRASH("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
+    INVENTORY_TRASH_NUMBER("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
+    INVENTORY_TRASH("inventory trash -i (?<name>.*)"),
     TOOLS_EQUIP ("tools equip (?<name>.*)"),
     TOOLS_SHOW_CURRENT("tools show current"),
     TOOLS_SHOW_AVAILABLE("tools show available"),

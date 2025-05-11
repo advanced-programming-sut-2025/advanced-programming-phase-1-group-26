@@ -1,9 +1,11 @@
 package view;
 
 import control.GameController;
+import control.game.activities.CommunicateController;
 import model.Farm;
 import model.Point;
 import model.enums.FarmTypes;
+import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
 
 import java.util.Scanner;
@@ -12,6 +14,7 @@ import java.util.regex.Matcher;
 public class GameMenu implements AppMenu
 {
     GameController controller = new GameController();
+    CommunicateController comController = new CommunicateController();
 
     @Override
     public void check(Scanner scanner)
@@ -112,9 +115,51 @@ public class GameMenu implements AppMenu
                 Farm farm = new Farm(FarmTypes.BEACH);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
-        }
 
-        else
+        } else if ((matcher = GameCommands.ENERGY_SHOW.getMatcher(input)) != null) {
+            System.out.println(controller.energyShow());
+        } else if ((matcher = GameCommands.ENERGY_SET.getMatcher(input)) != null) {
+            System.out.println(controller.energySet(matcher));
+        } else if ((matcher = GameCommands.ENERGY_UNLIMITED.getMatcher(input)) != null) {
+            System.out.println(controller.energyUnlimited());
+        } else if ((matcher = GameCommands.INVENTORY_SHOW.getMatcher(input)) != null) {
+            controller.inventoryShow();
+        } else if ((matcher = GameCommands.INVENTORY_TRASH_NUMBER.getMatcher(input)) != null ||
+        (matcher = GameCommands.INVENTORY_TRASH.getMatcher(input)) != null) {
+            System.out.println(controller.inventoryTrash(matcher));
+        } else if ((matcher = GameCommands.TOOLS_EQUIP.getMatcher(input)) != null) {
+            System.out.println(controller.toolsEquip(matcher));
+        } else if ((matcher = GameCommands.TOOLS_SHOW_CURRENT.getMatcher(input)) != null) {
+            System.out.println(controller.toolsShowCurrent());
+        } else if ((matcher = GameCommands.TOOLS_SHOW_AVAILABLE.getMatcher(input)) != null) {
+            controller.toolsShowAvailable();
+        } else if ((matcher = GameCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
+            System.out.println(controller.toolsUpgrade(matcher));
+        } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
+            controller.toolsUse(matcher);
+        } else if ((matcher = CommunicateCommands.FRIENDSHIP.getMatcher(input)) != null) { //TODO: why?!
+            comController.friendships();
+        } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
+            System.out.println(comController.talk(matcher));
+        } else if ((matcher = CommunicateCommands.TALK_HISTORY.getMatcher(input)) != null) {
+            comController.talkHistory(matcher);
+        } else if ((matcher = CommunicateCommands.GIFT.getMatcher(input)) != null) {
+            comController.gift(matcher);
+        } else if ((matcher = CommunicateCommands.GIFT_LIST.getMatcher(input)) != null) {
+            comController.giftList();
+        } else if ((matcher = CommunicateCommands.GIFT_RATE.getMatcher(input)) != null) {
+            comController.giftRate(matcher);
+        } else if ((matcher = CommunicateCommands.GIFT_HISTORY.getMatcher(input)) != null) {
+            comController.giftHistory(matcher);
+        } else if ((matcher = CommunicateCommands.HUG.getMatcher(input)) != null) {
+            comController.giveHug(matcher);
+        } else if ((matcher = CommunicateCommands.FLOWER.getMatcher(input)) != null) {
+            comController.giveFlower(matcher);
+        } else if ((matcher = CommunicateCommands.ASK_MARRIAGE.getMatcher(input)) != null) {
+            comController.purposeAsk(matcher);
+        } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
+            comController.purposeRespond(matcher);
+        } else
         {
             System.out.println("invalid command");
         }

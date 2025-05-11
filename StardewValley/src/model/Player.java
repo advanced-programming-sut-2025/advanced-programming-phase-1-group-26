@@ -25,6 +25,7 @@ public class Player {
 
     private int energy;
     private int maxEnergy = 200;
+    private int turnEnergy;
     /*TEMP*/ private boolean fainted;
 
     private Skill farmingSkill = new Skill(SkillType.Farming);
@@ -37,6 +38,8 @@ public class Player {
     private ArrayList<Trade> sentTrades = new ArrayList<>();
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
     private ArrayList<Trade> archiveTrades = new ArrayList<>();
+
+    private boolean newMessage;
 
     private ArrayList<Gift> newGifts = new ArrayList<>();
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
@@ -62,6 +65,7 @@ public class Player {
         this.user = user;
         this.farm = farm;
         this.energy = 200;
+        this.turnEnergy = 50;
         this.fainted = false;
         this.money = 0;
 
@@ -72,6 +76,8 @@ public class Player {
 
         this.zeidy = null;
         this.location = farm.getStartingPoint();
+        this.currentBackPack = new BackPack();
+        this.newMessage = false;
     }
     
 
@@ -85,6 +91,18 @@ public class Player {
 
     public void increaseEnergy(int energy) {
         this.energy += energy;
+    }
+
+    public int getTurnEnergy() {
+        return turnEnergy;
+    }
+
+    public void setTurnEnergy(int turnEnergy) {
+        this.turnEnergy = turnEnergy;
+    }
+
+    public void increaseTurnEnergy(int turnEnergy) {
+        this.turnEnergy += turnEnergy;
     }
 
     public int getMaxEnergy() {
@@ -128,7 +146,10 @@ public class Player {
     }
 
     public double getMoney() {
-        return money;
+        if (this.zeidy == null) {
+            return money;
+        }
+        return money + zeidy.money;
     }
 
     public void setMoney(double money) {
@@ -155,8 +176,32 @@ public class Player {
         return receivedTrades;
     }
 
+    public boolean isNewMessage() {
+        return newMessage;
+    }
+
+    public void setNewMessage(boolean newMessage) {
+        this.newMessage = newMessage;
+    }
+
     public ArrayList<Trade> getArchiveTrades() {
         return archiveTrades;
+    }
+
+    public ArrayList<Gift> getNewGifts() {
+        return newGifts;
+    }
+
+    public ArrayList<Gift> getArchiveGifts() {
+        return archiveGifts;
+    }
+
+    public ArrayList<Gift> getGivenGifts() {
+        return givenGifts;
+    }
+
+    public HashMap<Player, GameObject> getPurposeList() {
+        return purposeList;
     }
 
     public Player getZeidy() {
@@ -251,6 +296,35 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public void checkEnergy() {
+        if (this.turnEnergy < 1) {
+            this.setFainted(true);
+        }
+    }
+
+    public boolean isNear(Point location)
+    {
+        Point point = this.location;
+        int playerX = point.getX();
+        int playerY = point.getY();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x != 0 && y != 0)
+                {
+                    if (location.getX() == playerX + x && location.getY() == playerY + y)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public Tool getTool(ToolType type)
@@ -365,22 +439,6 @@ public class Player {
         }
 
         return capacity - currentBackPack.getSize();
-    }
-
-    public ArrayList<Gift> getNewGifts() {
-        return newGifts;
-    }
-
-    public ArrayList<Gift> getArchiveGifts() {
-        return archiveGifts;
-    }
-
-    public ArrayList<Gift> getGivenGifts() {
-        return givenGifts;
-    }
-
-    public HashMap<Player, GameObject> getPurposeList() {
-        return purposeList;
     }
 
     public FriendshipWithNpcData getSebastianFriendship() {
