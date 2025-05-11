@@ -713,4 +713,28 @@ public class GameController
 
         return new Result(true, help.toString().trim());
     }
+
+    public Result buildGreenhouse()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        GreenHouse greenhouse = player.getGreenHouse();
+        if (greenhouse.isBuilt())
+        {
+            return new Result(false, """
+                    You have already paid for the greenhouse.
+                    Although I could've not told you this and get your money. (Is the grammar of this sentence correct?)
+                   
+                    """);
+        }
+
+        if (!player.canAffordGreenhouse())
+        {
+            return new Result(false, "You can't afford the greenhouse.\n" +
+                    "You are poor :(");
+        }
+
+        greenhouse.build();
+        return new Result(true, "Yippee! You successfully built a greenhouse.");
+    }
 }

@@ -589,4 +589,9 @@ public class Player {
     {
         this.energy = maxEnergy;
     }
+
+    public boolean canAffordGreenhouse()
+    {
+        return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
+    }
 }

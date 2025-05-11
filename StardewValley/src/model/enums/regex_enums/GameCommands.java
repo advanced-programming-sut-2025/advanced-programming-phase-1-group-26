@@ -71,6 +71,7 @@ public enum GameCommands implements Command
     WHOAMI("whoami"),
     FORCE_NEXT_TURN("force\\s+next\\s+turn"),
     HELP_READING_MAP("help\\s+reading\\s+map"),
+    BUILD_GREENHOUSE("greenhouse\\s+build"),
     ;
 
     private final String pattern;

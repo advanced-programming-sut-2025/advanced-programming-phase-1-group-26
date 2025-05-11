@@ -118,6 +118,9 @@ public class GameMenu implements AppMenu
         } else if ((matcher = GameCommands.HELP_READ_MAP.getMatcher(input)) != null)
         {
             System.out.println(controller.helpReadMap());
+        } else if ((matcher = GameCommands.BUILD_GREENHOUSE.getMatcher(input)) != null)
+        {
+            System.out.println(controller.buildGreenhouse());
         }
 
         else if (input.equals("1"))
