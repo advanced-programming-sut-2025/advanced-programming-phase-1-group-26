@@ -10,7 +10,7 @@ public enum CommunicateCommands implements Command {
     TALK_HISTORY("talk history -u (?<username>.*)"),
     GIFT("gift -u (?<username>.*) -i (?<item>.*) -a (?<amount>\\d+)"),
     GIFT_LIST("gift list"),
-    GIFT_RATE("gift rate -i (?<giftNumber?\\d+) -r (?<rate>\\d+)"),
+    GIFT_RATE("gift rate -i (?<giftNumber>\\d+) -r (?<rate>\\d+)"),
     GIFT_HISTORY("gift history -u (?<username>.*)"),
     HUG("hug (?<username>.*)"),
     FLOWER("flower (?<username>.*)"),
@@ -23,10 +23,12 @@ public enum CommunicateCommands implements Command {
     CommunicateCommands(String regex) {
         this.pattern = Pattern.compile(regex);
     }
+
     @Override
     public Matcher getMatcher(String input) {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        if (matcher.matches())
+            return matcher;
+        return null;
     }
 }

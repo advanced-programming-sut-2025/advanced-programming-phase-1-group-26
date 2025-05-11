@@ -383,9 +383,9 @@ public class GameController
 
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm();
+        Map map = player.getCurrentMap();
 
-        int requiredEnergy = farm.calculateEnergy(player.getLocation(), destination);
+        int requiredEnergy = map.calculateEnergy(player.getLocation(), destination);
         int energy = player.getEnergy();
 
         if (requiredEnergy == -1)
@@ -413,9 +413,9 @@ public class GameController
 
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm();
+        Map map = player.getCurrentMap();
 
-        int requiredEnergy = farm.calculateEnergy(player.getLocation(), destination);
+        int requiredEnergy = map.calculateEnergy(player.getLocation(), destination);
         int energy = player.getEnergy();
 
         if (requiredEnergy < energy)
@@ -437,7 +437,7 @@ public class GameController
             return new Result(false, "OK");
         }
 
-        Point canGetTo = farm.findFurthestAvailablePoint(player.getLocation(), destination, energy);
+        Point canGetTo = map.findFurthestAvailablePoint(player.getLocation(), destination, energy);
 
         GameMenu.println("You can't go all the way...");
         GameMenu.println("But we have a special offer for you: ");
@@ -566,28 +566,110 @@ public class GameController
                 "Tip: You can refill it near tiles that contain water.");
     }
 
-    public Result createNewGame(String[] usernames)
-    {
-        return null;
-    }
-
-    public Result selectMap(String mapNumber)
-    {
-        return null;
-    }
-
-    public Result loadGame()
-    {
-        return null;
-    }
-
     public Result exitGame()
     {
-        return null;
+        Game game = App.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        if (!game.getOppenheimer().equals(player))
+        {
+            return new Result(false, "You are not Oppenheimer. You can not end this game.");
+        }
+
+        GameMenu.println("Are you sure? [y/n]");
+        String answer = GameMenu.scan();
+
+        if (!answer.equalsIgnoreCase("y"))
+        {
+            return new Result(false, "Phew! You got me scared for a moment.");
+        }
+
+        App.setCurrentGame(null);
+        App.setCurrentUser(player.getUser());
+        App.setCurrentMenu(Menu.LoginMenu);
+
+        return new Result(true, """
+                Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
+                Redirecting to Login Menu...
+                """);
     }
 
-    public Result nextTurn()
+    public Result deleteGame()
     {
-        return null;
+        int positive = 1;
+        int negative = 0;
+
+        for (Player player : App.getCurrentGame().getPlayers())
+        {
+            GameMenu.println("Hsssh! " + player.getUser().getNickname() + " is voting: ");
+            if (!player.equals(App.getCurrentGame().getCurrentPlayer()))
+            {
+                do
+                {
+                    GameMenu.println("Do you vote for this game to be deleted? [y/n]");
+                    String answer = GameMenu.scan();
+                    if (answer.equalsIgnoreCase("y"))
+                    {
+                        positive += 1;
+                        break;
+                    } else if (answer.equalsIgnoreCase("n"))
+                    {
+                        negative += 1;
+                        break;
+                    } else
+                    {
+                        GameMenu.println("Please don't be such a dalghak, we're doing sth serious here.");
+                    }
+                } while (true);
+            }
+        }
+
+        GameMenu.println("Election Results: (voting to end the game)");
+        GameMenu.println("\tpositive: " + positive);
+        GameMenu.println("\tnegative: " + negative);
+
+        if (negative > 0)
+        {
+            GameMenu.println("You think you have democracy?");
+            return new Result(false, "The game shall continue.");
+        }
+
+        App.setCurrentGame(null);
+        App.setCurrentUser(App.getCurrentGame().getCurrentPlayer().getUser());
+        App.setCurrentMenu(Menu.LoginMenu);
+
+        return new Result(true, """
+                Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
+                Redirecting to Login Menu...
+                """);
+    }
+
+    public void nextTurn()
+    {
+        Game game = App.getCurrentGame();
+        game.nextTurn();
+    }
+
+    public Result forceNextTurn()
+    {
+        Game game = App.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        game.setCurrentPlayer(game.getNext(player));
+        game.getCurrentPlayer().setEnergyToMax();
+        return new Result(true, game.getCurrentPlayer().getUser().getNickname() + " is now playing.");
+    }
+
+    public Result goToCabin()
+    {
+        Game game = App.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        player.goToCabin();
+        App.setCurrentMenu(Menu.HomeMenu);
+        return new Result(true, "Going to cabin...");
+    }
+
+    public Result whoAmI()
+    {
+        return new Result(true, App.getCurrentGame().getCurrentPlayer().getUser().getNickname());
     }
 }

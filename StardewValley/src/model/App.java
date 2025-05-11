@@ -3,19 +3,22 @@ package model;
 import model.enums.Menu;
 import java.util.ArrayList;
 
-public class App {
+public class App
+{
     private static ArrayList<User> users = new ArrayList<>();
     private static ArrayList<Game> games = new ArrayList<>();
+
     private static Game currentGame = null;
     private static User currentUser = null;
     private static Menu currentMenu = Menu.RegisterMenu;
 
-    public ArrayList<User> getUsers() {
+    public static ArrayList<User> getUsers() {
         return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
+    public static User getCurrentUser()
+    {
+        return currentUser;
     }
 
     public static Game getCurrentGame() {
@@ -39,5 +42,10 @@ public class App {
     public static void addGame(Game game)
     {
         games.add(game);
+    }
+
+    public static void setCurrentUser(User currentUser)
+    {
+        App.currentUser = currentUser;
     }
 }

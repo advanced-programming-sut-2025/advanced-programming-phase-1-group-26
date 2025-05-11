@@ -1,8 +1,12 @@
 package model;
 
 import model.enums.NpcDetails;
+import view.GameMenu;
+import view.HomeMenu;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.PrimitiveIterator;
 
 public class Game
 {
@@ -11,6 +15,7 @@ public class Game
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
+    private Player oppenheimer; // I actually wanted to call this "opener", but thought it would be funnier this way
 
     public Game() //TODO: this is only for test, should be removed later
     {
@@ -76,27 +81,21 @@ public class Game
 
         do
         {
-            if (index == players.size() - 1)
-            {
-                index = 0;
-                currentTime.updateHour(1);
-            } else
-            {
-                index += 1;
-            }
+           currentPlayer = getNext(currentPlayer);
+           currentIndex = players.indexOf(currentPlayer);
 
-            currentPlayer = players.get(index);
-
-            if (currentPlayer.getEnergy() > 0)
-            {
-                break;
-            }
+           if (currentPlayer.getEnergy() > 0)
+           {
+               GameMenu.println("skipping " + currentPlayer.getUser().getUsername() + "'s turn :(");
+               break;
+           }
 
         } while (index != currentIndex);
 
         // if it reaches the original player again, the day is ended, and things are reset
         if (index == currentIndex)
         {
+            HomeMenu.println("starting a new day...");
             currentTime.updateHour(23 - currentTime.getHour());
         }
 
@@ -106,39 +105,59 @@ public class Game
         }
     }
 
+    public Player getNext(Player player)
+    {
+        int currentIndex = players.indexOf(currentPlayer);
+        int index = currentIndex;
+
+        if (index == players.size() - 1)
+        {
+            index = 0;
+        } else
+        {
+            index += 1;
+        }
+
+        return players.get(index);
+    }
+
     public ArrayList<Farm> getFarms()
     {
         ArrayList<Farm> farms = new ArrayList<>();
         for (Player player : players)
         {
-            farms.add(player.getCurrentFarm());
+            farms.add(player.getFarm());
         }
         return farms;
     }
-    
+
     public Tile getTileFromDirection(String direction)
     {
-        Farm farm = currentPlayer.getCurrentFarm();
-        return switch (direction)
+        Map map = currentPlayer.getCurrentMap();
+        int x = currentPlayer.getLocation().getX();
+        int y = currentPlayer.getLocation().getY();
+
+        switch (direction)
         {
-            case "W" -> farm.getTile(currentPlayer.getLocation().getY(),
-                    currentPlayer.getLocation().getX() - 1);
-            case "E" -> farm.getTile(currentPlayer.getLocation().getY(),
-                    currentPlayer.getLocation().getX() + 1);
-            case "N" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
-                    currentPlayer.getLocation().getX());
-            case "S" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
-                    currentPlayer.getLocation().getX());
-            case "NW" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
-                    currentPlayer.getLocation().getX() - 1);
-            case "NE" -> farm.getTile(currentPlayer.getLocation().getY() - 1,
-                    currentPlayer.getLocation().getX() + 1);
-            case "SW" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
-                    currentPlayer.getLocation().getX() - 1);
-            case "SE" -> farm.getTile(currentPlayer.getLocation().getY() + 1,
-                    currentPlayer.getLocation().getX() + 1);
-            default -> null;
-        };
+            case "W":
+                return map.getTile(y, x - 1);
+            case "E":
+                return map.getTile(y, x + 1);
+            case "N":
+                return map.getTile(y - 1, x);
+            case "S":
+                return map.getTile(y + 1, x);
+            case "NW":
+                return map.getTile(y - 1, x - 1);
+            case "NE":
+                return map.getTile(y - 1, x + 1);
+            case "SW":
+                return map.getTile(y + 1, x - 1);
+            case "SE":
+                return map.getTile(y + 1, x + 1);
+            default:
+                return null;
+        }
     }
 
     public Player getPlayerByNickname(String nickname) {
@@ -148,5 +167,41 @@ public class Game
             }
         }
         return null;
+    }
+
+    public User getCreator()
+    {
+        return players.get(0).getUser();
+    }
+
+    public Player getOppenheimer()
+    {
+        if (oppenheimer == null)
+        {
+            return players.get(0);
+        }
+        return oppenheimer;
+    }
+
+    public void setOppenheimer(Player oppenheimer)
+    {
+        this.oppenheimer = oppenheimer;
+    }
+
+    public Player getPlayerFromUser(User user)
+    {
+        for (Player player : this.players)
+        {
+            if (player.getUser().equals(user))
+            {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer)
+    {
+        this.currentPlayer = currentPlayer;
     }
 }

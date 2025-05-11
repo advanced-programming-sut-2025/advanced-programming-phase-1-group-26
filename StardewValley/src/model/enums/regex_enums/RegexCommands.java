@@ -3,22 +3,21 @@ package model.enums.regex_enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum MenuCommands implements Command{ //+MainMenuCommand
-    LOGOUT(""),
-    MENU_ENTER(""),
-    MENU_EXIT(""),
-    SHOW_CURRENT_MENU(""),
-
+public enum RegexCommands implements Command
+{
+    USERNAME_FORMAT("[a-zA-Z0-9-]+"),
     ;
+
     private final Pattern pattern;
-    MenuCommands(String regex) {
+
+    RegexCommands(String regex) {
         this.pattern = Pattern.compile(regex);
     }
+
     @Override
     public Matcher getMatcher(String input) {
         Matcher matcher = pattern.matcher(input);
         matcher.matches();
         return matcher;
     }
-
 }

@@ -1,8 +1,10 @@
 package model;
 
 import model.animal.Animal;
+import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
@@ -13,15 +15,18 @@ import model.tools.BackPack;
 import model.tools.Tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Player {
 
     private final User user;
     private final Farm farm;
+    private final Cabin cabin;
+    private final GreenHouse greenHouse;
 
     private Point location = null;
-    private Farm currentFarm = null;
+    private Map currentMap = null;
 
     private int energy;
     private int maxEnergy = 200;
@@ -61,9 +66,18 @@ public class Player {
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
+    private ArrayList<KitchenItems> cookingRecipes = new ArrayList<>(
+            Arrays.asList(KitchenItems.FRIED_EGG,
+                    KitchenItems.BAKED_FISH,
+                    KitchenItems.SALAD));
+    private ArrayList<EdibleThing> refrigerator = new ArrayList<>();
+
     public Player(User user, Farm farm) {
         this.user = user;
         this.farm = farm;
+        this.cabin = new Cabin();
+        this.greenHouse = new GreenHouse();
+        this.currentMap = this.farm;
         this.energy = 200;
         this.turnEnergy = 50;
         this.fainted = false;
@@ -229,9 +243,9 @@ public class Player {
         return location;
     }
 
-    public Farm getCurrentFarm()
+    public Map getCurrentMap()
     {
-        return currentFarm;
+        return currentMap;
     }
 
     public void setLocation(Point location)
@@ -239,9 +253,9 @@ public class Player {
         this.location = location;
     }
 
-    public void setCurrentFarm(Farm currentFarm)
+    public void setCurrentMap(Map currentMap)
     {
-        this.currentFarm = currentFarm;
+        this.currentMap = currentMap;
     }
 
     public GameObject findObjectType(Enum<?> type)
@@ -301,29 +315,6 @@ public class Player {
         if (this.turnEnergy < 1) {
             this.setFainted(true);
         }
-    }
-
-    public boolean isNear(Point location)
-    {
-        Point point = this.location;
-        int playerX = point.getX();
-        int playerY = point.getY();
-
-        for (int x = -1; x <= 1; x++)
-        {
-            for (int y = -1; y <= 1; y++)
-            {
-                if (x != 0 && y != 0)
-                {
-                    if (location.getX() == playerX + x && location.getY() == playerY + y)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     public Tool getTool(ToolType type)
@@ -386,6 +377,7 @@ public class Player {
                 {
                     this.currentBackPack.getInventory().remove(object);
                 }
+                break;
             }
         }
     }
@@ -478,5 +470,122 @@ public class Player {
 
     public void setRobinFriendship(FriendshipWithNpcData robinFriendship) {
         RobinFriendship = robinFriendship;
+    }
+
+    public ArrayList<EdibleThing> getRefrigerator()
+    {
+        return refrigerator;
+    }
+
+    public ArrayList<KitchenItems> getCookingRecipes()
+    {
+        return cookingRecipes;
+    }
+
+    public boolean isNear(Point location)
+    {
+        int playerX = location.getX();
+        int playerY = location.getY();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x != 0 && y != 0)
+                {
+                    if (location.getX() == playerX + x && location.getY() == playerY + y)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public EdibleThing getFromRefrigerator (GameObjectType type)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                return thing;
+            }
+        }
+        return null;
+    }
+
+    public int howManyInRefrigerator(GameObjectType type)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                return thing.getNumber();
+            }
+        }
+        return 0;
+    }
+
+    public void removeAmountFromRefrigerator(GameObjectType type, int amount)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                thing.addNumber(-1 * amount);
+                if (thing.getNumber() <= 0)
+                {
+                    refrigerator.remove(thing);
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Player player)) return false;
+        return user.getUsername().equals(((Player) o).getUser().getUsername());
+    }
+
+    public Farm getFarm()
+    {
+        return farm;
+    }
+
+    public Cabin getCabin()
+    {
+        return cabin;
+    }
+
+    public GreenHouse getGreenHouse()
+    {
+        return greenHouse;
+    }
+
+    public void goToFarm()
+    {
+        this.currentMap = this.farm;
+        this.location = farm.getStartingPoint();
+    }
+
+    public void goToCabin()
+    {
+        this.currentMap = this.cabin;
+        this.location = cabin.getStartingPoint();
+    }
+
+    public void goToGreenHouse()
+    {
+        this.currentMap = this.greenHouse;
+        this.location = greenHouse.getStartingPoint();
+    }
+
+    public void setEnergyToMax()
+    {
+        this.energy = maxEnergy;
     }
 }

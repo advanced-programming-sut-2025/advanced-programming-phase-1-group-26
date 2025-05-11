@@ -1,10 +1,11 @@
 package view;
 
 import control.GameController;
+import model.*;
+import model.enums.MapTypes;
 import control.game.activities.CommunicateController;
 import model.Farm;
 import model.Point;
-import model.enums.FarmTypes;
 import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
 
@@ -78,13 +79,49 @@ public class GameMenu implements AppMenu
             String y = matcher.group("y");
             String size = matcher.group("size");
 
+        } else if ((matcher = GameCommands.SHOW_CRAFT_INFO.getMatcher(input)) != null)
+        {
+            String craftName = matcher.group("craftName").trim();
+            System.out.println(controller.showCraftInfo(craftName));
+        } else if ((matcher = GameCommands.PLANT_SEED.getMatcher(input)) != null)
+        {
+            String seed = matcher.group("seed").trim();
+            String direction = matcher.group("direction").trim();
+            System.out.println(controller.plantSeed(seed,direction));
+        } else if ((matcher = GameCommands.FERTILIZE.getMatcher(input)) != null)
+        {
+            String fertilizer = matcher.group("fertilizer").trim();
+            String direction = matcher.group("direction").trim();
+            System.out.println(controller.fertilize(fertilizer,direction));
+        } else if ((matcher = GameCommands.HOW_MUCH_WATER.getMatcher(input)) != null)
+        {
+            System.out.println(controller.howMuchWater());
+        } else if ((matcher = GameCommands.EXIT_GAME.getMatcher(input)) != null)
+        {
+            System.out.println(controller.exitGame());
+        } else if ((matcher = GameCommands.DELETE_GAME.getMatcher(input)) != null)
+        {
+            System.out.println(controller.deleteGame());
+        } else if ((matcher = GameCommands.NEXT_TURN.getMatcher(input)) != null)
+        {
+            controller.nextTurn();
+        } else if ((matcher = GameCommands.FORCE_NEXT_TURN.getMatcher(input)) != null)
+        {
+            System.out.println(controller.forceNextTurn());
+        }
+        else if ((matcher = GameCommands.GO_TO_CABIN.getMatcher(input)) != null)
+        {
+            System.out.println(controller.goToCabin());
+        } else if ((matcher = GameCommands.WHOAMI.getMatcher(input)) != null)
+        {
+            System.out.println(controller.whoAmI());
         }
 
         else if (input.equals("1"))
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.STANDARD);
+                Farm farm = new Farm(MapTypes.STANDARD);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
         }
@@ -94,7 +131,7 @@ public class GameMenu implements AppMenu
             for (int i = 0; i < 100; i++)
             {
 
-                Farm farm = new Farm(FarmTypes.RIVERLAND);
+                Farm farm = new Farm(MapTypes.RIVERLAND);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
         }
@@ -103,7 +140,7 @@ public class GameMenu implements AppMenu
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.HILL_TOP);
+                Farm farm = new Farm(MapTypes.HILL_TOP);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
         }
@@ -112,7 +149,7 @@ public class GameMenu implements AppMenu
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.BEACH);
+                Farm farm = new Farm(MapTypes.BEACH);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
 
@@ -137,7 +174,7 @@ public class GameMenu implements AppMenu
             System.out.println(controller.toolsUpgrade(matcher));
         } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
             controller.toolsUse(matcher);
-        } else if ((matcher = CommunicateCommands.FRIENDSHIP.getMatcher(input)) != null) { //TODO: why?!
+        } else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
             comController.friendships();
         } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
             System.out.println(comController.talk(matcher));
@@ -159,7 +196,33 @@ public class GameMenu implements AppMenu
             comController.purposeAsk(matcher);
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
-        } else
+        }
+
+        else if (input.equals("5"))
+        {
+            Cabin cabin = new Cabin();
+            System.out.println(cabin.getMapString(new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
+        }
+
+        else if (input.equals("6"))
+        {
+            GreenHouse greenHouse = new GreenHouse();
+            System.out.println(greenHouse.getMapString(new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
+        }
+
+        else if (input.equals("7"))
+        {
+            City city = new City();
+            System.out.println(city.getMapString(new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
+        }
+
+        else if (input.equals("8"))
+        {
+            ShopMap shop = new ShopMap();
+            System.out.println(shop.getMapString(new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
+        }
+
+        else
         {
             System.out.println("invalid command");
         }

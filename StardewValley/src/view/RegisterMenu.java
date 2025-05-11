@@ -16,7 +16,7 @@ public class RegisterMenu implements AppMenu
         String input = scanner.nextLine().trim();
         Matcher matcher;
 
-        if (input.equals("cheat god")) // for debugging, remove later
+        if (input.equals("cheat god")) // for debugging, TODO: remove later
         {
             App.setCurrentGame(new Game());
             App.setCurrentMenu(Menu.GameMenu);

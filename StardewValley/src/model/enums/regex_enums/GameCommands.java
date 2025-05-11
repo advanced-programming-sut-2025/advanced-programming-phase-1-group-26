@@ -21,10 +21,10 @@ public enum GameCommands implements Command
     INVENTORY_SHOW("inventory show"),
     INVENTORY_TRASH_NUMBER("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
     INVENTORY_TRASH("inventory trash -i (?<name>.*)"),
-    TOOLS_EQUIP ("tools equip (?<name>.*)"),
+    TOOLS_EQUIP("tools equip (?<name>.*)"),
     TOOLS_SHOW_CURRENT("tools show current"),
     TOOLS_SHOW_AVAILABLE("tools show available"),
-    TOOLS_UPGRADE("tools upgrade (?<tool_name>.*)"),
+    TOOLS_UPGRADE("tools upgrade (?<toolName>.*)"),
     TOOLS_USE("tools use -d (?<direction>.*)"),
 
 
@@ -53,6 +53,23 @@ public enum GameCommands implements Command
     WALK("walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
     HELP_READ_MAP("help\\s+reading\\s+map"),
+
+    EXIT_GAME("exit\\s+game"),
+    DELETE_GAME("delete\\s+game"),
+    NEXT_TURN("next\\s+turn"),
+
+    SHOW_CRAFT_INFO("craftinfo\\s+-n\\s+(?<craftName>.*)"),
+    PLANT_SEED("plant\\s+" +
+            "-s\\s+(?<seed>.*)\\s+" +
+            "-d\\s+(?<direction>.*)"),
+    FERTILIZE("fertilize\\s+" +
+            "-f\\s+(?<fertilizer>.*)\\s+" +
+            "-d\\s+(?<direction>)"),
+    HOW_MUCH_WATER("how\\s+much\\s+water"),
+
+    GO_TO_CABIN("go\\s+to\\s+cabin"),
+    WHOAMI("whoami"),
+    FORCE_NEXT_TURN("force\\s+next\\s+turn"),
     ;
 
     private final String pattern;

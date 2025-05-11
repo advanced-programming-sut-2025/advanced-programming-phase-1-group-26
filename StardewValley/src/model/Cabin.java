@@ -3,15 +3,13 @@ package model;
 import model.enums.MapTypes;
 import model.enums.TileTexture;
 
-import java.util.ArrayList;
-
-public class GreenHouse extends Map
+public class Cabin extends Map
 {
     private final String mapPath;
 
-    public GreenHouse()
+    public Cabin()
     {
-        this.mapType = MapTypes.GREEN_HOUSE;
+        this.mapType = MapTypes.CABIN;
         this.mapPath = mapType.getMapPath();
         initialize();
     }
@@ -23,7 +21,7 @@ public class GreenHouse extends Map
 
         if (mapData == null)
         {
-            throw new IllegalStateException("Failed to load green house map: " + mapPath);
+            throw new IllegalStateException("Failed to load cabin map: " + mapPath);
         }
 
         this.WIDTH = dims[0];
@@ -35,7 +33,7 @@ public class GreenHouse extends Map
             for (int x = 0; x < WIDTH; x++)
             {
                 tiles[y][x] = new Tile(new Point(x, y));
-                tiles[y][x].setType(TileTexture.LAND);
+                tiles[y][x].setType(TileTexture.CABIN_INTERIOR_FLOOR);
             }
         }
 

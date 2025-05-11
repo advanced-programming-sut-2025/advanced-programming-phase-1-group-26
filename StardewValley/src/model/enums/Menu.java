@@ -12,7 +12,9 @@ public enum Menu
     MainMenu(new MainMenu(), "main menu"),
     GameMenu(new GameMenu(), "game menu"),
     ProfileMenu(new ProfileMenu(), "profile menu"),
-    ExitMenu(new ExitMenu(), null);
+    ExitMenu(new ExitMenu(), null),
+    HomeMenu (new HomeMenu(), "home menu"),
+    ;
 
     private final AppMenu menu;
     private final String name;

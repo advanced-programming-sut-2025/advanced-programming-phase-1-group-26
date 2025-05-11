@@ -147,7 +147,81 @@ public class Tile
             } else if (texture.equals(TileTexture.QUARRY))
             {
                 return "\uD83E\uDEA8"; // rock emoji
-            } else
+            } else if (texture.equals(TileTexture.CABIN_WALL) || texture.equals(TileTexture.GREEN_HOUSE_WALL) ||
+            texture.equals(TileTexture.WALL))
+            {
+                return "\uD83D\uDFEB";
+            } else if (texture.equals(TileTexture.CABIN_INTERIOR_FLOOR) || texture.equals(TileTexture.FLOOR))
+            {
+                return "\uD83D\uDFE9";
+            } else if (texture.equals(TileTexture.GREEN_HOUSE_FLOOR))
+            {
+                return "\uD83D\uDFE9";
+            } else if (texture.equals(TileTexture.GREEN_HOUSE_WOOD))
+            {
+                return "\uD83D\uDFE7";
+            } else if (texture.equals(TileTexture.BED_TILE))
+            {
+                return "\uD83D\uDFE6";
+            } else if (texture.equals(TileTexture.DECOR_TILE))
+            {
+                return "\uD83D\uDFEA";
+            } else if (texture.equals(TileTexture.VILLAGE_GRASS))
+            {
+                return "\uD83D\uDFE9";
+            } else if (texture.equals(TileTexture.ROAD))
+            {
+                return "\uD83D\uDD33";
+            } else if (texture.equals(TileTexture.FENCE))
+            {
+                return "⬜";
+            } else if (texture.equals(TileTexture.BUILDING))
+            {
+                return "\uD83E\uDE9F";
+            } else if (texture.equals(TileTexture.SHOP_DOOR))
+            {
+                return "\uD83D\uDEAA";
+            } else if (texture.equals(TileTexture.CITY_BOARD))
+            {
+                return "\uD83D\uDFE5";
+            } else if (texture.equals(TileTexture.GARDEN))
+            {
+                return "\uD83D\uDFE9";
+            } else if (texture.equals(TileTexture.TREE))
+            {
+                return "\uD83C\uDF34";
+            } else if (texture.equals(TileTexture.BOOK))
+            {
+                return "\uD83D\uDCDA";
+            } else if (texture.equals(TileTexture.LAMP))
+            {
+                return "\uD83D\uDCA1";
+            } else if (texture.equals(TileTexture.TABLE))
+            {
+                return "\uD83E\uDEB4";
+            }else if (texture.equals(TileTexture.COMPUTER))
+            {
+                return "\uD83D\uDCBB";
+            }else if (texture.equals(TileTexture.SHOP_BLACKSMITH) ||
+                    texture.equals(TileTexture.SHOP_JOJAMART) ||
+                    texture.equals(TileTexture.SHOP_SALOON) ||
+                    texture.equals(TileTexture.SHOP_MARNIE) ||
+                    texture.equals(TileTexture.SHOP_FISH) ||
+                    texture.equals(TileTexture.SHOP_PIERRE) ||
+                    texture.equals(TileTexture.SHOP_CARPENTER))
+            {
+                return "\uD83D\uDFE7";
+            }else if (texture.equals(TileTexture.NPC_BLACKSMITH) ||
+                    texture.equals(TileTexture.NPC_JOJAMART) ||
+                    texture.equals(TileTexture.NPC_SALOON) ||
+                    texture.equals(TileTexture.NPC_MARNIE) ||
+                    texture.equals(TileTexture.NPC_FISH) ||
+                    texture.equals(TileTexture.NPC_PIERRE) ||
+                    texture.equals(TileTexture.NPC_CARPENTER))
+            {
+                return "\uD83E\uDD13";
+            }
+            else
             {
                 return "\uD83D\uDFE5"; // ERROR
             }

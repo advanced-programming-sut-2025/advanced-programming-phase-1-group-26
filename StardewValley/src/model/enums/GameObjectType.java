@@ -265,7 +265,6 @@ public enum GameObjectType
     WINE("wine"),
     DRIED_MUSHROOM("dried mushroom"),
     DRIED_FRUIT("dried fruit"),
-    RAISIN("raisin"),
     CLOTH("cloth"),
     MAYONNAISE("mayonnaise"),
     DUCK_MAYONNAISE("duck mayonnaise"),
@@ -330,6 +329,7 @@ public enum GameObjectType
     Automating_Iridium_WateringCan("automating iridium watering can"),
     HARD_WOOD("hard wood"),
     SALMON_DINNER_RECIPE("salmon dinner recipe"),
+
     ;
 
     private final String name;
