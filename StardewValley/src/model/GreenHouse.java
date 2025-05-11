@@ -84,4 +84,6 @@ public class GreenHouse extends Map
     {
         return woodCost;
     }
+
+    // TODO: add other greenhouse functionalities later
 }
