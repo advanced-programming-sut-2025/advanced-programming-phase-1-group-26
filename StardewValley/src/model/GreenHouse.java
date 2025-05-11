@@ -35,7 +35,7 @@ public class GreenHouse extends Map
             for (int x = 0; x < WIDTH; x++)
             {
                 tiles[y][x] = new Tile(new Point(x, y));
-                tiles[y][x].setType(TileTexture.GREEN_HOUSE_FLOOR);
+                tiles[y][x].setType(TileTexture.LAND);
             }
         }
 

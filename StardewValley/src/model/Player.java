@@ -313,29 +313,6 @@ public class Player {
         }
     }
 
-    public boolean isNear(Point location)
-    {
-        Point point = this.location;
-        int playerX = point.getX();
-        int playerY = point.getY();
-
-        for (int x = -1; x <= 1; x++)
-        {
-            for (int y = -1; y <= 1; y++)
-            {
-                if (x != 0 && y != 0)
-                {
-                    if (location.getX() == playerX + x && location.getY() == playerY + y)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
     public Tool getTool(ToolType type)
     {
         for (GameObject object : currentBackPack.getInventory())

@@ -156,7 +156,7 @@ public class Tile
                 return "\uD83D\uDFE9";
             } else if (texture.equals(TileTexture.GREEN_HOUSE_FLOOR))
             {
-                return "\uD83D\uDFE7";
+                return "\uD83D\uDFE9";
             } else if (texture.equals(TileTexture.GREEN_HOUSE_WOOD))
             {
                 return "\uD83D\uDFE7";

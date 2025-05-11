@@ -6,7 +6,6 @@ import model.enums.MapTypes;
 import control.game.activities.CommunicateController;
 import model.Farm;
 import model.Point;
-import model.enums.FarmTypes;
 import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
 
@@ -139,7 +138,7 @@ public class GameMenu implements AppMenu
             System.out.println(controller.toolsUpgrade(matcher));
         } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
             controller.toolsUse(matcher);
-        } else if ((matcher = CommunicateCommands.FRIENDSHIP.getMatcher(input)) != null) { //TODO: why?!
+        } else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
             comController.friendships();
         } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
             System.out.println(comController.talk(matcher));
@@ -161,7 +160,8 @@ public class GameMenu implements AppMenu
             comController.purposeAsk(matcher);
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
-        } else
+        }
+
         else if (input.equals("5"))
         {
             Cabin cabin = new Cabin();

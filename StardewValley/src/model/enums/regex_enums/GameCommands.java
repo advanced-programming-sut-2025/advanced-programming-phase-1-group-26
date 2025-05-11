@@ -24,7 +24,7 @@ public enum GameCommands implements Command
     TOOLS_EQUIP ("tools equip (?<name>.*)"),
     TOOLS_SHOW_CURRENT("tools show current"),
     TOOLS_SHOW_AVAILABLE("tools show available"),
-    TOOLS_UPGRADE("tools upgrade (?<tool_name>.*)"),
+    TOOLS_UPGRADE("tools upgrade (?<toolName>.*)"),
     TOOLS_USE("tools use -d (?<direction>.*)"),
 
 
