@@ -104,8 +104,12 @@ public class GameMenu implements AppMenu
             System.out.println(controller.deleteGame());
         } else if ((matcher = GameCommands.NEXT_TURN.getMatcher(input)) != null)
         {
-            System.out.println(controller.nextTurn());
-        } else if ((matcher = GameCommands.GO_TO_CABIN.getMatcher(input)) != null)
+            controller.nextTurn();
+        } else if ((matcher = GameCommands.FORCE_NEXT_TURN.getMatcher(input)) != null)
+        {
+            System.out.println(controller.forceNextTurn());
+        }
+        else if ((matcher = GameCommands.GO_TO_CABIN.getMatcher(input)) != null)
         {
             System.out.println(controller.goToCabin());
         } else if ((matcher = GameCommands.WHOAMI.getMatcher(input)) != null)

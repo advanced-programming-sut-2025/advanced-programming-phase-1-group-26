@@ -644,14 +644,19 @@ public class GameController
                 """);
     }
 
-    public Result nextTurn()
+    public void nextTurn()
     {
-        return null; // TODO: add later
+        Game game = App.getCurrentGame();
+        game.nextTurn();
     }
 
-    public Result cheatNextTurn()
+    public Result forceNextTurn()
     {
-        return null; // TODO: add later
+        Game game = App.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        game.setCurrentPlayer(game.getNext(player));
+        game.getCurrentPlayer().setEnergyToMax();
+        return new Result(true, game.getCurrentPlayer().getUser().getNickname() + " is now playing.");
     }
 
     public Result goToCabin()

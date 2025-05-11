@@ -69,6 +69,7 @@ public enum GameCommands implements Command
 
     GO_TO_CABIN("go\\s+to\\s+cabin"),
     WHOAMI("whoami"),
+    FORCE_NEXT_TURN("force\\s+next\\s+turn"),
     ;
 
     private final String pattern;

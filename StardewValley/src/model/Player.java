@@ -584,4 +584,9 @@ public class Player {
         this.currentMap = this.greenHouse;
         this.location = greenHouse.getStartingPoint();
     }
+
+    public void setEnergyToMax()
+    {
+        this.energy = maxEnergy;
+    }
 }

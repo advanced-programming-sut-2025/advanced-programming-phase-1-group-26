@@ -1,8 +1,12 @@
 package model;
 
 import model.enums.NpcDetails;
+import view.GameMenu;
+import view.HomeMenu;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.PrimitiveIterator;
 
 public class Game
 {
@@ -77,27 +81,21 @@ public class Game
 
         do
         {
-            if (index == players.size() - 1)
-            {
-                index = 0;
-                currentTime.updateHour(1);
-            } else
-            {
-                index += 1;
-            }
+           currentPlayer = getNext(currentPlayer);
+           currentIndex = players.indexOf(currentPlayer);
 
-            currentPlayer = players.get(index);
-
-            if (currentPlayer.getEnergy() > 0)
-            {
-                break;
-            }
+           if (currentPlayer.getEnergy() > 0)
+           {
+               GameMenu.println("skipping " + currentPlayer.getUser().getUsername() + "'s turn :(");
+               break;
+           }
 
         } while (index != currentIndex);
 
         // if it reaches the original player again, the day is ended, and things are reset
         if (index == currentIndex)
         {
+            HomeMenu.println("starting a new day...");
             currentTime.updateHour(23 - currentTime.getHour());
         }
 
@@ -105,6 +103,22 @@ public class Game
         {
             endDay();
         }
+    }
+
+    public Player getNext(Player player)
+    {
+        int currentIndex = players.indexOf(currentPlayer);
+        int index = currentIndex;
+
+        if (index == players.size() - 1)
+        {
+            index = 0;
+        } else
+        {
+            index += 1;
+        }
+
+        return players.get(index);
     }
 
     public ArrayList<Farm> getFarms()
