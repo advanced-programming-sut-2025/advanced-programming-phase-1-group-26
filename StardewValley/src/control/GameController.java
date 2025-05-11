@@ -566,24 +566,82 @@ public class GameController
                 "Tip: You can refill it near tiles that contain water.");
     }
 
-    public Result createNewGame(String[] usernames)
-    {
-        return null;
-    }
-
-    public Result selectMap(String mapNumber)
-    {
-        return null;
-    }
-
-    public Result loadGame()
-    {
-        return null;
-    }
-
     public Result exitGame()
     {
-        return null;
+        Game game = App.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        if (!game.getOppenheimer().equals(player))
+        {
+            return new Result(false, "You are not Oppenheimer. You can not end this game.");
+        }
+
+        GameMenu.println("Are you sure? [y/n]");
+        String answer = GameMenu.scan();
+
+        if (!answer.equalsIgnoreCase("y"))
+        {
+            return new Result(false, "Phew! You got me scared for a moment.");
+        }
+
+        App.setCurrentGame(null);
+        App.setCurrentUser(player.getUser());
+        App.setCurrentMenu(Menu.LoginMenu);
+
+        return new Result(true, """
+                Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
+                Redirecting to Login Menu...
+                """);
+    }
+
+    public Result deleteGame()
+    {
+        int positive = 1;
+        int negative = 0;
+
+        for (Player player : App.getCurrentGame().getPlayers())
+        {
+            GameMenu.println("Hsssh! " + player.getUser().getNickname() + " is voting: ");
+            if (!player.equals(App.getCurrentGame().getCurrentPlayer()))
+            {
+                do
+                {
+                    GameMenu.println("Do you vote for this game to be deleted? [y/n]");
+                    String answer = GameMenu.scan();
+                    if (answer.equalsIgnoreCase("y"))
+                    {
+                        positive += 1;
+                        break;
+                    } else if (answer.equalsIgnoreCase("n"))
+                    {
+                        negative += 1;
+                        break;
+                    } else
+                    {
+                        GameMenu.println("Please don't be such a dalghak, we're doing sth serious here.");
+                    }
+                } while (true);
+            }
+        }
+
+        GameMenu.println("Election Results: (voting to end the game)");
+        GameMenu.println("\tpositive: " + positive);
+        GameMenu.println("\tnegative: " + negative);
+
+        if (negative > 0)
+        {
+            GameMenu.println("You think you have democracy?");
+            return new Result(false, "The game shall continue.");
+        }
+
+        App.setCurrentGame(null);
+        App.setCurrentUser(App.getCurrentGame().getCurrentPlayer().getUser());
+        App.setCurrentMenu(Menu.LoginMenu);
+
+        return new Result(true, """
+                Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
+                Redirecting to Login Menu...
+                """);
     }
 
     public Result nextTurn()

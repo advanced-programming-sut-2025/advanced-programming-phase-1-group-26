@@ -79,6 +79,32 @@ public class GameMenu implements AppMenu
             String y = matcher.group("y");
             String size = matcher.group("size");
 
+        } else if ((matcher = GameCommands.SHOW_CRAFT_INFO.getMatcher(input)) != null)
+        {
+            String craftName = matcher.group("craftName").trim();
+            System.out.println(controller.showCraftInfo(craftName));
+        } else if ((matcher = GameCommands.PLANT_SEED.getMatcher(input)) != null)
+        {
+            String seed = matcher.group("seed").trim();
+            String direction = matcher.group("direction").trim();
+            System.out.println(controller.plantSeed(seed,direction));
+        } else if ((matcher = GameCommands.FERTILIZE.getMatcher(input)) != null)
+        {
+            String fertilizer = matcher.group("fertilizer").trim();
+            String direction = matcher.group("direction").trim();
+            System.out.println(controller.fertilize(fertilizer,direction));
+        } else if ((matcher = GameCommands.HOW_MUCH_WATER.getMatcher(input)) != null)
+        {
+            System.out.println(controller.howMuchWater());
+        } else if ((matcher = GameCommands.EXIT_GAME.getMatcher(input)) != null)
+        {
+            System.out.println(controller.exitGame());
+        } else if ((matcher = GameCommands.DELETE_GAME.getMatcher(input)) != null)
+        {
+            System.out.println(controller.deleteGame());
+        } else if ((matcher = GameCommands.NEXT_TURN.getMatcher(input)) != null)
+        {
+            System.out.println(controller.nextTurn());
         }
 
         else if (input.equals("1"))

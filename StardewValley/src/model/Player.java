@@ -17,6 +17,7 @@ import model.tools.Tool;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Player {
 
@@ -538,5 +539,12 @@ public class Player {
                 break;
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Player player)) return false;
+        return user.getUsername().equals(((Player) o).getUser().getUsername());
     }
 }

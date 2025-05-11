@@ -16,9 +16,10 @@ public class User {
     private Game currentGame = null;
     private ArrayList<Integer> gameMoney = new ArrayList<>();
 
-    public User(String nickname)
+    public User(String name)
     {
-        this.nickname = nickname;
+        this.username = name;
+        this.nickname = name;
 
         if (Math.random() < 0.5)
         {
