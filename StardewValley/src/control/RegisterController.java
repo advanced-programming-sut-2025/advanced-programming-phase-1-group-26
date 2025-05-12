@@ -44,11 +44,11 @@ public class RegisterController
         String nickName = matcher.group("nickname");
         String email = matcher.group("email");
         String genderName = matcher.group("gender");
-        Gender gender = null;
-        if (genderName.equalsIgnoreCase("female")) {
-            gender = Gender.FEMALE;
-        } else if (genderName.equalsIgnoreCase("male")) {
-            gender = Gender.MALE;
+
+        Gender gender = Gender.getGender(genderName);
+        if (gender == null)
+        {
+            return new Result(false, "invalid gender");
         }
 
         if (RegisterCommands.CHECK_USERNAME.getMatcher(username) == null) {

@@ -6,6 +6,7 @@ import model.User;
 import model.enums.Gender;
 import model.enums.Menu;
 import model.enums.regex_enums.RegexCommands;
+import model.enums.regex_enums.RegisterCommands;
 import view.ProfileMenu;
 import view.ProfileMenu;
 
@@ -154,7 +155,7 @@ public class ProfileController
             return new Result(false, "You must enter a new email.");
         }
 
-        if (!validEmail(newEmail))
+        if (RegisterCommands.CHECK_EMAIL.getMatcher(newEmail) == null)
         {
             return new Result(false, "Your email format is incorrect.");
         }
@@ -179,11 +180,7 @@ public class ProfileController
         }
 
         user.setGender(gender);
-        return new Result(true, """
-                It is mentioned in the phase 1 doc that gender can not be changed.
-                Honestly, I think that doesn't make much sense.
-                So I just put it here.
-                Protect the Dolls.""");
+        return new Result(true, "You gender was changed successfully.");
     }
 
     public Result userInfo()
@@ -203,7 +200,77 @@ public class ProfileController
 
     public Result exitMenu()
     {
+        App.setCurrentMenu(Menu.ExitMenu);
+        return new Result(true, "Exiting the game...");
+    }
+
+    public Result enterMenu(String menuName)
+    {
+        String output;
+        if (menuName.equalsIgnoreCase("main menu") || menuName.equalsIgnoreCase("main"))
+        {
+            App.setCurrentMenu(Menu.MainMenu);
+            output = "Switching to main menu...";
+        } else if (menuName.equalsIgnoreCase("login menu") || menuName.equalsIgnoreCase("login"))
+        {
+            App.setCurrentUser(null);
+            App.setCurrentMenu(Menu.LoginMenu);
+            output = "Switching to login menu...";
+        } else if (menuName.equalsIgnoreCase("register menu") || menuName.equalsIgnoreCase("register"))
+        {
+            App.setCurrentUser(null);
+            App.setCurrentMenu(Menu.RegisterMenu);
+            output = "Switching to register menu...";
+        } else
+        {
+            output = "Menu name is invalid or you can not switch to this menu from here.";
+        }
+
+        return new Result(true, output);
+    }
+
+    public Result help()
+    {
+        return new Result(true, "Available commands:\n" +
+                "\n" +
+                "- change username -u <new-username>\n" +
+                "    You can change your username to something new.\n" +
+                "\n" +
+                "- change password -p <new-password> -o <old-password>\n" +
+                "    You can change your password. You can get a random password by typing 'random password' in -p flag.\n" +
+                "\n" +
+                "- change nickname -n <new-password>\n" +
+                "    You can change your nickname to something new.\n" +
+                "\n" +
+                "- change email -n <new-email>\n" +
+                "    You can change your email to a new valid email.\n" +
+                "\n" +
+                "- change gender -g <new-gender>\n" +
+                "    You can change your gender to a different one.\n" +
+                "\n" +
+                "- user info\n" +
+                "    Shows your user information.\n" +
+                "\n" +
+                "- menu enter <menu-name>\n" +
+                "    Enters the specified menu. Usage: main - login - register\n" +
+                "\n" +
+                "- menu exit\n" +
+                "    Exits from the app.\n" +
+                "\n" +
+                "- menu back\n" +
+                "    Goes back to main menu.\n" +
+                "\n" +
+                "- show current menu\n" +
+                "    Displays the name of the current active menu.\n" +
+                "\n" +
+                "- help\n" +
+                "    Shows this help message.\n");
+    }
+
+    public Result back()
+    {
         App.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentUser(null);
         return new Result(true, "Redirecting to main menu...");
     }
 
@@ -292,18 +359,5 @@ public class ProfileController
     private boolean containsDigit(String password)
     {
         return password.matches(".*\\d.*");
-    }
-
-    private boolean validEmail(String email) // TODO : change based on arash
-    {
-        String EMAIL_REGEX =
-                "^(?=.{1,32}@)" +                                 // Limit local part to 64 characters
-                        "[a-zA-Z0-9](?!.*\\.\\.)[a-zA-Z0-9._-]{0,62}[a-zA-Z0-9]" + // local part: no starting/ending dot, no ".."
-                        "@" +
-                        "(?=.{3,255}$)" +                                  // total domain length max 255
-                        "[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?" +         // subdomain start and end with alnum
-                        "(\\.[a-zA-Z]{2,})+$";                             // at least one dot and TLD (e.g., .com, .ir)
-
-        return EMAIL_REGEX.matches(email);
     }
 }

@@ -10,17 +10,21 @@ public enum ProfileCommands implements Command
     CHANGE_PASSWORD("change\\s+password\\s+" +
             "-p\\s+(?<newPassword>\\S+)\\s+" +
             "-o\\s+(?<oldPassword>\\S+)"),
-    SET_PASSWORD_TO_RANDOM("set\\s+random\\s+password\\s+" +
+    SET_PASSWORD_TO_RANDOM("change\\s+password\\s+" +
+            "-p\\s+random\\s+password\\s+" +
             "-o\\s+(?<oldPassword>\\S+)"),
     CHANGE_NICKNAME("change\\s+nickname\\s+" +
-            "-u\\s+(?<newNickname>\\S+)"),
+            "-n\\s+(?<newNickname>\\S+)"),
     CHANGE_EMAIL("change\\s+email\\s+" +
             "-e\\s+(?<newEmail>\\S+)"),
     CHANGE_GENDER("change\\s+gender\\s+" +
             "-g\\s+(?<newGender>\\S+)"),
     USER_INFO("user\\s+info"),
-    EXIT_MENU("exit\\s+menu"),
-    SHOW_CURRENT_MENU("show\\s+current\\s+menu"),
+    MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
+    MENU_EXIT("menu\\s+exit"),
+    MENU_BACK("menu\\s+back"),
+    HELP("help"),
+    SHOW_CURRENT_MENU("show current menu"),
     ;
 
     private final Pattern pattern;

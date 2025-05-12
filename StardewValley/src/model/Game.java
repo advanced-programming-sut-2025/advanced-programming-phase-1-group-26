@@ -90,7 +90,6 @@ public class Game
         int index = currentIndex;
 
         // loop over players until reaches one that hasn't fainted yet (has enough energy)
-
         do
         {
            currentPlayer = getNext(currentPlayer);
@@ -98,8 +97,11 @@ public class Game
 
            if (currentPlayer.getEnergy() > 0)
            {
-               GameMenu.println("skipping " + currentPlayer.getUser().getUsername() + "'s turn :(");
+               GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
                break;
+           } else
+           {
+               GameMenu.println("skipping " + currentPlayer.getUser().getNickname() + "'s turn :(");
            }
 
         } while (index != currentIndex);

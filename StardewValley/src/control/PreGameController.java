@@ -60,16 +60,75 @@ public class PreGameController
                     "You can go read a book instead.");
         }
 
-        Game game = App.getCurrentGame();
+        Game game = user.getCurrentGame();
         Player player = game.getPlayerFromUser(user);
         game.setOppenheimer(player);
         game.setCurrentPlayer(player);
-        App.setCurrentGame(user.getCurrentGame());
+        App.setCurrentGame(game);
         App.setCurrentMenu(Menu.GameMenu);
         return new Result(true, """
                 Loading Game...
                 We wanted to add loading screens to the game to make it more interesting,
                 but unfortunately we didn't have time to :(""");
+    }
+
+    public Result enterMenu(String menuName)
+    {
+        String output;
+        if (menuName.equalsIgnoreCase("main menu") || menuName.equalsIgnoreCase("main"))
+        {
+            App.setCurrentMenu(Menu.MainMenu);
+            output = "Switching to game menu...";
+        } else
+        {
+            output = "Menu name is invalid or you can not switch to this menu from here.";
+        }
+
+        return new Result(true, output);
+    }
+
+    public Result help()
+    {
+        return new Result(true, "Available commands:\n" +
+                "\n" +
+                "- game new -u <username-1> <username-2> <username-3>\n" +
+                "    Creates the new game. You can use 1 to three usernames in front of -u flag. It can not empty. (Each game has 4 players.)\n" +
+                "\n" +
+                "- load game\n" +
+                "    If you have an ongoing game, this command load it so you can play.\n" +
+                "\n" +
+                "- menu enter <menu-name>\n" +
+                "    Enters the specified menu. Usage: profile - pre game\n" +
+                "\n" +
+                "- menu exit\n" +
+                "    Exits from the app.\n" +
+                "\n" +
+                "- show current menu\n" +
+                "    Displays the name of the current active menu.\n" +
+                "\n" +
+                "- menu back\n" +
+                "    Goes back to main menu.\n" +
+                "\n" +
+                "- help\n" +
+                "    Shows this help message.\n");
+    }
+
+    public Result showCurrentMenu()
+    {
+        return new Result(true, "You are currently in Pre Game Menu. Use 'help' for more information.");
+    }
+
+    public Result back()
+    {
+        App.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentUser(null);
+        return new Result(true, "Redirecting to main menu...");
+    }
+
+    public Result exit()
+    {
+        App.setCurrentMenu(Menu.ExitMenu);
+        return new Result(true, "Exiting the game...");
     }
 
     private void chooseMaps(ArrayList<User> users, Scanner scanner)
@@ -120,8 +179,10 @@ public class PreGameController
             u.setCurrentGame(game);
         }
 
-        PreGameMenu.println("New Game created.\n\n" +
-                "Welcome to Stardew Valley!");
+        PreGameMenu.println("""
+                New Game created.
+                
+                Welcome to Stardew Valley!""");
     }
 
     private User getUser(String username)

@@ -70,7 +70,7 @@ public enum GameCommands implements Command
 
     GO_TO_CABIN("go\\s+to\\s+cabin"),
     WHOAMI("whoami"),
-    FORCE_NEXT_TURN("force\\s+next\\s+turn"),
+    SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
     HELP_READING_MAP("help\\s+reading\\s+map"),
     BUILD_GREENHOUSE("greenhouse\\s+build"),
     SHOW_AROUND("show\\s+around"),
