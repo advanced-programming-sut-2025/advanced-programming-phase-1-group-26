@@ -11,7 +11,7 @@ public class User {
     private String nickname;
     private String email;
     private Gender gender;
-    private int question;
+    private String question;
     private int answer;
     private boolean stay;
 
@@ -76,10 +76,10 @@ public class User {
         this.gender = gender;
     }
 
-    public int getQuestion() {
+    public String getQuestion() {
         return question;
     }
-    public void setQuestion(int question) {
+    public void setQuestion(String question) {
         this.question = question;
     }
 

@@ -23,6 +23,8 @@ public class MainMenu implements AppMenu
         } else if (MainCommands.MENU_EXIT.getMatcher(input) != null)
         {
             System.out.println(controller.exit());
+        } else if (MainCommands.MENU_BACK.getMatcher(input) != null) {
+            System.out.println(controller.back());
         } else if (MainCommands.SHOW_CURRENT_MENU.getMatcher(input) != null)
         {
             System.out.println(controller.showCurrentMenu());
