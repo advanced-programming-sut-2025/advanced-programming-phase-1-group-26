@@ -13,6 +13,7 @@ import model.resources.Tree;
 
 import model.tools.Tool;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import model.tools.*;
@@ -404,7 +405,7 @@ public class GameController
                 "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
     }
 
-    public Result walk(String inputX, String inputY)
+    public Result walk(String inputX, String inputY, Scanner scanner)
     {
         int x = Integer.parseInt(inputX);
         int y = Integer.parseInt(inputY);
@@ -427,7 +428,7 @@ public class GameController
         {
             GameMenu.println("You can get to this place, but you will faint right away.");
             GameMenu.println("Do you want to continue? (Y/N)");
-            String input = GameMenu.scan();
+            String input = GameMenu.scan(scanner);
             if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
             {
                 player.increaseEnergy(-requiredEnergy);
@@ -445,7 +446,7 @@ public class GameController
         GameMenu.println("Your new location will be (" + canGetTo.getY() + ", " + canGetTo.getX() + ").");
         GameMenu.println("Do you want to continue? (Y/N)");
 
-        String input = GameMenu.scan();
+        String input = GameMenu.scan(scanner);
         if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
         {
             player.increaseEnergy(-energy);
@@ -566,7 +567,7 @@ public class GameController
                 "Tip: You can refill it near tiles that contain water.");
     }
 
-    public Result exitGame()
+    public Result exitGame(Scanner scanner)
     {
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
@@ -577,7 +578,7 @@ public class GameController
         }
 
         GameMenu.println("Are you sure? [y/n]");
-        String answer = GameMenu.scan();
+        String answer = GameMenu.scan(scanner);
 
         if (!answer.equalsIgnoreCase("y"))
         {
@@ -594,7 +595,7 @@ public class GameController
                 """);
     }
 
-    public Result deleteGame()
+    public Result deleteGame(Scanner scanner)
     {
         int positive = 1;
         int negative = 0;
@@ -607,7 +608,7 @@ public class GameController
                 do
                 {
                     GameMenu.println("Do you vote for this game to be deleted? [y/n]");
-                    String answer = GameMenu.scan();
+                    String answer = GameMenu.scan(scanner);
                     if (answer.equalsIgnoreCase("y"))
                     {
                         positive += 1;
@@ -712,6 +713,31 @@ public class GameController
         help.append(Color.RED).append("🟥 Unknown/Error Tile").append(Color.RESET).append("\n");
 
         return new Result(true, help.toString().trim());
+    }
+
+    public Result printMap(String inputX, String inputY, String inputSize)
+    {
+        int x = Integer.parseInt(inputX);
+        int y = Integer.parseInt(inputY);
+        int size = Integer.parseInt(inputSize);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        return new Result(true, player.getCurrentMap().
+                getMapString(player.getLocation(), new Point(x, y), size, size).trim());
+    }
+
+    public Result showAround()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+        return new Result(true, map.showAround(player.getLocation()).trim());
+    }
+
+    public Result printEntireMap()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+        return new Result(true,
+                map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim());
     }
 
     public Result buildGreenhouse()

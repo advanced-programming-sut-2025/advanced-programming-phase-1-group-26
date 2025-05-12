@@ -73,13 +73,16 @@ public class GameMenu implements AppMenu
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
-            System.out.println(controller.walk(x,y));
+            System.out.println(controller.walk(x,y, scanner));
         } else if ((matcher = GameCommands.PRINT_MAP.getMatcher(input)) != null)
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
             String size = matcher.group("size");
-
+            System.out.println(controller.printMap(x,y,size));
+        } else if ((matcher = GameCommands.SHOW_AROUND.getMatcher(input)) != null)
+        {
+            System.out.println(controller.showAround());
         } else if ((matcher = GameCommands.SHOW_CRAFT_INFO.getMatcher(input)) != null)
         {
             String craftName = matcher.group("craftName").trim();
@@ -99,10 +102,10 @@ public class GameMenu implements AppMenu
             System.out.println(controller.howMuchWater());
         } else if ((matcher = GameCommands.EXIT_GAME.getMatcher(input)) != null)
         {
-            System.out.println(controller.exitGame());
+            System.out.println(controller.exitGame(scanner));
         } else if ((matcher = GameCommands.DELETE_GAME.getMatcher(input)) != null)
         {
-            System.out.println(controller.deleteGame());
+            System.out.println(controller.deleteGame(scanner));
         } else if ((matcher = GameCommands.NEXT_TURN.getMatcher(input)) != null)
         {
             controller.nextTurn();
@@ -122,6 +125,9 @@ public class GameMenu implements AppMenu
         } else if ((matcher = GameCommands.BUILD_GREENHOUSE.getMatcher(input)) != null)
         {
             System.out.println(controller.buildGreenhouse());
+        } else if ((matcher = GameCommands.PRINT_ENTIRE_MAP.getMatcher(input)) != null)
+        {
+            System.out.println(controller.printEntireMap());
         }
 
         else if (input.equals("1"))
@@ -129,7 +135,7 @@ public class GameMenu implements AppMenu
             for (int i = 0; i < 100; i++)
             {
                 Farm farm = new Farm(MapTypes.STANDARD);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
         }
 
@@ -139,7 +145,7 @@ public class GameMenu implements AppMenu
             {
 
                 Farm farm = new Farm(MapTypes.RIVERLAND);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
         }
 
@@ -148,7 +154,7 @@ public class GameMenu implements AppMenu
             for (int i = 0; i < 100; i++)
             {
                 Farm farm = new Farm(MapTypes.HILL_TOP);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
         }
 
@@ -157,7 +163,7 @@ public class GameMenu implements AppMenu
             for (int i = 0; i < 100; i++)
             {
                 Farm farm = new Farm(MapTypes.BEACH);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
 
         } else if ((matcher = GameCommands.ENERGY_SHOW.getMatcher(input)) != null) {
@@ -208,25 +214,25 @@ public class GameMenu implements AppMenu
         else if (input.equals("5"))
         {
             Cabin cabin = new Cabin();
-            System.out.println(cabin.getMapString(new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
+            System.out.println(cabin.getMapString(null, new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
         }
 
         else if (input.equals("6"))
         {
             GreenHouse greenHouse = new GreenHouse();
-            System.out.println(greenHouse.getMapString(new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
+            System.out.println(greenHouse.getMapString(null, new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
         }
 
         else if (input.equals("7"))
         {
             City city = new City();
-            System.out.println(city.getMapString(new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
+            System.out.println(city.getMapString(null, new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
         }
 
         else if (input.equals("8"))
         {
             ShopMap shop = new ShopMap();
-            System.out.println(shop.getMapString(new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
+            System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
         }
 
         else
@@ -235,10 +241,9 @@ public class GameMenu implements AppMenu
         }
     }
 
-    public static String scan()
+    public static String scan(Scanner scanner)
     {
-        String text = mainScanner.nextLine().trim();
-        return text;
+        return scanner.nextLine().trim();
     }
 
     public static void println(String output)

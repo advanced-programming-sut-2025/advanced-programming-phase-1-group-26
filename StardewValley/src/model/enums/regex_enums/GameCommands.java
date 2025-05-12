@@ -46,12 +46,13 @@ public enum GameCommands implements Command
     SHOW_TOMORROW_WEATHER("weather\\s+forecast"),
 
     CHEAT_CODE_SET_TOMORROW_WEATHER("cheat\\s+weather\\s+set\\s+(?<type>\\S+)"),
-    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<y>-?\\d+)\\s+(?<x>-?\\d+)"),
+    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
 
 
     CAN_WALK("can\\s+walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     WALK("walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
+    PRINT_ENTIRE_MAP("print\\s+entire\\s+map"),
     HELP_READ_MAP("help\\s+reading\\s+map"),
 
     EXIT_GAME("exit\\s+game"),
@@ -72,6 +73,7 @@ public enum GameCommands implements Command
     FORCE_NEXT_TURN("force\\s+next\\s+turn"),
     HELP_READING_MAP("help\\s+reading\\s+map"),
     BUILD_GREENHOUSE("greenhouse\\s+build"),
+    SHOW_AROUND("show\\s+around"),
     ;
 
     private final Pattern pattern;
@@ -82,7 +84,8 @@ public enum GameCommands implements Command
     }
 
     @Override
-    public Matcher getMatcher(String input) {
+    public Matcher getMatcher(String input)
+    {
         Matcher matcher = pattern.matcher(input);
         return matcher.matches() ? matcher : null;
     }
