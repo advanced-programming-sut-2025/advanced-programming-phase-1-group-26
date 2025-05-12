@@ -6,18 +6,16 @@ import model.User;
 import model.enums.Gender;
 import model.enums.Menu;
 import model.enums.regex_enums.RegexCommands;
-import view.MainMenu;
+import view.ProfileMenu;
 import view.ProfileMenu;
 
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProfileController
 {
-    public Result changeUsername(String newUsername)
+    public Result changeUsername(String newUsername, Scanner scanner)
     {
         User user = App.getCurrentUser();
 
@@ -28,17 +26,17 @@ public class ProfileController
 
         if (user.getUsername().equals(newUsername))
         {
-            MainMenu.println("You should've entered a different username.");
+            ProfileMenu.println("You should've entered a different username.");
         } else if (!uniqueUsername(newUsername))
         {
-            MainMenu.println("This username is already taken.");
+            ProfileMenu.println("This username is already taken.");
         }
 
         newUsername = createNewUsername(newUsername);
 
-        MainMenu.println("Your new username would be: " + newUsername);
-        MainMenu.println("Do you confirm the change? [y/n]");
-        String answer = MainMenu.scan();
+        ProfileMenu.println("Your new username would be: " + newUsername);
+        ProfileMenu.println("Do you confirm the change? [y/n]");
+        String answer = ProfileMenu.scan(scanner);
 
         String output = "";
 
@@ -99,7 +97,7 @@ public class ProfileController
         return new Result(true, "Your password has been successfully changed.");
     }
 
-    public void setRandomPassword(String oldPassword)
+    public void setRandomPassword(String oldPassword, Scanner scanner)
     {
         User user = App.getCurrentUser();
 
@@ -116,20 +114,20 @@ public class ProfileController
         {
             newPassword = generateStrongRandomPassword();
             ProfileMenu.println("Your new password would be: " + newPassword);
-            MainMenu.println("Do you confirm the change? [y/n]");
-            String answer = MainMenu.scan().toLowerCase();
+            ProfileMenu.println("Do you confirm the change? [y/n]");
+            String answer = ProfileMenu.scan(scanner).toLowerCase();
 
             switch (answer)
             {
                 case "y":
-                    MainMenu.println("Your password has been successfully changed.");
+                    ProfileMenu.println("Your password has been successfully changed.");
                     user.setPassword(newPassword);
                     break outer;
                 case "n":
-                    MainMenu.println("Generating new password...");
+                    ProfileMenu.println("Generating new password...");
                     break;
                 case "q":
-                    MainMenu.println("Stopping random generator...");
+                    ProfileMenu.println("Stopping random generator...");
                     break outer;
             }
         } while (true);
@@ -193,7 +191,7 @@ public class ProfileController
         StringBuilder output = new StringBuilder();
         User user = App.getCurrentUser();
 
-        output.append(user.getNickname()).append("'s Profile");
+        output.append(user.getNickname()).append("'s Profile").append("\n");
         output.append("username: ").append(user.getUsername()).append("\n");
         output.append("email: ").append(user.getEmail()).append("\n");
         output.append("gender: ").append(user.getGender()).append("\n");
@@ -205,7 +203,7 @@ public class ProfileController
 
     public Result exitMenu()
     {
-        App.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentMenu(Menu.ProfileMenu);
         return new Result(true, "Redirecting to main menu...");
     }
 
@@ -270,7 +268,7 @@ public class ProfileController
         }
 
         // Shuffle result
-        List<Character> chars = sb.chars().mapToObj(c -> (char) c).toList();
+        List<Character> chars = new ArrayList<>(sb.chars().mapToObj(c -> (char) c).toList());
         Collections.shuffle(chars, rand);
 
         return chars.stream().map(String::valueOf).collect(Collectors.joining());

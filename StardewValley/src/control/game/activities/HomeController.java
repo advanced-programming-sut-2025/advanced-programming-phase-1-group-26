@@ -358,6 +358,31 @@ public class HomeController
         return new Result(true, "Yum Yum, you just ate " + kitchenItem.getType());
     }
 
+    public Result printMap(String inputX, String inputY, String inputSize)
+    {
+        int x = Integer.parseInt(inputX);
+        int y = Integer.parseInt(inputY);
+        int size = Integer.parseInt(inputSize);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        return new Result(true, player.getCurrentMap().
+                getMapString(player.getLocation(), new Point(x, y), size, size).trim());
+    }
+
+    public Result showAround()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+        return new Result(true, map.showAround(player.getLocation()).trim());
+    }
+
+    public Result printEntireMap()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+        return new Result(true,
+                map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim());
+    }
+
     public Result goOut()
     {
         Game game = App.getCurrentGame();

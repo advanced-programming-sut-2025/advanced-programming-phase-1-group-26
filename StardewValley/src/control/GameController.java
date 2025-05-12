@@ -13,6 +13,7 @@ import model.resources.Tree;
 
 import model.tools.Tool;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import model.tools.*;
@@ -404,7 +405,7 @@ public class GameController
                 "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
     }
 
-    public Result walk(String inputX, String inputY)
+    public Result walk(String inputX, String inputY, Scanner scanner)
     {
         int x = Integer.parseInt(inputX);
         int y = Integer.parseInt(inputY);
@@ -427,7 +428,7 @@ public class GameController
         {
             GameMenu.println("You can get to this place, but you will faint right away.");
             GameMenu.println("Do you want to continue? (Y/N)");
-            String input = GameMenu.scan();
+            String input = GameMenu.scan(scanner);
             if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
             {
                 player.increaseEnergy(-requiredEnergy);
@@ -445,7 +446,7 @@ public class GameController
         GameMenu.println("Your new location will be (" + canGetTo.getY() + ", " + canGetTo.getX() + ").");
         GameMenu.println("Do you want to continue? (Y/N)");
 
-        String input = GameMenu.scan();
+        String input = GameMenu.scan(scanner);
         if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
         {
             player.increaseEnergy(-energy);
@@ -566,7 +567,7 @@ public class GameController
                 "Tip: You can refill it near tiles that contain water.");
     }
 
-    public Result exitGame()
+    public Result exitGame(Scanner scanner)
     {
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
@@ -577,7 +578,7 @@ public class GameController
         }
 
         GameMenu.println("Are you sure? [y/n]");
-        String answer = GameMenu.scan();
+        String answer = GameMenu.scan(scanner);
 
         if (!answer.equalsIgnoreCase("y"))
         {
@@ -594,7 +595,7 @@ public class GameController
                 """);
     }
 
-    public Result deleteGame()
+    public Result deleteGame(Scanner scanner)
     {
         int positive = 1;
         int negative = 0;
@@ -607,7 +608,7 @@ public class GameController
                 do
                 {
                     GameMenu.println("Do you vote for this game to be deleted? [y/n]");
-                    String answer = GameMenu.scan();
+                    String answer = GameMenu.scan(scanner);
                     if (answer.equalsIgnoreCase("y"))
                     {
                         positive += 1;
@@ -671,5 +672,95 @@ public class GameController
     public Result whoAmI()
     {
         return new Result(true, App.getCurrentGame().getCurrentPlayer().getUser().getNickname());
+    }
+
+    public Result helpReadMap()
+    {
+        StringBuilder help = new StringBuilder();
+
+        help.append("📖 Reading the Map:\n");
+
+        help.append("\n== Basic Tile Textures ==\n");
+        help.append(Color.YELLOW).append("🟨 Unploughed Land").append(Color.RESET).append("\n");
+        help.append(Color.BROWN).append("🟫 Ploughed Land").append(Color.RESET).append("\n");
+        help.append(Color.BLUE).append("🌊 / 🟦 Lake / Water").append(Color.RESET).append("\n");
+        help.append(Color.GREEN).append("🟩 Grass, Village Grass, or Floor").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🏠 Cabin").append(Color.RESET).append("\n");
+        help.append(Color.CYAN).append("🪟 Greenhouse / Building").append(Color.RESET).append("\n");
+        help.append(Color.DARK_GREY).append("🪨 Quarry (Rock)").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("⬜ Fence").append(Color.RESET).append("\n");
+        help.append(Color.BLUE).append("🔷 Road").append(Color.RESET).append("\n");
+        help.append(Color.RED).append("🚪 Shop Door").append(Color.RESET).append("\n");
+        help.append(Color.RED).append("🟥 City Board").append(Color.RESET).append("\n");
+        help.append(Color.YELLOW).append("📚 Book").append(Color.RESET).append("\n");
+        help.append(Color.YELLOW).append("💡 Lamp").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🛋️ Table").append(Color.RESET).append("\n");
+        help.append(Color.CYAN).append("💻 Computer").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🛏️ Bed Tile").append(Color.RESET).append("\n");
+        help.append(Color.LIGHT_GREY).append("🏬 Shop Floor").append(Color.RESET).append("\n");
+        help.append(Color.YELLOW).append("🧠 NPC in Shop").append(Color.RESET).append("\n");
+        help.append(Color.DARK_GREY).append("🧱 Cabin Wall / Wall").append(Color.RESET).append("\n");
+
+        help.append("\n== Planted Objects ==\n");
+        help.append(Color.GREEN).append("🌳 / 🌴 Tree").append(Color.RESET).append("\n");
+        help.append(Color.LIME_GREEN).append("🌱 Crop").append(Color.RESET).append("\n");
+        help.append(Color.OLIVE_GREEN).append("🌳 Foraging Crop / Tree / Seed").append(Color.RESET).append("\n");
+        help.append(Color.DARK_GREY).append("🪨 Stone Resource").append(Color.RESET).append("\n");
+        help.append(Color.BROWN).append("🪵 Wood Resource").append(Color.RESET).append("\n");
+
+        help.append("\n== Other ==\n");
+        help.append(Color.RESET).append("🤓 Current Player Location").append(Color.RESET).append("\n");
+        help.append(Color.RED).append("🟥 Unknown/Error Tile").append(Color.RESET).append("\n");
+
+        return new Result(true, help.toString().trim());
+    }
+
+    public Result printMap(String inputX, String inputY, String inputSize)
+    {
+        int x = Integer.parseInt(inputX);
+        int y = Integer.parseInt(inputY);
+        int size = Integer.parseInt(inputSize);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        return new Result(true, player.getCurrentMap().
+                getMapString(player.getLocation(), new Point(x, y), size, size).trim());
+    }
+
+    public Result showAround()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+        return new Result(true, map.showAround(player.getLocation()).trim());
+    }
+
+    public Result printEntireMap()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+        return new Result(true,
+                map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim());
+    }
+
+    public Result buildGreenhouse()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        GreenHouse greenhouse = player.getGreenHouse();
+        if (greenhouse.isBuilt())
+        {
+            return new Result(false, """
+                    You have already paid for the greenhouse.
+                    Although I could've not told you this and get your money. (Is the grammar of this sentence correct?)
+                   
+                    """);
+        }
+
+        if (!player.canAffordGreenhouse())
+        {
+            return new Result(false, "You can't afford the greenhouse.\n" +
+                    "You are poor :(");
+        }
+
+        greenhouse.build();
+        return new Result(true, "Yippee! You successfully built a greenhouse.");
     }
 }

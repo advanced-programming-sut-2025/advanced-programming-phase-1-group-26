@@ -21,25 +21,23 @@ public enum HomeCommands implements Command
     CHEAT_ADD_CRAFTING_RECIPE("cheat\\s+add\\s+crafting\\s+recipe\\s+(?<recipeName>.*)"),
     CHEAT_ADD_COOKING_RECIPE("cheat\\s+add\\s+cooking\\s+recipe\\s+(?<recipeName>.*)"),
     GO_OUT("go\\s+out"),
+
+    PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
+    PRINT_ENTIRE_MAP("print\\s+entire\\s+map"),
+    SHOW_AROUND("show\\s+around"),
     ;
 
-    private final String pattern;
+    private final Pattern pattern;
 
     HomeCommands(String regex)
     {
-        this.pattern = regex;
+        this.pattern = Pattern.compile(regex);
     }
 
     @Override
     public Matcher getMatcher(String input)
     {
-        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
-
-        if (matcher.matches())
-        {
-            return matcher;
-        }
-
-        return null;
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches() ? matcher : null;
     }
 }

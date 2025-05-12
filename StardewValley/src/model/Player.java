@@ -83,16 +83,21 @@ public class Player {
         this.fainted = false;
         this.money = 0;
 
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
-            this.friendships.put(player, newFriendshipData);
-        }
+//        for (Player player : App.getCurrentGame().getPlayers())
+//        {
+//            FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
+//            this.friendships.put(player, newFriendshipData);
+//        }
 
         this.zeidy = null;
         this.location = farm.getStartingPoint();
         this.newMessage = false;
     }
-    
+
+    public void addFriendship(Player player, FriendshipData data)
+    {
+        this.friendships.put(player, data);
+    }
 
     public int getEnergy() {
         return energy;
@@ -587,5 +592,10 @@ public class Player {
     public void setEnergyToMax()
     {
         this.energy = maxEnergy;
+    }
+
+    public boolean canAffordGreenhouse()
+    {
+        return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
     }
 }

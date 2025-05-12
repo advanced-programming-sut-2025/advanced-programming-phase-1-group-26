@@ -1,13 +1,16 @@
 package model;
 
+import model.enums.GameObjectType;
 import model.enums.MapTypes;
 import model.enums.TileTexture;
-
-import java.util.ArrayList;
 
 public class GreenHouse extends Map
 {
     private final String mapPath;
+    private boolean isBuilt = false;
+
+    private static final int woodCost = 500;
+    private static final int moneyCost = 1000;
 
     public GreenHouse()
     {
@@ -58,4 +61,29 @@ public class GreenHouse extends Map
         }
         return null;
     }
+
+    public void build()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.increaseMoney(-1 * moneyCost);
+        player.addToInventory(GameObjectType.WOOD, woodCost);
+        isBuilt = true;
+    }
+
+    public boolean isBuilt()
+    {
+        return isBuilt;
+    }
+
+    public static int getMoneyCost()
+    {
+        return moneyCost;
+    }
+
+    public static int getWoodCost()
+    {
+        return woodCost;
+    }
+
+    // TODO: add other greenhouse functionalities later
 }

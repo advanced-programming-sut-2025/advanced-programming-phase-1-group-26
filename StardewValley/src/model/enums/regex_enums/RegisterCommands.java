@@ -22,8 +22,9 @@ public enum RegisterCommands implements Command{
     RegisterCommands(String regex) {
         this.pattern = Pattern.compile(regex);
     }
-    @Override
-    public Matcher getMatcher(String input) {
+
+    public Matcher getMatcher(String input)
+    {
         Matcher matcher = pattern.matcher(input);
         return matcher.matches() ? matcher : null;
     }

@@ -136,19 +136,6 @@ public class RegisterController
         return new Result(true, "Exiting the game...");
     }
 
-    public static String generatePassword() {
-        String specialChars = "!@#$%^&*-_=+{};:,.<>?";
-        String allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" + specialChars;
-
-        int length = 8 + random.nextInt(9);
-        StringBuilder password = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            int index = random.nextInt(allowedChars.length());
-            password.append(allowedChars.charAt(index));
-        }
-        return password.toString();
-    }
-
     public Result help()
     {
         return new Result(true, "Available commands:\n" +
@@ -173,5 +160,18 @@ public class RegisterController
                 "\n" +
                 "- help\n" +
                 "    Shows this help message.\n");
+    }
+
+    public static String generatePassword() {
+        String specialChars = "!@#$%^&*-_=+{};:,.<>?";
+        String allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" + specialChars;
+
+        int length = 8 + random.nextInt(9);
+        StringBuilder password = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(allowedChars.length());
+            password.append(allowedChars.charAt(index));
+        }
+        return password.toString();
     }
 }
