@@ -12,7 +12,10 @@ public enum Menu
     MainMenu(new MainMenu(), "main menu"),
     GameMenu(new GameMenu(), "game menu"),
     ProfileMenu(new ProfileMenu(), "profile menu"),
-    ExitMenu(new ExitMenu(), null);
+    ExitMenu(new ExitMenu(), null),
+    HomeMenu(new HomeMenu(), "home menu"),
+    PreGameMenu(new PreGameMenu(), "pre game menu"),
+    ;
 
     private final AppMenu menu;
     private final String name;
@@ -32,5 +35,9 @@ public enum Menu
     public String toString()
     {
         return this.name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

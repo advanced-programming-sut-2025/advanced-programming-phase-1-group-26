@@ -12,7 +12,7 @@ public enum TheStardropSaloonStock {
     PANCAKES_RECIPE("Pancakes Recipe", "A recipe to make Pancakes.", 100, 1),
     BREAD_RECIPE("Bread Recipe", "A recipe to make Bread.", 100, 1),
     TORTILLA_RECIPE("Tortilla Recipe", "A recipe to make Tortilla.", 100, 1),
-    PIZZA_RECIPE("Pizza Recipe", "A recipe to make Pizza.", 150, 1),
+    PIZZA_RECIPE("Pizza Recip`e", "A recipe to make Pizza.", 150, 1),
     MAKI_ROLL_RECIPE("Maki Roll Recipe", "A recipe to make Maki Roll.", 300, 1),
     TRIPLE_SHOT_ESPRESSO_RECIPE("Triple Shot Espresso Recipe", "A recipe to make Triple Shot Espresso.", 5000, 1),
     COOKIE_RECIPE("Cookie Recipe", "A recipe to make Cookie.", 300, 1);

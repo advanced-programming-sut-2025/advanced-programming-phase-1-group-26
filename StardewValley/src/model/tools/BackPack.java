@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class BackPack extends Tool {
     private BackPackLevel level;
+    private ArrayList<GameObject> inventory = new ArrayList<>();
 
     public BackPack() {
         super.type = ToolType.BackPack;
@@ -22,8 +23,6 @@ public class BackPack extends Tool {
     public void setLevel(BackPackLevel level) {
         this.level = level;
     }
-
-    private ArrayList<GameObject> inventory = new ArrayList<>();
 
     public ArrayList<GameObject> getInventory()
     {

@@ -3,9 +3,13 @@ package model.enums.regex_enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum LoginCommands implements Command{
-    LOGIN("^login -u (?<username>\\S+) -p (?<password>\\S+)(?: (?<flag>-stay-logged-in))?$"),
-    FORGET_PASSWORD("^forget password -u (?<username>\\S+)$"),
+public enum PreGameCommands implements Command
+{
+    NEW_GAME("game\\s+new\\s+-u" +
+            "\\s+(?<user1>\\S+)" +
+            "(\\s+(?<user2>\\S*))?" +
+            "(\\s+(?<user3>\\S*))?"),
+    LOAD_GAME("load\\s+game"),
     MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
     MENU_EXIT("menu\\s+exit"),
     MENU_BACK("menu\\s+back"),
@@ -14,9 +18,12 @@ public enum LoginCommands implements Command{
     ;
 
     private final Pattern pattern;
-    LoginCommands(String regex) {
+
+    PreGameCommands(String regex)
+    {
         this.pattern = Pattern.compile(regex);
     }
+
     @Override
     public Matcher getMatcher(String input) {
         Matcher matcher = pattern.matcher(input);

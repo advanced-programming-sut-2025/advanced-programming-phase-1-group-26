@@ -14,7 +14,7 @@ public class CherryBomb extends CraftingItem
     public void doItsThing()
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Map map = player.getCurrentFarm();
+        Map map = player.getCurrentMap();
         Point location = player.getLocation();
         int x = location.getX();
         int y = location.getY();

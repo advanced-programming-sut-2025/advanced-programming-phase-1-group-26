@@ -1,8 +1,11 @@
 package model;
 
 import model.animal.Animal;
+import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
+import model.enums.Gender;
 import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
@@ -13,18 +16,23 @@ import model.tools.BackPack;
 import model.tools.Tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Player {
 
     private final User user;
     private final Farm farm;
+    private final Cabin cabin;
+    private final GreenHouse greenHouse;
 
+    private Gender gender;
     private Point location = null;
-    private Farm currentFarm = null;
+    private Map currentMap = null;
 
     private int energy;
     private int maxEnergy = 200;
+    private int turnEnergy;
     /*TEMP*/ private boolean fainted;
 
     private Skill farmingSkill = new Skill(SkillType.Farming);
@@ -38,6 +46,8 @@ public class Player {
     private ArrayList<Trade> receivedTrades = new ArrayList<>();
     private ArrayList<Trade> archiveTrades = new ArrayList<>();
 
+    private boolean newMessage;
+
     private ArrayList<Gift> newGifts = new ArrayList<>();
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
@@ -48,7 +58,7 @@ public class Player {
     private FriendshipWithNpcData LiaFriendship = new FriendshipWithNpcData();
     private FriendshipWithNpcData RobinFriendship = new FriendshipWithNpcData();
 
-    private HashMap<Player, GameObject> purposeList = new HashMap<>();
+    private HashMap<Player, GameObjectType> purposeList = new HashMap<>();
     private Player zeidy;
 
     private Tool currentTool;
@@ -58,22 +68,46 @@ public class Player {
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
+    private ArrayList<KitchenItems> cookingRecipes = new ArrayList<>(
+            Arrays.asList(KitchenItems.FRIED_EGG,
+                    KitchenItems.BAKED_FISH,
+                    KitchenItems.SALAD));
+    private ArrayList<EdibleThing> refrigerator = new ArrayList<>();
+
     public Player(User user, Farm farm) {
         this.user = user;
         this.farm = farm;
+        this.cabin = new Cabin();
+        this.greenHouse = new GreenHouse();
+        this.currentMap = this.farm;
         this.energy = 200;
+        this.turnEnergy = 50;
         this.fainted = false;
         this.money = 0;
 
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
-            this.friendships.put(player, newFriendshipData);
-        }
+//        for (Player player : App.getCurrentGame().getPlayers())
+//        {
+//            FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
+//            this.friendships.put(player, newFriendshipData);
+//        }
 
         this.zeidy = null;
         this.location = farm.getStartingPoint();
+        this.newMessage = false;
     }
-    
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void addFriendship(Player player, FriendshipData data)
+    {
+        this.friendships.put(player, data);
+    }
 
     public int getEnergy() {
         return energy;
@@ -85,6 +119,18 @@ public class Player {
 
     public void increaseEnergy(int energy) {
         this.energy += energy;
+    }
+
+    public int getTurnEnergy() {
+        return turnEnergy;
+    }
+
+    public void setTurnEnergy(int turnEnergy) {
+        this.turnEnergy = turnEnergy;
+    }
+
+    public void increaseTurnEnergy(int turnEnergy) {
+        this.turnEnergy += turnEnergy;
     }
 
     public int getMaxEnergy() {
@@ -128,7 +174,10 @@ public class Player {
     }
 
     public double getMoney() {
-        return money;
+        if (this.zeidy == null) {
+            return money;
+        }
+        return money + zeidy.money;
     }
 
     public void setMoney(double money) {
@@ -155,8 +204,32 @@ public class Player {
         return receivedTrades;
     }
 
+    public boolean isNewMessage() {
+        return newMessage;
+    }
+
+    public void setNewMessage(boolean newMessage) {
+        this.newMessage = newMessage;
+    }
+
     public ArrayList<Trade> getArchiveTrades() {
         return archiveTrades;
+    }
+
+    public ArrayList<Gift> getNewGifts() {
+        return newGifts;
+    }
+
+    public ArrayList<Gift> getArchiveGifts() {
+        return archiveGifts;
+    }
+
+    public ArrayList<Gift> getGivenGifts() {
+        return givenGifts;
+    }
+
+    public HashMap<Player, GameObjectType> getPurposeList() {
+        return purposeList;
     }
 
     public Player getZeidy() {
@@ -185,9 +258,9 @@ public class Player {
         return location;
     }
 
-    public Farm getCurrentFarm()
+    public Map getCurrentMap()
     {
-        return currentFarm;
+        return currentMap;
     }
 
     public void setLocation(Point location)
@@ -195,9 +268,9 @@ public class Player {
         this.location = location;
     }
 
-    public void setCurrentFarm(Farm currentFarm)
+    public void setCurrentMap(Map currentMap)
     {
-        this.currentFarm = currentFarm;
+        this.currentMap = currentMap;
     }
 
     public GameObject findObjectType(Enum<?> type)
@@ -251,6 +324,12 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public void checkEnergy() {
+        if (this.turnEnergy < 1) {
+            this.setFainted(true);
+        }
     }
 
     public Tool getTool(ToolType type)
@@ -313,6 +392,7 @@ public class Player {
                 {
                     this.currentBackPack.getInventory().remove(object);
                 }
+                break;
             }
         }
     }
@@ -367,22 +447,6 @@ public class Player {
         return capacity - currentBackPack.getSize();
     }
 
-    public ArrayList<Gift> getNewGifts() {
-        return newGifts;
-    }
-
-    public ArrayList<Gift> getArchiveGifts() {
-        return archiveGifts;
-    }
-
-    public ArrayList<Gift> getGivenGifts() {
-        return givenGifts;
-    }
-
-    public HashMap<Player, GameObject> getPurposeList() {
-        return purposeList;
-    }
-
     public FriendshipWithNpcData getSebastianFriendship() {
         return SebastianFriendship;
     }
@@ -429,5 +493,127 @@ public class Player {
 
     public void addAnimal(Animal animal) {
         animals.add(animal);
+    }
+
+    public ArrayList<EdibleThing> getRefrigerator()
+    {
+        return refrigerator;
+    }
+
+    public ArrayList<KitchenItems> getCookingRecipes()
+    {
+        return cookingRecipes;
+    }
+
+    public boolean isNear(Point location)
+    {
+        int playerX = location.getX();
+        int playerY = location.getY();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x != 0 && y != 0)
+                {
+                    if (location.getX() == playerX + x && location.getY() == playerY + y)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public EdibleThing getFromRefrigerator (GameObjectType type)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                return thing;
+            }
+        }
+        return null;
+    }
+
+    public int howManyInRefrigerator(GameObjectType type)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                return thing.getNumber();
+            }
+        }
+        return 0;
+    }
+
+    public void removeAmountFromRefrigerator(GameObjectType type, int amount)
+    {
+        for (EdibleThing thing : refrigerator)
+        {
+            if (thing.getObjectType().equals(type))
+            {
+                thing.addNumber(-1 * amount);
+                if (thing.getNumber() <= 0)
+                {
+                    refrigerator.remove(thing);
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Player player)) return false;
+        return user.getUsername().equals(((Player) o).getUser().getUsername());
+    }
+
+    public Farm getFarm()
+    {
+        return farm;
+    }
+
+    public Cabin getCabin()
+    {
+        return cabin;
+    }
+
+    public GreenHouse getGreenHouse()
+    {
+        return greenHouse;
+    }
+
+    public void goToFarm()
+    {
+        this.currentMap = this.farm;
+        this.location = farm.getStartingPoint();
+    }
+
+    public void goToCabin()
+    {
+        this.currentMap = this.cabin;
+        this.location = cabin.getStartingPoint();
+    }
+
+    public void goToGreenHouse()
+    {
+        this.currentMap = this.greenHouse;
+        this.location = greenHouse.getStartingPoint();
+    }
+
+    public void setEnergyToMax()
+    {
+        this.energy = maxEnergy;
+    }
+
+    public boolean canAffordGreenhouse()
+    {
+        return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
     }
 }

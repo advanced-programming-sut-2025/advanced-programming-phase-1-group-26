@@ -3,22 +3,26 @@ package model.enums.regex_enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum LoginCommands implements Command{
-    LOGIN("^login -u (?<username>\\S+) -p (?<password>\\S+)(?: (?<flag>-stay-logged-in))?$"),
-    FORGET_PASSWORD("^forget password -u (?<username>\\S+)$"),
-    MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
+public enum MainCommands implements Command
+{
+    USER_LOGOUT("user\\s+logout"),
+    MENU_ENTER("menu\\s+enter\\s+(?<menuName>.+)"),
     MENU_EXIT("menu\\s+exit"),
     MENU_BACK("menu\\s+back"),
     HELP("help"),
-    SHOW_CURRENT_MENU("show current menu"),
-    ;
+    SHOW_CURRENT_MENU("show\\s+current\\s+menu"),
 
+    ;
     private final Pattern pattern;
-    LoginCommands(String regex) {
+
+    MainCommands(String regex)
+    {
         this.pattern = Pattern.compile(regex);
     }
+
     @Override
-    public Matcher getMatcher(String input) {
+    public Matcher getMatcher(String input)
+    {
         Matcher matcher = pattern.matcher(input);
         return matcher.matches() ? matcher : null;
     }

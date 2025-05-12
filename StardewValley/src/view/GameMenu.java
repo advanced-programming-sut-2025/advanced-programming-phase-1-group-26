@@ -2,10 +2,13 @@ package view;
 
 import control.GameController;
 import control.game.activities.MarketingController;
+import model.*;
+import model.enums.MapTypes;
+import control.game.activities.CommunicateController;
 import model.Farm;
 import model.NPC;
 import model.Point;
-import model.enums.FarmTypes;
+import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
 
 import java.util.Scanner;
@@ -16,11 +19,14 @@ public class GameMenu implements AppMenu
     GameController controller = new GameController();
     MarketingController marketingController = new MarketingController();
     NPC npc;
+    CommunicateController comController = new CommunicateController();
+
     @Override
     public void check(Scanner scanner)
     {
         String input = scanner.nextLine().trim();
         Matcher matcher;
+        Matcher comMatcher;
 
         //TODO: add checkFainted in game menu
 
@@ -71,21 +77,69 @@ public class GameMenu implements AppMenu
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
-            System.out.println(controller.walk(x,y));
+            System.out.println(controller.walk(x,y, scanner));
         } else if ((matcher = GameCommands.PRINT_MAP.getMatcher(input)) != null)
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
             String size = matcher.group("size");
-
+            System.out.println(controller.printMap(x,y,size));
+        } else if ((matcher = GameCommands.SHOW_AROUND.getMatcher(input)) != null)
+        {
+            System.out.println(controller.showAround());
+        } else if ((matcher = GameCommands.SHOW_CRAFT_INFO.getMatcher(input)) != null)
+        {
+            String craftName = matcher.group("craftName").trim();
+            System.out.println(controller.showCraftInfo(craftName));
+        } else if ((matcher = GameCommands.PLANT_SEED.getMatcher(input)) != null)
+        {
+            String seed = matcher.group("seed").trim();
+            String direction = matcher.group("direction").trim();
+            System.out.println(controller.plantSeed(seed,direction));
+        } else if ((matcher = GameCommands.FERTILIZE.getMatcher(input)) != null)
+        {
+            String fertilizer = matcher.group("fertilizer").trim();
+            String direction = matcher.group("direction").trim();
+            System.out.println(controller.fertilize(fertilizer,direction));
+        } else if ((matcher = GameCommands.HOW_MUCH_WATER.getMatcher(input)) != null)
+        {
+            System.out.println(controller.howMuchWater());
+        } else if ((matcher = GameCommands.EXIT_GAME.getMatcher(input)) != null)
+        {
+            System.out.println(controller.exitGame(scanner));
+        } else if ((matcher = GameCommands.DELETE_GAME.getMatcher(input)) != null)
+        {
+            System.out.println(controller.deleteGame(scanner));
+        } else if ((matcher = GameCommands.NEXT_TURN.getMatcher(input)) != null)
+        {
+            controller.nextTurn();
+        } else if ((matcher = GameCommands.SUDO_NEXT_TURN.getMatcher(input)) != null)
+        {
+            System.out.println(controller.sudoNextTurn());
+        }
+        else if ((matcher = GameCommands.GO_TO_CABIN.getMatcher(input)) != null)
+        {
+            System.out.println(controller.goToCabin());
+        } else if ((matcher = GameCommands.WHOAMI.getMatcher(input)) != null)
+        {
+            System.out.println(controller.whoAmI());
+        } else if ((matcher = GameCommands.HELP_READ_MAP.getMatcher(input)) != null)
+        {
+            System.out.println(controller.helpReadMap());
+        } else if ((matcher = GameCommands.BUILD_GREENHOUSE.getMatcher(input)) != null)
+        {
+            System.out.println(controller.buildGreenhouse());
+        } else if ((matcher = GameCommands.PRINT_ENTIRE_MAP.getMatcher(input)) != null)
+        {
+            System.out.println(controller.printEntireMap());
         }
 
         else if (input.equals("1"))
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.STANDARD);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                Farm farm = new Farm(MapTypes.STANDARD);
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
         }
 
@@ -94,8 +148,8 @@ public class GameMenu implements AppMenu
             for (int i = 0; i < 100; i++)
             {
 
-                Farm farm = new Farm(FarmTypes.RIVERLAND);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                Farm farm = new Farm(MapTypes.RIVERLAND);
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
         }
 
@@ -103,8 +157,8 @@ public class GameMenu implements AppMenu
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.HILL_TOP);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                Farm farm = new Farm(MapTypes.HILL_TOP);
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
         }
 
@@ -112,9 +166,77 @@ public class GameMenu implements AppMenu
         {
             for (int i = 0; i < 100; i++)
             {
-                Farm farm = new Farm(FarmTypes.BEACH);
-                System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
+                Farm farm = new Farm(MapTypes.BEACH);
+                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
             }
+
+        } else if ((matcher = GameCommands.ENERGY_SHOW.getMatcher(input)) != null) {
+            System.out.println(controller.energyShow());
+        } else if ((matcher = GameCommands.ENERGY_SET.getMatcher(input)) != null) {
+            System.out.println(controller.energySet(matcher));
+        } else if ((matcher = GameCommands.ENERGY_UNLIMITED.getMatcher(input)) != null) {
+            System.out.println(controller.energyUnlimited());
+        } else if ((matcher = GameCommands.INVENTORY_SHOW.getMatcher(input)) != null) {
+            controller.inventoryShow();
+        } else if ((matcher = GameCommands.INVENTORY_TRASH_NUMBER.getMatcher(input)) != null ||
+        (matcher = GameCommands.INVENTORY_TRASH.getMatcher(input)) != null) {
+            System.out.println(controller.inventoryTrash(matcher));
+        } else if ((matcher = GameCommands.TOOLS_EQUIP.getMatcher(input)) != null) {
+            System.out.println(controller.toolsEquip(matcher));
+        } else if ((matcher = GameCommands.TOOLS_SHOW_CURRENT.getMatcher(input)) != null) {
+            System.out.println(controller.toolsShowCurrent());
+        } else if ((matcher = GameCommands.TOOLS_SHOW_AVAILABLE.getMatcher(input)) != null) {
+            controller.toolsShowAvailable();
+        } else if ((matcher = GameCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
+            System.out.println(controller.toolsUpgrade(matcher));
+        } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
+            controller.toolsUse(matcher);
+        } else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
+            comController.friendships();
+        } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
+            System.out.println(comController.talk(matcher));
+        } else if ((matcher = CommunicateCommands.TALK_HISTORY.getMatcher(input)) != null) {
+            comController.talkHistory(matcher);
+        } else if ((matcher = CommunicateCommands.GIFT.getMatcher(input)) != null) {
+            comController.gift(matcher);
+        } else if (CommunicateCommands.GIFT_LIST.getMatcher(input) != null) {
+            comController.giftList();
+        } else if ((matcher = CommunicateCommands.GIFT_RATE.getMatcher(input)) != null) {
+            comController.giftRate(matcher);
+        } else if ((matcher = CommunicateCommands.GIFT_HISTORY.getMatcher(input)) != null) {
+            comController.giftHistory(matcher);
+        } else if ((matcher = CommunicateCommands.HUG.getMatcher(input)) != null) {
+            comController.giveHug(matcher);
+        } else if ((matcher = CommunicateCommands.FLOWER.getMatcher(input)) != null) {
+            comController.giveFlower(matcher);
+        } else if ((matcher = CommunicateCommands.ASK_MARRIAGE.getMatcher(input)) != null) {
+            comController.purposeAsk(matcher);
+        } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
+            comController.purposeRespond(matcher);
+        }
+
+        else if (input.equals("5"))
+        {
+            Cabin cabin = new Cabin();
+            System.out.println(cabin.getMapString(null, new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
+        }
+
+        else if (input.equals("6"))
+        {
+            GreenHouse greenHouse = new GreenHouse();
+            System.out.println(greenHouse.getMapString(null, new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
+        }
+
+        else if (input.equals("7"))
+        {
+            City city = new City();
+            System.out.println(city.getMapString(null, new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
+        }
+
+        else if (input.equals("8"))
+        {
+            ShopMap shop = new ShopMap();
+            System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
         }
 
         else if(GameCommands.MEET_NPC.matches(input)) {
@@ -134,10 +256,9 @@ public class GameMenu implements AppMenu
         }
     }
 
-    public static String scan()
+    public static String scan(Scanner scanner)
     {
-        String text = mainScanner.nextLine().trim();
-        return text;
+        return scanner.nextLine().trim();
     }
 
     public static void println(String output)

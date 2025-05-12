@@ -15,9 +15,9 @@ public enum InputFormats implements Command{
         this.pattern = Pattern.compile(regex);
     }
     @Override
-    public Matcher getMatcher(String input) {
+    public Matcher getMatcher(String input)
+    {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        return matcher.matches() ? matcher : null;
     }
 }

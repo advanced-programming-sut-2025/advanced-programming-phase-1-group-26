@@ -1,20 +1,15 @@
 package model;
 
-import model.enums.GameObjectType;
 import model.enums.MapTypes;
 import model.enums.TileTexture;
 
-public class GreenHouse extends Map
+public class ShopMap extends Map
 {
     private final String mapPath;
-    private boolean isBuilt = false;
 
-    private static final int woodCost = 500;
-    private static final int moneyCost = 1000;
-
-    public GreenHouse()
+    public ShopMap()
     {
-        this.mapType = MapTypes.GREEN_HOUSE;
+        this.mapType = MapTypes.SHOP;
         this.mapPath = mapType.getMapPath();
         initialize();
     }
@@ -26,7 +21,7 @@ public class GreenHouse extends Map
 
         if (mapData == null)
         {
-            throw new IllegalStateException("Failed to load green house map: " + mapPath);
+            throw new IllegalStateException("Failed to load shop map: " + mapPath);
         }
 
         this.WIDTH = dims[0];
@@ -38,7 +33,7 @@ public class GreenHouse extends Map
             for (int x = 0; x < WIDTH; x++)
             {
                 tiles[y][x] = new Tile(new Point(x, y));
-                tiles[y][x].setType(TileTexture.LAND);
+                tiles[y][x].setType(TileTexture.FLOOR);
             }
         }
 
@@ -61,29 +56,4 @@ public class GreenHouse extends Map
         }
         return null;
     }
-
-    public void build()
-    {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        player.increaseMoney(-1 * moneyCost);
-        player.addToInventory(GameObjectType.WOOD, woodCost);
-        isBuilt = true;
-    }
-
-    public boolean isBuilt()
-    {
-        return isBuilt;
-    }
-
-    public static int getMoneyCost()
-    {
-        return moneyCost;
-    }
-
-    public static int getWoodCost()
-    {
-        return woodCost;
-    }
-
-    // TODO: add other greenhouse functionalities later
 }

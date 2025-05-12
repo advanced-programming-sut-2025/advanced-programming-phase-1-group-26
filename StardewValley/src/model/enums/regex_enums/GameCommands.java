@@ -19,11 +19,12 @@ public enum GameCommands implements Command
     /* Player Commands */
     ENERGY_SHOW("energy show"),
     INVENTORY_SHOW("inventory show"),
-    INVENTORY_TRASH("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
-    TOOLS_EQUIP ("tools equip (?<name>.*)"),
+    INVENTORY_TRASH_NUMBER("inventory trash -i (?<name>.*) -n (?<number>\\d+)"),
+    INVENTORY_TRASH("inventory trash -i (?<name>.*)"),
+    TOOLS_EQUIP("tools equip (?<name>.*)"),
     TOOLS_SHOW_CURRENT("tools show current"),
     TOOLS_SHOW_AVAILABLE("tools show available"),
-    TOOLS_UPGRADE("tools upgrade (?<tool_name>.*)"),
+    TOOLS_UPGRADE("tools upgrade (?<toolName>.*)"),
     TOOLS_USE("tools use -d (?<direction>.*)"),
 
 
@@ -46,12 +47,13 @@ public enum GameCommands implements Command
     SHOW_TOMORROW_WEATHER("weather\\s+forecast"),
 
     CHEAT_CODE_SET_TOMORROW_WEATHER("cheat\\s+weather\\s+set\\s+(?<type>\\S+)"),
-    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<y>-?\\d+)\\s+(?<x>-?\\d+)"),
+    CHEAT_CODE_HIT_THUNDER("cheat\\s+Thor\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
 
 
     CAN_WALK("can\\s+walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     WALK("walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
+    PRINT_ENTIRE_MAP("print\\s+entire\\s+map"),
     HELP_READ_MAP("help\\s+reading\\s+map"),
 
     /*Animal Commands*/
@@ -64,25 +66,39 @@ public enum GameCommands implements Command
     PRODUCES("produces"),
     COLLECT_PRODUCES("collect produces -n (?<name>.*)"),
     SELL_ANIMAL("sell animal -n (?<name>.*)"),
+
+    EXIT_GAME("exit\\s+game"),
+    DELETE_GAME("delete\\s+game"),
+    NEXT_TURN("next\\s+turn"),
+
+    SHOW_CRAFT_INFO("craftinfo\\s+-n\\s+(?<craftName>.*)"),
+    PLANT_SEED("plant\\s+" +
+            "-s\\s+(?<seed>.*)\\s+" +
+            "-d\\s+(?<direction>.*)"),
+    FERTILIZE("fertilize\\s+" +
+            "-f\\s+(?<fertilizer>.*)\\s+" +
+            "-d\\s+(?<direction>)"),
+    HOW_MUCH_WATER("how\\s+much\\s+water"),
+
+    GO_TO_CABIN("go\\s+to\\s+cabin"),
+    WHOAMI("whoami"),
+    SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
+    HELP_READING_MAP("help\\s+reading\\s+map"),
+    BUILD_GREENHOUSE("greenhouse\\s+build"),
+    SHOW_AROUND("show\\s+around"),
     ;
 
-    private final String pattern;
+    private final Pattern pattern;
 
     GameCommands(String regex)
     {
-        this.pattern = regex;
+        this.pattern = Pattern.compile(regex);
     }
 
     @Override
     public Matcher getMatcher(String input)
     {
-        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
-
-        if (matcher.matches())
-        {
-            return matcher;
-        }
-
-        return null;
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches() ? matcher : null;
     }
 }
