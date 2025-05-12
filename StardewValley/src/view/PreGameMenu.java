@@ -28,6 +28,22 @@ public class PreGameMenu implements AppMenu
         } else if ((matcher = PreGameCommands.LOAD_GAME.getMatcher(input)) != null)
         {
             System.out.println(controller.loadGame());
+        } else if ((matcher = PreGameCommands.MENU_ENTER.getMatcher(input)) != null)
+        {
+            String menuName = scanner.nextLine().trim();
+            System.out.println(controller.enterMenu(menuName));
+        }else if ((matcher = PreGameCommands.MENU_EXIT.getMatcher(input)) != null)
+        {
+            System.out.println(controller.exit());
+        }else if ((matcher = PreGameCommands.MENU_BACK.getMatcher(input)) != null)
+        {
+            System.out.println(controller.back());
+        }else if ((matcher = PreGameCommands.HELP.getMatcher(input)) != null)
+        {
+            System.out.println(controller.help());
+        }else if ((matcher = PreGameCommands.SHOW_CURRENT_MENU.getMatcher(input)) != null)
+        {
+            System.out.println(controller.showCurrentMenu());
         } else
         {
             System.out.println("invalid command");

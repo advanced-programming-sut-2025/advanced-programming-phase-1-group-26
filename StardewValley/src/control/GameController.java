@@ -580,9 +580,12 @@ public class GameController
         GameMenu.println("Are you sure? [y/n]");
         String answer = GameMenu.scan(scanner);
 
-        if (!answer.equalsIgnoreCase("y"))
+        if (answer.equalsIgnoreCase("n"))
         {
             return new Result(false, "Phew! You got me scared for a moment.");
+        } else if (!answer.equalsIgnoreCase("y"))
+        {
+            return new Result(false, "Invalid input. Returning to game.");
         }
 
         App.setCurrentGame(null);
@@ -597,31 +600,40 @@ public class GameController
 
     public Result deleteGame(Scanner scanner)
     {
+        Game game = App.getCurrentGame();
+        Player currentPlayer = game.getCurrentPlayer();
+
         int positive = 1;
         int negative = 0;
 
         for (Player player : App.getCurrentGame().getPlayers())
         {
-            GameMenu.println("Hsssh! " + player.getUser().getNickname() + " is voting: ");
-            if (!player.equals(App.getCurrentGame().getCurrentPlayer()))
+            if (currentPlayer.equals(player))
             {
-                do
+                GameMenu.println(player.getUser().getNickname() + " has voted positive.");
+            } else
+            {
+                GameMenu.println("Hsssh! " + player.getUser().getNickname() + " is voting. ");
+                if (!player.equals(App.getCurrentGame().getCurrentPlayer()))
                 {
-                    GameMenu.println("Do you vote for this game to be deleted? [y/n]");
-                    String answer = GameMenu.scan(scanner);
-                    if (answer.equalsIgnoreCase("y"))
+                    do
                     {
-                        positive += 1;
-                        break;
-                    } else if (answer.equalsIgnoreCase("n"))
-                    {
-                        negative += 1;
-                        break;
-                    } else
-                    {
-                        GameMenu.println("Please don't be such a dalghak, we're doing sth serious here.");
-                    }
-                } while (true);
+                        GameMenu.println("Do you vote for this game to be deleted? [y/n]");
+                        String answer = GameMenu.scan(scanner);
+                        if (answer.equalsIgnoreCase("y"))
+                        {
+                            positive += 1;
+                            break;
+                        } else if (answer.equalsIgnoreCase("n"))
+                        {
+                            negative += 1;
+                            break;
+                        } else
+                        {
+                            GameMenu.println("Please don't be such a dalghak, we're doing sth serious here.");
+                        }
+                    } while (true);
+                }
             }
         }
 
@@ -635,12 +647,19 @@ public class GameController
             return new Result(false, "The game shall continue.");
         }
 
+        for (Player p : game.getPlayers())
+        {
+            User user = p.getUser();
+            user.setCurrentGame(null);
+            user.addToNumberOfGames();
+        }
+
+        App.setCurrentUser(currentPlayer.getUser());
         App.setCurrentGame(null);
-        App.setCurrentUser(App.getCurrentGame().getCurrentPlayer().getUser());
         App.setCurrentMenu(Menu.LoginMenu);
 
         return new Result(true, """
-                Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
+                You broke my heart, good bye.
                 Redirecting to Login Menu...
                 """);
     }
@@ -651,7 +670,7 @@ public class GameController
         game.nextTurn();
     }
 
-    public Result forceNextTurn()
+    public Result sudoNextTurn()
     {
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();

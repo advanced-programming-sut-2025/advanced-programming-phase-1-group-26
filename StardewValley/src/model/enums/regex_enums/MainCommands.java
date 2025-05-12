@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public enum MainCommands implements Command
 {
     USER_LOGOUT("user\\s+logout"),
-    MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
+    MENU_ENTER("menu\\s+enter\\s+(?<menuName>.+)"),
     MENU_EXIT("menu\\s+exit"),
     MENU_BACK("menu\\s+back"),
     HELP("help"),

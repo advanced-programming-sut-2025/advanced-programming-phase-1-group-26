@@ -6,10 +6,15 @@ import java.util.regex.Pattern;
 public enum PreGameCommands implements Command
 {
     NEW_GAME("game\\s+new\\s+-u" +
-            "(\\s+(?<user1>\\S*))?" +
+            "\\s+(?<user1>\\S+)" +
             "(\\s+(?<user2>\\S*))?" +
             "(\\s+(?<user3>\\S*))?"),
     LOAD_GAME("load\\s+game"),
+    MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
+    MENU_EXIT("menu\\s+exit"),
+    MENU_BACK("menu\\s+back"),
+    HELP("help"),
+    SHOW_CURRENT_MENU("show current menu"),
     ;
 
     private final Pattern pattern;
