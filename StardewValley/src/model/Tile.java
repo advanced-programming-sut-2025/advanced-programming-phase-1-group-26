@@ -110,10 +110,10 @@ public class Tile
     public String getAppearance()
     {
         // TODO: uncomment this later
-//        if (App.getCurrentGame().getCurrentPlayer().getLocation().equals(point))
-//        {
-//            return "\uD83E\uDD13"; // nerd face
-//        }
+        if (App.getCurrentGame().getCurrentPlayer().getLocation().equals(point))
+        {
+            return "\uD83D\uDC3C"; // panda face
+        }
 
         if (object == null)
         {
@@ -146,7 +146,7 @@ public class Tile
                 return "\uD83E\uDE9F"; // glass emoji, maybe change later
             } else if (texture.equals(TileTexture.QUARRY))
             {
-                return "\uD83E\uDEA8"; // rock emoji
+                return "\uD83E\uDE76";
             } else if (texture.equals(TileTexture.CABIN_WALL) || texture.equals(TileTexture.GREEN_HOUSE_WALL) ||
             texture.equals(TileTexture.WALL))
             {
@@ -252,6 +252,9 @@ public class Tile
                 {
                     return "\uD83E\uDEB5"; // wood emoji
                 }
+            } else if (object instanceof ForagingMineral)
+            {
+                return "\uD83E\uDEA8"; // rock emoji
             } else
             {
                 return "\uD83D\uDFE5"; // ERROR

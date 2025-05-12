@@ -3,6 +3,7 @@ package model;
 import model.enums.Season;
 import model.enums.TimeOfDay;
 import model.enums.Weather;
+import model.enums.regex_enums.GameCommands;
 
 import java.util.List;
 import java.util.Random;
@@ -33,17 +34,29 @@ public class Time
 
     public void updateDay(int dayNum)
     {
-        //setting energies to maximum
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        // setting energies to maximum
+        for (Player player : App.getCurrentGame().getPlayers())
+        {
             player.setEnergy(player.getMaxEnergy());
         }
+
         day += dayNum;
+
+        for (int i = 0; i < day; i++)
+        {
+            App.getCurrentGame().distributeForagingItems();
+        }
+
+        updateWeather();
+
         if (day >= 29)
         {
             int seasonNum = ((day - 29) / 28) + 1;
             day = ((day - 29) % 28) + 1;
             season = season.update(seasonNum);
         }
+
+        Game game = App.getCurrentGame();
     }
 
     public int getHour()

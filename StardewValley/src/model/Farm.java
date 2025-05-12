@@ -27,7 +27,7 @@ public class Farm extends model.Map
         // Initialize all tiles as LAND
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                tiles[y][x] = new Tile(new Point(y, x));
+                tiles[y][x] = new Tile(new Point(x, y));
                 tiles[y][x].setType(TileTexture.LAND);
             }
         }
@@ -76,7 +76,7 @@ public class Farm extends model.Map
 
     private void setRandomItems()
     {
-        int randomItemsCount = getFreeTiles().size() / 20; //TODO: used some hard coded constants here
+        int randomItemsCount = getFreeTiles().size() / 50;
 
         for (int i = 0; i < randomItemsCount / 3; i++)
         {
@@ -88,8 +88,7 @@ public class Farm extends model.Map
         for (int i = 0; i < randomItemsCount / 3; i++)
         {
             Tile random = getRandomFreeTile();
-            ResourceItem type = randomItem(ResourceItem.class);
-            random.setObject(new Resource(type));
+            random.setObject(new Resource(ResourceItem.WOOD));
         }
 
         for (int i = 0; i < randomItemsCount / 3; i++)
@@ -123,6 +122,36 @@ public class Farm extends model.Map
                 }
             }
         }
+    }
+
+    public void setRandomForagingMinerals()
+    {
+        ArrayList<Tile> freeTiles = getFreeQuarryTiles();
+        for (Tile tile : freeTiles)
+        {
+            if (Math.random() < 0.01)
+            {
+                ForagingMineralType type = randomItem(ForagingMineralType.class);
+                tile.setObject(new ForagingMineral(type));
+            }
+        }
+    }
+
+    public ArrayList<Tile> getFreeQuarryTiles()
+    {
+        ArrayList<Tile> quarryTiles = new ArrayList<>();
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                if (tile.getObject() == null && tile.getTexture() == TileTexture.QUARRY)
+                {
+                    quarryTiles.add(tile);
+                }
+            }
+        }
+        return quarryTiles;
     }
 
     public ArrayList<Plant> getPlants()

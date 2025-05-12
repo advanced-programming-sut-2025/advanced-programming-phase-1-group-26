@@ -65,15 +65,16 @@ public enum GameCommands implements Command
             "-d\\s+(?<direction>.*)"),
     FERTILIZE("fertilize\\s+" +
             "-f\\s+(?<fertilizer>.*)\\s+" +
-            "-d\\s+(?<direction>)"),
+            "-d\\s+(?<direction>\\S+)"),
     HOW_MUCH_WATER("how\\s+much\\s+water"),
 
-    GO_TO_CABIN("go\\s+to\\s+cabin"),
+    GO_TO_CABIN("cd\\s+cabin"),
     WHOAMI("whoami"),
     SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
     HELP_READING_MAP("help\\s+reading\\s+map"),
     BUILD_GREENHOUSE("greenhouse\\s+build"),
     SHOW_AROUND("show\\s+around"),
+    SHOW_PATH("show\\s+path\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     ;
 
     private final Pattern pattern;

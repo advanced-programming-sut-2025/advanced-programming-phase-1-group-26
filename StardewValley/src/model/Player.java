@@ -117,8 +117,12 @@ public class Player {
         this.energy = energy;
     }
 
-    public void increaseEnergy(int energy) {
-        this.energy += energy;
+    public void increaseEnergy(int energy)
+    {
+        if (energy != -1)
+        {
+            this.energy += energy;
+        }
     }
 
     public int getTurnEnergy() {
@@ -266,11 +270,6 @@ public class Player {
     public void setLocation(Point location)
     {
         this.location = location;
-    }
-
-    public void setCurrentMap(Map currentMap)
-    {
-        this.currentMap = currentMap;
     }
 
     public GameObject findObjectType(Enum<?> type)
@@ -599,6 +598,12 @@ public class Player {
         this.location = greenHouse.getStartingPoint();
     }
 
+    public void goToCity()
+    {
+        this.currentMap = this.user.getCurrentGame().getCity();
+        this.location = this.user.getCurrentGame().getCity().getStartingPoint();
+    }
+
     public void setEnergyToMax()
     {
         this.energy = maxEnergy;
@@ -607,5 +612,15 @@ public class Player {
     public boolean canAffordGreenhouse()
     {
         return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
+    }
+
+    public boolean hasEnoughEnergy(int required)
+    {
+        if (energy == -1)
+        {
+            return true;
+        }
+
+        return energy > required;
     }
 }

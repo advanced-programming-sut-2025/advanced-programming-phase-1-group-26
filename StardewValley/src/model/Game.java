@@ -17,6 +17,7 @@ public class Game
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
     private Player oppenheimer; // I actually wanted to call this "opener", but thought it would be funnier this way
+    private City city = new City();
 
     public Game() //TODO: this is only for test, should be removed later
     {
@@ -81,6 +82,7 @@ public class Game
         for (Farm farm : getFarms())
         {
             farm.setRandomForagingItems();
+            farm.setRandomForagingMinerals();
         }
     }
 
@@ -111,11 +113,6 @@ public class Game
         {
             HomeMenu.println("starting a new day...");
             currentTime.updateHour(23 - currentTime.getHour());
-        }
-
-        if (currentTime.getHour() == 9)
-        {
-            endDay();
         }
     }
 
@@ -217,5 +214,10 @@ public class Game
     public void setCurrentPlayer(Player currentPlayer)
     {
         this.currentPlayer = currentPlayer;
+    }
+
+    public City getCity()
+    {
+        return city;
     }
 }

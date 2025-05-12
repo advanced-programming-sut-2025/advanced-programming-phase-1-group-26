@@ -395,7 +395,7 @@ public class GameController
                     "Choose your destination wisely.");
         }
 
-        if (requiredEnergy <= energy)
+        if (player.hasEnoughEnergy(requiredEnergy))
         {
             return new Result(true, "positive\n" +
                     "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
@@ -410,7 +410,7 @@ public class GameController
         int x = Integer.parseInt(inputX);
         int y = Integer.parseInt(inputY);
 
-        Point destination = new Point(y, x);
+        Point destination = new Point(x, y);
 
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
@@ -419,15 +419,36 @@ public class GameController
         int requiredEnergy = map.calculateEnergy(player.getLocation(), destination);
         int energy = player.getEnergy();
 
-        if (requiredEnergy < energy)
+        if (requiredEnergy == -1)
         {
-            return new Result(false, "You do not have enough energy to get to this place :(");
+            return new Result(false, "You shall not pass!\n" +
+                    "Choose your destination wisely.");
         }
 
-        if (requiredEnergy == energy)
+        if (!player.hasEnoughEnergy(requiredEnergy))
+        {
+            Point canGetTo = map.findFurthestAvailablePoint(player.getLocation(), destination, energy);
+
+            GameMenu.println("You can't go all the way...");
+            GameMenu.println("But we have a special offer for you: ");
+            GameMenu.println("You can walk as much as you can, you would get closer to the destination.");
+            GameMenu.println("Your new location will be (" + canGetTo.getY() + ", " + canGetTo.getX() + ").");
+            GameMenu.println("Do you want to continue? [y/n]");
+
+            String input = GameMenu.scan(scanner);
+            if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
+            {
+                player.increaseEnergy(-energy);
+                player.setLocation(destination);
+                return new Result(true, "You have successfully get to this place.");
+            }
+            return new Result(false, "OK");
+        }
+
+        if (player.getEnergy() == requiredEnergy)
         {
             GameMenu.println("You can get to this place, but you will faint right away.");
-            GameMenu.println("Do you want to continue? (Y/N)");
+            GameMenu.println("Do you want to continue? [y/n]");
             String input = GameMenu.scan(scanner);
             if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
             {
@@ -438,22 +459,9 @@ public class GameController
             return new Result(false, "OK");
         }
 
-        Point canGetTo = map.findFurthestAvailablePoint(player.getLocation(), destination, energy);
-
-        GameMenu.println("You can't go all the way...");
-        GameMenu.println("But we have a special offer for you: ");
-        GameMenu.println("You can walk as much as you can, you would get closer to the destination.");
-        GameMenu.println("Your new location will be (" + canGetTo.getY() + ", " + canGetTo.getX() + ").");
-        GameMenu.println("Do you want to continue? (Y/N)");
-
-        String input = GameMenu.scan(scanner);
-        if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
-        {
-            player.increaseEnergy(-energy);
-            player.setLocation(destination);
-            return new Result(true, "You have successfully get to this place.");
-        }
-        return new Result(false, "OK");
+        player.setLocation(destination);
+        player.increaseEnergy(-1 * requiredEnergy);
+        return new Result(true, "You have successfully reached your destination.");
     }
 
     public Result showCraftInfo(String craftName)
@@ -778,5 +786,26 @@ public class GameController
 
         greenhouse.build();
         return new Result(true, "Yippee! You successfully built a greenhouse.");
+    }
+
+    public Result showPath(String inputX, String inputY)
+    {
+        int x = Integer.parseInt(inputX);
+        int y = Integer.parseInt(inputY);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+
+        if (!map.isInBounds(x, y))
+        {
+            return new Result(false, "Invalid destination coordinates.");
+        }
+
+        int energy = map.calculateEnergy(player.getLocation(), new Point(x, y));
+        if (energy == -1)
+        {
+            return new Result(false, "There is no possible path to this point.");
+        }
+
+        return new Result(true, map.getMapWithPath(player.getLocation(), new Point(x, y)));
     }
 }

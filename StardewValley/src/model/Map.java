@@ -18,7 +18,7 @@ public abstract class Map
     {
         if (isInBounds(x, y))
         {
-            return tiles[x][y];
+            return tiles[y][x];
         }
         return null;
     }
@@ -61,13 +61,7 @@ public abstract class Map
                 if (isInBounds(x, y))
                 {
                     Tile tile = tiles[y][x];
-                    if (heroLocation != null && heroLocation.equals(tile.getPoint()))
-                    {
-                        output.append("\uD83D\uDC3C");
-                    } else
-                    {
-                        output.append(tile.getAppearance());
-                    }
+                    output.append(tile.getAppearance());
                 }
             }
             output.append("\n");
@@ -104,17 +98,18 @@ public abstract class Map
     public ArrayList<Point> getNeighbors(Point p)
     {
         ArrayList<Point> neighbors = new ArrayList<>();
-        int[] dx = {-1, 0, 1, -1, 1, -1, 0, 1};
-        int[] dy = {0, 1, 0, -1, -1, 1, -1, 1};
 
-        for (int dir = 0; dir < 8; dir++)
+        int[] dx = {-1, 0, 1, 0};
+        int[] dy = {0, 1, 0, -1};
+
+        for (int dir = 0; dir < 4; dir++)
         {
             int newX = p.getX() + dx[dir];
             int newY = p.getY() + dy[dir];
 
-            if (isInBounds(newY, newX) && isWalkable(getTile(newY, newX)))
+            if (isInBounds(newX, newY) && isWalkable(getTile(newX, newY)))
             {
-                neighbors.add(new Point(newY, newX));
+                neighbors.add(new Point(newX, newY));
             }
         }
 
@@ -123,11 +118,11 @@ public abstract class Map
 
     public ArrayList<Point> findShortestPath(Point from, Point to)
     {
-        if (!isInBounds(from.getY(), from.getX()) || !isInBounds(to.getY(), to.getX()))
+        if (!isInBounds(from.getX(), from.getY()) || !isInBounds(to.getX(), to.getY()))
             return null;
 
-        Tile startTile = getTile(from.getY(), from.getX());
-        Tile endTile = getTile(to.getY(), to.getX());
+        Tile startTile = getTile(from.getX(), from.getY());
+        Tile endTile = getTile(to.getX(), to.getY());
 
         if (!isWalkable(startTile) || !isWalkable(endTile))
             return null;
@@ -163,7 +158,9 @@ public abstract class Map
 
         ArrayList<Point> path = new ArrayList<>();
         for (Point at = to; at != null; at = parentMap.get(at))
+        {
             path.add(at);
+        }
 
         Collections.reverse(path);
         return path;
@@ -285,5 +282,46 @@ public abstract class Map
     {
         return HEIGHT;
     }
+
+    public String getMapWithPath(Point from, Point to)
+    {
+        ArrayList<Point> path = findShortestPath(from, to);
+
+        StringBuilder output = new StringBuilder();
+
+        for (int y = 0; y < this.HEIGHT; y++)
+        {
+            for (int x = 0; x < this.WIDTH; x++)
+            {
+                Point current = new Point(x, y);
+                Tile tile = tiles[y][x];
+
+                if (path != null && isInPath(path, current) && !current.equals(from))
+                {
+                    output.append("\uD83D\uDFE7"); // Path
+                }
+                else
+                {
+                    output.append(tile.getAppearance());
+                }
+            }
+            output.append("\n");
+        }
+
+        return output.toString().trim();
+    }
+
+    public boolean isInPath(ArrayList<Point> path, Point point)
+    {
+        for (Point at : path)
+        {
+            if (at.equals(point))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 

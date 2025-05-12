@@ -149,7 +149,7 @@ public class PreGameController
         for (int i = 0; i < farmTypes.size(); i++)
         {
             MapTypes farm = MapTypes.values()[i];
-            PreGameMenu.println("\t" + (i + 1) + "- " + farm);
+            PreGameMenu.println("\t" + (i + 1) + "- " + farm.getName());
         }
 
         ArrayList<Player> players = new ArrayList<>();
@@ -166,7 +166,7 @@ public class PreGameController
                 } else
                 {
                     int number = Integer.parseInt(input);
-                    if (number < 1 || number > farmTypes.size() + 1)
+                    if (number < 1 || number > farmTypes.size())
                     {
                         PreGameMenu.print("Please enter a valid number: ");
                     } else
@@ -195,7 +195,7 @@ public class PreGameController
     }
 
     public void chooseGender(Scanner scanner) {
-        PreGameMenu.println("choosing gender... ");
+        PreGameMenu.println("\nchoosing gender... ");
         for (Player player : App.getCurrentGame().getPlayers()) {
             while (true) {
                 PreGameMenu.print(player.getNickName() + ": ");

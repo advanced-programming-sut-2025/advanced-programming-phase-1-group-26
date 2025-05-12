@@ -128,6 +128,11 @@ public class GameMenu implements AppMenu
         } else if ((matcher = GameCommands.PRINT_ENTIRE_MAP.getMatcher(input)) != null)
         {
             System.out.println(controller.printEntireMap());
+        } else if ((matcher = GameCommands.SHOW_PATH.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x").trim();
+            String y = matcher.group("y").trim();
+            System.out.println(controller.showPath(x,y));
         }
 
         else if (input.equals("1"))
