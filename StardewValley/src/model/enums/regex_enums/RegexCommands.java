@@ -10,14 +10,14 @@ public enum RegexCommands implements Command
 
     private final Pattern pattern;
 
-    RegexCommands(String regex) {
+    RegexCommands(String regex)
+    {
         this.pattern = Pattern.compile(regex);
     }
 
     @Override
     public Matcher getMatcher(String input) {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        return matcher.matches() ? matcher : null;
     }
 }

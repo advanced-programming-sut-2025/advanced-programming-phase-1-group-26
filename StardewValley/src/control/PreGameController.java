@@ -25,11 +25,17 @@ public class PreGameController
 
         for (String username : usernames)
         {
-            User thisUser = getUser(username);
-
-            if (thisUser != null && !thisUser.hasCurrentGame())
+            if (!username.isEmpty())
             {
-                users.add(getUser(username));
+                User thisUser = getUser(username);
+
+                if (thisUser != null && !thisUser.hasCurrentGame() && !users.contains(thisUser))
+                {
+                    users.add(getUser(username));
+                } else if (thisUser != null)
+                {
+                    PreGameMenu.println("Couldn't add " + username + ".");
+                }
             }
         }
 
@@ -66,9 +72,9 @@ public class PreGameController
 
     private void chooseMaps(ArrayList<User> users)
     {
-        final int farmOptionsNum = MapTypes.values().length;
+        ArrayList<MapTypes> farmTypes = MapTypes.farmTypes();
         PreGameMenu.println("Farm Options: ");
-        for (int i = 0; i < farmOptionsNum; i++)
+        for (int i = 0; i < farmTypes.size(); i++)
         {
             MapTypes farm = MapTypes.values()[i];
             PreGameMenu.println("\t" + (i + 1) + "- " + farm);
@@ -78,20 +84,19 @@ public class PreGameController
 
         for (User user : users)
         {
-            PreGameMenu.println("Choosing farm for " + user.getNickname() + ".\n" +
-                    "Please enter the number of the farm you would like to choose:");
+            PreGameMenu.print("Choosing farm for " + user.getNickname() + ": ");
             while (true)
             {
                 String input = PreGameMenu.scan();
                 if (!input.matches("-?[0-9]+"))
                 {
-                    PreGameMenu.println("Please enter a valid number.");
+                    PreGameMenu.print("Please enter a valid number: ");
                 } else
                 {
                     int number = Integer.parseInt(input);
-                    if (number < 1 || number > farmOptionsNum + 1)
+                    if (number < 1 || number > farmTypes.size() + 1)
                     {
-                        PreGameMenu.println("Please enter a valid number.");
+                        PreGameMenu.print("Please enter a valid number: ");
                     } else
                     {
                         MapTypes type = MapTypes.values()[number - 1];
@@ -101,20 +106,20 @@ public class PreGameController
                     }
                 }
             }
-
-            Game game = new Game(players);
-            game.setCurrentPlayer(players.get(0));
-            App.addGame(game);
-            App.setCurrentGame(game);
-            App.setCurrentMenu(Menu.GameMenu);
-            for (User u : users)
-            {
-                u.setCurrentGame(game);
-            }
-
-            PreGameMenu.println("New Game created.\n" +
-                    "Redirecting to game menu.");
         }
+
+        Game game = new Game(players);
+        game.setCurrentPlayer(players.get(0));
+        App.addGame(game);
+        App.setCurrentGame(game);
+        App.setCurrentMenu(Menu.GameMenu);
+        for (User u : users)
+        {
+            u.setCurrentGame(game);
+        }
+
+        PreGameMenu.println("New Game created.\n" +
+                "Redirecting to game menu.");
     }
 
     private User getUser(String username)

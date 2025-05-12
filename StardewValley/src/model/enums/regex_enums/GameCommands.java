@@ -74,23 +74,16 @@ public enum GameCommands implements Command
     BUILD_GREENHOUSE("greenhouse\\s+build"),
     ;
 
-    private final String pattern;
+    private final Pattern pattern;
 
     GameCommands(String regex)
     {
-        this.pattern = regex;
+        this.pattern = Pattern.compile(regex);
     }
 
     @Override
-    public Matcher getMatcher(String input)
-    {
-        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
-
-        if (matcher.matches())
-        {
-            return matcher;
-        }
-
-        return null;
+    public Matcher getMatcher(String input) {
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches() ? matcher : null;
     }
 }

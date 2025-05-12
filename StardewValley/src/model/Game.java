@@ -1,6 +1,7 @@
 package model;
 
 import model.enums.NpcDetails;
+import model.player_data.FriendshipData;
 import view.GameMenu;
 import view.HomeMenu;
 
@@ -25,6 +26,17 @@ public class Game
     public Game(ArrayList<Player> players)
     {
         this.players = players;
+        for (Player player : players)
+        {
+            for (Player other : players)
+            {
+                if (!player.equals(other))
+                {
+                    FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
+                    player.addFriendship(other, newFriendshipData);
+                }
+            }
+        }
     }
 
     public Time getCurrentTime()

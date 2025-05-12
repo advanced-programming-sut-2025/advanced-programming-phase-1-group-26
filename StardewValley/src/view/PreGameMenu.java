@@ -19,8 +19,10 @@ public class PreGameMenu implements AppMenu
 
         if ((matcher = PreGameCommands.NEW_GAME.getMatcher(input)) != null)
         {
-            String[] tokens = input.trim().split("\\s+");
-            String[] usernames = Arrays.copyOfRange(tokens, 3, tokens.length);
+            String[] usernames = new String[3];
+            usernames[0] = matcher.group("user1") == null ? "" : matcher.group("user1").trim();
+            usernames[1] = matcher.group("user2") == null ? "" : matcher.group("user2").trim();
+            usernames[2] = matcher.group("user3") == null ? "" : matcher.group("user3").trim();
 
             controller.newGame(usernames);
         } else if ((matcher = PreGameCommands.LOAD_GAME.getMatcher(input)) != null)
@@ -40,5 +42,10 @@ public class PreGameMenu implements AppMenu
     public static void println(String output)
     {
         System.out.println(output);
+    }
+
+    public static void print(String output)
+    {
+        System.out.print(output);
     }
 }

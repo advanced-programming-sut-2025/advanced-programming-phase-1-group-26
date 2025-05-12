@@ -23,7 +23,6 @@ public enum MainCommands implements Command
     public Matcher getMatcher(String input)
     {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        return matcher.matches() ? matcher : null;
     }
 }

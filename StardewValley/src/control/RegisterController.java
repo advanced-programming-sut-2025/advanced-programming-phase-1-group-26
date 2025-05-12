@@ -73,7 +73,8 @@ public class RegisterController
         }
         newUser = new User(username, password, nickName, email, gender);
         App.getUsers().add(newUser);
-        App.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentMenu(Menu.MainMenu); // TODO: maybe this should be in pick question (?)
+        App.setCurrentUser(newUser);
         return new Result(true, "user created successfully!");
     }
 

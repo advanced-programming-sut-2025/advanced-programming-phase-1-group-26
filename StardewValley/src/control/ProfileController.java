@@ -10,6 +10,7 @@ import view.MainMenu;
 import view.ProfileMenu;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -193,7 +194,7 @@ public class ProfileController
         StringBuilder output = new StringBuilder();
         User user = App.getCurrentUser();
 
-        output.append(user.getNickname()).append("'s Profile");
+        output.append(user.getNickname()).append("'s Profile").append("\n");
         output.append("username: ").append(user.getUsername()).append("\n");
         output.append("email: ").append(user.getEmail()).append("\n");
         output.append("gender: ").append(user.getGender()).append("\n");
@@ -270,7 +271,7 @@ public class ProfileController
         }
 
         // Shuffle result
-        List<Character> chars = sb.chars().mapToObj(c -> (char) c).toList();
+        List<Character> chars = new ArrayList<>(sb.chars().mapToObj(c -> (char) c).toList());
         Collections.shuffle(chars, rand);
 
         return chars.stream().map(String::valueOf).collect(Collectors.joining());

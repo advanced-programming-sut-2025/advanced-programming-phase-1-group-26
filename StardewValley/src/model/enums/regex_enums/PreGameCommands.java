@@ -5,10 +5,10 @@ import java.util.regex.Pattern;
 
 public enum PreGameCommands implements Command
 {
-    NEW_GAME("game\\s+new\\s+-u\\s+" +
-            "(?<username1>\\S+)" +
-            "(\\s+(?<username2>\\S+))?" +
-            "(\\s+(?<username3>\\S+))?"),
+    NEW_GAME("game\\s+new\\s+-u" +
+            "(\\s+(?<user1>\\S*))?" +
+            "(\\s+(?<user2>\\S*))?" +
+            "(\\s+(?<user3>\\S*))?"),
     LOAD_GAME("load\\s+game"),
     ;
 
@@ -20,10 +20,8 @@ public enum PreGameCommands implements Command
     }
 
     @Override
-    public Matcher getMatcher(String input)
-    {
+    public Matcher getMatcher(String input) {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        return matcher.matches() ? matcher : null;
     }
 }

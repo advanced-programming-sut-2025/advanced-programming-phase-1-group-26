@@ -21,7 +21,7 @@ public class MainMenuController
         String output = "";
         if (menuName.equalsIgnoreCase("game menu") || menuName.equalsIgnoreCase("game"))
         {
-            App.setCurrentMenu(Menu.GameMenu);
+            App.setCurrentMenu(Menu.PreGameMenu);
             output = "Switching to game menu...";
         } else if (menuName.equalsIgnoreCase("profile menu") || menuName.equalsIgnoreCase("profile"))
         {

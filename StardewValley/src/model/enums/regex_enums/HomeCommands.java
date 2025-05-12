@@ -23,23 +23,16 @@ public enum HomeCommands implements Command
     GO_OUT("go\\s+out"),
     ;
 
-    private final String pattern;
+    private final Pattern pattern;
 
     HomeCommands(String regex)
     {
-        this.pattern = regex;
+        this.pattern = Pattern.compile(regex);
     }
 
     @Override
-    public Matcher getMatcher(String input)
-    {
-        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
-
-        if (matcher.matches())
-        {
-            return matcher;
-        }
-
-        return null;
+    public Matcher getMatcher(String input) {
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches() ? matcher : null;
     }
 }
