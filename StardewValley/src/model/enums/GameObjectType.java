@@ -330,6 +330,9 @@ public enum GameObjectType
     HARD_WOOD("hard wood"),
     SALMON_DINNER_RECIPE("salmon dinner recipe"),
 
+    BOUQUET("Bouquet"),
+    WEDDING_RING("Wedding Ring"),
+
     ;
 
     private final String name;

@@ -1,6 +1,7 @@
 package control;
 
 import model.*;
+import model.enums.Gender;
 import model.enums.MapTypes;
 import model.enums.Menu;
 import view.AppMenu;
@@ -49,6 +50,9 @@ public class PreGameController
 
         PreGameMenu.println("Users selected successfully.");
         chooseMaps(users, scanner);
+        chooseGender(scanner);
+        PreGameMenu.println("New Game created.\n\n" +
+                "Welcome to Stardew Valley!");
     }
 
     public Result loadGame()
@@ -110,6 +114,7 @@ public class PreGameController
             }
         }
 
+
         Game game = new Game(players);
         game.setCurrentPlayer(players.get(0));
         App.addGame(game);
@@ -119,9 +124,23 @@ public class PreGameController
         {
             u.setCurrentGame(game);
         }
+    }
 
-        PreGameMenu.println("New Game created.\n\n" +
-                "Welcome to Stardew Valley!");
+    public void chooseGender(Scanner scanner) {
+        PreGameMenu.println("choosing gender... ");
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            while (true) {
+                PreGameMenu.println(player.getNickName() + ": ");
+                String genderName = scanner.nextLine();
+                Gender gender = Gender.getGender(genderName);
+                if (gender != null) {
+                    player.setGender(gender);
+                    break;
+                } else {
+                    System.out.println("invalid gender");
+                }
+            }
+        }
     }
 
     private User getUser(String username)

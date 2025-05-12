@@ -3,6 +3,7 @@ package model;
 import model.animal.Animal;
 import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
+import model.enums.Gender;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
@@ -25,6 +26,7 @@ public class Player {
     private final Cabin cabin;
     private final GreenHouse greenHouse;
 
+    private Gender gender;
     private Point location = null;
     private Map currentMap = null;
 
@@ -56,7 +58,7 @@ public class Player {
     private FriendshipWithNpcData LiaFriendship = new FriendshipWithNpcData();
     private FriendshipWithNpcData RobinFriendship = new FriendshipWithNpcData();
 
-    private HashMap<Player, GameObject> purposeList = new HashMap<>();
+    private HashMap<Player, GameObjectType> purposeList = new HashMap<>();
     private Player zeidy;
 
     private Tool currentTool;
@@ -92,6 +94,14 @@ public class Player {
         this.zeidy = null;
         this.location = farm.getStartingPoint();
         this.newMessage = false;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public void addFriendship(Player player, FriendshipData data)
@@ -218,7 +228,7 @@ public class Player {
         return givenGifts;
     }
 
-    public HashMap<Player, GameObject> getPurposeList() {
+    public HashMap<Player, GameObjectType> getPurposeList() {
         return purposeList;
     }
 

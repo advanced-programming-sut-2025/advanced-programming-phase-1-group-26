@@ -289,17 +289,17 @@ public class CommunicateController
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         if (currentPlayer.isNear(player.getLocation())) {
             if (checkFriendship(currentPlayer, player, "flower")) { //TODO: change all flowers to bouquet;
-                if (currentPlayer.getItemInInventory(GameObjectType.FLOWER) != null) {
-                    currentPlayer.getItemInInventory(GameObjectType.FLOWER).addNumber(-1);
-                    if (currentPlayer.getItemInInventory(GameObjectType.FLOWER).getNumber() < 1) {
+                if (currentPlayer.getItemInInventory(GameObjectType.BOUQUET) != null) {
+                    currentPlayer.getItemInInventory(GameObjectType.BOUQUET).addNumber(-1);
+                    if (currentPlayer.getItemInInventory(GameObjectType.BOUQUET).getNumber() < 1) {
                         currentPlayer.getCurrentBackPack().getInventory().
-                                remove(currentPlayer.getItemInInventory(GameObjectType.FLOWER));
+                                remove(currentPlayer.getItemInInventory(GameObjectType.BOUQUET));
                     }
 
-                    if (player.getItemInInventory(GameObjectType.FLOWER) != null) {
-                        player.getItemInInventory(GameObjectType.FLOWER).addNumber(1);
+                    if (player.getItemInInventory(GameObjectType.BOUQUET) != null) {
+                        player.getItemInInventory(GameObjectType.BOUQUET).addNumber(1);
                     } else {
-                        player.getCurrentBackPack().getInventory().add(new GameObject(GameObjectType.FLOWER, 1));
+                        player.getCurrentBackPack().getInventory().add(new GameObject(GameObjectType.BOUQUET, 1));
                     }
 
                     if (!currentPlayer.getFriendships().get(player).isIntrcatedToday()) {
@@ -322,17 +322,16 @@ public class CommunicateController
 
     public void purposeAsk (Matcher matcher) {
         Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
-        GameObject ring = null; //TODO: change
+        GameObjectType ring = GameObjectType.WEDDING_RING;
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         if (currentPlayer.isNear(player.getLocation())) {
             if (currentPlayer.getUser().getGender().equals(Gender.FEMALE)) {
                 System.out.println("you can't purpose ask doost pesaret");
             } else if (!checkFriendship(currentPlayer, player, "marriage")) {
                 System.out.println("your friendship is not good enough to marry each other!");
-//            } else if (currentPlayer.getItemInInventory(PierresGeneralStoreYearRoundStock.WEDDING_RING)) {
-                
+            } else if (currentPlayer.getItemInInventory(ring) == null) {
+                System.out.println("you don't have a ring. buy one");
             } else {
-                
                 player.getPurposeList().put(currentPlayer, ring);
             }
         } else {
@@ -346,7 +345,7 @@ public class CommunicateController
         String respond = matcher.group("respond");
         if (respond.equals("cancel")) answer = false;
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        GameObject ring = currentPlayer.getPurposeList().get(player);
+        GameObject ring = player.getItemInInventory(currentPlayer.getPurposeList().get(player));
 
         if (answer) {
             currentPlayer.getCurrentBackPack().getInventory().remove(ring);
