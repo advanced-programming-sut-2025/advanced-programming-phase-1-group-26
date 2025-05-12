@@ -203,7 +203,7 @@ public class ProfileController
 
     public Result exitMenu()
     {
-        App.setCurrentMenu(Menu.ProfileMenu);
+        App.setCurrentMenu(Menu.MainMenu);
         return new Result(true, "Redirecting to main menu...");
     }
 
@@ -294,7 +294,7 @@ public class ProfileController
         return password.matches(".*\\d.*");
     }
 
-    private boolean validEmail(String email)
+    private boolean validEmail(String email) // TODO : change based on arash
     {
         String EMAIL_REGEX =
                 "^(?=.{1,32}@)" +                                 // Limit local part to 64 characters

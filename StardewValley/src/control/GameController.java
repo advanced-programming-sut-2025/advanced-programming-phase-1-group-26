@@ -635,8 +635,8 @@ public class GameController
             return new Result(false, "The game shall continue.");
         }
 
-        App.setCurrentGame(null);
         App.setCurrentUser(App.getCurrentGame().getCurrentPlayer().getUser());
+        App.setCurrentGame(null);
         App.setCurrentMenu(Menu.LoginMenu);
 
         return new Result(true, """
