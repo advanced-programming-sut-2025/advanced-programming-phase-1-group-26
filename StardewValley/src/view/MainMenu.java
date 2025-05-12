@@ -38,9 +38,9 @@ public class MainMenu implements AppMenu
         }
     }
 
-    public static String scan()
+    public static String scan(Scanner scanner)
     {
-        return mainScanner.nextLine().trim();
+        return scanner.nextLine().trim();
     }
 
     public static void println(String output)

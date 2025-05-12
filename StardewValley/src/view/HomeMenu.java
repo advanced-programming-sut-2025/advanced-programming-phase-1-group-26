@@ -66,10 +66,9 @@ public class HomeMenu implements AppMenu
         }
     }
 
-    public static String scan()
+    public static String scan(Scanner scanner)
     {
-        String text = mainScanner.nextLine().trim();
-        return text;
+        return scanner.nextLine().trim();
     }
 
     public static void println(String output)

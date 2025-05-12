@@ -19,7 +19,7 @@ public class ProfileMenu implements AppMenu
         if ((matcher = ProfileCommands.CHANGE_USERNAME.getMatcher(input)) != null)
         {
             String newUsername = matcher.group("newUsername").trim();
-            System.out.println(controller.changeUsername(newUsername));
+            System.out.println(controller.changeUsername(newUsername, scanner));
         } else if ((matcher = ProfileCommands.CHANGE_PASSWORD.getMatcher(input)) != null)
         {
             String newPassword = matcher.group("newPassword").trim();
@@ -28,7 +28,7 @@ public class ProfileMenu implements AppMenu
         } else if ((matcher = ProfileCommands.SET_PASSWORD_TO_RANDOM.getMatcher(input)) != null)
         {
             String oldPassword = matcher.group("oldPassword").trim();
-            controller.setRandomPassword(oldPassword);
+            controller.setRandomPassword(oldPassword, scanner);
         } else if ((matcher = ProfileCommands.CHANGE_NICKNAME.getMatcher(input)) != null)
         {
             String newNickname = matcher.group("newNickname").trim();
@@ -56,9 +56,9 @@ public class ProfileMenu implements AppMenu
         }
     }
 
-    public static String scan()
+    public static String scan(Scanner scanner)
     {
-        return mainScanner.nextLine().trim();
+        return scanner.nextLine().trim();
     }
 
     public static void println(String output)

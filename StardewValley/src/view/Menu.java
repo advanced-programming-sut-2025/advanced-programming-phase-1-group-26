@@ -14,7 +14,6 @@ abstract class Menu
     private static final GameMenu gameMenu = new GameMenu();
     private static final ExitMenu leaderboardMenu = new ExitMenu();
     private static final HomeMenu homeMenu = new HomeMenu();
-    protected static Scanner mainScanner;
 
     abstract Result executeCommands(String command);
 

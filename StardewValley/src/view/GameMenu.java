@@ -73,7 +73,7 @@ public class GameMenu implements AppMenu
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
-            System.out.println(controller.walk(x,y));
+            System.out.println(controller.walk(x,y, scanner));
         } else if ((matcher = GameCommands.PRINT_MAP.getMatcher(input)) != null)
         {
             String x = matcher.group("x");
@@ -99,10 +99,10 @@ public class GameMenu implements AppMenu
             System.out.println(controller.howMuchWater());
         } else if ((matcher = GameCommands.EXIT_GAME.getMatcher(input)) != null)
         {
-            System.out.println(controller.exitGame());
+            System.out.println(controller.exitGame(scanner));
         } else if ((matcher = GameCommands.DELETE_GAME.getMatcher(input)) != null)
         {
-            System.out.println(controller.deleteGame());
+            System.out.println(controller.deleteGame(scanner));
         } else if ((matcher = GameCommands.NEXT_TURN.getMatcher(input)) != null)
         {
             controller.nextTurn();
@@ -235,10 +235,9 @@ public class GameMenu implements AppMenu
         }
     }
 
-    public static String scan()
+    public static String scan(Scanner scanner)
     {
-        String text = mainScanner.nextLine().trim();
-        return text;
+        return scanner.nextLine().trim();
     }
 
     public static void println(String output)

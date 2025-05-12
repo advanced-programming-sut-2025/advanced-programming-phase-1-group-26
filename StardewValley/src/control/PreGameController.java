@@ -3,14 +3,16 @@ package control;
 import model.*;
 import model.enums.MapTypes;
 import model.enums.Menu;
+import view.AppMenu;
 import view.MainMenu;
 import view.PreGameMenu;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PreGameController
 {
-    public void newGame(String[] usernames)
+    public void newGame(String[] usernames, Scanner scanner)
     {
         User user = App.getCurrentUser();
         ArrayList<User> users = new ArrayList<>();
@@ -46,7 +48,7 @@ public class PreGameController
         }
 
         PreGameMenu.println("Users selected successfully.");
-        chooseMaps(users);
+        chooseMaps(users, scanner);
     }
 
     public Result loadGame()
@@ -70,7 +72,7 @@ public class PreGameController
                 but unfortunately we didn't have time to :(""");
     }
 
-    private void chooseMaps(ArrayList<User> users)
+    private void chooseMaps(ArrayList<User> users, Scanner scanner)
     {
         ArrayList<MapTypes> farmTypes = MapTypes.farmTypes();
         PreGameMenu.println("Farm Options: ");
@@ -87,7 +89,7 @@ public class PreGameController
             PreGameMenu.print("Choosing farm for " + user.getNickname() + ": ");
             while (true)
             {
-                String input = PreGameMenu.scan();
+                String input = PreGameMenu.scan(scanner);
                 if (!input.matches("-?[0-9]+"))
                 {
                     PreGameMenu.print("Please enter a valid number: ");
@@ -118,8 +120,8 @@ public class PreGameController
             u.setCurrentGame(game);
         }
 
-        PreGameMenu.println("New Game created.\n" +
-                "Redirecting to game menu.");
+        PreGameMenu.println("New Game created.\n\n" +
+                "Welcome to Stardew Valley!");
     }
 
     private User getUser(String username)
