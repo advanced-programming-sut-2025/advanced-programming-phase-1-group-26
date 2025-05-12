@@ -54,7 +54,7 @@ public class Player {
     private Tool currentTool;
     private double money;
 
-    private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
+    private ArrayList<Animal> animals = new ArrayList<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
@@ -421,5 +421,13 @@ public class Player {
 
     public void setRobinFriendship(FriendshipWithNpcData robinFriendship) {
         RobinFriendship = robinFriendship;
+    }
+
+    public ArrayList<Animal> getAnimals() {
+        return animals;
+    }
+
+    public void addAnimal(Animal animal) {
+        animals.add(animal);
     }
 }

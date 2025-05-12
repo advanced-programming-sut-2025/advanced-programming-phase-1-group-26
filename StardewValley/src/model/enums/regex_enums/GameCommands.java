@@ -30,6 +30,7 @@ public enum GameCommands implements Command
     /* cheat codes */
     ENERGY_SET("energy set -v (?<value>\\d+)"),
     ENERGY_UNLIMITED("energy unlimited"),
+    SET_FRIENDSHIP("cheat set friendship -n (?<name>.*) -c (?<amount>\\d+)"),
 
 
     SHOW_TIME("time"),
@@ -52,6 +53,17 @@ public enum GameCommands implements Command
     WALK("walk\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
     HELP_READ_MAP("help\\s+reading\\s+map"),
+
+    /*Animal Commands*/
+    BUILD_ANIMAL_HOUSE("build -a (?<name>.*) -l (?<y>\\d+) (?<x>\\d+)"),
+    BUY_ANIMAL("buy animal -a (?<animal>.*) -n (?<name>.*)"),
+    PET_ANIMAL("pet -n (?<name>.*)"),
+    ANIMAL_INFOS("animals"),
+    SHEPHERD_ANIMAL("shepherd animals -n (?<name>.*) -l (?<y>\\d+) (?<x>\\d+)"),
+    FEED_HAY("feed hay -n (?<name>.*)"),
+    PRODUCES("produces"),
+    COLLECT_PRODUCES("collect produces -n (?<name>.*)"),
+    SELL_ANIMAL("sell animal -n (?<name>.*)"),
     ;
 
     private final String pattern;

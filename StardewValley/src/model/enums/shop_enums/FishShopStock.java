@@ -1,8 +1,12 @@
 package model.enums.shop_enums;
 
+import model.enums.GameObjectType;
+import model.enums.building_enums.CraftingRecipeEnums;
+
 public enum FishShopStock {
     FISH_SMOKER_RECIPE("Fish Smoker (Recipe)", "A recipe to make Fish Smoker",
-            10000, -1, 1),
+            10000, -1, 1,
+            CraftingRecipeEnums.FISH_SMOKER_RECIPE),
     TROUT_SOUP("Trout Soup", "Pretty salty.",
             250, -1, 1),
     BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.",
@@ -19,8 +23,10 @@ public enum FishShopStock {
     private final int price;
     private final int fishingSkillRequired;
     private final int dailyLimit;
+    private final GameObjectType gameObjectType;
 
-    FishShopStock(String name, String description, int price, int fishingSkillRequired, int dailyLimit) {
+    FishShopStock(String name, String description, int price, int fishingSkillRequired,
+                  int dailyLimit) {
         this.name = name;
         this.description = description;
         this.price = price;

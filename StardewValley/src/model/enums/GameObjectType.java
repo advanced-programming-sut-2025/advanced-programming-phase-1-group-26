@@ -330,6 +330,14 @@ public enum GameObjectType
     Automating_Iridium_WateringCan("automating iridium watering can"),
     HARD_WOOD("hard wood"),
     SALMON_DINNER_RECIPE("salmon dinner recipe"),
+    COPPER_TOOL("copper tool"),
+    COPPER_TRASH_CAN("copper trash can"),
+    STEEL_TOOL("steel tool"),
+    STEEL_TRASH_CAN("steel trash can"),
+    GOLD_TOOL("gold tool"),
+    GOLD_TRASH_CAN("gold trash can"),
+    IRIDIUM_TOOL("ridium tool"),
+    IRIDIUM_TRASH_CAN("ridium trash can"),
     ;
 
     private final String name;

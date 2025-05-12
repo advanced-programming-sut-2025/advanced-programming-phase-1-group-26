@@ -1,7 +1,9 @@
 package view;
 
 import control.GameController;
+import control.game.activities.MarketingController;
 import model.Farm;
+import model.NPC;
 import model.Point;
 import model.enums.FarmTypes;
 import model.enums.regex_enums.GameCommands;
@@ -12,7 +14,8 @@ import java.util.regex.Matcher;
 public class GameMenu implements AppMenu
 {
     GameController controller = new GameController();
-
+    MarketingController marketingController = new MarketingController();
+    NPC npc;
     @Override
     public void check(Scanner scanner)
     {
@@ -112,6 +115,17 @@ public class GameMenu implements AppMenu
                 Farm farm = new Farm(FarmTypes.BEACH);
                 System.out.println(farm.getMapString(new Point(0, 0), 70, 70));
             }
+        }
+
+        else if(GameCommands.MEET_NPC.matches(input)) {
+            System.out.println(marketingController.meetNPC(input));
+            if(marketingController.meetNPC(input).isSuccessful()) npc = marketingController.targetNPC(input);
+        } else if(GameCommands.GIFT_NPC.matches(input)) {
+            System.out.println(marketingController.giftNPC(input));
+        } else if(GameCommands.QUESTS_LIST.matches(input)) {
+            System.out.println(marketingController.questsNPCList(npc));
+        } else if(GameCommands.QUESTS_FINISH.matches(input)) {
+            System.out.println(marketingController.questsFinish(input, npc));
         }
 
         else

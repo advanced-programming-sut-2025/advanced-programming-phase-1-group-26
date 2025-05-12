@@ -91,11 +91,13 @@ public class MarketingController {
         if(!npc.isNearPlayer(npc.getLocation(), App.getCurrentGame().getCurrentPlayer().getLocation()))
             return new Result(false, "You are not in a near NPC");
         int index = Integer.parseInt(GameCommands.QUESTS_FINISH.getMatcher(input).group("index"));
+        GameObject request = npc.getNpcDetails().getRequests().get(index);
         GameObject reward = npc.getNpcDetails().getRewards().get(index);
         if(npc.getFriendshipWithNpcData().getLevel() == 2) {
             reward.addNumber(reward.getNumber());
         }
-        App.getCurrentGame().getCurrentPlayer().getInventory().add(reward);
+        App.getCurrentGame().getCurrentPlayer().addToInventory(reward);
+        App.getCurrentGame().getCurrentPlayer().removeFromInventory(request);
         npc.removeQuest(index);
 
         return new Result(true, "Quest finished");
