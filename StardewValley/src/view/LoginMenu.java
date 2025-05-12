@@ -20,7 +20,7 @@ public class LoginMenu implements AppMenu {
             System.out.println(controller.login(matcher));
         } else if ((matcher = LoginCommands.FORGET_PASSWORD.getMatcher(input)) != null) {
             System.out.println(controller.forgetPassword(matcher, scanner));
-        } else if (LoginCommands.MENU_ENTER.getMatcher(input) != null) {
+        } else if ((matcher = LoginCommands.MENU_ENTER.getMatcher(input)) != null) {
             String menuName = matcher.group("menuName").trim();
             System.out.println(controller.enterMenu(menuName));
         } else if (LoginCommands.MENU_EXIT.getMatcher(input) != null) {

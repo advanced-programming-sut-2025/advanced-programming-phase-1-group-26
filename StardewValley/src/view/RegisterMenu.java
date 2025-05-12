@@ -35,7 +35,7 @@ public class RegisterMenu implements AppMenu
             }
         } else if ((matcher = RegisterCommands.PICK_QUESTION.getMatcher(input)) != null) {
             System.out.println(controller.pickQuestion(matcher));
-        } else if (RegisterCommands.MENU_ENTER.getMatcher(input) != null) {
+        } else if ((matcher = RegisterCommands.MENU_ENTER.getMatcher(input)) != null) {
             String menuName = matcher.group("menuName").trim();
             System.out.println(controller.enterMenu(menuName));
         } else if (RegisterCommands.MENU_EXIT.getMatcher(input) != null) {

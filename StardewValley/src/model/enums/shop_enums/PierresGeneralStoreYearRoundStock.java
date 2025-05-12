@@ -63,6 +63,7 @@ public enum PierresGeneralStoreYearRoundStock { //TODO needs some coding
     private final int dailyLimit; // -1 for unlimited
     private final Season season; // null for year-round
 
+
     PierresGeneralStoreYearRoundStock(String displayName, String description, int price, int dailyLimit, Season season) {
         this.displayName = displayName;
         this.description = description;
