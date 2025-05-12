@@ -7,10 +7,16 @@ public enum RegisterCommands implements Command{
     REGISTER("register -u (?<username>\\S+) -p (?<password>\\S+) (?<passwordConfirm>\\S+)" +
             " -n (?<nickname>.*?) -e (?<email>\\S+) -g (?<gender>\\S+)"),
     CHECK_USERNAME("^[a-zA-Z0-9-]+$"),
-    CHECK_PASSWORD("^[a-zA-Z0-9!#$%^&*)(=+}{\\]\\[|\\/:;'\",><?]+$"),
+    CHECK_PASSWORD("^[a-zA-Z0-9!@#$%^&*)(=+}{\\]\\[|\\/:;'\",><?]+$"),
     CHECK_EMAIL("^[a-zA-Z0-9](?!.*\\.\\.)[a-zA-Z0-9._-]*[a-zA-Z0-9]@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$"),
     PICK_QUESTION("pick question -q (?<questionNumber>\\d+) -a (?<answer>\\d+) -c (?<answerConfirm>\\d+)"),
-    GO_TO_LOGIN("go to login menu");
+    MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
+    MENU_EXIT("menu\\s+exit"),
+    MENU_BACK("menu\\s+back"),
+    HELP("help"),
+    SHOW_CURRENT_MENU("show current menu"),
+
+    ;
 
     private final Pattern pattern;
     RegisterCommands(String regex) {

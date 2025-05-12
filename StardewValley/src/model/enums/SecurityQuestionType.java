@@ -22,4 +22,13 @@ public enum SecurityQuestionType
     public int getId() {
         return id;
     }
+
+    public static String getQuestionById (int id) {
+        for (SecurityQuestionType type : SecurityQuestionType.values()) {
+            if (type.id == id) {
+                return type.question;
+            }
+        }
+        return null;
+    }
 }

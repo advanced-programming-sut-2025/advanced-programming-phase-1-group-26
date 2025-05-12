@@ -8,8 +8,9 @@ public enum MainCommands implements Command
     USER_LOGOUT("user\\s+logout"),
     MENU_ENTER("menu\\s+enter\\s+(?<menuName>\\S+)"),
     MENU_EXIT("menu\\s+exit"),
-    SHOW_CURRENT_MENU("show\\s+current\\s+menu"),
+    MENU_BACK("menu\\s+back"),
     HELP("help"),
+    SHOW_CURRENT_MENU("show\\s+current\\s+menu"),
 
     ;
     private final Pattern pattern;
@@ -23,7 +24,6 @@ public enum MainCommands implements Command
     public Matcher getMatcher(String input)
     {
         Matcher matcher = pattern.matcher(input);
-        matcher.matches();
-        return matcher;
+        return matcher.matches() ? matcher : null;
     }
 }

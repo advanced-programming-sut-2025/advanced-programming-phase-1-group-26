@@ -1,11 +1,7 @@
 package control;
 
 import model.*;
-import model.enums.MapTypes;
 import model.enums.Menu;
-import view.MainMenu;
-
-import java.util.ArrayList;
 
 public class MainMenuController
 {
@@ -60,10 +56,16 @@ public class MainMenuController
                 "    Shows this help message.\n");
     }
 
-    public Result exit()
+    public Result back()
     {
         App.setCurrentMenu(Menu.LoginMenu);
         App.setCurrentUser(null);
         return new Result(true, "Redirecting to login menu...");
+    }
+
+    public Result exit()
+    {
+        App.setCurrentMenu(Menu.ExitMenu);
+        return new Result(true, "Exiting the game...");
     }
 }
