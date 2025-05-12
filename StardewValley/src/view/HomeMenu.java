@@ -1,6 +1,7 @@
 package view;
 
 import control.game.activities.HomeController;
+import model.enums.regex_enums.GameCommands;
 import model.enums.regex_enums.HomeCommands;
 
 import java.util.Scanner;
@@ -63,6 +64,21 @@ public class HomeMenu implements AppMenu
         } else if ((matcher = HomeCommands.GO_OUT.getMatcher(input)) != null)
         {
             System.out.println(controller.goOut());
+        } else if ((matcher = HomeCommands.PRINT_MAP.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x");
+            String y = matcher.group("y");
+            String size = matcher.group("size");
+            System.out.println(controller.printMap(x,y,size));
+        } else if ((matcher = HomeCommands.SHOW_AROUND.getMatcher(input)) != null)
+        {
+            System.out.println(controller.showAround());
+        } else if ((matcher = HomeCommands.PRINT_ENTIRE_MAP.getMatcher(input)) != null)
+        {
+            System.out.println(controller.printEntireMap());
+        } else
+        {
+            System.out.println("invalid command");
         }
     }
 

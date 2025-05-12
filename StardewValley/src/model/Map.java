@@ -51,7 +51,7 @@ public abstract class Map
         }
     }
 
-    public String getMapString(Point location, int HEIGHT, int WIDTH)
+    public String getMapString(Point heroLocation, Point location, int HEIGHT, int WIDTH)
     {
         StringBuilder output = new StringBuilder();
         for (int y = 0; y < this.HEIGHT; y++)
@@ -61,7 +61,13 @@ public abstract class Map
                 if (isInBounds(x, y))
                 {
                     Tile tile = tiles[y][x];
-                    output.append(tile.getAppearance());
+                    if (heroLocation != null && heroLocation.equals(tile.getPoint()))
+                    {
+                        output.append("\uD83D\uDC3C");
+                    } else
+                    {
+                        output.append(tile.getAppearance());
+                    }
                 }
             }
             output.append("\n");
@@ -118,50 +124,51 @@ public abstract class Map
     public ArrayList<Point> findShortestPath(Point from, Point to)
     {
         if (!isInBounds(from.getY(), from.getX()) || !isInBounds(to.getY(), to.getX()))
-        {
             return null;
-        }
 
         Tile startTile = getTile(from.getY(), from.getX());
         Tile endTile = getTile(to.getY(), to.getX());
 
         if (!isWalkable(startTile) || !isWalkable(endTile))
-        {
             return null;
-        }
 
-        Queue<ArrayList<Point>> queue = new LinkedList<>();
+        Queue<Point> queue = new LinkedList<>();
         Set<Point> visited = new HashSet<>();
+        java.util.Map<Point, Point> parentMap = new java.util.HashMap<>();
 
-        ArrayList<Point> startPath = new ArrayList<>();
-        startPath.add(from);
-        queue.add(startPath);
+        queue.add(from);
         visited.add(from);
 
         while (!queue.isEmpty())
         {
-            ArrayList<Point> path = queue.poll();
-            Point current = path.getLast();
+            Point current = queue.poll();
 
             if (current.equals(to))
-            {
-                return path;
-            }
+                break;
 
             for (Point neighbor : getNeighbors(current))
             {
                 if (!visited.contains(neighbor))
                 {
                     visited.add(neighbor);
-                    ArrayList<Point> newPath = new ArrayList<>(path);
-                    newPath.add(neighbor);
-                    queue.add(newPath);
+                    parentMap.put(neighbor, current);
+                    queue.add(neighbor);
                 }
             }
         }
 
-        return null;
+        // Reconstruct path
+        if (!parentMap.containsKey(to))
+            return null;
+
+        ArrayList<Point> path = new ArrayList<>();
+        for (Point at = to; at != null; at = parentMap.get(at))
+            path.add(at);
+
+        Collections.reverse(path);
+        return path;
     }
+
 
     public int calculateEnergy(Point from, Point to)
     {
@@ -247,14 +254,20 @@ public abstract class Map
         int x = location.getX();
         int y = location.getY();
 
-        for (int i = 3; i >= -3; i--)
+        for (int i = -2; i < 3; i++)
         {
-            for (int j = -3; j <= 3; j++)
+            for (int j = -2; j < 3; j++)
             {
                 if (isInBounds(x + j, y + i))
                 {
-                    Tile tile = getTile(x + j, y + i);
-                    output.append(tile.getAppearance());
+                    Tile tile = tiles[y + i][x + j];
+                    if (i == 0 && j == 0)
+                    {
+                        output.append("\uD83D\uDC3C");
+                    } else
+                    {
+                        output.append(tile.getAppearance());
+                    }
                 }
             }
             output.append("\n");
