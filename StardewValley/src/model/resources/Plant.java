@@ -1,6 +1,8 @@
 package model.resources;
 
+import model.App;
 import model.GameObject;
+import model.Tile;
 import model.enums.Season;
 
 import java.util.List;
@@ -34,7 +36,10 @@ public class Plant extends GameObject
     {
         if (currentStage < totalHarvestTime)
         {
-            currentStage += 1;
+            if (seasons.contains(App.getCurrentGame().getCurrentTime().getSeason()) || isInGreenhouse)
+            {
+                currentStage += 1;
+            }
         }
     }
 
@@ -66,5 +71,31 @@ public class Plant extends GameObject
     public void putInGreenhouse()
     {
         isInGreenhouse = true;
+    }
+
+    public String showDetails(Plant plant, Tile tile)
+    {
+        StringBuilder output = new StringBuilder();
+
+        if (plant instanceof Tree)
+        {
+            output.append(((Tree) plant).getTreeType().getCraftInfo());
+        } else if (plant instanceof Crop)
+        {
+            output.append(((Crop) plant).getCropType().getCraftInfo());
+        }
+
+        output.append("\n");
+
+        output.append("Remaining Time: ").append(totalHarvestTime - currentStage).append(" (days)\n");
+        if (canHarvest())
+        {
+            output.append("Harvest Wait Time: ").append(harvestWaitTime).append(" (days)\n");
+        }
+        output.append("Current Stage: ").append(currentStage).append(" (days ago)\n");
+        output.append("Watered Today: ").append(lastWatered == 0 ? "positive" : "negative").append(" (days)\n");
+        output.append("Has Been Fertilized: ").append(tile.isFertilized() ? "positive" : "negative").append(" (days)\n");
+
+        return output.toString().trim();
     }
 }

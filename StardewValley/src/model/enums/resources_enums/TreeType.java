@@ -140,4 +140,16 @@ public enum TreeType
         }
         return null;
     }
+
+    public static TreeType getTreeBySeed(GameObjectType seedType)
+    {
+        for (TreeType type : TreeType.values())
+        {
+            if (type.source.getType().equals(seedType))
+            {
+                return type;
+            }
+        }
+        return null;
+    }
 }

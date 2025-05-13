@@ -183,9 +183,14 @@ public enum CropType
 
     private static final Random RANDOM = new Random();
 
-    public static CropType getCropFromSeed(ForagingSeedType seedType)
+    public GameObjectType getType()
     {
-        if (seedType.getName().equals(ForagingSeedType.MIXED_SEEDS.getName()))
+        return type;
+    }
+
+    public static CropType getCropBySeed(GameObjectType seedType)
+    {
+        if (seedType.equals(ForagingSeedType.MIXED_SEEDS.getType()))
         {
             CropType random = CropType.values()[RANDOM.nextInt(CropType.values().length)];
             return random;
@@ -193,17 +198,11 @@ public enum CropType
 
         for (CropType cropType : CropType.values())
         {
-            if (cropType.getName().equals(seedType.getName()))
+            if (cropType.getSeedType().getType().equals(seedType))
             {
                 return cropType;
             }
         }
-
         return null;
-    }
-
-    public GameObjectType getType()
-    {
-        return type;
     }
 }

@@ -90,6 +90,7 @@ public class Game
         {
             hitTilesByThunder();
         }
+        growPlants();
     }
 
     public void distributeForagingItems()
@@ -326,5 +327,17 @@ public class Game
     public int getPlayerIndex()
     {
         return players.indexOf(currentPlayer);
+    }
+
+    public void growPlants()
+    {
+        for (Player player : players)
+        {
+            ArrayList<Plant> plants = player.getAllPlants();
+            for (Plant plant : plants)
+            {
+                plant.update();
+            }
+        }
     }
 }

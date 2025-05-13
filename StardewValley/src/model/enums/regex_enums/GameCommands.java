@@ -28,6 +28,7 @@ public enum GameCommands implements Command
             "-f\\s+(?<fertilizer>.*)\\s+" +
             "-d\\s+(?<direction>\\S+)"),
     HOW_MUCH_WATER("how\\s+much\\s+water"),
+    SHOW_PLANT("show\\s+plant\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
 
     CD_PLACE("cd\\s+(?<placeName>.+)"),
 
