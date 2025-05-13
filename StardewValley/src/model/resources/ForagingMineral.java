@@ -1,7 +1,6 @@
 package model.resources;
 
 import model.GameObject;
-import model.enums.GameObjectType;
 import model.enums.resources_enums.ForagingMineralType;
 
 public class ForagingMineral extends GameObject
