@@ -668,16 +668,6 @@ public class Player {
         return greenHouse.getAllPlantTiles();
     }
 
-    public ArrayList<Tile> getAllPlants()
-    {
-        ArrayList<Tile> allPlants = new ArrayList<>();
-
-        allPlants.addAll(farm.getAllPlantTiles());
-        allPlants.addAll(greenHouse.getAllPlantTiles());
-
-        return allPlants;
-    }
-
     public boolean isInFarm()
     {
         return isInFarm;

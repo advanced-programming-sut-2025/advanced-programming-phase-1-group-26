@@ -60,6 +60,10 @@ public class Tile
         }
     }
 
+    public void ploghInverse() {
+        isPloughed = false;
+    }
+
     public TileTexture getTexture()
     {
         return texture;
