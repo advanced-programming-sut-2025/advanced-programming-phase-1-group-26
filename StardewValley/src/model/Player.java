@@ -512,26 +512,14 @@ public class Player {
         return cookingRecipes;
     }
 
-    public boolean isNear(Point location)
+    public boolean isNear(Point otherLocation)
     {
-        int playerX = this.location.getX();
-        int playerY = this.location.getY();
 
-        for (int x = -1; x <= 1; x++)
-        {
-            for (int y = -1; y <= 1; y++)
-            {
-                if (x != 0 && y != 0)
-                {
-                    if (location.getX() == playerX + x && location.getY() == playerY + y)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
+        Point location = this.location;
+        int dx = Math.abs(location.getX() - otherLocation.getX());
+        int dy = Math.abs(location.getY() - otherLocation.getY());
 
-        return false;
+        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
     }
 
     public EdibleThing getFromRefrigerator (GameObjectType type)
