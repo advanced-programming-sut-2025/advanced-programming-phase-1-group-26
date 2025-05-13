@@ -239,14 +239,14 @@ public class GameMenu implements AppMenu
             System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
         }
 
-        else if(GameCommands.MEET_NPC.matches(input)) {
+        else if((matcher = GameCommands.MEET_NPC.getMatcher(input)) != null) {
             System.out.println(marketingController.meetNPC(input));
             if(marketingController.meetNPC(input).isSuccessful()) npc = marketingController.targetNPC(input);
-        } else if(GameCommands.GIFT_NPC.matches(input)) {
+        } else if((matcher = GameCommands.GIFT_NPC.getMatcher(input)) != null) {
             System.out.println(marketingController.giftNPC(input));
-        } else if(GameCommands.QUESTS_LIST.matches(input)) {
+        } else if((matcher = GameCommands.QUESTS_LIST.getMatcher(input)) != null) {
             System.out.println(marketingController.questsNPCList(npc));
-        } else if(GameCommands.QUESTS_FINISH.matches(input)) {
+        } else if((matcher = GameCommands.QUESTS_FINISH.getMatcher(input)) != null) {
             System.out.println(marketingController.questsFinish(input, npc));
         }
 

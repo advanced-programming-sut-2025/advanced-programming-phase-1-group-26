@@ -26,7 +26,7 @@ public enum BlacksmithUpgradeTools {
     private final String ingredient;
     private final int ingredientAmount;
     private final int cost;
-    private final int dailyLimit;
+    private int dailyLimit;
     private final GameObjectType gameObjectType;
 
     BlacksmithUpgradeTools(String name, String ingredient, int ingredientAmount, int cost, int dailyLimit,
@@ -44,4 +44,19 @@ public enum BlacksmithUpgradeTools {
     public int getIngredientAmount() { return ingredientAmount; }
     public int getCost() { return cost; }
     public int getDailyLimit() { return dailyLimit; }
+    public GameObjectType getGameObjectType() { return gameObjectType; }
+
+    public void setDailyLimit(int dailyLimit) {
+        this.dailyLimit = dailyLimit;
+    }
+
+    public void resetDailyLimit() {
+        for (GameObjectType gameObjectType : GameObjectType.values()) {
+            setDailyLimit(1);
+        }
+    }
+
+    public void decreaseDailyLimit() {
+        setDailyLimit(--dailyLimit);
+    }
 }

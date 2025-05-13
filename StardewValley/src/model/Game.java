@@ -17,6 +17,7 @@ public class Game
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
     private Player oppenheimer; // I actually wanted to call this "opener", but thought it would be funnier this way
+    private City city;
 
     public Game() //TODO: this is only for test, should be removed later
     {
@@ -37,6 +38,14 @@ public class Game
                 }
             }
         }
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public Time getCurrentTime()

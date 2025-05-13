@@ -1,6 +1,7 @@
 package model;
 
 import model.enums.MapTypes;
+import model.enums.ShopType;
 import model.enums.TileTexture;
 
 public class City extends Map
@@ -55,5 +56,10 @@ public class City extends Map
             }
         }
         return null;
+    }
+
+    public boolean isNearShop(ShopType type) {
+        //TODO
+        return true;
     }
 }
