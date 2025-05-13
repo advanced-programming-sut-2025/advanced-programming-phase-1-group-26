@@ -365,6 +365,16 @@ public enum GameObjectType
     TRIPLE_SHOT_ESPRESSO_RECIPE("Triple Shot Espresso Recipe"),
     COOKIE_RECIPE("Cookie Recipe"),
 
+    AXE("Axe"),
+    BackPack("BackPack"),
+    FISHING_POLE("Fishing Pole"),
+    HOE("Hoe"),
+    PICKAXE("Pickaxe"),
+    SEYTHE("Seythe"),
+    SHEAR("Shear"),
+    TRASH_CAN("Trash Can"),
+    WATERING_CAN("Watering Can"),
+
     ;
 
     private final String name;
@@ -384,7 +394,7 @@ public enum GameObjectType
     {
         for (GameObjectType gameObjectType : GameObjectType.values())
         {
-            if (gameObjectType.name().equalsIgnoreCase(name))
+            if (gameObjectType.toString().equalsIgnoreCase(name))
             {
                 return gameObjectType;
             }

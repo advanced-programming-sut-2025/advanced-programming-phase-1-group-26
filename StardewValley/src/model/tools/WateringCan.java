@@ -4,27 +4,26 @@ import model.enums.GameObjectType;
 import model.enums.tool_enums.ToolType;
 import model.enums.tool_enums.WateringCanLevel;
 
-import java.util.ArrayList;
-
 public class WateringCan extends Tool {
     private WateringCanLevel level;
     private final int maxVolume = 20; // TODO: might change value later
     private int currentVolume = 20;
 
     public WateringCan() {
-        super.type = ToolType.WateringCan;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.WATERING_CAN;
+        super.toolType = ToolType.WateringCan;
+        super.name = toolType.getName();
         this.level = WateringCanLevel.base;
     }
 
     public WateringCan(WateringCanLevel level) {
-        super.type = ToolType.WateringCan;
-        super.name = type.getName();
+        super.toolType = ToolType.WateringCan;
+        super.name = toolType.getName();
         this.level = level;
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public WateringCanLevel getLevel() {

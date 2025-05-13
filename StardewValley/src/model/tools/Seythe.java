@@ -10,13 +10,14 @@ public class Seythe extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public Seythe() {
-        super.type = ToolType.Seythe;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.SEYTHE;
+        super.toolType = ToolType.Seythe;
+        super.name = toolType.getName();
         this.energyUsage = 2;
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public ArrayList<GameObjectType> getUsage() {

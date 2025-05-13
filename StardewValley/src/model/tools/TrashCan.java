@@ -11,14 +11,15 @@ public class TrashCan extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public TrashCan() {
-        super.type = ToolType.TrashCan;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.TRASH_CAN;
+        super.toolType = ToolType.TrashCan;
+        super.name = toolType.getName();
         this.level = WateringCanLevel.base;
     }
 
     public TrashCan(WateringCanLevel level) {
-        super.type = ToolType.TrashCan;
-        super.name = type.getName();
+        super.toolType = ToolType.TrashCan;
+        super.name = toolType.getName();
         this.level = level;
     }
 

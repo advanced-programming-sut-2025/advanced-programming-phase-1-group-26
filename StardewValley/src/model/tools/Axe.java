@@ -11,19 +11,20 @@ public class Axe extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public Axe() {
-        super.type = ToolType.Axe;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.AXE;
+        super.toolType = ToolType.Axe;
+        super.name = toolType.getName();
         this.level = AxeLevel.base;
     }
 
     public Axe(AxeLevel level) {
-        super.type = ToolType.Axe;
-        super.name = type.getName();
+        super.toolType = ToolType.Axe;
+        super.name = toolType.getName();
         this.level = level;
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public AxeLevel getLevel() {

@@ -12,19 +12,20 @@ public class Pickaxe extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public Pickaxe() {
-        super.type = ToolType.Pickaxe;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.PICKAXE;
+        super.toolType = ToolType.Pickaxe;
+        super.name = toolType.getName();
         this.level = PickaxeLevel.base;
     }
 
     public Pickaxe(PickaxeLevel level) {
-        super.type = ToolType.Pickaxe;
-        super.name = type.getName();
+        super.toolType = ToolType.Pickaxe;
+        super.name = toolType.getName();
         this.level = level;
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public PickaxeLevel getLevel() {

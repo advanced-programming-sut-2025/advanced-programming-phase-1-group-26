@@ -12,14 +12,15 @@ public class FishingPole extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public FishingPole(FishingPoleLevel level) {
-        super.type = ToolType.FishingPole;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.FISHING_POLE;
+        super.toolType = ToolType.FishingPole;
+        super.name = toolType.getName();
         this.level = level;
         /* Set Usages: near water */
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public FishingPoleLevel getLevel() {

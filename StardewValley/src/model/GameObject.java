@@ -34,7 +34,7 @@ public class GameObject
         this.number += number;
     }
 
-    public Enum<?> getType()
+    public Enum<?> getToolType()
     {
         return null;
     }

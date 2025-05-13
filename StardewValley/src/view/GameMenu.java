@@ -34,15 +34,15 @@ public class GameMenu implements AppMenu
                 (matcher = GeneralCommands.INVENTORY_TRASH.getMatcher(input)) != null) {
             System.out.println(generalController.inventoryTrash(matcher));
         } else if ((matcher = GeneralCommands.TOOLS_EQUIP.getMatcher(input)) != null) {
-            System.out.println(generalController.toolsEquip(matcher));
+            System.out.println(gameController.toolsEquip(matcher));
         } else if ((matcher = GeneralCommands.TOOLS_SHOW_CURRENT.getMatcher(input)) != null) {
-            System.out.println(generalController.toolsShowCurrent());
+            System.out.println(gameController.toolsShowCurrent());
         } else if ((matcher = GeneralCommands.TOOLS_SHOW_AVAILABLE.getMatcher(input)) != null) {
-            generalController.toolsShowAvailable();
+            gameController.toolsShowAvailable();
         } else if ((matcher = GeneralCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
-            System.out.println(generalController.toolsUpgrade(matcher));
+            System.out.println(gameController.toolsUpgrade(matcher));
         } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
-            gameController.toolsUse(matcher);
+            System.out.println(gameController.toolsUse(matcher));
         }
 
         /* player cheat codes */

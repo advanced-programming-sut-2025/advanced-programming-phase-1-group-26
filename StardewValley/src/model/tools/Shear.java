@@ -11,15 +11,16 @@ public class Shear extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public Shear() {
-        super.type = ToolType.Shear;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.SHEAR;
+        super.toolType = ToolType.Shear;
+        super.name = toolType.getName();
         this.energyUsage = 4;
         this.price = 1000;
         /* Set Usage: Domestic Animals */
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public int getEnergyUsage() {

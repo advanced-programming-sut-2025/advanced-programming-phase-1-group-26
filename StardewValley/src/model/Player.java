@@ -4,7 +4,6 @@ import model.animal.Animal;
 import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
-import model.enums.Weather;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
@@ -287,7 +286,7 @@ public class Player {
     {
         for (GameObject obj : currentBackPack.getInventory())
         {
-            Enum<?> inventoryItemType = obj.getType();
+            Enum<?> inventoryItemType = obj.getToolType();
 
             if (inventoryItemType.equals(type))
             {
@@ -348,7 +347,7 @@ public class Player {
         {
             if (object instanceof Tool tool)
             {
-                if (tool.getType().equals(type))
+                if (tool.getToolType().equals(type))
                 {
                     return tool;
                 }

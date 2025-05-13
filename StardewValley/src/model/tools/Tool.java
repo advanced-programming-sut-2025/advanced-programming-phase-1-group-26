@@ -5,15 +5,15 @@ import model.enums.GameObjectType;
 import model.enums.tool_enums.ToolType;
 
 public class Tool extends GameObject {
-     ToolType type;
+     ToolType toolType;
      String name;
 
-     public ToolType getType() {
-          return type;
+     public ToolType getToolType() {
+          return toolType;
      }
 
-     public void setType(ToolType type) {
-          this.type = type;
+     public void setToolType(ToolType toolType) {
+          this.toolType = toolType;
      }
 
      public String getName() {
@@ -22,5 +22,11 @@ public class Tool extends GameObject {
 
      public void setName(String name) {
           this.name = name;
+     }
+
+     @Override
+     public GameObjectType getObjectType()
+     {
+          return super.getObjectType();
      }
 }

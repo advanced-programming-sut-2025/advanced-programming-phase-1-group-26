@@ -1,11 +1,9 @@
 package model.shops;
 
 import model.GameObject;
-import model.Point;
 import model.enums.ShopType;
 import model.enums.shop_enums.BlacksmithStockItem;
 import model.enums.shop_enums.BlacksmithUpgradeTools;
-import model.enums.tool_enums.ToolType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +53,7 @@ public class Blacksmith extends Shop {
     public void purchase(GameObject gameObject) {
         super.purchase(gameObject);
         for(BlacksmithUpgradeTools tool : upgradeToolsList) {
-            if(tool.getGameObjectType().equals(gameObject.getType())) {
+            if(tool.getGameObjectType().equals(gameObject.getToolType())) {
 
             }
         }
