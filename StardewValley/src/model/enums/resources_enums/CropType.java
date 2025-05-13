@@ -47,7 +47,7 @@ public enum CropType
     PUMPKIN(GameObjectType.PUMPKIN_CROP, "Pumpkin", ForagingSeedType.PUMPKIN_SEEDS, List.of(1,2,3,4,3), 13, true, -1, 320, false, -1, List.of(Season.Fall), true),
     YAM(GameObjectType.YAM_CROP, "Yam", ForagingSeedType.YAM_SEEDS, List.of(1,3,3,3), 10, true, -1, 160, true, 45, List.of(Season.Fall), false),
     SWEET_GEM_BERRY(GameObjectType.SWEET_GEM_BERRY_CROP, "Sweet Gem Berry", ForagingSeedType.RARE_SEED, List.of(2,4,6,6,6), 24, true, -1, 3000, false, -1, List.of(Season.Fall), false),
-    POWDERMELON(GameObjectType.POWDERMELON_CROP, "Powdermelon", ForagingSeedType.POWERDMELON_SEEDS, List.of(1,2,1,2,1), 7, true, -1, 60, true, 63, List.of(Season.Winter), true),
+    POWDERMELON(GameObjectType.POWDERMELON_CROP, "Powdermelon", ForagingSeedType.POWDERMELON_SEEDS, List.of(1,2,1,2,1), 7, true, -1, 60, true, 63, List.of(Season.Winter), true),
     ANCIENT_FRUIT(GameObjectType.ANCIENT_FRUIT_CROP, "Ancient Fruit", ForagingSeedType.ANCIENT_SEEDS, List.of(2,7,7,7,5), 28, false, 7, 550, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall), false);
     ;
 
@@ -164,7 +164,7 @@ public enum CropType
             output.append(getSeasons().get(i).getName()).append(i == getSeasons().size() - 1 ? "\n" : ", ");
         }
 
-        output.append("Can Become Giant: ").append(canBecomeGiant).append("\n");
+        output.append("Can Become Giant: ").append(canBecomeGiant ? "TRUE" : "FALSE").append("\n");
 
         return output.toString().trim();
     }
@@ -183,9 +183,14 @@ public enum CropType
 
     private static final Random RANDOM = new Random();
 
-    public static CropType getCropFromSeed(ForagingSeedType seedType)
+    public GameObjectType getType()
     {
-        if (seedType.getName().equals(ForagingSeedType.MIXED_SEEDS.getName()))
+        return type;
+    }
+
+    public static CropType getCropBySeed(GameObjectType seedType)
+    {
+        if (seedType.equals(ForagingSeedType.MIXED_SEEDS.getType()))
         {
             CropType random = CropType.values()[RANDOM.nextInt(CropType.values().length)];
             return random;
@@ -193,17 +198,11 @@ public enum CropType
 
         for (CropType cropType : CropType.values())
         {
-            if (cropType.getName().equals(seedType.getName()))
+            if (cropType.getSeedType().getType().equals(seedType))
             {
                 return cropType;
             }
         }
-
         return null;
-    }
-
-    public GameObjectType getType()
-    {
-        return type;
     }
 }
