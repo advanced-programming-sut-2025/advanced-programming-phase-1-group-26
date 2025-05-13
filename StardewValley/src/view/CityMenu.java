@@ -1,29 +1,24 @@
 package view;
 
-import control.GameController;
 import control.GeneralController;
-import control.game.activities.CommunicateController;
-import model.enums.regex_enums.CommunicateCommands;
+import control.game.activities.CityController;
+import model.enums.regex_enums.CityCommands;
 import model.enums.regex_enums.GameCommands;
 import model.enums.regex_enums.GeneralCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class GameMenu implements AppMenu
+public class CityMenu implements AppMenu
 {
-    GameController gameController = new GameController();
-    CommunicateController comController = new CommunicateController();
     GeneralController generalController = new GeneralController();
+    CityController cityController = new CityController();
 
     @Override
     public void check(Scanner scanner)
     {
-        String input = scanner.nextLine().trim();
+        String input = scanner.nextLine();
         Matcher matcher;
-        Matcher comMatcher;
-
-        //TODO: add checkFainted in game menu
 
         /* Player Commands */
         if ((matcher = GeneralCommands.ENERGY_SHOW.getMatcher(input)) != null) {
@@ -41,8 +36,6 @@ public class GameMenu implements AppMenu
             generalController.toolsShowAvailable();
         } else if ((matcher = GeneralCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
             System.out.println(generalController.toolsUpgrade(matcher));
-        } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
-            gameController.toolsUse(matcher);
         }
 
         /* player cheat codes */
@@ -164,78 +157,9 @@ public class GameMenu implements AppMenu
             System.out.println(generalController.deleteGame(scanner));
         }
 
-
-        else if ((matcher = GameCommands.SHOW_CRAFT_INFO.getMatcher(input)) != null)
+        else if ((matcher = CityCommands.CD_FARM.getMatcher(input)) != null)
         {
-            String craftName = matcher.group("craftName").trim();
-            System.out.println(gameController.showCraftInfo(craftName));
-        } else if ((matcher = GameCommands.PLANT_SEED.getMatcher(input)) != null)
-        {
-            String seed = matcher.group("seed").trim();
-            String direction = matcher.group("direction").trim();
-            System.out.println(gameController.plantSeed(seed,direction));
-        } else if ((matcher = GameCommands.FERTILIZE.getMatcher(input)) != null)
-        {
-            String fertilizer = matcher.group("fertilizer").trim();
-            String direction = matcher.group("direction").trim();
-            System.out.println(gameController.fertilize(fertilizer,direction));
-        } else if ((matcher = GameCommands.HOW_MUCH_WATER.getMatcher(input)) != null)
-        {
-            System.out.println(gameController.howMuchWater());
-        } else if ((matcher = GameCommands.CD_PLACE.getMatcher(input)) != null)
-        {
-            String placeName = matcher.group("placeName").trim();
-            System.out.println(gameController.goToPlace(placeName));
-        } else if ((matcher = GameCommands.HELP_READ_MAP.getMatcher(input)) != null)
-        {
-            System.out.println(gameController.helpReadMap());
-        } else if ((matcher = GameCommands.BUILD_GREENHOUSE.getMatcher(input)) != null)
-        {
-            System.out.println(gameController.buildGreenhouse());
-        } else if ((matcher = GameCommands.CHEAT_ADD_MONEY.getMatcher(input)) != null)
-        {
-            String amount = matcher.group("amount").trim();
-            System.out.println(gameController.cheatAddMoney(amount));
+            System.out.println(cityController.goOut());
         }
-
-
-        else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
-            comController.friendships();
-        } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
-            System.out.println(comController.talk(matcher));
-        } else if ((matcher = CommunicateCommands.TALK_HISTORY.getMatcher(input)) != null) {
-            comController.talkHistory(matcher);
-        } else if ((matcher = CommunicateCommands.GIFT.getMatcher(input)) != null) {
-            comController.gift(matcher);
-        } else if (CommunicateCommands.GIFT_LIST.getMatcher(input) != null) {
-            comController.giftList();
-        } else if ((matcher = CommunicateCommands.GIFT_RATE.getMatcher(input)) != null) {
-            comController.giftRate(matcher);
-        } else if ((matcher = CommunicateCommands.GIFT_HISTORY.getMatcher(input)) != null) {
-            comController.giftHistory(matcher);
-        } else if ((matcher = CommunicateCommands.HUG.getMatcher(input)) != null) {
-            comController.giveHug(matcher);
-        } else if ((matcher = CommunicateCommands.FLOWER.getMatcher(input)) != null) {
-            comController.giveFlower(matcher);
-        } else if ((matcher = CommunicateCommands.ASK_MARRIAGE.getMatcher(input)) != null) {
-            comController.purposeAsk(matcher);
-        } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
-            comController.purposeRespond(matcher);
-        }
-
-        else
-        {
-            System.out.println("invalid command");
-        }
-    }
-
-    public static String scan(Scanner scanner)
-    {
-        return scanner.nextLine().trim();
-    }
-
-    public static void println(String output)
-    {
-        System.out.println(output);
     }
 }

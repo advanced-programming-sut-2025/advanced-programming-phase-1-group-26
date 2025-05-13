@@ -154,6 +154,8 @@ public class PreGameController
 
         ArrayList<Player> players = new ArrayList<>();
 
+        int count = 0;
+
         for (User user : users)
         {
             PreGameMenu.print("Choosing farm for " + user.getNickname() + ": ");
@@ -172,7 +174,7 @@ public class PreGameController
                     } else
                     {
                         MapTypes type = MapTypes.values()[number - 1];
-                        Player player = new Player(user, new Farm(type));
+                        Player player = new Player(user, new Farm(type), count++);
                         players.add(player);
                         break;
                     }

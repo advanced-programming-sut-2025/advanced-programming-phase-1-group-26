@@ -4,6 +4,8 @@ import model.enums.TileTexture;
 import model.enums.resources_enums.ResourceItem;
 import model.resources.*;
 
+import java.util.ArrayList;
+
 public class Tile
 {
     private final Point point;
@@ -128,7 +130,22 @@ public class Tile
         // TODO: uncomment this later
         if (App.getCurrentGame().getCurrentPlayer().getLocation().equals(point))
         {
-            return "\uD83D\uDC3C"; // panda face
+            return App.getCurrentGame().getCurrentPlayer().getApperance();
+        }
+
+        if (App.getCurrentGame().getCurrentPlayer().isInCity())
+        {
+            Point[] points = App.getCurrentGame().getCity().getPlayerPoints();
+            ArrayList<Player> players = App.getCurrentGame().getPlayers();
+
+            for (int i = 0; i < points.length; i++)
+            {
+                Point p = points[i];
+                if (p != null && p.getX() == point.getX() && p.getY() == point.getY())
+                {
+                    return players.get(i).getApperance();
+                }
+            }
         }
 
         if (object == null)
