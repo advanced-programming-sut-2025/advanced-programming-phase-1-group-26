@@ -40,6 +40,22 @@ public class Tile
     public void hitByThunder()
     {
         hitByThunder = true;
+
+        isFertilized = false;
+        isPloughed = false;
+
+        if (object != null)
+        {
+            if (object instanceof Tree)
+            {
+                object = new Resource(ResourceItem.WOOD);
+            }
+
+            if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof Plant)
+            {
+                object = null;
+            }
+        }
     }
 
     public TileTexture getTexture()
@@ -117,7 +133,10 @@ public class Tile
 
         if (object == null)
         {
-            if (texture.equals(TileTexture.LAND))
+            if (hitByThunder)
+            {
+                return "⬛";
+            } else if (texture.equals(TileTexture.LAND))
             {
                 if (isPloughed)
                 {
@@ -277,5 +296,10 @@ public class Tile
     public void setImmunityFromCrows()
     {
         isImmuneFromCrows = false;
+    }
+
+    public void unHitByThunder()
+    {
+        hitByThunder = false;
     }
 }

@@ -28,11 +28,11 @@ public class Time
         {
             int dayNum = ((hour - 23) / 14) + 1;
             hour = ((hour - 23) % 14) + 9;
-            updateDay(dayNum);
+            updateDay(dayNum, false); // TODO: if uses cheat code for advance time in large amount,
         }
     }
 
-    public void updateDay(int dayNum)
+    public void updateDay(int dayNum, boolean hasCheated)
     {
         // setting energies to maximum
         for (Player player : App.getCurrentGame().getPlayers())
@@ -44,7 +44,12 @@ public class Time
 
         for (int i = 0; i < day; i++)
         {
-            App.getCurrentGame().distributeForagingItems();
+            App.getCurrentGame().endDay();
+
+            if (hasCheated)
+            {
+                App.getCurrentGame().waterAllFarmPlants();
+            }
         }
 
         updateWeather();

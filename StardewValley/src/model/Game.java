@@ -1,13 +1,14 @@
 package model;
 
 import model.enums.NpcDetails;
+import model.enums.Weather;
 import model.player_data.FriendshipData;
+import model.resources.Plant;
 import view.GameMenu;
 import view.HomeMenu;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.PrimitiveIterator;
+import java.util.Collections;
 
 public class Game
 {
@@ -62,19 +63,25 @@ public class Game
         return currentPlayer;
     }
 
-    public Tile findTile(int y, int x)
-    {
-        //return farm.getMap().get(y).get(x);
-    return null;
-    }
-
     public void endDay()
     {
         // TODO: add this methods later
         // resetPlayersEnergy();
         // growPlants();
         // respawnPlayers();
+
         distributeForagingItems();
+
+        if (currentTime.getCurrentWeather().equals(Weather.Rain) || currentTime.getCurrentWeather().equals(Weather.Storm))
+        {
+            waterAllFarmPlants();
+        }
+
+        resetHitByThunders();
+        if (currentTime.getCurrentWeather().equals(Weather.Storm))
+        {
+            hitTilesByThunder();
+        }
     }
 
     public void distributeForagingItems()
@@ -219,5 +226,81 @@ public class Game
     public City getCity()
     {
         return city;
+    }
+
+    public ArrayList<Tile> getAllFarmPlants()
+    {
+        ArrayList<Tile> allFarmPlants = new ArrayList<>();
+        for (Player player : players)
+        {
+            allFarmPlants.addAll(player.getFarmPlants());
+        }
+        return allFarmPlants;
+    }
+
+    public ArrayList<Tile> getAllGreenhousePlants()
+    {
+        ArrayList<Tile> allGreenhousePlants = new ArrayList<>();
+        for (Player player : players)
+        {
+            allGreenhousePlants.addAll(player.getGreenhousePlants());
+        }
+        return allGreenhousePlants;
+    }
+
+    public ArrayList<Tile> getAllPlants()
+    {
+        ArrayList<Tile> allPlants = new ArrayList<>();
+
+        allPlants.addAll(getAllFarmPlants());
+        allPlants.addAll(getAllGreenhousePlants());
+
+        return allPlants;
+    }
+
+    public void waterAllFarmPlants()
+    {
+        ArrayList<Tile> allFarmPlants = getAllFarmPlants();
+        for (Tile tile : allFarmPlants)
+        {
+            if (tile.getObject() != null && tile.getObject() instanceof Plant)
+            {
+                Plant plant = (Plant) tile.getObject();
+                plant.water();
+            }
+        }
+    }
+
+    public void hitTilesByThunder()
+    {
+        for (Player player : players)
+        {
+            ArrayList<Tile> playerFarmPlants = player.getFarmPlants();
+            ArrayList<Tile> randomFarmPlants = getThreeRandomElements(playerFarmPlants);
+            for (Tile tile : randomFarmPlants)
+            {
+                tile.hitByThunder();
+            }
+        }
+    }
+
+    public ArrayList<Tile> getThreeRandomElements(ArrayList<Tile> originalList)
+    {
+        ArrayList<Tile> shuffled = new ArrayList<>(originalList);
+        Collections.shuffle(shuffled);
+        int count = Math.min(3, shuffled.size());
+        return new ArrayList<>(shuffled.subList(0, count));
+    }
+
+    public void resetHitByThunders()
+    {
+        for (Player player : players)
+        {
+            Farm farm = player.getFarm();
+            for (Tile tile : farm.getThunderedTiles())
+            {
+                tile.unHitByThunder();
+            }
+        }
     }
 }

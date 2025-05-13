@@ -4,6 +4,7 @@ import model.animal.Animal;
 import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
+import model.enums.Weather;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
@@ -85,12 +86,6 @@ public class Player {
         this.fainted = false;
         this.money = 0;
 
-//        for (Player player : App.getCurrentGame().getPlayers())
-//        {
-//            FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
-//            this.friendships.put(player, newFriendshipData);
-//        }
-
         this.zeidy = null;
         this.location = farm.getStartingPoint();
         this.newMessage = false;
@@ -121,8 +116,10 @@ public class Player {
     {
         if (energy != -1)
         {
-            this.energy += energy;
+           this.energy += energy;
         }
+
+        // TODO: add faint check mechanism
     }
 
     public int getTurnEnergy() {
@@ -622,5 +619,25 @@ public class Player {
         }
 
         return energy > required;
+    }
+
+    public ArrayList<Tile> getFarmPlants()
+    {
+        return farm.getAllPlantTiles();
+    }
+
+    public ArrayList<Tile> getGreenhousePlants()
+    {
+        return greenHouse.getAllPlantTiles();
+    }
+
+    public ArrayList<Tile> getAllPlants()
+    {
+        ArrayList<Tile> allPlants = new ArrayList<>();
+
+        allPlants.addAll(farm.getAllPlantTiles());
+        allPlants.addAll(greenHouse.getAllPlantTiles());
+
+        return allPlants;
     }
 }

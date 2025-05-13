@@ -150,10 +150,21 @@ public class GameController
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
             GameMenu.println("you don't have any tool equipped");
-        } else {
+        } else
+        {
+            Double weatherModifier = 1.0;
+            Weather weather = App.getCurrentGame().getCurrentTime().getCurrentWeather();
+            if (weather.equals(Weather.Rain) || weather.equals(Weather.Storm))
+            {
+                weatherModifier = 1.5;
+            } else if (weather.equals(Weather.Snow))
+            {
+                weatherModifier = 2.0;
+            }
+
             if (tool instanceof Axe) {
                 if (targetTile.getObject() instanceof Tree) {
-                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseEnergy((int)(weatherModifier * -((Axe) tool).getLevel().getBaseEnergyUsage()));
                 } else {
                     return new Result(false, "you can't use axe on this tile");
                 }
@@ -170,16 +181,16 @@ public class GameController
 
             } else if (tool instanceof Pickaxe) {
                 if (targetTile.getObject() instanceof Mineral) {
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage()));
                 } else if (targetTile.getObject() == null) {
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseEnergy((int) (weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage()));
                 } //items on the tile
                 else {
                     return new Result(false, "you can't use pickaxe on this tile");
                 }
             } else if (tool instanceof Seythe)
             {
-                currentPlayer.increaseEnergy(-((Seythe) tool).getEnergyUsage());
+                currentPlayer.increaseEnergy((int)(weatherModifier * -((Seythe) tool).getEnergyUsage()));
 
                 if (targetTile.getTexture().equals(TileTexture.GRASS) && targetTile.getObject() == null)
                 {
@@ -223,10 +234,10 @@ public class GameController
                 //doesn't have level
 
             } else if (tool instanceof TrashCan) {
-                currentPlayer.increaseEnergy(((TrashCan) tool).getLevel().getBaseEnergyUsage());
+                currentPlayer.increaseEnergy((int)(weatherModifier * -((TrashCan) tool).getLevel().getBaseEnergyUsage()));
 
             } else if (tool instanceof WateringCan) {
-                currentPlayer.increaseEnergy(-((WateringCan) tool).getLevel().getBaseEnergyUsage());
+                currentPlayer.increaseEnergy((int)(weatherModifier * -((WateringCan) tool).getLevel().getBaseEnergyUsage()));
                 if (targetTile.hasPlants())
                 {
                     Plant plant = (Plant) targetTile.getObject();
@@ -242,7 +253,7 @@ public class GameController
                 }
             } else if (tool instanceof FishingPole) {
 
-                currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
+                currentPlayer.increaseEnergy((int)(weatherModifier * -((FishingPole) tool).getLevel().getBaseEnergyUsage()));
             } else if (tool instanceof BackPack) {
                 //doesn't use energy
             }
@@ -290,7 +301,7 @@ public class GameController
         output.append("time: ").append(gameTime.getHour());
         output.append(", day: ").append(gameTime.getDay()).append("\n");
 
-        gameTime.updateDay(date);
+        gameTime.updateDay(date, true);
 
         output.append("time: ").append(gameTime.getHour());
         output.append(", day: ").append(gameTime.getDay()).append("\n");
@@ -357,8 +368,8 @@ public class GameController
         int x = Integer.parseInt(inputX);
         int y = Integer.parseInt(inputY);
 
-        Game game = App.getCurrentGame();
-        Tile tile = game.findTile(y, x);
+        Map map = App.getCurrentGame().getCurrentPlayer().getCurrentMap();
+        Tile tile = map.getTile(x, y);
 
         if (tile == null)
         {
@@ -380,7 +391,7 @@ public class GameController
         int x = Integer.parseInt(inputX);
         int y = Integer.parseInt(inputY);
 
-        Point destination = new Point(y, x);
+        Point destination = new Point(x, y);
 
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
@@ -830,7 +841,7 @@ public class GameController
             output.append("theCity/");
         }
 
-        output.append("X: ").append(player.getLocation().getX()).append(", Y: ").append(player.getLocation().getY()).append("\n");
+        output.append("X=").append(player.getLocation().getX()).append("/Y=").append(player.getLocation().getY());
         return new Result(true, output.toString());
     }
 
@@ -850,5 +861,10 @@ public class GameController
         player.setLocation(destination);
 
         return new Result(true, "Teleported successfully.");
+    }
+
+    public Result showPlant()
+    {
+        return null; // TODO: add later
     }
 }

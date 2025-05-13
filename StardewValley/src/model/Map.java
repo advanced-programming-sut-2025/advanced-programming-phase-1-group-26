@@ -2,6 +2,7 @@ package model;
 
 import model.enums.MapTypes;
 import model.enums.TileTexture;
+import model.resources.Plant;
 import model.resources.Tree;
 
 import java.util.*;
@@ -361,5 +362,24 @@ public abstract class Map
         return false;
     }
 
+    public ArrayList<Tile> getAllPlantTiles()
+    {
+        ArrayList<Tile> allPlantTiles = new ArrayList<>();
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                if (tile.getTexture().equals(TileTexture.LAND) || tile.getTexture().equals(TileTexture.GRASS))
+                {
+                    if (tile.getObject() != null && tile.getObject() instanceof Plant)
+                    {
+                        allPlantTiles.add(tile);
+                    }
+                }
+            }
+        }
+        return allPlantTiles;
+    }
 }
 

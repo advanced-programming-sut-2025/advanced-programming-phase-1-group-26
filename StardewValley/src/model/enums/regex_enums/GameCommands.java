@@ -39,8 +39,8 @@ public enum GameCommands implements Command
     SHOW_DAY_OF_WEEK("day\\s+of\\s+the\\s+week"),
     SHOW_SEASON("season"),
 
-    CHEAT_CODE_ADVANCE_TIME("cheat\\s+advance\\s+time\\s+(?<time>\\d+)h"),
-    CHEAT_CODE_ADVANCE_DATE("cheat\\s+advance\\s+date\\s+(?<date>\\d+)d"),
+    CHEAT_CODE_ADVANCE_TIME("cheat\\s+advance\\s+time\\s+-h\\s+(?<time>\\d+)"),
+    CHEAT_CODE_ADVANCE_DATE("cheat\\s+advance\\s+date\\s+-d\\s+(?<date>\\d+)"),
 
     SHOW_WEATHER("weather"),
     SHOW_TOMORROW_WEATHER("weather\\s+forecast"),

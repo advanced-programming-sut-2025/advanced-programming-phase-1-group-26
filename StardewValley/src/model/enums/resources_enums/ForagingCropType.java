@@ -3,7 +3,9 @@ package model.enums.resources_enums;
 import model.enums.GameObjectType;
 import model.enums.Season;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public enum ForagingCropType
 {
@@ -62,5 +64,25 @@ public enum ForagingCropType
     public GameObjectType getType()
     {
         return type;
+    }
+
+    public static ArrayList<ForagingCropType> getSeasonCrops(Season season)
+    {
+        ArrayList<ForagingCropType> seasonCrops = new ArrayList<>();
+        for (ForagingCropType foragingCropType : ForagingCropType.values())
+        {
+            if (foragingCropType.seasons.contains(season))
+            {
+                seasonCrops.add(foragingCropType);
+            }
+        }
+        return seasonCrops;
+    }
+
+    public static ForagingCropType getRandomSeasonCrop(Season season)
+    {
+        ArrayList<ForagingCropType> seasonCrops = getSeasonCrops(season);
+        int index = ThreadLocalRandom.current().nextInt(seasonCrops.size());
+        return seasonCrops.get(index);
     }
 }

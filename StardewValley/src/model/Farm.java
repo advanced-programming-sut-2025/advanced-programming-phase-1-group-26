@@ -109,15 +109,15 @@ public class Farm extends model.Map
         ArrayList<Tile> freeTiles = getFreeTiles();
         for (Tile tile : freeTiles)
         {
-            if (Math.random() < 0.01)
+            if (Math.random() < 0.01 && !tile.isHitByThunder())
             {
                 if (Math.random() < 0.5)
                 {
-                    ForagingCropType type = randomItem(ForagingCropType.class);
+                    ForagingCropType type = ForagingCropType.getRandomSeasonCrop(App.getCurrentGame().getCurrentTime().getSeason());
                     tile.setObject(new ForagingCrop(type));
                 } else if (tile.isPloughed())
                 {
-                    ForagingSeedType type = randomItem(ForagingSeedType.class);
+                    ForagingSeedType type = ForagingSeedType.getRandomSeasonSeed(App.getCurrentGame().getCurrentTime().getSeason());
                     tile.setObject(new ForagingSeed(type));
                 }
             }
@@ -177,5 +177,22 @@ public class Farm extends model.Map
         }
 
         return plants;
+    }
+
+    public ArrayList<Tile> getThunderedTiles()
+    {
+        ArrayList<Tile> thunderedTiles = new ArrayList<>();
+        for (int i = 0; i < HEIGHT; i++)
+        {
+            for (int j = 0; j < WIDTH; j++)
+            {
+                Tile tile = getTile(i, j);
+                if (tile.isHitByThunder())
+                {
+                    thunderedTiles.add(tile);
+                }
+            }
+        }
+        return thunderedTiles;
     }
 }
