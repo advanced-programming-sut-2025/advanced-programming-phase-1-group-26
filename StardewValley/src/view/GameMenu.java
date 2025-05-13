@@ -196,6 +196,11 @@ public class GameMenu implements AppMenu
         {
             String amount = matcher.group("amount").trim();
             System.out.println(gameController.cheatAddMoney(amount));
+        } else if ((matcher = GameCommands.SHOW_PLANT.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x").trim();
+            String y = matcher.group("y").trim();
+            System.out.println(gameController.showPlant(x,y));
         }
 
 

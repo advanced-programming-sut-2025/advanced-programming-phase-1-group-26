@@ -13,6 +13,9 @@ import model.player_data.FriendshipWithNpcData;
 import model.player_data.Skill;
 import model.player_data.Trade;
 import model.enums.SkillType;
+import model.resources.Plant;
+import model.tools.BackPack;
+import model.tools.Tool;
 import model.tools.*;
 
 import java.util.ArrayList;
@@ -693,5 +696,28 @@ public class Player {
     public String getApperance()
     {
         return apperance;
+    }
+
+    public ArrayList<Plant> getAllPlants()
+    {
+        ArrayList<Plant> allPlants = new ArrayList<>();
+
+        for (Tile tile : farm.getAllPlantTiles())
+        {
+            if (tile.getObject() != null && tile.getObject() instanceof Plant)
+            {
+                allPlants.add((Plant) tile.getObject());
+            }
+        }
+
+        for (Tile tile : greenHouse.getAllPlantTiles())
+        {
+            if (tile.getObject() != null && tile.getObject() instanceof Plant)
+            {
+                allPlants.add((Plant) tile.getObject());
+            }
+        }
+
+        return allPlants;
     }
 }

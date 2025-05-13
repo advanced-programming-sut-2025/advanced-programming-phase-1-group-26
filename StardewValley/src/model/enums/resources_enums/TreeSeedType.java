@@ -33,4 +33,9 @@ public enum TreeSeedType
     {
         return name;
     }
+
+    public GameObjectType getType()
+    {
+        return type;
+    }
 }

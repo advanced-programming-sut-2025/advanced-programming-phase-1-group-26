@@ -87,7 +87,8 @@ public class GeneralController
                 currentPlayer.getCurrentTool().getObjectType().name());
     }
 
-    public void toolsShowAvailable() {
+    public void toolsShowAvailable()
+    {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
             System.out.println(object.getObjectType().name());

@@ -18,7 +18,7 @@ public enum TreeType
     OAK_TREE(GameObjectType.OAK_TREE, "Oak Tree", TreeSeedType.Acorns, List.of(7, 7, 7, 7), 28, FruitType.Oak_Resin, 7, 150, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
     MAPLE_TREE(GameObjectType.MAPLE_TREE, "Maple Tree", TreeSeedType.Maple_Seeds, List.of(7, 7, 7, 7), 28, FruitType.Maple_Syrup, 9, 200, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
     PINE_TREE(GameObjectType.PINE_TREE, "Pine Tree", TreeSeedType.Pine_Cones, List.of(7, 7, 7, 7), 28, FruitType.Pine_Tar, 5, 100, false, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
-    MAHOGANY_TREE(GameObjectType.MAHOGANY_TREE, "Mahogany Tree", TreeSeedType.Mahogany_Seeds, List.of(7, 7, 7, 7), 28, FruitType.Sap, 1, 2, true, -2, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
+    MAHOGANY_TREE(GameObjectType.MAHOGANY_TREE, "Mahogany Tree", TreeSeedType.Mahogany_Seeds, List.of(7, 7, 7, 7), 28, FruitType.Sap, 1, 2, true, -1, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
     MUSHROOM_TREE(GameObjectType.MUSHROOM_TREE, "Mushroom Tree", TreeSeedType.Mushroom_Tree_Seeds, List.of(7, 7, 7, 7), 28, FruitType.Common_Mushroom, 1, 40, true, 38, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
     MYSTIC_TREE(GameObjectType.MYSTIC_TREE, "Mystic Tree", TreeSeedType.Mystic_Tree_Seed, List.of(7, 7, 7, 7), 28, FruitType.Mystic_Syrup, 7, 1000, true, 500, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter));
     ;
@@ -105,8 +105,8 @@ public enum TreeType
     {
         StringBuilder output = new StringBuilder();
         output.append("Name: ").append(name).append("\n");
-        output.append("Source: ").append(source.getName()).append("\n");
-        output.append("Fruit: ").append(fruit.getName()).append("\n");
+        output.append("Source: ").append(source.getType()).append("\n");
+        output.append("Fruit: ").append(fruit.getType()).append("\n");
         output.append("Fruit Harvest Cycle: ").append(fruitHarvestCycle).append("\n");
 
         output.append("Stages: ");
@@ -134,6 +134,18 @@ public enum TreeType
         for (TreeType type : TreeType.values())
         {
             if (type.getName().equalsIgnoreCase(name))
+            {
+                return type;
+            }
+        }
+        return null;
+    }
+
+    public static TreeType getTreeBySeed(GameObjectType seedType)
+    {
+        for (TreeType type : TreeType.values())
+        {
+            if (type.source.getType().equals(seedType))
             {
                 return type;
             }

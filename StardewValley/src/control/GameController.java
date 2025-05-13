@@ -7,6 +7,7 @@ import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingSeedType;
 import model.enums.resources_enums.ResourceItem;
 import model.enums.resources_enums.TreeType;
+import model.enums.resources_enums.*;
 import model.enums.tool_enums.ToolType;
 import model.resources.Crop;
 
@@ -304,6 +305,7 @@ public class GameController
             }
             currentPlayer.checkEnergy();
         }
+
         return new Result(true, "WE SHOULD CHANGE THIS PART OF CODE!!!");
     }
 
@@ -311,10 +313,12 @@ public class GameController
     {
         CropType cropType = CropType.getCropType(craftName);
         TreeType treeType = TreeType.getTreeType(craftName);
+        ForagingCropType foragingCropType = ForagingCropType.getForagingCropType(craftName);
+        ForagingTreeType foragingTreeType = ForagingTreeType.getForagingTreeType(craftName);
 
-        if (cropType == null && treeType == null)
+        if (cropType == null && treeType == null && foragingCropType == null && foragingTreeType == null)
         {
-            return new Result(false, "Craft with name " + craftName + " does not exist.");
+            return new Result(false, "Item with name " + craftName + " does not exist.");
         }
 
         if (cropType != null)
@@ -327,6 +331,16 @@ public class GameController
             return new Result(true, treeType.getCraftInfo());
         }
 
+        if (foragingCropType != null)
+        {
+            return new Result(true, foragingCropType.getCraftInfo());
+        }
+
+        if (foragingTreeType != null)
+        {
+            return new Result(true, foragingTreeType.getCraftInfo());
+        }
+
         return new Result(false, "ERROR");
     }
 
@@ -334,7 +348,7 @@ public class GameController
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
 
-        ForagingSeedType seedType = ForagingSeedType.getSeedType(seedName);
+        GameObjectType seedType = GameObjectType.getGameObjectType(seedName);
         if (seedType == null)
         {
             return new Result(false, "There's no such kind of seed.");
@@ -348,7 +362,7 @@ public class GameController
 
         if (!tile.isPloughed())
         {
-            return new Result(false, "This tile is not ploughed :(");
+            return new Result(false, "This tile is not ploughed.");
         }
 
         if (tile.getObject() != null)
@@ -362,13 +376,34 @@ public class GameController
             return new Result(false, "You don't have this type of seed.");
         }
 
-        CropType cropType = CropType.getCropFromSeed((ForagingSeedType) seed.getType());
-        Crop crop = new Crop(cropType);
+        CropType cropType = CropType.getCropBySeed(seedType);
+        TreeType treeType = TreeType.getTreeType(seedName);
 
-        player.removeFromInventory(seed);
+        if (cropType != null)
+        {
+            Crop crop = new Crop(cropType);
+            tile.setObject(crop);
+            if (player.isInGreenHouse())
+            {
+                crop.putInGreenhouse();
+            }
+            player.removeFromInventory(seed);
+            return new Result(true, "Successfully planted " + cropType.getName() + ".");
+        }
 
-        tile.setObject(crop);
-        return new Result(true, "You have successfully planted " + cropType.getCraftInfo() + ".");
+        if (treeType != null)
+        {
+            Tree tree = new Tree(treeType);
+            tile.setObject(tree);
+            if (player.isInGreenHouse())
+            {
+                tree.putInGreenhouse();
+            }
+            player.removeFromInventory(tree);
+            return new Result(true, "Successfully planted " + treeType.getName() + ".");
+        }
+
+        return new Result(false, "invalid seed");
     }
 
     public Result fertilize(String fertilizerName, String direction)
@@ -555,8 +590,37 @@ public class GameController
         return new Result(true, "Congrats Thief. You just stole $ " + money + " from bank.");
     }
 
-    public Result showPlant()
+    public Result showPlant(String inputX, String inputY)
     {
-        return null; // TODO: add later
+        int x = Integer.parseInt(inputX);
+        int y = Integer.parseInt(inputY);
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+
+        if (!map.isInBounds(x, y))
+        {
+            return new Result(false, "invalid bounds");
+        }
+
+        Tile tile = map.getTile(x, y);
+        if (tile == null)
+        {
+            return new Result(false, "invalid tile");
+        }
+
+        if (!tile.hasPlants())
+        {
+            return new Result(false, "There is no plant on this tile.");
+        }
+
+        GameObject object = tile.getObject();
+        if (object == null || !(object instanceof Plant))
+        {
+            return new Result(false, "There is no plant on this tile.");
+        }
+
+        Plant plant = (Plant) object;
+        return new Result(true, plant.showDetails(plant, tile));
     }
 }

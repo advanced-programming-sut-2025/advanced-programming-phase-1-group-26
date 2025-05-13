@@ -17,7 +17,7 @@ public enum FruitType
     Pine_Tar(GameObjectType.PINE_TAR, "Pine Tar"),
     Sap(GameObjectType.SAP, "Sap"),
     Common_Mushroom(GameObjectType.COMMON_MUSHROOM, "Common_Mushroom"),
-    Mystic_Syrup(GameObjectType.COMMON_MUSHROOM, "Mystic_Syrup"),
+    Mystic_Syrup(GameObjectType.MYSTIC_SYRUP, "Mystic_Syrup"),
     ;
 
     private final GameObjectType type;

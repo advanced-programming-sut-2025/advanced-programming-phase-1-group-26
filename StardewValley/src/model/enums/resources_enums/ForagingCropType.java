@@ -85,4 +85,38 @@ public enum ForagingCropType
         int index = ThreadLocalRandom.current().nextInt(seasonCrops.size());
         return seasonCrops.get(index);
     }
+
+    public String getCraftInfo()
+    {
+        StringBuilder output = new StringBuilder();
+        output.append("Name: ").append(this.name().replace("_FORAGING_CROP", "").replace('_', ' ').toLowerCase()).append("\n");
+        output.append("Base Sell Price: ").append(baseSellPrice).append("\n");
+        output.append("Is Edible: ").append(energy > 0 ? "TRUE" : "FALSE").append("\n");
+        output.append("Base Energy: ").append(energy).append("\n");
+
+        output.append("Season(s): ");
+        for (int i = 0; i < seasons.size(); i++)
+        {
+            output.append(seasons.get(i).getName()).append(i == seasons.size() - 1 ? "\n" : ", ");
+        }
+
+        return output.toString().trim();
+    }
+
+    public String getName()
+    {
+        return type.toString();
+    }
+
+    public static ForagingCropType getForagingCropType(String name)
+    {
+        for (ForagingCropType foragingCropType : ForagingCropType.values())
+        {
+            if (foragingCropType.getName().equalsIgnoreCase(name))
+            {
+                return foragingCropType;
+            }
+        }
+        return null;
+    }
 }
