@@ -20,6 +20,7 @@ import model.tools.Tool;
 import model.tools.*;
 import view.GameMenu;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class GameController
@@ -47,6 +48,7 @@ public class GameController
     public Result energyUnlimited() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         currentPlayer.setTurnEnergy(-1); //might change later
+        currentPlayer.setEnergy(-1);
         return new Result(true,"your energy is now unlimited eshghohal");
 
     }

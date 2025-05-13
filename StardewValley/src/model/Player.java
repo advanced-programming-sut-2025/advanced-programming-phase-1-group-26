@@ -514,8 +514,8 @@ public class Player {
 
     public boolean isNear(Point location)
     {
-        int playerX = location.getX();
-        int playerY = location.getY();
+        int playerX = this.location.getX();
+        int playerY = this.location.getY();
 
         for (int x = -1; x <= 1; x++)
         {

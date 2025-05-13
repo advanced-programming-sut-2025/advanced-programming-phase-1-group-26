@@ -2,7 +2,9 @@ package view;
 
 import control.GeneralController;
 import control.game.activities.CityController;
+import control.game.activities.CommunicateController;
 import model.enums.regex_enums.CityCommands;
+import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
 import model.enums.regex_enums.GeneralCommands;
 
@@ -13,6 +15,7 @@ public class CityMenu implements AppMenu
 {
     GeneralController generalController = new GeneralController();
     CityController cityController = new CityController();
+    CommunicateController comController = new CommunicateController();
 
     @Override
     public void check(Scanner scanner)
@@ -160,6 +163,28 @@ public class CityMenu implements AppMenu
         else if ((matcher = CityCommands.CD_FARM.getMatcher(input)) != null)
         {
             System.out.println(cityController.goOut());
+        }else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
+            comController.friendships();
+        } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
+            System.out.println(comController.talk(matcher));
+        } else if ((matcher = CommunicateCommands.TALK_HISTORY.getMatcher(input)) != null) {
+            comController.talkHistory(matcher);
+        } else if ((matcher = CommunicateCommands.GIFT.getMatcher(input)) != null) {
+            comController.gift(matcher);
+        } else if (CommunicateCommands.GIFT_LIST.getMatcher(input) != null) {
+            comController.giftList();
+        } else if ((matcher = CommunicateCommands.GIFT_RATE.getMatcher(input)) != null) {
+            comController.giftRate(matcher);
+        } else if ((matcher = CommunicateCommands.GIFT_HISTORY.getMatcher(input)) != null) {
+            comController.giftHistory(matcher);
+        } else if ((matcher = CommunicateCommands.HUG.getMatcher(input)) != null) {
+            comController.giveHug(matcher);
+        } else if ((matcher = CommunicateCommands.FLOWER.getMatcher(input)) != null) {
+            comController.giveFlower(matcher);
+        } else if ((matcher = CommunicateCommands.ASK_MARRIAGE.getMatcher(input)) != null) {
+            comController.purposeAsk(matcher);
+        } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
+            comController.purposeRespond(matcher);
         }
     }
 }

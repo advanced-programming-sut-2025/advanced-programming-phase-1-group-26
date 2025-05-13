@@ -75,6 +75,8 @@ public class GeneralController
         return new Result(false, "you don't have this tool in your inventory");
     }
 
+    
+
     public Result toolsShowCurrent() {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         if (currentPlayer.getCurrentTool() == null) {
