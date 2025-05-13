@@ -47,4 +47,8 @@ public enum MarniesRanchLivestock {
         return buildingRequired;
     }
     public int getDailyLimit() { return dailyLimit; }
+
+    public FarmAnimals getAnimalType() {
+        return animalType;
+    }
 }
