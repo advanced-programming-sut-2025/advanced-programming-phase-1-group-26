@@ -1,20 +1,26 @@
 package model.enums.tool_enums;
 
 public enum AxeLevel {
-    base (5),
-    Copper (4),
-    Iron (3),
-    Golden (2),
-    Iridium (1);
+    base ("basic",5),
+    Copper ("cooper",4),
+    Iron ("iron",3),
+    Golden ("golden",2),
+    Iridium ("iridium",1);
 
+    String levelName;
     int baseEnergyUsage;
     int failedEnergyUsage;
     /* Set ForagingMaxxing Later*/
 
-    AxeLevel(int baseEnergyUsage) {
+    AxeLevel(String name, int baseEnergyUsage) {
+        this.levelName = name;
         this.baseEnergyUsage = baseEnergyUsage;
         this.failedEnergyUsage = baseEnergyUsage - 1;
 
+    }
+
+    public String getLevelName() {
+        return levelName;
     }
 
     public int getBaseEnergyUsage() {

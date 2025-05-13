@@ -16,6 +16,12 @@ public class Axe extends Tool {
         this.level = AxeLevel.base;
     }
 
+    public Axe(AxeLevel level) {
+        super.type = ToolType.Axe;
+        super.name = type.getName();
+        this.level = level;
+    }
+
     public ToolType getType() {
         return type;
     }

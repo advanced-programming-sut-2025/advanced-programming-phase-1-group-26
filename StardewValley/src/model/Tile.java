@@ -72,6 +72,10 @@ public class Tile
         isPloughed = true;
     }
 
+    public void ploghInverse() {
+        isPloughed = false;
+    }
+
     public boolean isPloughed()
     {
         return isPloughed;

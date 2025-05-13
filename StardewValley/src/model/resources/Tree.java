@@ -8,6 +8,7 @@ public class Tree extends Plant
     private FruitType fruit;
     private int fruitHarvestCycle;
 
+
     public Tree(TreeType treeType)
     {
         this.type = treeType;
@@ -41,4 +42,9 @@ public class Tree extends Plant
     {
         return fruit;
     }
+
+    public TreeType getTreeType() {
+        return (TreeType) type;
+    }
+
 }

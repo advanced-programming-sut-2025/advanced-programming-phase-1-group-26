@@ -8,7 +8,7 @@ import java.util.List;
 public class Plant extends GameObject
 {
     protected String name;
-    protected Object type;
+    protected Enum<?> type;
     protected Object source;
     protected List<Integer> stages;
     protected int totalHarvestTime;
@@ -49,5 +49,9 @@ public class Plant extends GameObject
     public boolean canHarvest() // would be overridden
     {
         return false;
+    }
+
+    public Enum<?> getPlantType() {
+        return type;
     }
 }

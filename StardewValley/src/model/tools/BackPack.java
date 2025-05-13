@@ -1,6 +1,7 @@
 package model.tools;
 
 import model.GameObject;
+import model.enums.tool_enums.AxeLevel;
 import model.enums.tool_enums.BackPackLevel;
 import model.enums.tool_enums.ToolType;
 
@@ -14,6 +15,12 @@ public class BackPack extends Tool {
         super.type = ToolType.BackPack;
         super.name = type.getName();
         this.level = BackPackLevel.base;
+    }
+
+    public BackPack(BackPackLevel level) {
+        super.type = ToolType.BackPack;
+        super.name = type.getName();
+        this.level = level;
     }
 
     public BackPackLevel getLevel() {

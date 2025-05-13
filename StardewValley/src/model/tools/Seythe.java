@@ -13,7 +13,6 @@ public class Seythe extends Tool {
         super.type = ToolType.Seythe;
         super.name = type.getName();
         this.energyUsage = 2;
-        /* Set Usage: weed, product */
     }
 
     public ToolType getType() {

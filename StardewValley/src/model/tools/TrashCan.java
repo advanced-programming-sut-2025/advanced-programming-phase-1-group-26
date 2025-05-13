@@ -16,6 +16,12 @@ public class TrashCan extends Tool {
         this.level = WateringCanLevel.base;
     }
 
+    public TrashCan(WateringCanLevel level) {
+        super.type = ToolType.TrashCan;
+        super.name = type.getName();
+        this.level = level;
+    }
+
     public WateringCanLevel getLevel() {
         return level;
     }

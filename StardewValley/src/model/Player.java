@@ -12,8 +12,7 @@ import model.player_data.FriendshipWithNpcData;
 import model.player_data.Skill;
 import model.player_data.Trade;
 import model.enums.SkillType;
-import model.tools.BackPack;
-import model.tools.Tool;
+import model.tools.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +83,12 @@ public class Player {
         this.turnEnergy = 50;
         this.fainted = false;
         this.money = 0;
+        this.addToInventory(new Axe());
+        this.addToInventory(new Hoe());
+        this.addToInventory(new Pickaxe());
+        this.addToInventory(new WateringCan());
+        this.addToInventory(new Seythe());
+        this.addToInventory(new TrashCan());
 
 //        for (Player player : App.getCurrentGame().getPlayers())
 //        {

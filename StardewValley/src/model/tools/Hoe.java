@@ -17,7 +17,12 @@ public class Hoe extends Tool {
         this.level = HoeLevel.base;
 
         /* Set Usages: Dirt */
+    }
 
+    public Hoe(HoeLevel level) {
+        super.type = ToolType.Hoe;
+        super.name = type.getName();
+        this.level = level;
     }
 
     public ToolType getType() {

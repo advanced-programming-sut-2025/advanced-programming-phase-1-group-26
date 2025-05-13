@@ -15,8 +15,12 @@ public class Pickaxe extends Tool {
         super.type = ToolType.Pickaxe;
         super.name = type.getName();
         this.level = PickaxeLevel.base;
+    }
 
-        /* Set Usages: Stone & Minerals & HoedDirt & PlayerItem */
+    public Pickaxe(PickaxeLevel level) {
+        super.type = ToolType.Pickaxe;
+        super.name = type.getName();
+        this.level = level;
     }
 
     public ToolType getType() {

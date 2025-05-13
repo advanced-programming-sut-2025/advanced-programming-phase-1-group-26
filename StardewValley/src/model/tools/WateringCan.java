@@ -15,8 +15,12 @@ public class WateringCan extends Tool {
         super.type = ToolType.WateringCan;
         super.name = type.getName();
         this.level = WateringCanLevel.base;
+    }
 
-        /* Set Usages: near products & water */
+    public WateringCan(WateringCanLevel level) {
+        super.type = ToolType.WateringCan;
+        super.name = type.getName();
+        this.level = level;
     }
 
     public ToolType getType() {
