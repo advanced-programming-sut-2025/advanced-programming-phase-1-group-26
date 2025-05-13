@@ -4,7 +4,6 @@ import model.*;
 import model.animal.Animal;
 import model.enums.*;
 import model.enums.resources_enums.CropType;
-import model.enums.resources_enums.ForagingSeedType;
 import model.enums.resources_enums.ResourceItem;
 import model.enums.resources_enums.TreeType;
 import model.enums.resources_enums.*;
@@ -111,7 +110,7 @@ public class GameController
         }
 
         return new Result(true, "your current tool: " +
-                currentPlayer.getCurrentTool().getType().getName());
+                currentPlayer.getCurrentTool().getToolType().getName());
     }
 
     public void toolsShowAvailable() {

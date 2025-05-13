@@ -327,7 +327,7 @@ public class HomeController
         EdibleThing food = new EdibleThing(recipe, 5);
         player.addToInventory(food);
 
-        return new Result(true, food.getType() + " was added to your backpack.");
+        return new Result(true, food.getToolType() + " was added to your backpack.");
     }
 
     public Result eat(String itemName)

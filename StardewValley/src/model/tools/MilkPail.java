@@ -11,15 +11,16 @@ public class MilkPail extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public MilkPail() {
-        super.type = ToolType.MilkPail;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.MILK_PAIL;
+        super.toolType = ToolType.MilkPail;
+        super.name = toolType.getName();
         this.energyUsage = 4;
         this.price = 1000;
         /* Set Usage: Domestic Animals */
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public int getEnergyUsage() {

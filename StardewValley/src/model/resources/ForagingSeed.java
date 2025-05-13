@@ -19,7 +19,7 @@ public class ForagingSeed extends GameObject
     }
 
     @Override
-    public Enum<?> getType()
+    public Enum<?> getToolType()
     {
         return seedType;
     }

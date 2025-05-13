@@ -12,21 +12,22 @@ public class Hoe extends Tool {
     private final ArrayList<GameObjectType> usage = new ArrayList<>();
 
     public Hoe() {
-        super.type = ToolType.Hoe;
-        super.name = type.getName();
+        super.ObjectType = GameObjectType.HOE;
+        super.toolType = ToolType.Hoe;
+        super.name = toolType.getName();
         this.level = HoeLevel.base;
 
         /* Set Usages: Dirt */
     }
 
     public Hoe(HoeLevel level) {
-        super.type = ToolType.Hoe;
-        super.name = type.getName();
+        super.toolType = ToolType.Hoe;
+        super.name = toolType.getName();
         this.level = level;
     }
 
-    public ToolType getType() {
-        return type;
+    public ToolType getToolType() {
+        return toolType;
     }
 
     public HoeLevel getLevel() {
