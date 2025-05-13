@@ -280,13 +280,19 @@ public class Player {
     public void setLocation(Point location)
     {
         this.location = location;
+        if (isInCity)
+        {
+            int index = App.getCurrentGame().getPlayerIndex();
+            City city = App.getCurrentGame().getCity();
+            city.getPlayerPoints()[index] = location;
+        }
     }
 
     public GameObject findObjectType(Enum<?> type)
     {
         for (GameObject obj : currentBackPack.getInventory())
         {
-            Enum<?> inventoryItemType = obj.getToolType();
+            Enum<?> inventoryItemType = obj.getObjectType();
 
             if (inventoryItemType.equals(type))
             {
@@ -603,7 +609,7 @@ public class Player {
         if (isInCity)
         {
             City city = App.getCurrentGame().getCity();
-            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = this.location;
+            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = null;
         }
         this.isInCity = false;
         this.isInGreenHouse = false;

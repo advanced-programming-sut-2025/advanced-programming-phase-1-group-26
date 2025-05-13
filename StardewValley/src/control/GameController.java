@@ -286,12 +286,20 @@ public class GameController
                 if (targetTile.hasPlants())
                 {
                     Plant plant = (Plant) targetTile.getObject();
+
+                    if (plant.hasBeenWateredToday())
+                    {
+                        return new Result(true, "You have already watered this plant today.");
+                    }
+
                     if (((WateringCan) tool).getCurrentVolume() == 0)
                     {
                         return new Result(true, "You should refill your watering can.");
                     }
+
                     ((WateringCan) tool).decreaseVolume(1);
                     plant.water();
+                    return new Result(true, "Plant has been watered.");
                 } else if (targetTile.getTexture().equals(TileTexture.LAKE))
                 {
                     ((WateringCan) tool).addVolume(5);

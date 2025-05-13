@@ -347,10 +347,10 @@ public class Tile
             {
                 if (isPloughed)
                 {
-                    return "\uD83D\uDFEB";
+                    return "\uD83D\uDFEB"; // 🟫
                 } else
                 {
-                    return "\uD83D\uDFE8";
+                    return "\uD83D\uDFE8"; // 🟨
                 }
             } else if (texture.equals(TileTexture.LAKE))
             {
@@ -364,7 +364,13 @@ public class Tile
 //                return "\uD83D\uDFE6";
             } else if (texture.equals(TileTexture.GRASS))
             {
-                return "\uD83D\uDFE9";
+                if (isPloughed)
+                {
+                    return "\uD83D\uDFEB"; // 🟫
+                } else
+                {
+                    return "\uD83D\uDFE9"; // 🟩
+                }
             } else if (texture.equals(TileTexture.CABIN))
             {
                     return "\uD83C\uDFE0"; // maybe (?)

@@ -460,6 +460,17 @@ public class GeneralController
         Player player = game.getCurrentPlayer();
         game.setCurrentPlayer(game.getNext(player));
         game.getCurrentPlayer().setEnergyToMax();
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer.isInCity())
+        {
+            App.setCurrentMenu(Menu.CityMenu);
+        } else if (currentPlayer.isInFarm() || currentPlayer.isInGreenHouse())
+        {
+            App.setCurrentMenu(Menu.GameMenu);
+        } else
+        {
+            App.setCurrentMenu(Menu.HomeMenu);
+        }
         return new Result(true, game.getCurrentPlayer().getUser().getNickname() + " is now playing.");
     }
 

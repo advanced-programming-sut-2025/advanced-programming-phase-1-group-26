@@ -19,7 +19,7 @@ public class Plant extends GameObject
     protected int energy;
     protected List<Season> seasons;
 
-    protected int lastWatered = 0;
+    protected int lastWatered = -1; // TODO: can this fix the problem?
     protected int currentStage = 0;
     protected int lastHarvested = -1;
 
@@ -93,9 +93,14 @@ public class Plant extends GameObject
             output.append("Harvest Wait Time: ").append(harvestWaitTime).append(" (days)\n");
         }
         output.append("Current Stage: ").append(currentStage).append(" (days ago)\n");
-        output.append("Watered Today: ").append(lastWatered == 0 ? "positive" : "negative").append(" (days)\n");
-        output.append("Has Been Fertilized: ").append(tile.isFertilized() ? "positive" : "negative").append(" (days)\n");
+        output.append("Watered Today: ").append(lastWatered == 0 ? "positive" : "negative").append("\n");
+        output.append("Has Been Fertilized: ").append(tile.isFertilized() ? "positive" : "negative").append("\n");
 
         return output.toString().trim();
+    }
+
+    public boolean hasBeenWateredToday()
+    {
+        return lastWatered == 0;
     }
 }
