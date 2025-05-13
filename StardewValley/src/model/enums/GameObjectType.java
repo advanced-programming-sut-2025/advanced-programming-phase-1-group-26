@@ -230,9 +230,9 @@ public enum GameObjectType
     STONE("stone"),
     IRIDIUM_ORE("iridium ore"),
     ACORN("acorn"),
-    MAPLE_SEED("maple seed"),
-    PINE_CONE("pine cone"),
-    MAHOGANY_SEED("mahogany seed"),
+    MAPLE_SEED("maple seeds"),
+    PINE_CONE("pine cones"),
+    MAHOGANY_SEED("mahogany seeds"),
 
     CHERRY_BOMB("cherry bomb"),
     BOMB("bomb"),
@@ -253,7 +253,7 @@ public enum GameObjectType
     PRESERVES_JAR("preserves jar"),
     DEHYDRATOR("dehydrator"),
     FISH_SMOKER("fish smoker"),
-    MYSTIC_TREE_SEED("mystic tree seed"),
+    MYSTIC_TREE_SEED("mystic tree seeds"),
 
     HONEY("honey"),
     GOAT_CHEESE("goat cheese"),
@@ -286,7 +286,7 @@ public enum GameObjectType
     FLOWER("Flower"),
     HEART("Heart"),
 
-    Apricot_Sapling("apricot_sapling"),
+    Apricot_Sapling("apricot sapling"),
     Cherry_Sapling("cherry sapling"),
     Banana_Sapling("banana sapling"),
     Mango_Sapling("mango sapling"),
@@ -299,7 +299,7 @@ public enum GameObjectType
     Pine_Cones("pine cones"),
     Mahogany_Seeds("mahogany seeds"),
     Mushroom_Tree_Seeds("mushroom tree seeds"),
-    Mystic_Tree_Seed("mystic tree seed"),
+    Mystic_Tree_Seed("mystic tree seeds"),
 
     FERTILIZER("fertilizer"),
 

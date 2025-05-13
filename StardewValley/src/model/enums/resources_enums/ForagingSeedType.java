@@ -51,7 +51,7 @@ public enum ForagingSeedType
     YAM_SEEDS("Yam Seeds", GameObjectType.YAM_SEEDS, List.of(Season.Fall)),
     RARE_SEED("Rare Seed", GameObjectType.RARE_SEED, List.of(Season.Fall)),
 
-    POWERDMELON_SEEDS("Powdermelon Seeds", GameObjectType.POWERDMELON_SEEDS, List.of(Season.Winter)),
+    POWDERMELON_SEEDS("Powdermelon Seeds", GameObjectType.POWERDMELON_SEEDS, List.of(Season.Winter)),
 
     ANCIENT_SEEDS("Ancient Seeds", GameObjectType.ANCIENT_SEEDS, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter)),
     MIXED_SEEDS("Mixed Seeds", GameObjectType.MIXED_SEEDS, List.of(Season.Spring, Season.Summer, Season.Fall, Season.Winter));

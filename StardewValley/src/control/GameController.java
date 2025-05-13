@@ -2,9 +2,7 @@ package control;
 
 import model.*;
 import model.enums.*;
-import model.enums.resources_enums.CropType;
-import model.enums.resources_enums.ForagingSeedType;
-import model.enums.resources_enums.TreeType;
+import model.enums.resources_enums.*;
 import model.enums.tool_enums.ToolType;
 import model.resources.Crop;
 
@@ -149,10 +147,12 @@ public class GameController
     {
         CropType cropType = CropType.getCropType(craftName);
         TreeType treeType = TreeType.getTreeType(craftName);
+        ForagingCropType foragingCropType = ForagingCropType.getForagingCropType(craftName);
+        ForagingTreeType foragingTreeType = ForagingTreeType.getForagingTreeType(craftName);
 
-        if (cropType == null && treeType == null)
+        if (cropType == null && treeType == null && foragingCropType == null && foragingTreeType == null)
         {
-            return new Result(false, "Craft with name " + craftName + " does not exist.");
+            return new Result(false, "Item with name " + craftName + " does not exist.");
         }
 
         if (cropType != null)
@@ -163,6 +163,16 @@ public class GameController
         if (treeType != null)
         {
             return new Result(true, treeType.getCraftInfo());
+        }
+
+        if (foragingCropType != null)
+        {
+            return new Result(true, foragingCropType.getCraftInfo());
+        }
+
+        if (foragingTreeType != null)
+        {
+            return new Result(true, foragingTreeType.getCraftInfo());
         }
 
         return new Result(false, "ERROR");

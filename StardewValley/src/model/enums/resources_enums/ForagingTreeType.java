@@ -32,4 +32,35 @@ public enum ForagingTreeType
     {
         return type;
     }
+
+    public String getCraftInfo()
+    {
+        StringBuilder output = new StringBuilder();
+        output.append("Name: ").append(this.name().replace("_", " ").toLowerCase()).append("\n");
+
+        output.append("Season(s): ");
+        for (int i = 0; i < seasons.size(); i++)
+        {
+            output.append(seasons.get(i).getName()).append(i == seasons.size() - 1 ? "\n" : ", ");
+        }
+
+        return output.toString().trim();
+    }
+
+    public String getName()
+    {
+        return this.name().replace("_", " ").toLowerCase();
+    }
+
+    public static ForagingTreeType getForagingTreeType(String name)
+    {
+        for (ForagingTreeType foragingTreeType : ForagingTreeType.values())
+        {
+            if (foragingTreeType.getName().equalsIgnoreCase(name))
+            {
+                return foragingTreeType;
+            }
+        }
+        return null;
+    }
 }
