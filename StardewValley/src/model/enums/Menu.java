@@ -15,6 +15,7 @@ public enum Menu
     ExitMenu(new ExitMenu(), null),
     HomeMenu(new HomeMenu(), "home menu"),
     PreGameMenu(new PreGameMenu(), "pre game menu"),
+    CityMenu(new CityMenu(), "city menu"),
     ;
 
     private final AppMenu menu;
@@ -37,7 +38,8 @@ public enum Menu
         return this.name;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 }

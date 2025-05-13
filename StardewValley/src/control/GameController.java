@@ -256,13 +256,67 @@ public class GameController
                 "Tip: You can refill it near tiles that contain water.");
     }
 
-    public Result goToCabin()
+    public Result goToPlace(String placeName)
     {
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        player.goToCabin();
-        App.setCurrentMenu(Menu.HomeMenu);
-        return new Result(true, "Going to cabin...");
+
+        if (!player.isInFarm())
+        {
+            return new Result(false, "invalid command");
+        }
+
+        if (placeName.equalsIgnoreCase("cabin") || placeName.equalsIgnoreCase("home"))
+        {
+            Point cabinDoor = player.getCabin().getStartingPoint();
+            int requiredEnergy = player.getCurrentMap().calculateEnergy(player.getLocation(), cabinDoor);
+
+            if (!player.hasEnoughEnergy(requiredEnergy))
+            {
+                return new Result(false, "You don't have enough energy, you're stuck here.");
+            }
+
+            player.goToCabin();
+            App.setCurrentMenu(Menu.HomeMenu);
+            player.increaseEnergy(-1 * requiredEnergy);
+            return new Result(true, "Going to cabin...");
+        } else if (placeName.equalsIgnoreCase("greenhouse") ||
+                placeName.equalsIgnoreCase("green house"))
+        {
+            GreenHouse greenHouse = player.getGreenHouse();
+            if (!greenHouse.isBuilt())
+            {
+                return new Result(false, "You haven't built the greenhouse yet. You can't enter it.");
+            }
+
+            Point greenHouseDoor = player.getGreenHouse().getStartingPoint();
+            int requiredEnergy = player.getCurrentMap().calculateEnergy(player.getLocation(), greenHouseDoor);
+
+            if (!player.hasEnoughEnergy(requiredEnergy))
+            {
+                return new Result(false, "You don't have enough energy, you're stuck here.");
+            }
+
+            player.goToGreenHouse();
+            player.increaseEnergy(-1 * requiredEnergy);
+            return new Result(false, "Going to green house...");
+        } else if (placeName.equalsIgnoreCase("city"))
+        {
+            Point cabinDoor = player.getCabin().getStartingPoint();
+            int requiredEnergy = player.getCurrentMap().calculateEnergy(player.getLocation(), cabinDoor);
+
+            if (!player.hasEnoughEnergy(requiredEnergy))
+            {
+                return new Result(false, "You don't have enough energy, you're stuck here.");
+            }
+
+            player.goToCity();
+            App.setCurrentMenu(Menu.CityMenu);
+            player.increaseEnergy(-1 * requiredEnergy);
+            return new Result(true, "Going to city...");
+        }
+
+        return new Result(false, "invalid place name");
     }
 
     public Result helpReadMap()
@@ -328,6 +382,15 @@ public class GameController
 
         greenhouse.build();
         return new Result(true, "Yippee! You successfully built a greenhouse.");
+    }
+
+    public Result cheatAddMoney(String amount)
+    {
+        int money = Integer.parseInt(amount);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.increaseMoney(money);
+
+        return new Result(true, "Congrats Thief. You just stole $ " + money + " from bank.");
     }
 
     public Result showPlant()

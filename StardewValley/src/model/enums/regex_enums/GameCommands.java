@@ -29,10 +29,11 @@ public enum GameCommands implements Command
             "-d\\s+(?<direction>\\S+)"),
     HOW_MUCH_WATER("how\\s+much\\s+water"),
 
-    GO_TO_CABIN("cd\\s+cabin"),
+    CD_PLACE("cd\\s+(?<placeName>.+)"),
 
     HELP_READING_MAP("help\\s+reading\\s+map"),
     BUILD_GREENHOUSE("greenhouse\\s+build"),
+    CHEAT_ADD_MONEY("cheat\\s+add\\s+money\\s+-a\\s+(?<amount>\\d+)"),
     ;
 
     private final Pattern pattern;

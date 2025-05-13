@@ -290,14 +290,7 @@ public abstract class Map
                 if (isInBounds(col, row))
                 {
                     Tile tile = tiles[row][col];
-                    if (i == 0 && j == 0)
-                    {
-                        output.append("\uD83D\uDC3C"); // 🐼
-                    }
-                    else
-                    {
                         output.append(tile.getAppearance());
-                    }
                 }
                 else
                 {

@@ -201,7 +201,7 @@ public class HomeMenu implements AppMenu
         {
             String recipeName = matcher.group("recipeName");
             System.out.println(homeController.cheatAddCookingRecipe(recipeName));
-        } else if ((matcher = HomeCommands.GO_OUT.getMatcher(input)) != null)
+        } else if ((matcher = HomeCommands.CD_FARM.getMatcher(input)) != null)
         {
             System.out.println(homeController.goOut());
         } else if ((matcher = HomeCommands.PRINT_MAP.getMatcher(input)) != null)

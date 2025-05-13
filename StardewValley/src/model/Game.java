@@ -1,5 +1,6 @@
 package model;
 
+import model.enums.Menu;
 import model.enums.NpcDetails;
 import model.enums.Weather;
 import model.player_data.FriendshipData;
@@ -120,6 +121,17 @@ public class Game
         {
             HomeMenu.println("starting a new day...");
             currentTime.updateHour(23 - currentTime.getHour());
+        }
+
+        if (currentPlayer.isInCity())
+        {
+            App.setCurrentMenu(Menu.CityMenu);
+        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm())
+        {
+            App.setCurrentMenu(Menu.GameMenu);
+        } else
+        {
+            App.setCurrentMenu(Menu.HomeMenu);
         }
     }
 
@@ -302,5 +314,10 @@ public class Game
                 tile.unHitByThunder();
             }
         }
+    }
+
+    public int getPlayerIndex()
+    {
+        return players.indexOf(currentPlayer);
     }
 }

@@ -41,4 +41,9 @@ public class Tree extends Plant
     {
         return fruit;
     }
+
+    public TreeType getTreeType()
+    {
+        return (TreeType)type;
+    }
 }
