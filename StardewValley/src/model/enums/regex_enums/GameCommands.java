@@ -34,6 +34,18 @@ public enum GameCommands implements Command
     HELP_READING_MAP("help\\s+reading\\s+map"),
     BUILD_GREENHOUSE("greenhouse\\s+build"),
     CHEAT_ADD_MONEY("cheat\\s+add\\s+money\\s+-a\\s+(?<amount>\\d+)"),
+
+    /*Animal Commands*/
+    BUILD_ANIMAL_HOUSE("build -a (?<name>.*) -l (?<y>\\d+) (?<x>\\d+)"),
+    BUY_ANIMAL("buy animal -a (?<animal>.*) -n (?<name>.*)"),
+    PET_ANIMAL("pet -n (?<name>.*)"),
+    ANIMAL_INFOS("animals"),
+    SHEPHERD_ANIMAL("shepherd animals -n (?<name>.*) -l (?<y>\\d+) (?<x>\\d+)"),
+    FEED_HAY("feed hay -n (?<name>.*)"),
+    PRODUCES("produces"),
+    COLLECT_PRODUCES("collect produces -n (?<name>.*)"),
+    SELL_ANIMAL("sell animal -n (?<name>.*)"),
+    SET_FRIENDSHIP("cheat set friendship -n (?<name>.*) -c (?<amount>\\d+)"),
     ;
 
     private final Pattern pattern;

@@ -17,8 +17,8 @@ public abstract class Shop {
     public void purchase(GameObject gameObject){}
 
 
-    public Shop(Point location, ShopType type, String shopName, String salesManName, int startWork, int endWork) {
-        this.location = location;
+    public Shop(ShopType type, String shopName, String salesManName, int startWork, int endWork) {
+//        this.location = location;
         this.type = type;
         this.shopName = shopName;
         this.salesManName = salesManName;
