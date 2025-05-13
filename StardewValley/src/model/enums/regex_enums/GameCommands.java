@@ -75,6 +75,9 @@ public enum GameCommands implements Command
     BUILD_GREENHOUSE("greenhouse\\s+build"),
     SHOW_AROUND("show\\s+around"),
     SHOW_PATH("show\\s+path\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
+
+    PWD("pwd"),
+    SUDO_CD("sudo\\s+cd\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)"),
     ;
 
     private final Pattern pattern;

@@ -133,45 +133,41 @@ public class GameMenu implements AppMenu
             String x = matcher.group("x").trim();
             String y = matcher.group("y").trim();
             System.out.println(controller.showPath(x,y));
+        } else if ((matcher = GameCommands.PWD.getMatcher(input)) != null)
+        {
+            System.out.println(controller.pwd());
+        } else if ((matcher = GameCommands.SUDO_CD.getMatcher(input)) != null)
+        {
+            String x = matcher.group("x").trim();
+            String y = matcher.group("y").trim();
+            System.out.println(controller.sudoCD(x,y));
         }
 
         else if (input.equals("1"))
         {
-            for (int i = 0; i < 100; i++)
-            {
-                Farm farm = new Farm(MapTypes.STANDARD);
-                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
-            }
+            Farm farm = new Farm(MapTypes.STANDARD);
+            System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
         }
 
         else if (input.equals("2"))
         {
-            for (int i = 0; i < 100; i++)
-            {
-
-                Farm farm = new Farm(MapTypes.RIVERLAND);
-                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
-            }
+            Farm farm = new Farm(MapTypes.RIVERLAND);
+            System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
         }
 
         else if (input.equals("3"))
         {
-            for (int i = 0; i < 100; i++)
-            {
-                Farm farm = new Farm(MapTypes.HILL_TOP);
-                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
-            }
+            Farm farm = new Farm(MapTypes.HILL_TOP);
+            System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
         }
 
         else if (input.equals("4"))
         {
-            for (int i = 0; i < 100; i++)
-            {
-                Farm farm = new Farm(MapTypes.BEACH);
-                System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
-            }
+            Farm farm = new Farm(MapTypes.BEACH);
+            System.out.println(farm.getMapString(null, new Point(0, 0), 70, 70));
+        }
 
-        } else if ((matcher = GameCommands.ENERGY_SHOW.getMatcher(input)) != null) {
+        else if ((matcher = GameCommands.ENERGY_SHOW.getMatcher(input)) != null) {
             System.out.println(controller.energyShow());
         } else if ((matcher = GameCommands.ENERGY_SET.getMatcher(input)) != null) {
             System.out.println(controller.energySet(matcher));

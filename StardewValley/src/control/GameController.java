@@ -753,7 +753,7 @@ public class GameController
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Map map = player.getCurrentMap();
-        return new Result(true, map.showAround(player.getLocation()).trim());
+        return new Result(true, map.showAround(player.getLocation()));
     }
 
     public Result printEntireMap()
@@ -807,5 +807,48 @@ public class GameController
         }
 
         return new Result(true, map.getMapWithPath(player.getLocation(), new Point(x, y)));
+    }
+
+    public Result pwd()
+    {
+        StringBuilder output = new StringBuilder();
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+
+        if (map instanceof Farm)
+        {
+            output.append("myFarm/");
+        } else if (map instanceof Cabin)
+        {
+            output.append("myCabin/");
+        } else if (map instanceof GreenHouse)
+        {
+            output.append("myGreenhouse/");
+        } else if (map instanceof City)
+        {
+            output.append("theCity/");
+        }
+
+        output.append("X: ").append(player.getLocation().getX()).append(", Y: ").append(player.getLocation().getY()).append("\n");
+        return new Result(true, output.toString());
+    }
+
+    public Result sudoCD(String inputX, String inputY)
+    {
+        int x = Integer.parseInt(inputX);
+        int y = Integer.parseInt(inputY);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map map = player.getCurrentMap();
+
+        if (!map.isInBounds(x, y))
+        {
+            return new Result(false, "Invalid destination coordinates.");
+        }
+
+        Point destination = new Point(x, y);
+        player.setLocation(destination);
+
+        return new Result(true, "Teleported successfully.");
     }
 }

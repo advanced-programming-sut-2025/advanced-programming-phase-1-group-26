@@ -251,27 +251,65 @@ public abstract class Map
         int x = location.getX();
         int y = location.getY();
 
-        for (int i = -2; i < 3; i++)
+        // Column headers
+        output.append(" "); // 2 spaces for top-left corner
+        for (int j = -2; j <= 2; j++)
         {
-            for (int j = -2; j < 3; j++)
+            int col = x + j;
+            if (isInBounds(col, y))
             {
-                if (isInBounds(x + j, y + i))
+                output.append(String.format("%02d", col));
+            }
+            else
+            {
+                output.append("  "); // 2 spaces for missing column label
+            }
+            output.append(" "); // space between columns (always)
+        }
+        output.append("\n");
+
+        // Rows
+        for (int i = -2; i <= 2; i++)
+        {
+            int row = y + i;
+
+            if (isInBounds(x, row))
+            {
+                output.append(String.format("%02d", row)).append(" ");
+            }
+            else
+            {
+                output.append("   "); // 2 for missing label, 1 for space
+            }
+
+            for (int j = -2; j <= 2; j++)
+            {
+                int col = x + j;
+
+                if (isInBounds(col, row))
                 {
-                    Tile tile = tiles[y + i][x + j];
+                    Tile tile = tiles[row][col];
                     if (i == 0 && j == 0)
                     {
-                        output.append("\uD83D\uDC3C");
-                    } else
+                        output.append("\uD83D\uDC3C"); // 🐼
+                    }
+                    else
                     {
                         output.append(tile.getAppearance());
                     }
                 }
+                else
+                {
+                    output.append("⬛");
+                }
             }
+
             output.append("\n");
         }
 
         return output.toString();
     }
+
 
     public int getWIDTH()
     {
