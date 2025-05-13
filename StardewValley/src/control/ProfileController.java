@@ -270,7 +270,6 @@ public class ProfileController
     public Result back()
     {
         App.setCurrentMenu(Menu.MainMenu);
-        App.setCurrentUser(null);
         return new Result(true, "Redirecting to main menu...");
     }
 

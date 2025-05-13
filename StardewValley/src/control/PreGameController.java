@@ -42,15 +42,20 @@ public class PreGameController
             }
         }
 
-        for (int i = 0; i < 4 - users.size(); i++)
+        int usersCount = users.size();
+
+        for (int i = 0; i < 4 - usersCount; i++)
         {
-            User newUser = new User(String.format("guest" + (i + 1)));
+            User newUser = new User("guest" + (i + 1));
             users.add(newUser);
         }
+
+        String string = scanner.nextLine();
 
         PreGameMenu.println("Users selected successfully.");
         chooseMaps(users, scanner);
         chooseGender(scanner);
+
         PreGameMenu.println("New Game created.\n\n" +
                 "Welcome to Stardew Valley!");
     }
@@ -73,7 +78,9 @@ public class PreGameController
         return new Result(true, """
                 Loading Game...
                 We wanted to add loading screens to the game to make it more interesting,
-                but unfortunately we didn't have time to :(""");
+                but unfortunately we didn't have time to :(
+                
+                Welcome to Stardew Valley!""");
     }
 
     public Result enterMenu(String menuName)
@@ -182,14 +189,16 @@ public class PreGameController
         for (User u : users)
         {
             u.setCurrentGame(game);
+            u.addToNumberOfGames();
         }
+
     }
 
     public void chooseGender(Scanner scanner) {
         PreGameMenu.println("choosing gender... ");
         for (Player player : App.getCurrentGame().getPlayers()) {
             while (true) {
-                PreGameMenu.println(player.getNickName() + ": ");
+                PreGameMenu.print(player.getNickName() + ": ");
                 String genderName = scanner.nextLine();
                 Gender gender = Gender.getGender(genderName);
                 if (gender != null) {

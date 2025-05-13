@@ -590,12 +590,11 @@ public class GameController
 
         App.setCurrentGame(null);
         App.setCurrentUser(player.getUser());
-        App.setCurrentMenu(Menu.LoginMenu);
+        App.setCurrentMenu(Menu.MainMenu);
 
         return new Result(true, """
                 Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
-                Redirecting to Login Menu...
-                """);
+                Redirecting to Main Menu...""");
     }
 
     public Result deleteGame(Scanner scanner)
@@ -647,21 +646,19 @@ public class GameController
             return new Result(false, "The game shall continue.");
         }
 
-        for (Player p : game.getPlayers())
+        for (Player player : App.getCurrentGame().getPlayers())
         {
-            User user = p.getUser();
+            User user = player.getUser();
             user.setCurrentGame(null);
-            user.addToNumberOfGames();
         }
 
         App.setCurrentUser(currentPlayer.getUser());
         App.setCurrentGame(null);
-        App.setCurrentMenu(Menu.LoginMenu);
+        App.setCurrentMenu(Menu.MainMenu);
 
         return new Result(true, """
                 You broke my heart, good bye.
-                Redirecting to Login Menu...
-                """);
+                Redirecting to Main Menu...""");
     }
 
     public void nextTurn()
