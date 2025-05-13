@@ -4,6 +4,7 @@ import model.enums.Season;
 import model.enums.TimeOfDay;
 import model.enums.Weather;
 import model.enums.regex_enums.GameCommands;
+import model.player_data.FriendshipData;
 
 import java.util.List;
 import java.util.Random;
@@ -53,6 +54,7 @@ public class Time
         }
 
         updateWeather();
+        friendshipUpdate();
 
         if (day >= 29)
         {
@@ -107,5 +109,16 @@ public class Time
         tomorrowWeather = list.get(random.nextInt(list.size()));
     }
 
-
+    public void friendshipUpdate() {
+        for (Player player1 : App.getCurrentGame().getPlayers()) {
+            for (Player player2 : App.getCurrentGame().getPlayers()) {
+                if (player1 != player2) {
+                    FriendshipData data1 = player1.getFriendships().get(player2);
+                    FriendshipData data2 = player2.getFriendships().get(player1);
+                    data1.setIntrcatedToday(false);
+                    data2.setIntrcatedToday(false);
+                }
+            }
+        }
+    }
 }

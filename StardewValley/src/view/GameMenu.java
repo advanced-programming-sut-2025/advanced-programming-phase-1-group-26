@@ -206,6 +206,8 @@ public class GameMenu implements AppMenu
 
         else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
             comController.friendships();
+        } else if ((matcher = CommunicateCommands.CHEAT_UPGRADE_FRIENDSHIP.getMatcher(input)) != null) {
+            System.out.println(comController.cheatUpgradeFriendship(matcher));
         } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
             System.out.println(comController.talk(matcher));
         } else if ((matcher = CommunicateCommands.TALK_HISTORY.getMatcher(input)) != null) {

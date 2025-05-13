@@ -280,6 +280,13 @@ public class Player {
     public void setLocation(Point location)
     {
         this.location = location;
+        if (isInCity)
+        {
+            int index = App.getCurrentGame().getPlayerIndex();
+            City city = App.getCurrentGame().getCity();
+            city.getPlayerPoints()[index] = location;
+        }
+
     }
 
     public GameObject findObjectType(Enum<?> type)
@@ -591,7 +598,7 @@ public class Player {
         if (isInCity)
         {
             City city = App.getCurrentGame().getCity();
-            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = this.location;
+            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = null;
         }
         this.isInCity = false;
         this.isInGreenHouse = false;
@@ -637,12 +644,12 @@ public class Player {
 
     public boolean hasEnoughEnergy(int required)
     {
-        if (energy == -1)
+        if (turnEnergy == -1)
         {
             return true;
         }
 
-        return energy > required;
+        return turnEnergy > required;
     }
 
     public ArrayList<Tile> getFarmPlants()

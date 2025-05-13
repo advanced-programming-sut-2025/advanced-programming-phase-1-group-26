@@ -28,7 +28,9 @@ public class GeneralController
         System.out.println("your items:");
         System.out.println("----");
         for (GameObject object : inventory) {
-            System.out.println(object.getObjectType().name() + " x" + object.getNumber());
+            int number = object.getNumber();
+            if (object instanceof Tool) number = 1;
+            System.out.println(object.getObjectType().name() + " x" + number);
             System.out.println("----");
         }
     }
@@ -376,7 +378,7 @@ public class GeneralController
             String input = GameMenu.scan(scanner);
             if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
             {
-                player.increaseEnergy(-energy);
+                player.increaseTurnEnergy(-energy);
                 player.setLocation(destination);
                 return new Result(true, "You have successfully get to this place.");
             }
@@ -460,6 +462,18 @@ public class GeneralController
         Player player = game.getCurrentPlayer();
         game.setCurrentPlayer(game.getNext(player));
         game.getCurrentPlayer().setEnergyToMax();
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer.isInCity())
+        {
+            App.setCurrentMenu(Menu.CityMenu);
+        } else if (currentPlayer.isInFarm() || currentPlayer.isInGreenHouse())
+        {
+            App.setCurrentMenu(Menu.GameMenu);
+        } else
+        {
+            App.setCurrentMenu(Menu.HomeMenu);
+        }
+
         return new Result(true, game.getCurrentPlayer().getUser().getNickname() + " is now playing.");
     }
 

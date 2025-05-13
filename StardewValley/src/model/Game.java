@@ -178,21 +178,21 @@ public class Game
         switch (direction)
         {
             case "W":
-                return map.getTile(y, x - 1);
+                return map.getTile(x - 1, y);
             case "E":
-                return map.getTile(y, x + 1);
+                return map.getTile(x + 1, y);
             case "N":
-                return map.getTile(y - 1, x);
+                return map.getTile(x, y - 1);
             case "S":
-                return map.getTile(y + 1, x);
+                return map.getTile(x, y + 1);
             case "NW":
-                return map.getTile(y - 1, x - 1);
+                return map.getTile(x - 1, y - 1);
             case "NE":
-                return map.getTile(y - 1, x + 1);
+                return map.getTile(x + 1, y - 1);
             case "SW":
-                return map.getTile(y + 1, x - 1);
+                return map.getTile(x - 1, y + 1);
             case "SE":
-                return map.getTile(y + 1, x + 1);
+                return map.getTile(x + 1, y + 1);
             default:
                 return null;
         }

@@ -17,6 +17,7 @@ public enum CommunicateCommands implements Command {
     ASK_MARRIAGE("ask marriage -u (?<username>.*) -r (?<ring>.*)"),
     RESPOND("respond -(?<respond>I do|cancel) -u (?<username>.*)"),
 
+    CHEAT_UPGRADE_FRIENDSHIP("cheat upgrade friendship -u (?<name>\\S+) -l (?<level>\\d+)"),
     ;
 
     private final Pattern pattern;

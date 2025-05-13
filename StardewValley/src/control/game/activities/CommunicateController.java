@@ -25,6 +25,19 @@ public class CommunicateController
         }
     }
 
+    public Result cheatUpgradeFriendship(Matcher matcher) {
+        String name = matcher.group("name");
+        Player player = App.getCurrentGame().getPlayerByNickname(name);
+        int level = Integer.parseInt(matcher.group("level"));
+        Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
+        FriendshipData currentLevel = mainPlayer.getFriendships().get(player);
+        FriendshipData otherLevel = player.getFriendships().get(mainPlayer);
+        currentLevel.setLevel(level);
+        otherLevel.setLevel(level);
+
+        return new Result(true, "level upgraded cheater");
+    }
+
     public static void upgradeFriendshipLevel (Player mainPlayer, Player player2) {
         FriendshipData currentLevel = mainPlayer.getFriendships().get(player2);
         FriendshipData otherLevel = player2.getFriendships().get(mainPlayer);
@@ -119,7 +132,7 @@ public class CommunicateController
             data1.getMessageHistory().add(message);
             data2.getMessageHistory().add(message);
 
-            if (!data1.isIntrcatedToday()) {
+            if (!data1.isIntrcatedToday()) { //TODO: check friendship update
                 data1.addXp(20);
                 data2.addXp(20);
                 data1.setIntrcatedToday(true);
@@ -161,6 +174,7 @@ public class CommunicateController
                 item = type;
             }
         }
+
         if (currentPlayer.isNear(player.getLocation())) {
             if (checkFriendship(currentPlayer, player, "gift")) {
                 if (currentPlayer.getItemInInventory(item) == null ||
@@ -180,10 +194,10 @@ public class CommunicateController
                     } else {
                         player.getItemInInventory(item).addNumber(amount);
                     }
-
                     player.getNewGifts().add(newGift);
                     player.getArchiveGifts().add(newGift);
                     currentPlayer.getGivenGifts().add(newGift);
+                    System.out.println("gifted successfully");
                 }
             } else {
                 System.out.println("you can't give each other gifts at this level!");
@@ -206,7 +220,7 @@ public class CommunicateController
     }
 
     public void giftRate (Matcher matcher) {
-        int id = Integer.parseInt(matcher.group("id"));
+        int id = Integer.parseInt(matcher.group("giftNumber"));
         int rate = Integer.parseInt(matcher.group("rate"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Gift targetGift = currentPlayer.getGiftById(id);
@@ -225,8 +239,8 @@ public class CommunicateController
             giver.getFriendships().get(currentPlayer).addXp(friendship);
             currentPlayer.getFriendships().get(giver).addXp(friendship);
             upgradeFriendshipLevel(currentPlayer, giver);
+            System.out.println("gift rated successfully");
         }
-
     }
 
     public void giftHistory (Matcher matcher) {
