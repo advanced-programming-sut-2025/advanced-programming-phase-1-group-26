@@ -1,19 +1,46 @@
 package control.game.activities;
 
-import model.App;
-import model.GameObject;
-import model.NPC;
-import model.Result;
+import model.*;
 import model.enums.GameObjectType;
 import model.enums.NpcDetails;
 import model.enums.Season;
+import model.enums.ShopType;
 import model.enums.regex_enums.GameCommands;
+import model.shops.*;
 import model.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class MarketingController {
+    public Result showAllProducts() {
+        ShopType targetType = null;
+        for(ShopType type : ShopType.values()){
+            if(App.getCurrentGame().getCity().isNearShop(type)){
+                targetType = type;
+            }
+        }
+        if(targetType == null) {
+            return new Result(false, "No shop found in this location");
+        }
+
+        Shop shop = null;
+
+        switch(targetType) {
+            case BLACK_SMITH -> shop = new Blacksmith();
+            case MARINE_RANCH -> shop = new MarniesRanch();
+            case JOJA_MART -> shop = new JojaMart();
+            case CARPENTER_SHOP -> shop = new CarpentersShop();
+            case PIERRE_GENERAL_STORE -> shop = new PierresGeneralStore();
+            case FISH_SHOP -> shop = new FishShop();
+            case STARDROP_SALOON -> shop = new TheStardropSaloon();
+        }
+        if(!shop.isOpen(App.getCurrentGame().getCurrentTime())) {
+            return new Result(false, "Shop is not open");
+        }
+        return new Result(true, shop.showProducts());
+    }
+
     public Result meetNPC(String input) {
         String npcName = GameCommands.MEET_NPC.getMatcher(input).group("NPCname");
         for(NPC npc : App.getCurrentGame().getNPCs()) {
@@ -91,11 +118,13 @@ public class MarketingController {
         if(!npc.isNearPlayer(npc.getLocation(), App.getCurrentGame().getCurrentPlayer().getLocation()))
             return new Result(false, "You are not in a near NPC");
         int index = Integer.parseInt(GameCommands.QUESTS_FINISH.getMatcher(input).group("index"));
+        GameObject request = npc.getNpcDetails().getRequests().get(index);
         GameObject reward = npc.getNpcDetails().getRewards().get(index);
         if(npc.getFriendshipWithNpcData().getLevel() == 2) {
             reward.addNumber(reward.getNumber());
         }
-        App.getCurrentGame().getCurrentPlayer().getInventory().add(reward);
+        App.getCurrentGame().getCurrentPlayer().addToInventory(reward);
+        App.getCurrentGame().getCurrentPlayer().removeFromInventory(request);
         npc.removeQuest(index);
 
         return new Result(true, "Quest finished");

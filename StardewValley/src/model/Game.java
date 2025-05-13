@@ -41,6 +41,7 @@ public class Game
         }
     }
 
+
     public Time getCurrentTime()
     {
         return currentTime;
@@ -61,6 +62,12 @@ public class Game
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public Tile findTile(int y, int x)
+    {
+        //return farm.getMap().get(y).get(x);
+    return null;
     }
 
     public void endDay()

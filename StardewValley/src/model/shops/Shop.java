@@ -1,10 +1,12 @@
 package model.shops;
 
 import model.GameObject;
+import model.Point;
 import model.Time;
 import model.enums.ShopType;
 
 public abstract class Shop {
+    private Point location;
     private ShopType type;
     private String shopName;
     private String salesManName;
@@ -12,10 +14,11 @@ public abstract class Shop {
     private int endWork;
     public String showProducts(){return "products:\n";}
     public String showAvailableProducts(){return "available products:\n";}
-    public void purchase(GameObject gameObject) {}
+    public void purchase(GameObject gameObject){}
 
 
-    public Shop(ShopType type, String shopName, String salesManName, int startWork, int endWork) {
+    public Shop(Point location, ShopType type, String shopName, String salesManName, int startWork, int endWork) {
+        this.location = location;
         this.type = type;
         this.shopName = shopName;
         this.salesManName = salesManName;

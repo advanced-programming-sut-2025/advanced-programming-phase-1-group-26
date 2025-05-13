@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CarpentersShop extends Shop {
-    private CarpentersShopFarmBuilding farmBuilding;
+    private CarpentersShopFarmBuilding farmBuilding; //TODO change it to farmbuilding
     private CarpentersShopStock stock;
     private ArrayList<CarpentersShopStock> stocks = new ArrayList<>();
     private ArrayList<CarpentersShopFarmBuilding> farmBuildings = new ArrayList<>();
