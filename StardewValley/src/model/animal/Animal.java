@@ -8,21 +8,29 @@ public class Animal {
     private int price;
     private int friendship;
     private boolean isFed;
+    private boolean isIn;
+    private boolean isPet;
 
     public Animal(String name, FarmAnimals animalType) {
         this.name = name;
         this.animalType = animalType;
         this.price = animalType.getPurchaseCost();
         this.friendship = 0;
+        this.isFed = false;
+        this.isIn = false;
+        this.isPet = false;
     }
 
-    public void feed() {}
+    public void feed() {
+        isFed = true;
+    }
     public void pet() {
-        this.friendship += 15;
+        increaseFriendship(15);
     }
 
     public void feedFromOutside() {
-        this.friendship += 8;
+        isFed = true;
+        increaseFriendship(8);
     }
     public int getPrice()
     {
@@ -56,6 +64,13 @@ public class Animal {
     public void setFriendship(int friendship) {
         this.friendship = friendship;
     }
+    public void increaseFriendship(int amount) {
+        this.friendship += amount;
+        if(friendship >= 1000) friendship = 1000;
+    }
+    public void decreaseFriendship(int amount) {
+        this.friendship -= amount;
+    }
 
     public boolean isFed() {
         return isFed;
@@ -63,5 +78,36 @@ public class Animal {
 
     public void setFed(boolean fed) {
         isFed = fed;
+    }
+
+    public boolean isIn() {
+        return isIn;
+    }
+
+    public void setIn(boolean in) {
+        isIn = in;
+    }
+
+    public boolean isPet() {
+        return isPet;
+    }
+
+    public void setPet(boolean pet) {
+        isPet = pet;
+    }
+
+    public void checkAndReset() {
+        if(!isFed) {
+            decreaseFriendship(20);
+        }
+        if(!isIn) {
+            decreaseFriendship(20);
+        }
+        if(!isPet) {
+            decreaseFriendship(10 - friendship / 200);
+        }
+
+        isFed = false;
+        isPet = false;
     }
 }

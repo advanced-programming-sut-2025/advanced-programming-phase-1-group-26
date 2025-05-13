@@ -14,11 +14,11 @@ public class MainMenuController
 
     public Result enterMenu(String menuName)
     {
-        String output = "";
-        if (menuName.equalsIgnoreCase("game menu") || menuName.equalsIgnoreCase("game"))
+        String output;
+        if (menuName.equalsIgnoreCase("pre game menu") || menuName.equalsIgnoreCase("pre game"))
         {
             App.setCurrentMenu(Menu.PreGameMenu);
-            output = "Switching to game menu...";
+            output = "Switching to pre game menu...";
         } else if (menuName.equalsIgnoreCase("profile menu") || menuName.equalsIgnoreCase("profile"))
         {
             App.setCurrentMenu(Menu.ProfileMenu);
@@ -43,14 +43,17 @@ public class MainMenuController
                 "- user logout\n" +
                 "    Logs you out of the system.\n" +
                 "\n" +
-                "- menu enter <menuName>\n" +
-                "    Enters the specified menu. Example: menu enter login\n" +
+                "- menu enter <menu-name>\n" +
+                "    Enters the specified menu. Usage: profile - pre game\n" +
                 "\n" +
                 "- menu exit\n" +
-                "    Exits the current menu and returns to the previous one.\n" +
+                "    Exits from the app.\n" +
                 "\n" +
                 "- show current menu\n" +
                 "    Displays the name of the current active menu.\n" +
+                "\n" +
+                "- menu back\n" +
+                "    Goes back to login menu.\n" +
                 "\n" +
                 "- help\n" +
                 "    Shows this help message.\n");

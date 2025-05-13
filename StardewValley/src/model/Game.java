@@ -1,13 +1,15 @@
 package model;
 
+import model.enums.Menu;
 import model.enums.NpcDetails;
+import model.enums.Weather;
 import model.player_data.FriendshipData;
+import model.resources.Plant;
 import view.GameMenu;
 import view.HomeMenu;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.PrimitiveIterator;
+import java.util.Collections;
 
 public class Game
 {
@@ -17,6 +19,7 @@ public class Game
     private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
     private Player oppenheimer; // I actually wanted to call this "opener", but thought it would be funnier this way
+    private City city = new City();
 
     public Game() //TODO: this is only for test, should be removed later
     {
@@ -38,6 +41,7 @@ public class Game
             }
         }
     }
+
 
     public Time getCurrentTime()
     {
@@ -73,7 +77,19 @@ public class Game
         // resetPlayersEnergy();
         // growPlants();
         // respawnPlayers();
+
         distributeForagingItems();
+
+        if (currentTime.getCurrentWeather().equals(Weather.Rain) || currentTime.getCurrentWeather().equals(Weather.Storm))
+        {
+            waterAllFarmPlants();
+        }
+
+        resetHitByThunders();
+        if (currentTime.getCurrentWeather().equals(Weather.Storm))
+        {
+            hitTilesByThunder();
+        }
     }
 
     public void distributeForagingItems()
@@ -81,6 +97,7 @@ public class Game
         for (Farm farm : getFarms())
         {
             farm.setRandomForagingItems();
+            farm.setRandomForagingMinerals();
         }
     }
 
@@ -90,7 +107,6 @@ public class Game
         int index = currentIndex;
 
         // loop over players until reaches one that hasn't fainted yet (has enough energy)
-
         do
         {
            currentPlayer = getNext(currentPlayer);
@@ -98,8 +114,11 @@ public class Game
 
            if (currentPlayer.getEnergy() > 0)
            {
-               GameMenu.println("skipping " + currentPlayer.getUser().getUsername() + "'s turn :(");
+               GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
                break;
+           } else
+           {
+               GameMenu.println("skipping " + currentPlayer.getUser().getNickname() + "'s turn :(");
            }
 
         } while (index != currentIndex);
@@ -111,9 +130,15 @@ public class Game
             currentTime.updateHour(23 - currentTime.getHour());
         }
 
-        if (currentTime.getHour() == 9)
+        if (currentPlayer.isInCity())
         {
-            endDay();
+            App.setCurrentMenu(Menu.CityMenu);
+        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm())
+        {
+            App.setCurrentMenu(Menu.GameMenu);
+        } else
+        {
+            App.setCurrentMenu(Menu.HomeMenu);
         }
     }
 
@@ -215,5 +240,91 @@ public class Game
     public void setCurrentPlayer(Player currentPlayer)
     {
         this.currentPlayer = currentPlayer;
+    }
+
+    public City getCity()
+    {
+        return city;
+    }
+
+    public ArrayList<Tile> getAllFarmPlants()
+    {
+        ArrayList<Tile> allFarmPlants = new ArrayList<>();
+        for (Player player : players)
+        {
+            allFarmPlants.addAll(player.getFarmPlants());
+        }
+        return allFarmPlants;
+    }
+
+    public ArrayList<Tile> getAllGreenhousePlants()
+    {
+        ArrayList<Tile> allGreenhousePlants = new ArrayList<>();
+        for (Player player : players)
+        {
+            allGreenhousePlants.addAll(player.getGreenhousePlants());
+        }
+        return allGreenhousePlants;
+    }
+
+    public ArrayList<Tile> getAllPlants()
+    {
+        ArrayList<Tile> allPlants = new ArrayList<>();
+
+        allPlants.addAll(getAllFarmPlants());
+        allPlants.addAll(getAllGreenhousePlants());
+
+        return allPlants;
+    }
+
+    public void waterAllFarmPlants()
+    {
+        ArrayList<Tile> allFarmPlants = getAllFarmPlants();
+        for (Tile tile : allFarmPlants)
+        {
+            if (tile.getObject() != null && tile.getObject() instanceof Plant)
+            {
+                Plant plant = (Plant) tile.getObject();
+                plant.water();
+            }
+        }
+    }
+
+    public void hitTilesByThunder()
+    {
+        for (Player player : players)
+        {
+            ArrayList<Tile> playerFarmPlants = player.getFarmPlants();
+            ArrayList<Tile> randomFarmPlants = getThreeRandomElements(playerFarmPlants);
+            for (Tile tile : randomFarmPlants)
+            {
+                tile.hitByThunder();
+            }
+        }
+    }
+
+    public ArrayList<Tile> getThreeRandomElements(ArrayList<Tile> originalList)
+    {
+        ArrayList<Tile> shuffled = new ArrayList<>(originalList);
+        Collections.shuffle(shuffled);
+        int count = Math.min(3, shuffled.size());
+        return new ArrayList<>(shuffled.subList(0, count));
+    }
+
+    public void resetHitByThunders()
+    {
+        for (Player player : players)
+        {
+            Farm farm = player.getFarm();
+            for (Tile tile : farm.getThunderedTiles())
+            {
+                tile.unHitByThunder();
+            }
+        }
+    }
+
+    public int getPlayerIndex()
+    {
+        return players.indexOf(currentPlayer);
     }
 }

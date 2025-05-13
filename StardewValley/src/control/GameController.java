@@ -8,15 +8,19 @@ import model.enums.resources_enums.ForagingSeedType;
 import model.enums.resources_enums.ResourceItem;
 import model.enums.resources_enums.TreeType;
 import model.enums.tool_enums.ToolType;
+import model.resources.Crop;
+
+import model.resources.ForagingMineral;
+import model.resources.Plant;
+import model.resources.Tree;
 import model.resources.*;
 
 import model.tools.Tool;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.regex.Matcher;
 
 import model.tools.*;
 import view.GameMenu;
+
+import java.util.regex.Matcher;
 
 public class GameController
 {
@@ -148,7 +152,18 @@ public class GameController
         Tool tool = App.getCurrentGame().getCurrentPlayer().getCurrentTool();
         if (tool == null) {
             GameMenu.println("you don't have any tool equipped");
-        } else {
+        } else
+        {
+            Double weatherModifier = 1.0;
+            Weather weather = App.getCurrentGame().getCurrentTime().getCurrentWeather();
+            if (weather.equals(Weather.Rain) || weather.equals(Weather.Storm))
+            {
+                weatherModifier = 1.5;
+            } else if (weather.equals(Weather.Snow))
+            {
+                weatherModifier = 2.0;
+            }
+
             if (tool instanceof Axe) {
                 if (targetTile.getObject() instanceof Tree ||
                         targetTile.getObject() instanceof ForagingTree ||
@@ -215,7 +230,7 @@ public class GameController
                 }
             } else if (tool instanceof Seythe)
             {
-                currentPlayer.increaseEnergy(-((Seythe) tool).getEnergyUsage());
+                currentPlayer.increaseEnergy((int)(weatherModifier * -((Seythe) tool).getEnergyUsage()));
 
                 if (targetTile.getTexture().equals(TileTexture.GRASS) && targetTile.getObject() == null)
                 {
@@ -265,7 +280,7 @@ public class GameController
                 //TODO:
 
             } else if (tool instanceof WateringCan) {
-                currentPlayer.increaseEnergy(-((WateringCan) tool).getLevel().getBaseEnergyUsage());
+                currentPlayer.increaseEnergy((int)(weatherModifier * -((WateringCan) tool).getLevel().getBaseEnergyUsage()));
                 if (targetTile.hasPlants())
                 {
                     Plant plant = (Plant) targetTile.getObject();
@@ -288,209 +303,6 @@ public class GameController
             currentPlayer.checkEnergy();
         }
         return new Result(true, "WE SHOULD CHANGE THIS PART OF CODE!!!");
-    }
-
-    public Result showTime()
-    {
-        return new Result(true, String.valueOf(App.getCurrentGame().getCurrentTime().getHour()));
-    }
-
-    public Result showDate()
-    {
-        return new Result(true, String.valueOf(App.getCurrentGame().getCurrentTime().getDay()));
-    }
-
-    public Result cheatAdvanceTime(String timeAdvance)
-    {
-        Time gameTime = App.getCurrentGame().getCurrentTime();
-        int time = Integer.parseInt(timeAdvance);
-        StringBuilder output = new StringBuilder();
-
-        output.append("time: ").append(gameTime.getHour());
-        output.append(", day: ").append(gameTime.getDay()).append("\n");
-
-        gameTime.updateHour(time);
-
-        output.append("time: ").append(gameTime.getHour());
-        output.append(", day: ").append(gameTime.getDay()).append("\n");
-        output.append("Time advanced successfully using cheat code :)");
-
-        return new Result(true, output.toString());
-    }
-
-    public Result cheatAdvanceDate(String dateAdvance)
-    {
-        Time gameTime = App.getCurrentGame().getCurrentTime();
-        int date = Integer.parseInt(dateAdvance);
-        StringBuilder output = new StringBuilder();
-
-        output.append("time: ").append(gameTime.getHour());
-        output.append(", day: ").append(gameTime.getDay()).append("\n");
-
-        gameTime.updateDay(date);
-
-        output.append("time: ").append(gameTime.getHour());
-        output.append(", day: ").append(gameTime.getDay()).append("\n");
-        output.append("Date advanced successfully using cheat code :)");
-
-        return new Result(true, output.toString());
-    }
-
-    public Result showDateAndTime()
-    {
-        Time gameTime = App.getCurrentGame().getCurrentTime();
-
-        String output = "time: " + gameTime.getHour() +
-                ", day: " + gameTime.getDay();
-
-        return new Result(true, output);
-    }
-
-    public Result showDayOfWeek()
-    {
-        Time gameTime = App.getCurrentGame().getCurrentTime();
-        String dayName = DayOfWeek.getDayOfWeek((gameTime.getDay() - 1) % 7);
-
-        return new Result(true, "Today is " + dayName + ".");
-    }
-
-    public Result showSeason()
-    {
-        Season season = App.getCurrentGame().getCurrentTime().getSeason();
-        return new Result(true, "You're currently in " + season.toString() + ".");
-    }
-
-    public Result showWeather()
-    {
-        Time gameTime = App.getCurrentGame().getCurrentTime();
-
-        return new Result(true, "Today's weather is " + gameTime.getCurrentWeather() + ".");
-    }
-
-    public Result showTomorrowWeather()
-    {
-        Time gameTime = App.getCurrentGame().getCurrentTime();
-
-        return new Result(true, "Tomorrow's weather would be " + gameTime.getTomorrowWeather() + ".");
-    }
-
-    public Result cheatChangeTomorrowWeather(String weatherType)
-    {
-        Weather weather = Weather.getWeather(weatherType);
-
-        if (weather == null)
-        {
-            return new Result(false, "Invalid weather. Try again!");
-        }
-
-        Time gameTime = App.getCurrentGame().getCurrentTime();
-        gameTime.setTomorrowWeather(weather);
-
-        return new Result(true, "You're a Wizard!\nTomorrow's weather changed to " + weather + ".");
-    }
-
-    public Result cheatHitThunder(String inputX, String inputY)
-    {
-        int x = Integer.parseInt(inputX);
-        int y = Integer.parseInt(inputY);
-
-        Game game = App.getCurrentGame();
-        Tile tile = game.findTile(y, x);
-
-        if (tile == null)
-        {
-            return new Result(false, "Tile with x: " + x + " and y: " + y + " does not exist.");
-        }
-
-        if (tile.isHitByThunder())
-        {
-            return new Result(true, "This unlucky tile has already been hit by thunder.");
-        }
-
-        tile.hitByThunder();
-
-        return new Result(true, "By the might of Thor, son of Odin, this tile has been struck by lightning!");
-    }
-
-    public Result canWalk(String inputX, String inputY)
-    {
-        int x = Integer.parseInt(inputX);
-        int y = Integer.parseInt(inputY);
-
-        Point destination = new Point(y, x);
-
-        Game game = App.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Map map = player.getCurrentMap();
-
-        int requiredEnergy = map.calculateEnergy(player.getLocation(), destination);
-        int energy = player.getEnergy();
-
-        if (requiredEnergy == -1)
-        {
-            return new Result(false, "You shall not pass!\n" +
-                    "Choose your destination wisely.");
-        }
-
-        if (requiredEnergy <= energy)
-        {
-            return new Result(true, "positive\n" +
-                    "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
-        }
-
-        return new Result(false, "negative\n" +
-                "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
-    }
-
-    public Result walk(String inputX, String inputY, Scanner scanner)
-    {
-        int x = Integer.parseInt(inputX);
-        int y = Integer.parseInt(inputY);
-
-        Point destination = new Point(y, x);
-
-        Game game = App.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Map map = player.getCurrentMap();
-
-        int requiredEnergy = map.calculateEnergy(player.getLocation(), destination);
-        int energy = player.getEnergy();
-
-        if (requiredEnergy < energy)
-        {
-            return new Result(false, "You do not have enough energy to get to this place :(");
-        }
-
-        if (requiredEnergy == energy)
-        {
-            GameMenu.println("You can get to this place, but you will faint right away.");
-            GameMenu.println("Do you want to continue? (Y/N)");
-            String input = GameMenu.scan(scanner);
-            if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
-            {
-                player.increaseEnergy(-requiredEnergy);
-                player.setLocation(destination);
-                return new Result(true, "You have successfully get to the destination.");
-            }
-            return new Result(false, "OK");
-        }
-
-        Point canGetTo = map.findFurthestAvailablePoint(player.getLocation(), destination, energy);
-
-        GameMenu.println("You can't go all the way...");
-        GameMenu.println("But we have a special offer for you: ");
-        GameMenu.println("You can walk as much as you can, you would get closer to the destination.");
-        GameMenu.println("Your new location will be (" + canGetTo.getY() + ", " + canGetTo.getX() + ").");
-        GameMenu.println("Do you want to continue? (Y/N)");
-
-        String input = GameMenu.scan(scanner);
-        if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
-        {
-            player.increaseEnergy(-energy);
-            player.setLocation(destination);
-            return new Result(true, "You have successfully get to this place.");
-        }
-        return new Result(false, "OK");
     }
 
     public Result showCraftInfo(String craftName)
@@ -604,111 +416,67 @@ public class GameController
                 "Tip: You can refill it near tiles that contain water.");
     }
 
-    public Result exitGame(Scanner scanner)
+    public Result goToPlace(String placeName)
     {
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
 
-        if (!game.getOppenheimer().equals(player))
+        if (!player.isInFarm())
         {
-            return new Result(false, "You are not Oppenheimer. You can not end this game.");
+            return new Result(false, "invalid command");
         }
 
-        GameMenu.println("Are you sure? [y/n]");
-        String answer = GameMenu.scan(scanner);
-
-        if (!answer.equalsIgnoreCase("y"))
+        if (placeName.equalsIgnoreCase("cabin") || placeName.equalsIgnoreCase("home"))
         {
-            return new Result(false, "Phew! You got me scared for a moment.");
-        }
+            Point cabinDoor = player.getCabin().getStartingPoint();
+            int requiredEnergy = player.getCurrentMap().calculateEnergy(player.getLocation(), cabinDoor);
 
-        App.setCurrentGame(null);
-        App.setCurrentUser(player.getUser());
-        App.setCurrentMenu(Menu.LoginMenu);
-
-        return new Result(true, """
-                Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
-                Redirecting to Login Menu...
-                """);
-    }
-
-    public Result deleteGame(Scanner scanner)
-    {
-        int positive = 1;
-        int negative = 0;
-
-        for (Player player : App.getCurrentGame().getPlayers())
-        {
-            GameMenu.println("Hsssh! " + player.getUser().getNickname() + " is voting: ");
-            if (!player.equals(App.getCurrentGame().getCurrentPlayer()))
+            if (!player.hasEnoughEnergy(requiredEnergy))
             {
-                do
-                {
-                    GameMenu.println("Do you vote for this game to be deleted? [y/n]");
-                    String answer = GameMenu.scan(scanner);
-                    if (answer.equalsIgnoreCase("y"))
-                    {
-                        positive += 1;
-                        break;
-                    } else if (answer.equalsIgnoreCase("n"))
-                    {
-                        negative += 1;
-                        break;
-                    } else
-                    {
-                        GameMenu.println("Please don't be such a dalghak, we're doing sth serious here.");
-                    }
-                } while (true);
+                return new Result(false, "You don't have enough energy, you're stuck here.");
             }
-        }
 
-        GameMenu.println("Election Results: (voting to end the game)");
-        GameMenu.println("\tpositive: " + positive);
-        GameMenu.println("\tnegative: " + negative);
-
-        if (negative > 0)
+            player.goToCabin();
+            App.setCurrentMenu(Menu.HomeMenu);
+            player.increaseEnergy(-1 * requiredEnergy);
+            return new Result(true, "Going to cabin...");
+        } else if (placeName.equalsIgnoreCase("greenhouse") ||
+                placeName.equalsIgnoreCase("green house"))
         {
-            GameMenu.println("You think you have democracy?");
-            return new Result(false, "The game shall continue.");
+            GreenHouse greenHouse = player.getGreenHouse();
+            if (!greenHouse.isBuilt())
+            {
+                return new Result(false, "You haven't built the greenhouse yet. You can't enter it.");
+            }
+
+            Point greenHouseDoor = player.getGreenHouse().getStartingPoint();
+            int requiredEnergy = player.getCurrentMap().calculateEnergy(player.getLocation(), greenHouseDoor);
+
+            if (!player.hasEnoughEnergy(requiredEnergy))
+            {
+                return new Result(false, "You don't have enough energy, you're stuck here.");
+            }
+
+            player.goToGreenHouse();
+            player.increaseEnergy(-1 * requiredEnergy);
+            return new Result(false, "Going to green house...");
+        } else if (placeName.equalsIgnoreCase("city"))
+        {
+            Point cabinDoor = player.getCabin().getStartingPoint();
+            int requiredEnergy = player.getCurrentMap().calculateEnergy(player.getLocation(), cabinDoor);
+
+            if (!player.hasEnoughEnergy(requiredEnergy))
+            {
+                return new Result(false, "You don't have enough energy, you're stuck here.");
+            }
+
+            player.goToCity();
+            App.setCurrentMenu(Menu.CityMenu);
+            player.increaseEnergy(-1 * requiredEnergy);
+            return new Result(true, "Going to city...");
         }
 
-        App.setCurrentGame(null);
-        App.setCurrentUser(App.getCurrentGame().getCurrentPlayer().getUser());
-        App.setCurrentMenu(Menu.LoginMenu);
-
-        return new Result(true, """
-                Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
-                Redirecting to Login Menu...
-                """);
-    }
-
-    public void nextTurn()
-    {
-        Game game = App.getCurrentGame();
-        game.nextTurn();
-    }
-
-    public Result forceNextTurn()
-    {
-        Game game = App.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        game.setCurrentPlayer(game.getNext(player));
-        game.getCurrentPlayer().setEnergyToMax();
-        return new Result(true, game.getCurrentPlayer().getUser().getNickname() + " is now playing.");
-    }
-
-    public Result goToCabin()
-    {
-        Game game = App.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        player.goToCabin();
-        App.setCurrentMenu(Menu.HomeMenu);
-        return new Result(true, "Going to cabin...");
-    }
-
-    public Result whoAmI()
-    {
-        return new Result(true, App.getCurrentGame().getCurrentPlayer().getUser().getNickname());
+        return new Result(false, "invalid place name");
     }
 
     public Result helpReadMap()
@@ -752,31 +520,6 @@ public class GameController
         return new Result(true, help.toString().trim());
     }
 
-    public Result printMap(String inputX, String inputY, String inputSize)
-    {
-        int x = Integer.parseInt(inputX);
-        int y = Integer.parseInt(inputY);
-        int size = Integer.parseInt(inputSize);
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        return new Result(true, player.getCurrentMap().
-                getMapString(player.getLocation(), new Point(x, y), size, size).trim());
-    }
-
-    public Result showAround()
-    {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        Map map = player.getCurrentMap();
-        return new Result(true, map.showAround(player.getLocation()).trim());
-    }
-
-    public Result printEntireMap()
-    {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        Map map = player.getCurrentMap();
-        return new Result(true,
-                map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim());
-    }
-
     public Result buildGreenhouse()
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -799,5 +542,19 @@ public class GameController
 
         greenhouse.build();
         return new Result(true, "Yippee! You successfully built a greenhouse.");
+    }
+
+    public Result cheatAddMoney(String amount)
+    {
+        int money = Integer.parseInt(amount);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.increaseMoney(money);
+
+        return new Result(true, "Congrats Thief. You just stole $ " + money + " from bank.");
+    }
+
+    public Result showPlant()
+    {
+        return null; // TODO: add later
     }
 }

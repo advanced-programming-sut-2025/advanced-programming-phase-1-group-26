@@ -23,6 +23,8 @@ public class Plant extends GameObject
 
     protected int harvestWaitTime;
 
+    protected boolean isInGreenhouse = false;
+
     public void water()
     {
         lastWatered = 0;
@@ -51,7 +53,18 @@ public class Plant extends GameObject
         return false;
     }
 
-    public Enum<?> getPlantType() {
+    public Enum<?> getPlantType()
+    {
         return type;
+    }
+
+    public boolean isInGreenHouse()
+    {
+        return isInGreenhouse;
+    }
+
+    public void putInGreenhouse()
+    {
+        isInGreenhouse = true;
     }
 }

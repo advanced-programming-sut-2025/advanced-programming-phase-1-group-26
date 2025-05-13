@@ -3,6 +3,9 @@ package model;
 import model.enums.GameObjectType;
 import model.enums.MapTypes;
 import model.enums.TileTexture;
+import model.resources.Plant;
+
+import java.util.ArrayList;
 
 public class GreenHouse extends Map
 {

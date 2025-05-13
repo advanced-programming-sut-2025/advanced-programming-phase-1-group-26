@@ -20,7 +20,7 @@ public enum HomeCommands implements Command
     EAT("eat\\s+(?<foodName>.*)"),
     CHEAT_ADD_CRAFTING_RECIPE("cheat\\s+add\\s+crafting\\s+recipe\\s+(?<recipeName>.*)"),
     CHEAT_ADD_COOKING_RECIPE("cheat\\s+add\\s+cooking\\s+recipe\\s+(?<recipeName>.*)"),
-    GO_OUT("go\\s+out"),
+    CD_FARM("cd\\s+farm"),
 
     PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
     PRINT_ENTIRE_MAP("print\\s+entire\\s+map"),

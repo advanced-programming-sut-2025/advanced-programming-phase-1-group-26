@@ -42,15 +42,20 @@ public class PreGameController
             }
         }
 
-        for (int i = 0; i < 4 - users.size(); i++)
+        int usersCount = users.size();
+
+        for (int i = 0; i < 4 - usersCount; i++)
         {
-            User newUser = new User(String.format("guest" + (i + 1)));
+            User newUser = new User("guest" + (i + 1));
             users.add(newUser);
         }
+
+        String string = scanner.nextLine();
 
         PreGameMenu.println("Users selected successfully.");
         chooseMaps(users, scanner);
         chooseGender(scanner);
+
         PreGameMenu.println("New Game created.\n\n" +
                 "Welcome to Stardew Valley!");
     }
@@ -64,16 +69,77 @@ public class PreGameController
                     "You can go read a book instead.");
         }
 
-        Game game = App.getCurrentGame();
+        Game game = user.getCurrentGame();
         Player player = game.getPlayerFromUser(user);
         game.setOppenheimer(player);
         game.setCurrentPlayer(player);
-        App.setCurrentGame(user.getCurrentGame());
+        App.setCurrentGame(game);
         App.setCurrentMenu(Menu.GameMenu);
         return new Result(true, """
                 Loading Game...
                 We wanted to add loading screens to the game to make it more interesting,
-                but unfortunately we didn't have time to :(""");
+                but unfortunately we didn't have time to :(
+                
+                Welcome to Stardew Valley!""");
+    }
+
+    public Result enterMenu(String menuName)
+    {
+        String output;
+        if (menuName.equalsIgnoreCase("main menu") || menuName.equalsIgnoreCase("main"))
+        {
+            App.setCurrentMenu(Menu.MainMenu);
+            output = "Switching to game menu...";
+        } else
+        {
+            output = "Menu name is invalid or you can not switch to this menu from here.";
+        }
+
+        return new Result(true, output);
+    }
+
+    public Result help()
+    {
+        return new Result(true, "Available commands:\n" +
+                "\n" +
+                "- game new -u <username-1> <username-2> <username-3>\n" +
+                "    Creates the new game. You can use 1 to three usernames in front of -u flag. It can not empty. (Each game has 4 players.)\n" +
+                "\n" +
+                "- load game\n" +
+                "    If you have an ongoing game, this command load it so you can play.\n" +
+                "\n" +
+                "- menu enter <menu-name>\n" +
+                "    Enters the specified menu. Usage: profile - pre game\n" +
+                "\n" +
+                "- menu exit\n" +
+                "    Exits from the app.\n" +
+                "\n" +
+                "- show current menu\n" +
+                "    Displays the name of the current active menu.\n" +
+                "\n" +
+                "- menu back\n" +
+                "    Goes back to main menu.\n" +
+                "\n" +
+                "- help\n" +
+                "    Shows this help message.\n");
+    }
+
+    public Result showCurrentMenu()
+    {
+        return new Result(true, "You are currently in Pre Game Menu. Use 'help' for more information.");
+    }
+
+    public Result back()
+    {
+        App.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentUser(null);
+        return new Result(true, "Redirecting to main menu...");
+    }
+
+    public Result exit()
+    {
+        App.setCurrentMenu(Menu.ExitMenu);
+        return new Result(true, "Exiting the game...");
     }
 
     private void chooseMaps(ArrayList<User> users, Scanner scanner)
@@ -83,10 +149,12 @@ public class PreGameController
         for (int i = 0; i < farmTypes.size(); i++)
         {
             MapTypes farm = MapTypes.values()[i];
-            PreGameMenu.println("\t" + (i + 1) + "- " + farm);
+            PreGameMenu.println("\t" + (i + 1) + "- " + farm.getName());
         }
 
         ArrayList<Player> players = new ArrayList<>();
+
+        int count = 0;
 
         for (User user : users)
         {
@@ -100,13 +168,13 @@ public class PreGameController
                 } else
                 {
                     int number = Integer.parseInt(input);
-                    if (number < 1 || number > farmTypes.size() + 1)
+                    if (number < 1 || number > farmTypes.size())
                     {
                         PreGameMenu.print("Please enter a valid number: ");
                     } else
                     {
                         MapTypes type = MapTypes.values()[number - 1];
-                        Player player = new Player(user, new Farm(type));
+                        Player player = new Player(user, new Farm(type), count++);
                         players.add(player);
                         break;
                     }
@@ -123,14 +191,16 @@ public class PreGameController
         for (User u : users)
         {
             u.setCurrentGame(game);
+            u.addToNumberOfGames();
         }
+
     }
 
     public void chooseGender(Scanner scanner) {
-        PreGameMenu.println("choosing gender... ");
+        PreGameMenu.println("\nchoosing gender... ");
         for (Player player : App.getCurrentGame().getPlayers()) {
             while (true) {
-                PreGameMenu.println(player.getNickName() + ": ");
+                PreGameMenu.print(player.getNickName() + ": ");
                 String genderName = scanner.nextLine();
                 Gender gender = Gender.getGender(genderName);
                 if (gender != null) {

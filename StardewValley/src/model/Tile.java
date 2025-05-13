@@ -4,6 +4,8 @@ import model.enums.TileTexture;
 import model.enums.resources_enums.ResourceItem;
 import model.resources.*;
 
+import java.util.ArrayList;
+
 public class Tile
 {
     private final Point point;
@@ -40,6 +42,22 @@ public class Tile
     public void hitByThunder()
     {
         hitByThunder = true;
+
+        isFertilized = false;
+        isPloughed = false;
+
+        if (object != null)
+        {
+            if (object instanceof Tree)
+            {
+                object = new Resource(ResourceItem.WOOD);
+            }
+
+            if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof Plant)
+            {
+                object = null;
+            }
+        }
     }
 
     public TileTexture getTexture()
@@ -114,14 +132,32 @@ public class Tile
     public String getAppearance()
     {
         // TODO: uncomment this later
-//        if (App.getCurrentGame().getCurrentPlayer().getLocation().equals(point))
-//        {
-//            return "\uD83E\uDD13"; // nerd face
-//        }
+        if (App.getCurrentGame().getCurrentPlayer().getLocation().equals(point))
+        {
+            return App.getCurrentGame().getCurrentPlayer().getApperance();
+        }
+
+        if (App.getCurrentGame().getCurrentPlayer().isInCity())
+        {
+            Point[] points = App.getCurrentGame().getCity().getPlayerPoints();
+            ArrayList<Player> players = App.getCurrentGame().getPlayers();
+
+            for (int i = 0; i < points.length; i++)
+            {
+                Point p = points[i];
+                if (p != null && p.getX() == point.getX() && p.getY() == point.getY())
+                {
+                    return players.get(i).getApperance();
+                }
+            }
+        }
 
         if (object == null)
         {
-            if (texture.equals(TileTexture.LAND))
+            if (hitByThunder)
+            {
+                return "⬛";
+            } else if (texture.equals(TileTexture.LAND))
             {
                 if (isPloughed)
                 {
@@ -150,7 +186,7 @@ public class Tile
                 return "\uD83E\uDE9F"; // glass emoji, maybe change later
             } else if (texture.equals(TileTexture.QUARRY))
             {
-                return "\uD83E\uDEA8"; // rock emoji
+                return "\uD83E\uDE76";
             } else if (texture.equals(TileTexture.CABIN_WALL) || texture.equals(TileTexture.GREEN_HOUSE_WALL) ||
             texture.equals(TileTexture.WALL))
             {
@@ -256,6 +292,9 @@ public class Tile
                 {
                     return "\uD83E\uDEB5"; // wood emoji
                 }
+            } else if (object instanceof ForagingMineral)
+            {
+                return "\uD83E\uDEA8"; // rock emoji
             } else
             {
                 return "\uD83D\uDFE5"; // ERROR
@@ -278,5 +317,10 @@ public class Tile
     public void setImmunityFromCrows()
     {
         isImmuneFromCrows = false;
+    }
+
+    public void unHitByThunder()
+    {
+        hitByThunder = false;
     }
 }

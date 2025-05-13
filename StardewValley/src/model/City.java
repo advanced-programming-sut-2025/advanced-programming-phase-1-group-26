@@ -1,11 +1,13 @@
 package model;
 
 import model.enums.MapTypes;
+import model.enums.ShopType;
 import model.enums.TileTexture;
 
 public class City extends Map
 {
     private final String mapPath;
+    Point[] playerPoints = new Point[4];
 
     public City()
     {
@@ -38,10 +40,10 @@ public class City extends Map
         }
 
         applyMap();
-        this.startingPoint = findStartingPoint();
+        this.startingPoint = findFreeStartingPoint();
     }
 
-    private Point findStartingPoint()
+    public Point findFreeStartingPoint()
     {
         for (int y = 0; y < HEIGHT; y++)
         {
@@ -50,10 +52,34 @@ public class City extends Map
                 Tile tile = tiles[y][x];
                 if (tile.getTexture().equals(TileTexture.ROAD))
                 {
-                    return tile.getPoint();
+                    boolean found = true;
+
+                    for (Point point : playerPoints)
+                    {
+                        if (point != null && point.getX() == x && point.getY() == y)
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                    {
+                        return tile.getPoint();
+                    }
                 }
             }
         }
         return null;
+    }
+
+    public static boolean isNearShop(ShopType type)
+    {
+        return true; // TODO: add later
+    }
+
+    public Point[] getPlayerPoints()
+    {
+        return playerPoints;
     }
 }

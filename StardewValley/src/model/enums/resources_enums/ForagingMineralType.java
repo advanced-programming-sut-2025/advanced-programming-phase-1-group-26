@@ -43,7 +43,8 @@ public enum ForagingMineralType
         return sellPrice;
     }
 
-    public GameObjectType getType() {
+    public GameObjectType getType()
+    {
         return type;
     }
 }

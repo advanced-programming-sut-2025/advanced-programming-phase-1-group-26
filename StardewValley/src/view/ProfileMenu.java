@@ -44,12 +44,22 @@ public class ProfileMenu implements AppMenu
         } else if ((matcher = ProfileCommands.USER_INFO.getMatcher(input)) != null)
         {
             System.out.println(controller.userInfo());
-        } else if ((matcher = ProfileCommands.EXIT_MENU.getMatcher(input)) != null)
+        } else if ((matcher = ProfileCommands.MENU_EXIT.getMatcher(input)) != null)
         {
             System.out.println(controller.exitMenu());
         } else if ((matcher = ProfileCommands.SHOW_CURRENT_MENU.getMatcher(input)) != null)
         {
             System.out.println(controller.showCurrentMenu());
+        } else if ((matcher = ProfileCommands.MENU_ENTER.getMatcher(input)) != null)
+        {
+            String menuName = matcher.group("menuName").trim();
+            System.out.println(controller.enterMenu(menuName));
+        } else if ((matcher = ProfileCommands.MENU_BACK.getMatcher(input)) != null)
+        {
+            System.out.println(controller.back());
+        } else if ((matcher = ProfileCommands.HELP.getMatcher(input)) != null)
+        {
+            System.out.println(controller.help());
         } else
         {
             System.out.println("invalid command");

@@ -4,6 +4,7 @@ import model.animal.Animal;
 import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
+import model.enums.Weather;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
@@ -17,6 +18,7 @@ import model.tools.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Player {
 
@@ -63,7 +65,7 @@ public class Player {
     private Tool currentTool;
     private double money;
 
-    private HashMap<Animal, Integer> animalFriendships = new HashMap<>();
+    private ArrayList<Animal> animals = new ArrayList<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
@@ -73,7 +75,15 @@ public class Player {
                     KitchenItems.SALAD));
     private ArrayList<EdibleThing> refrigerator = new ArrayList<>();
 
-    public Player(User user, Farm farm) {
+    public static ArrayList<String> appearences = new ArrayList<>(List.of("\uD83D\uDC31", "\uD83E\uDD8A", "\uD83D\uDC3C", "\uD83E\uDD81"));
+
+    private boolean isInFarm = true;
+    private boolean isInCity = false;
+    private boolean isInGreenHouse = false;
+
+    private final String apperance;
+
+    public Player(User user, Farm farm, int number) {
         this.user = user;
         this.farm = farm;
         this.cabin = new Cabin();
@@ -90,15 +100,10 @@ public class Player {
         this.addToInventory(new Seythe());
         this.addToInventory(new TrashCan());
 
-//        for (Player player : App.getCurrentGame().getPlayers())
-//        {
-//            FriendshipData newFriendshipData = new FriendshipData(0, 0, false);
-//            this.friendships.put(player, newFriendshipData);
-//        }
-
         this.zeidy = null;
         this.location = farm.getStartingPoint();
         this.newMessage = false;
+        this.apperance = appearences.get(number);
     }
 
     public Gender getGender() {
@@ -122,8 +127,14 @@ public class Player {
         this.energy = energy;
     }
 
-    public void increaseEnergy(int energy) {
-        this.energy += energy;
+    public void increaseEnergy(int energy)
+    {
+        if (energy != -1)
+        {
+           this.energy += energy;
+        }
+
+        // TODO: add faint check mechanism
     }
 
     public int getTurnEnergy() {
@@ -183,10 +194,6 @@ public class Player {
             return money;
         }
         return money + zeidy.money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
     }
 
     public void increaseMoney(double money) {
@@ -271,11 +278,6 @@ public class Player {
     public void setLocation(Point location)
     {
         this.location = location;
-    }
-
-    public void setCurrentMap(Map currentMap)
-    {
-        this.currentMap = currentMap;
     }
 
     public GameObject findObjectType(Enum<?> type)
@@ -492,6 +494,14 @@ public class Player {
         RobinFriendship = robinFriendship;
     }
 
+    public ArrayList<Animal> getAnimals() {
+        return animals;
+    }
+
+    public void addAnimal(Animal animal) {
+        animals.add(animal);
+    }
+
     public ArrayList<EdibleThing> getRefrigerator()
     {
         return refrigerator;
@@ -588,20 +598,41 @@ public class Player {
 
     public void goToFarm()
     {
+        if (isInCity)
+        {
+            City city = App.getCurrentGame().getCity();
+            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = this.location;
+        }
+        this.isInCity = false;
+        this.isInGreenHouse = false;
+        this.isInFarm = true;
         this.currentMap = this.farm;
         this.location = farm.getStartingPoint();
     }
 
     public void goToCabin()
     {
+        this.isInFarm = false;
         this.currentMap = this.cabin;
         this.location = cabin.getStartingPoint();
     }
 
     public void goToGreenHouse()
     {
+        this.isInFarm = false;
+        this.isInGreenHouse = true;
         this.currentMap = this.greenHouse;
         this.location = greenHouse.getStartingPoint();
+    }
+
+    public void goToCity()
+    {
+        City city = App.getCurrentGame().getCity();
+        this.isInFarm = false;
+        this.isInCity = true;
+        this.currentMap = this.user.getCurrentGame().getCity();
+        this.location = this.user.getCurrentGame().getCity().findFreeStartingPoint();
+        city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = this.location;
     }
 
     public void setEnergyToMax()
@@ -612,5 +643,55 @@ public class Player {
     public boolean canAffordGreenhouse()
     {
         return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
+    }
+
+    public boolean hasEnoughEnergy(int required)
+    {
+        if (energy == -1)
+        {
+            return true;
+        }
+
+        return energy > required;
+    }
+
+    public ArrayList<Tile> getFarmPlants()
+    {
+        return farm.getAllPlantTiles();
+    }
+
+    public ArrayList<Tile> getGreenhousePlants()
+    {
+        return greenHouse.getAllPlantTiles();
+    }
+
+    public ArrayList<Tile> getAllPlants()
+    {
+        ArrayList<Tile> allPlants = new ArrayList<>();
+
+        allPlants.addAll(farm.getAllPlantTiles());
+        allPlants.addAll(greenHouse.getAllPlantTiles());
+
+        return allPlants;
+    }
+
+    public boolean isInFarm()
+    {
+        return isInFarm;
+    }
+
+    public boolean isInCity()
+    {
+        return isInCity;
+    }
+
+    public boolean isInGreenHouse()
+    {
+        return isInGreenHouse;
+    }
+
+    public String getApperance()
+    {
+        return apperance;
     }
 }
