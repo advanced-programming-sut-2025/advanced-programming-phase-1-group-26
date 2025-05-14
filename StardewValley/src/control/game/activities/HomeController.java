@@ -97,7 +97,7 @@ public class HomeController
             player.removeAmountFromInventory(type, ingredients.get(type));
         }
 
-        player.increaseEnergy(-2);
+        player.increaseTurnEnergy(-2);
         CraftingItem product = CraftingItemCreator.create(recipe);
 
         player.addToInventory(product);
@@ -322,7 +322,7 @@ public class HomeController
             }
         }
 
-        player.increaseEnergy(-3);
+        player.increaseTurnEnergy(-3);
 
         EdibleThing food = new EdibleThing(recipe, 5);
         player.addToInventory(food);
@@ -353,7 +353,7 @@ public class HomeController
         }
 
         player.removeAmountFromInventory(type, 1);
-        player.increaseEnergy(kitchenItem.getEnergy());
+        player.increaseTurnEnergy(kitchenItem.getEnergy());
 
         return new Result(true, "Yum Yum, you just ate " + kitchenItem.getType());
     }

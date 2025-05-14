@@ -206,11 +206,14 @@ public class GameMenu implements AppMenu
             String x = matcher.group("x").trim();
             String y = matcher.group("y").trim();
             System.out.println(gameController.showPlant(x,y));
-        }
-
-
-        else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
+        } else if (GeneralCommands.SHOW_MONEY.getMatcher(input) != null) {
+            System.out.println(gameController.showMoney());
+        } else if (CommunicateCommands.FRIENDSHIP.getMatcher(input) != null) {
             comController.friendships();
+        } else if ((matcher = CommunicateCommands.CHEAT_UPGRADE_FRIENDSHIP.getMatcher(input)) != null) {
+            System.out.println(comController.cheatUpgradeFriendship(matcher));
+        } else if ((matcher = CommunicateCommands.CHEAT_UPGRADE_XP.getMatcher(input)) != null) {
+            System.out.println(comController.cheatUpgradeFriendshipLevel(matcher));
         } else if ((matcher = CommunicateCommands.TALK.getMatcher(input)) != null) {
             System.out.println(comController.talk(matcher));
         } else if ((matcher = CommunicateCommands.TALK_HISTORY.getMatcher(input)) != null) {
@@ -220,15 +223,15 @@ public class GameMenu implements AppMenu
         } else if (CommunicateCommands.GIFT_LIST.getMatcher(input) != null) {
             comController.giftList();
         } else if ((matcher = CommunicateCommands.GIFT_RATE.getMatcher(input)) != null) {
-            comController.giftRate(matcher);
+            System.out.println(comController.giftRate(matcher));
         } else if ((matcher = CommunicateCommands.GIFT_HISTORY.getMatcher(input)) != null) {
             comController.giftHistory(matcher);
         } else if ((matcher = CommunicateCommands.HUG.getMatcher(input)) != null) {
-            comController.giveHug(matcher);
+            System.out.println(comController.giveHug(matcher));
         } else if ((matcher = CommunicateCommands.FLOWER.getMatcher(input)) != null) {
-            comController.giveFlower(matcher);
+            System.out.println(comController.giveFlower(matcher));
         } else if ((matcher = CommunicateCommands.ASK_MARRIAGE.getMatcher(input)) != null) {
-            comController.purposeAsk(matcher);
+            System.out.println(comController.purposeAsk(matcher));
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
         }

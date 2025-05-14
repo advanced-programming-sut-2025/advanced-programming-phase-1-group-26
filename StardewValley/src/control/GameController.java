@@ -622,4 +622,9 @@ public class GameController
         Plant plant = (Plant) object;
         return new Result(true, plant.showDetails(plant, tile));
     }
+
+    public Result showMoney() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        return new Result(true, "your money: " + player.getMoney());
+    }
 }

@@ -58,6 +58,7 @@ public enum GeneralCommands implements Command
     SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
     EXIT_GAME("exit\\s+game"),
     DELETE_GAME("delete\\s+game"),
+    SHOW_MONEY("show\\s+money"),
     ;
 
     private final Pattern pattern;

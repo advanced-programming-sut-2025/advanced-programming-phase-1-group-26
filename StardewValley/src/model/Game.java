@@ -123,6 +123,8 @@ public class Game
            if (currentPlayer.getEnergy() > 0)
            {
                GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
+               System.out.println(currentPlayer.newMessages());
+               System.out.println(currentPlayer.newGifts());
                break;
            } else
            {
@@ -185,21 +187,21 @@ public class Game
         switch (direction)
         {
             case "W":
-                return map.getTile(y, x - 1);
+                return map.getTile(x - 1, y);
             case "E":
-                return map.getTile(y, x + 1);
+                return map.getTile(x + 1, y);
             case "N":
-                return map.getTile(y - 1, x);
+                return map.getTile(x, y - 1);
             case "S":
-                return map.getTile(y + 1, x);
+                return map.getTile(x, y + 1);
             case "NW":
-                return map.getTile(y - 1, x - 1);
+                return map.getTile(x - 1, y - 1);
             case "NE":
-                return map.getTile(y - 1, x + 1);
+                return map.getTile(x + 1, y - 1);
             case "SW":
-                return map.getTile(y + 1, x - 1);
+                return map.getTile(x - 1, y + 1);
             case "SE":
-                return map.getTile(y + 1, x + 1);
+                return map.getTile(x + 1, y + 1);
             default:
                 return null;
         }
@@ -207,7 +209,7 @@ public class Game
 
     public Player getPlayerByNickname(String nickname) {
         for (Player player : this.players) {
-            if (player.getUser().getNickname().equals(nickname)) {
+            if (player.getUser().getNickname().equalsIgnoreCase(nickname)) {
                 return player;
             }
         }
