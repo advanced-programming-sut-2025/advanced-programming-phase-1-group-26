@@ -7,6 +7,9 @@ import control.game.activities.MarketingController;
 import model.*;
 import model.enums.MapTypes;
 import control.game.activities.CommunicateController;
+import control.game.activities.TradeController;
+import model.App;
+import model.enums.Menu;
 import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
 import model.enums.regex_enums.GeneralCommands;
@@ -20,6 +23,7 @@ public class GameMenu implements AppMenu
     CommunicateController comController = new CommunicateController();
     GeneralController generalController = new GeneralController();
     AnimalController animalController = new AnimalController();
+    TradeController tradeController = new TradeController();
 
     @Override
     public void check(Scanner scanner)
@@ -293,6 +297,10 @@ public class GameMenu implements AppMenu
             System.out.println(marketingController.questsNPCList(npc));
         } else if((matcher = GameCommands.QUESTS_FINISH.getMatcher(input)) != null) {
             System.out.println(marketingController.questsFinish(input, npc));
+        } else if (GeneralCommands.START_TRADE.getMatcher(input) != null) {
+            App.setCurrentMenu(Menu.TradeMenu);
+            System.out.println("redirecting to trade menu...");
+            tradeController.tradeList();
         }
 
         else

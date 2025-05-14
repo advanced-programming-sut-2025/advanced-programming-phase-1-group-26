@@ -6,10 +6,11 @@ import java.util.regex.Pattern;
 public enum TradeCommands implements Command {
 
     TRADE("trade -u (?<username>.*) -t (?<type>.*) -i (?<item>.*) -a (?<amount>\\d+) " +
-                  "(-p (?<price>\\d+)|-ti (?<targetItem>.*) -ta (?<targetAmount>)\\d+))"),
+                  "(-p (?<price>\\d+)|-ti (?<targetItem>.*?) -ta (?<targetAmount>\\d+))"),
     TRADE_LIST("trade list"),
     TRADE_RESPOND("trade respond -(?<respond>accept|reject) -i (?<id>\\d+)"),
     TRADE_HISTORY("trade history"),
+    END_TRADE("end trade"),
 
     ;
 

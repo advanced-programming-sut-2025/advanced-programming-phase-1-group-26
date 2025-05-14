@@ -59,6 +59,7 @@ public enum GeneralCommands implements Command
     EXIT_GAME("exit\\s+game"),
     DELETE_GAME("delete\\s+game"),
     SHOW_MONEY("show\\s+money"),
+    START_TRADE("start\\s+trade"),
     ;
 
     private final Pattern pattern;
