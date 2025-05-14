@@ -1,13 +1,12 @@
 package model.enums.building_enums;
 
-import model.GameObject;
 import model.enums.GameObjectType;
 import model.enums.SkillType;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum KitchenItems
+public enum KitchenRecipe
 {
     FRIED_EGG(GameObjectType.FRIED_EGG, new HashMap<>() {{
         put(GameObjectType.EGG, 1);
@@ -139,8 +138,8 @@ public enum KitchenItems
     private final HashMap<SkillType, Integer> buff;
     private final int sellPrice;
 
-    KitchenItems(GameObjectType type, HashMap<GameObjectType, Integer> ingredients, int energy,
-                 HashMap<SkillType, Integer> buff, int sellPrice)
+    KitchenRecipe(GameObjectType type, HashMap<GameObjectType, Integer> ingredients, int energy,
+                  HashMap<SkillType, Integer> buff, int sellPrice)
     {
         this.type = type;
         this.ingredients = ingredients;
@@ -194,9 +193,9 @@ public enum KitchenItems
         return output.toString().trim();
     }
 
-    public static KitchenItems getKitchenRecipe(String recipeName)
+    public static KitchenRecipe getKitchenRecipe(String recipeName)
     {
-        for (KitchenItems kitchenItems : KitchenItems.values())
+        for (KitchenRecipe kitchenItems : KitchenRecipe.values())
         {
             if (kitchenItems.getType().toString().equalsIgnoreCase(recipeName))
             {
@@ -206,11 +205,11 @@ public enum KitchenItems
         return null;
     }
 
-    public static KitchenItems isEdible(GameObjectType type)
+    public static KitchenRecipe getKitchenRecipe(GameObjectType type)
     {
-        for (KitchenItems kitchenItems : KitchenItems.values())
+        for (KitchenRecipe kitchenItems : KitchenRecipe.values())
         {
-            if (kitchenItems.type.equals(type))
+            if (kitchenItems.getType().equals(type))
             {
                 return kitchenItems;
             }
@@ -218,24 +217,24 @@ public enum KitchenItems
         return null;
     }
 
-//    public static boolean isEdible(GameObjectType type)
-//    {
-//        for (KitchenItems kitchenItems : KitchenItems.values())
-//        {
-//            if (kitchenItems.getType().equals(type))
-//            {
-//                return true;
-//            }
-//
-//            for (GameObjectType ingredientType : kitchenItems.getIngredients().keySet())
-//            {
-//                if (ingredientType.equals(type))
-//                {
-//                    return true;
-//                }
-//            }
-//        }
-//
-//        return false;
+    public static boolean isEdible(GameObjectType type)
+    {
+        for (KitchenRecipe kitchenItems : KitchenRecipe.values())
+        {
+            if (kitchenItems.getType().equals(type))
+            {
+                return true;
+            }
+
+            for (GameObjectType ingredientType : kitchenItems.getIngredients().keySet())
+            {
+                if (ingredientType.equals(type))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

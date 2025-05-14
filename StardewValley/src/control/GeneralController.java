@@ -31,7 +31,7 @@ public class GeneralController
         for (GameObject object : inventory) {
             int number = object.getNumber();
             if (object instanceof Tool) number = 1;
-            System.out.println(object.getObjectType().name() + " x" + number);
+            System.out.println(object.getObjectType().toString() + " x" + number);
             System.out.println("----");
         }
     }
