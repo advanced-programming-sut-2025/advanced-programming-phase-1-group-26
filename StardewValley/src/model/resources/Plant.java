@@ -19,16 +19,24 @@ public class Plant extends GameObject
     protected int energy;
     protected List<Season> seasons;
 
-    protected int lastWatered = -1; // TODO: can this fix the problem?
+    protected boolean hasStarted = false;
+    protected int lastWatered = 1; // TODO: can this fix the problem?
     protected int currentStage = 0;
-    protected int lastHarvested = -1;
+    protected int lastHarvested = 0;
 
+    protected boolean hasHarvested = false;
     protected int harvestWaitTime;
 
     protected boolean isInGreenhouse = false;
+    protected Tile tile = null;
 
     public void water()
     {
+        if (!hasStarted)
+        {
+            hasStarted = true;
+        }
+
         lastWatered = 0;
     }
 
@@ -45,8 +53,11 @@ public class Plant extends GameObject
 
     public void update()
     {
-        grow();
-        lastWatered += 1;
+        if (hasBeenWateredToday())
+        {
+            grow();
+        }
+        lastWatered += 1; // always ages if not watered
         if (currentStage == totalHarvestTime)
         {
             lastHarvested += 1;
@@ -101,6 +112,36 @@ public class Plant extends GameObject
 
     public boolean hasBeenWateredToday()
     {
+        if (!hasStarted)
+        {
+            return false;
+        }
+
         return lastWatered == 0;
+    }
+
+    public int getLastWatered()
+    {
+        if (!hasStarted)
+        {
+            return -1;
+        }
+
+        return lastWatered;
+    }
+
+    public Tile getTile()
+    {
+        return tile;
+    }
+
+    public boolean hasStarted()
+    {
+        return hasStarted;
+    }
+
+    public void setHasStarted(boolean hasStarted)
+    {
+        this.hasStarted = hasStarted;
     }
 }

@@ -1,5 +1,6 @@
 package model.resources;
 
+import model.Tile;
 import model.enums.resources_enums.CropType;
 
 public class Crop extends Plant
@@ -8,7 +9,7 @@ public class Crop extends Plant
     private int growthTime;
     private boolean canBecomeGiant;
 
-    public Crop(CropType cropType)
+    public Crop(CropType cropType, Tile tile)
     {
         this.type = cropType;
         this.name = cropType.getName();
@@ -25,6 +26,7 @@ public class Crop extends Plant
         this.ObjectType = cropType.getType();
 
         this.harvestWaitTime = totalHarvestTime;
+        this.tile = tile;
     }
 
     public String getName()

@@ -249,6 +249,8 @@ public abstract class Map
     {
         StringBuilder output = new StringBuilder();
 
+        output.append("\n");
+
         int x = location.getX();
         int y = location.getY();
 

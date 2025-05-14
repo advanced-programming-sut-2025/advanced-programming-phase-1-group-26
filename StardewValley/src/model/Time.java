@@ -42,7 +42,7 @@ public class Time
 
         day += dayNum;
 
-        for (int i = 0; i < day; i++)
+        for (int i = 0; i < dayNum; i++)
         {
             App.getCurrentGame().endDay();
 

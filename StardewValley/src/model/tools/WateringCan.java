@@ -6,7 +6,6 @@ import model.enums.tool_enums.WateringCanLevel;
 
 public class WateringCan extends Tool {
     private WateringCanLevel level;
-    private final int maxVolume = 20; // TODO: might change value later
     private int currentVolume = 20;
 
     public WateringCan() {
@@ -41,11 +40,11 @@ public class WateringCan extends Tool {
 
     public void addVolume(int volume)
     {
-        currentVolume = Math.max(currentVolume + volume, maxVolume);
+        currentVolume = Math.max(currentVolume + volume, level.getCapacity());
     }
 
     public void decreaseVolume(int volume)
     {
-        currentVolume -= volume;
+        currentVolume = Math.max(currentVolume - volume, 0);
     }
 }

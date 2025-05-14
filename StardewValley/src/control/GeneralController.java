@@ -309,7 +309,9 @@ public class GeneralController
         Player player = App.getCurrentGame().getCurrentPlayer();
         Map map = player.getCurrentMap();
         return new Result(true,
-                map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim());
+                "\n" +
+                        map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim()
+        + "\n");
     }
 
     /* walk commands */
@@ -336,11 +338,11 @@ public class GeneralController
         if (player.hasEnoughEnergy(requiredEnergy))
         {
             return new Result(true, "positive\n" +
-                    "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
+                    "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy);
         }
 
         return new Result(false, "negative\n" +
-                "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
+                "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy);
     }
 
     public Result walk(String inputX, String inputY, Scanner scanner)
