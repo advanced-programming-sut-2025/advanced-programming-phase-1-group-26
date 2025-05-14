@@ -366,8 +366,16 @@ public class Player {
 
     public void addToInventory(GameObject object)
     {
-        currentBackPack.getInventory().add(object);
+        GameObject o = getItemInInventory(object.getObjectType());
+        if (o != null)
+        {
+            addToInventory(object.getObjectType(), object.getNumber());
+        } else
+        {
+            currentBackPack.getInventory().add(object);
+        }
     }
+
 
     public ArrayList<CraftingRecipeEnums> getCraftingRecipes()
     {
@@ -438,10 +446,12 @@ public class Player {
 
     public void addToInventory(GameObjectType objectType, int amount)
     {
+        boolean added = false;
         GameObject object = getItemInInventory(objectType);
         if (object != null)
         {
             object.addNumber(amount);
+            added = true;
         } else
         {
             if (inventoryHasCapacity())
@@ -451,6 +461,7 @@ public class Player {
             }
         }
     }
+
 
     public int getInventoryCapacity()
     {

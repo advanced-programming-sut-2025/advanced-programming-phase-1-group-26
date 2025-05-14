@@ -3,6 +3,9 @@ package view;
 import control.GameController;
 import control.GeneralController;
 import control.game.activities.CommunicateController;
+import control.game.activities.TradeController;
+import model.App;
+import model.enums.Menu;
 import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
 import model.enums.regex_enums.GeneralCommands;
@@ -15,6 +18,7 @@ public class GameMenu implements AppMenu
     GameController gameController = new GameController();
     CommunicateController comController = new CommunicateController();
     GeneralController generalController = new GeneralController();
+    TradeController tradeController = new TradeController();
 
     @Override
     public void check(Scanner scanner)
@@ -229,9 +233,11 @@ public class GameMenu implements AppMenu
             System.out.println(comController.purposeAsk(matcher));
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
-        }
-
-        else
+        } else if (GeneralCommands.START_TRADE.getMatcher(input) != null) {
+            App.setCurrentMenu(Menu.TradeMenu);
+            System.out.println("redirecting to trade menu...");
+            tradeController.tradeList();
+        } else
         {
             System.out.println("invalid command");
         }
