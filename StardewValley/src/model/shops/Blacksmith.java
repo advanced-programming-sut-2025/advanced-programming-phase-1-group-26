@@ -15,7 +15,7 @@ public class Blacksmith extends Shop {
     private ArrayList<BlacksmithStockItem> stockItems = new ArrayList<>();
 
     public Blacksmith() {
-        super(null, ShopType.BLACK_SMITH, ShopType.BLACK_SMITH.name(), "Clint", 9, 16);
+        super(ShopType.BLACK_SMITH, ShopType.BLACK_SMITH.name(), "Clint", 9, 16);
     }
 
     public void setUpgradeTools() {

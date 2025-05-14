@@ -1,6 +1,7 @@
 package model.animal;
 
 import model.enums.animal_enums.FarmAnimals;
+import model.enums.animal_enums.FarmBuilding;
 
 public class Animal {
     private String name;
@@ -109,5 +110,22 @@ public class Animal {
 
         isFed = false;
         isPet = false;
+    }
+
+    public boolean canGoInThere(FarmBuilding building) {
+        switch(this.animalType.getBuilding()) {
+            case BIG_BARN : if(building.equals(FarmBuilding.BARN)) return false; break;
+            case DELUXE_BARN : if(building.equals(FarmBuilding.BARN) ||
+                    building.equals(FarmBuilding.BIG_BARN)) return false; break;
+            case BIG_COOP : if(building.equals(FarmBuilding.COOP)) return false; break;
+            case DELUXE_COOP : if(building.equals(FarmBuilding.COOP) ||
+                    building.equals(FarmBuilding.BIG_COOP)) return false; break;
+        }
+        return true;
+    }
+
+    public void shepherdAnimal() {
+        isIn = !isIn;
+        if(!isIn) feedFromOutside();
     }
 }

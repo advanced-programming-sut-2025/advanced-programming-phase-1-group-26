@@ -1,9 +1,11 @@
 package model;
 
 import model.animal.Animal;
+import model.animal.AnimalBuilding;
 import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
+import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
@@ -65,6 +67,7 @@ public class Player {
     private double money;
 
     private ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<AnimalBuilding> animalBuildings = new ArrayList<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
@@ -615,5 +618,17 @@ public class Player {
     public boolean canAffordGreenhouse()
     {
         return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
+    }
+
+    public ArrayList<AnimalBuilding> getAnimalBuildings() {
+        return animalBuildings;
+    }
+
+    public void addAnimalBuilding(AnimalBuilding animalBuilding) {
+        animalBuildings.add(animalBuilding);
+    }
+
+    public void decreaseMoney(int amount) {
+        money -= amount;
     }
 }
