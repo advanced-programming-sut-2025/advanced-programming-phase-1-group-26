@@ -228,17 +228,15 @@ public class CommunicateController
         }
     }
 
-    public void giftRate (Matcher matcher) {
+    public Result giftRate (Matcher matcher) {
         int id = Integer.parseInt(matcher.group("giftNumber"));
         int rate = Integer.parseInt(matcher.group("rate"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Gift targetGift = currentPlayer.getGiftById(id);
         if (targetGift == null) {
-            System.out.println("there's no gift with this id");
-            return;
+            return new Result(false, "there's no gift with this id");
         } else if (rate < 1 || rate > 5) {
-            System.out.println("your rate should be between 1 to 5");
-            return;
+            return new Result(false, "your rate should be between 1 to 5");
         }
 
         targetGift.setRate(rate);
@@ -253,13 +251,12 @@ public class CommunicateController
                 giver.getFriendships().get(currentPlayer).setNewLevel(false);
                 currentPlayer.getFriendships().get(giver).setNewLevel(false);
             }
-            if (giver.equals(currentPlayer.getZeidy())) {
-                giver.increaseTurnEnergy(50);
-                currentPlayer.increaseTurnEnergy(50);
-            }
-            //upgradeFriendshipLevel(currentPlayer, giver);
-            System.out.println("gift rated successfully");
         }
+        if (giver.equals(currentPlayer.getZeidy())) {
+            giver.increaseTurnEnergy(50);
+            currentPlayer.increaseTurnEnergy(50);
+        }
+        return new Result(true, "gift rated successfully");
     }
 
     public void giftHistory (Matcher matcher) {
@@ -302,7 +299,6 @@ public class CommunicateController
                         player.getFriendships().get(currentPlayer).setNewLevel(false);
                         currentPlayer.getFriendships().get(player).setNewLevel(false);
                     }
-                    //upgradeFriendshipLevel(currentPlayer, player);
                     currentPlayer.getFriendships().get(player).setIntrcatedToday(true);
                     player.getFriendships().get(currentPlayer).setIntrcatedToday(true);
                 }
@@ -386,7 +382,8 @@ public class CommunicateController
                     if (currentPlayer.getGender().equals(Gender.FEMALE)) {
                         return new Result(false, "you can't purpose ask doost pesaret");
                     } else if (player.getGender().equals(Gender.MALE)) {
-                        return new Result(false, "unfortunately this item is not supported in your country");
+                        return new Result(false,
+                                "unfortunately this item is not supported in your country");
                     } else if (currentPlayer.getItemInInventory(ring) == null) {
                         return new Result(false, "you don't have a ring. buy one");
                     } else {
@@ -427,9 +424,8 @@ public class CommunicateController
                 player.getFriendships().get(currentPlayer).setNewLevel(false);
                 currentPlayer.getFriendships().get(player).setNewLevel(false);
             }
-            //upgradeFriendshipLevel(currentPlayer, player);
             System.out.println("you are husband and wife now");
-            //add energy things
+            //TODO: add energy things
         } else {
             FriendshipData data1 =currentPlayer.getFriendships().get(player);
             FriendshipData data2 =player.getFriendships().get(currentPlayer);
@@ -441,11 +437,6 @@ public class CommunicateController
             data2.setBouquetBought(false);
             System.out.println("go kill yourself");
         }
-
         currentPlayer.getPurposeList().remove(player);
-
-
     }
-
-
 }
