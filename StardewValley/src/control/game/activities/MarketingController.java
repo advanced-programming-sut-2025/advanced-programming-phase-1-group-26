@@ -107,7 +107,7 @@ public class MarketingController {
     public Result questsNPCList(NPC npc) {
         StringBuilder sb = new StringBuilder();
         for(GameObject quest : npc.updateQuests(Season.Spring, App.getCurrentGame().getCurrentTime())) {
-            sb.append(quest.getObjectType().name() + " " + quest.getNumber() + "\n");
+            sb.append(quest.getObjectType().toString() + " " + quest.getNumber() + "\n");
         }
 
         return new Result(true, sb.toString());

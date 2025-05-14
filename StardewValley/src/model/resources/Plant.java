@@ -57,16 +57,23 @@ public class Plant extends GameObject
         {
             grow();
         }
-        lastWatered += 1; // always ages if not watered
-        if (currentStage == totalHarvestTime)
+
+        if (hasHarvested)
         {
-            lastHarvested += 1;
+            lastHarvested = Math.min(harvestWaitTime, lastHarvested + 1);
         }
+
+        lastWatered += 1;
     }
 
     public boolean canHarvest() // would be overridden
     {
-        return false;
+        if (!hasHarvested)
+        {
+            return (currentStage == totalHarvestTime);
+        }
+
+        return lastHarvested >= harvestWaitTime;
     }
 
     public Enum<?> getPlantType()
@@ -96,14 +103,19 @@ public class Plant extends GameObject
             output.append(((Crop) plant).getCropType().getCraftInfo());
         }
 
-        output.append("\n");
+        output.append("\n------------------------------------\n");
 
         output.append("Remaining Time: ").append(totalHarvestTime - currentStage).append(" (days)\n");
-        if (canHarvest())
+        output.append("Current Stage: ").append(currentStage).append(" (days ago)\n");
+
+        output.append("------------------------------------\n");
+        if (hasHarvested)
         {
             output.append("Harvest Wait Time: ").append(harvestWaitTime).append(" (days)\n");
+            output.append("Days required before Next Harvest: ").append(harvestWaitTime - lastHarvested).append(" (days)\n");
+            output.append("------------------------------------\n");
         }
-        output.append("Current Stage: ").append(currentStage).append(" (days ago)\n");
+
         output.append("Watered Today: ").append(lastWatered == 0 ? "positive" : "negative").append("\n");
         output.append("Has Been Fertilized: ").append(tile.isFertilized() ? "positive" : "negative").append("\n");
 

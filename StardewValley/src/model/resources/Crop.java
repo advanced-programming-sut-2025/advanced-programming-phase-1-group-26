@@ -34,11 +34,11 @@ public class Crop extends Plant
         return this.name;
     }
 
-    @Override
-    public boolean canHarvest()
-    {
-        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
-    }
+//    @Override
+//    public boolean canHarvest()
+//    {
+//        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
+//    }
 
     public CropType getCropType()
     {
@@ -52,6 +52,7 @@ public class Crop extends Plant
             return true;
         }
 
+        hasHarvested = true;
         lastHarvested = 0;
         harvestWaitTime = growthTime;
 

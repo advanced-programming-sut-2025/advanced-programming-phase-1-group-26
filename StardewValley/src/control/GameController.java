@@ -107,16 +107,22 @@ public class GameController
                 if (targetTile.getObject() instanceof Tree ||
                         targetTile.getObject() instanceof ForagingTree ||
                         targetTile.getObject().getObjectType().equals(ResourceItem.WOOD.getType())) {
+                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
                     currentPlayer.addToInventory(ResourceItem.WOOD.getType(), 3);
+                    GameMenu.println("3 units of wood added to inventory.");
                     if (targetTile.getObject() instanceof Tree) {
                         if (((Tree) targetTile.getObject()).getTreeType().equals(TreeType.MAPLE_TREE)) {
+                            Tree tree = (Tree) targetTile.getObject();
+                            tree.harvest();
                             currentPlayer.addToInventory(new GameObject(GameObjectType.MAPLE_SYRUP, 3));
+                            GameMenu.println("3 units of wood added to inventory.");
                         } else if (((Tree) targetTile.getObject()).getTreeType().equals(TreeType.MYSTIC_TREE)) {
+                            Tree tree = (Tree) targetTile.getObject();
+                            tree.harvest();
                             currentPlayer.addToInventory(new GameObject(GameObjectType.MYSTIC_SYRUP, 3));
                         }
                     }
-                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
-                    return new Result(true, "axe used");
+                    return new Result(true, "axe used successfully");
                 } else {
                     currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getFailedEnergyUsage());
                     return new Result(false, "you can't use axe on this tile");
@@ -175,12 +181,6 @@ public class GameController
             {
                 currentPlayer.increaseEnergy((int)(weatherModifier * -((Seythe) tool).getEnergyUsage()));
 
-                if (targetTile.getTexture().equals(TileTexture.GRASS) && targetTile.getObject() == null)
-                {
-                    targetTile.setType(TileTexture.LAND);
-                    return new Result(true, "You can now plant seeds in this tile.");
-                }
-
                 if (!targetTile.hasPlants())
                 {
                     return new Result(false, "There are no plants in this tile :(");
@@ -203,7 +203,7 @@ public class GameController
                     currentPlayer.addToInventory(fruit);
                     tree.harvest();
                     currentPlayer.getFarmingSkill().addUnit(5);
-                    return new Result(true, "you harvested one " + fruit.getObjectType().name() + ".");
+                    return new Result(true, "you harvested one " + fruit.getObjectType().toString() + ".");
                 } else if (plant instanceof Crop)
                 {
                     Crop crop = (Crop) plant;
@@ -215,7 +215,7 @@ public class GameController
                         targetTile.unPlant();
                     }
 
-                    return new Result(true, "you harvested one " + crop.getObjectType().name() + ".");
+                    return new Result(true, "you harvested one " + crop.getObjectType().toString() + ".");
                 }
 
             } else if (tool instanceof Shear) {
@@ -351,7 +351,7 @@ public class GameController
         }
 
         CropType cropType = CropType.getCropBySeed(seedType);
-        TreeType treeType = TreeType.getTreeType(seedName);
+        TreeType treeType = TreeType.getTreeBySeed(seedType);
 
         if (cropType != null)
         {

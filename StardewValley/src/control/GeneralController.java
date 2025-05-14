@@ -28,7 +28,7 @@ public class GeneralController
         System.out.println("your items:");
         System.out.println("----");
         for (GameObject object : inventory) {
-            System.out.println(object.getObjectType().name() + " x" + object.getNumber());
+            System.out.println(object.getObjectType().toString() + " x" + object.getNumber());
             System.out.println("----");
         }
     }

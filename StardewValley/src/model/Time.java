@@ -21,15 +21,17 @@ public class Time
     public void updateHour(int hourNum)
     {
         hour += hourNum;
-        if(hour > 9 && hour <= 12) timeOfDay = TimeOfDay.MORNING;
-        if(hour > 12 && hour <= 17) timeOfDay = TimeOfDay.AFTERNOON;
-        if(hour > 17 && hour <= 23) timeOfDay = TimeOfDay.EVENING;
-        if (hour >= 23)
+
+        if (hour > 22)
         {
             int dayNum = ((hour - 23) / 14) + 1;
             hour = ((hour - 23) % 14) + 9;
             updateDay(dayNum, false); // TODO: if uses cheat code for advance time in large amount,
         }
+
+        if(hour > 9 && hour <= 12) timeOfDay = TimeOfDay.MORNING;
+        if(hour > 12 && hour <= 17) timeOfDay = TimeOfDay.AFTERNOON;
+        if(hour > 17 && hour <= 23) timeOfDay = TimeOfDay.EVENING;
     }
 
     public void updateDay(int dayNum, boolean hasCheated)
@@ -44,17 +46,17 @@ public class Time
 
         for (int i = 0; i < dayNum; i++)
         {
-            App.getCurrentGame().endDay();
-
             if (hasCheated)
             {
                 App.getCurrentGame().waterAllFarmPlants();
             }
+
+            App.getCurrentGame().endDay();
         }
 
         updateWeather();
 
-        if (day >= 29)
+        if (day > 28)
         {
             int seasonNum = ((day - 29) / 28) + 1;
             day = ((day - 29) % 28) + 1;

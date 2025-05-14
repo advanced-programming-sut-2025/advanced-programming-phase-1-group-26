@@ -199,7 +199,7 @@ public class CommunicateController
         System.out.println("your gifts: ");
         for (Gift object : currentPlayer.getArchiveGifts()) {
             System.out.println("id: " + object.getId() +
-                    " item: " + object.getGameObject().getObjectType().name() +
+                    " item: " + object.getGameObject().getObjectType().toString() +
                     " amount: " + object.getGameObject().getNumber());
             System.out.println("----");
         }
@@ -236,7 +236,7 @@ public class CommunicateController
         for (Gift object : currentPlayer.getGivenGifts())  {
             if (object.getTaker().getNickName().equals(player.getNickName())) {
                 System.out.println("id: " + object.getId() +
-                        " item: " + object.getGameObject().getObjectType().name() +
+                        " item: " + object.getGameObject().getObjectType().toString() +
                         " amount: " + object.getGameObject().getNumber());
                 System.out.println("----");
             }
@@ -245,7 +245,7 @@ public class CommunicateController
         for (Gift object : currentPlayer.getArchiveGifts()) {
             if (object.getGiver().getNickName().equals(player.getNickName())) {
                 System.out.println("id: " + object.getId() +
-                        " item: " + object.getGameObject().getObjectType().name() +
+                        " item: " + object.getGameObject().getObjectType().toString() +
                         " amount: " + object.getGameObject().getNumber());
                 System.out.println("----");
             }

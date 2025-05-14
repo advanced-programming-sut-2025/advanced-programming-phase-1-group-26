@@ -27,14 +27,15 @@ public class Tree extends Plant
         this.tile = tile;
     }
 
-    @Override
-    public boolean canHarvest()
-    {
-        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
-    }
+//    @Override
+//    public boolean canHarvest()
+//    {
+//        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
+//    }
 
     public void harvest()
     {
+        hasHarvested = true;
         lastHarvested = 0;
         harvestWaitTime = fruitHarvestCycle;
     }

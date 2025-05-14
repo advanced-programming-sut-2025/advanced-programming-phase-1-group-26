@@ -48,7 +48,7 @@ public enum GameObjectType
     BLUE_JAZZ_CROP("Blue Jazz"),
     CARROT_CROP("Carrot"),
     CAULIFLOWER_CROP("Cauliflower"),
-    COFFEE_BEAN_CROP("Coffee Bean"),
+    COFFEE_BEAN_CROP("Coffee Bean (Plant)"),
     GARLIC_CROP("Garlic"),
     GREEN_BEAN_CROP("Green Bean"),
     KALE_CROP("Kale"),

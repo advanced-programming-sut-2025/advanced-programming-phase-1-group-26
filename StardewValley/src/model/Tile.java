@@ -1,6 +1,8 @@
 package model;
 
+import model.enums.GameObjectType;
 import model.enums.TileTexture;
+import model.enums.resources_enums.ForagingMineralType;
 import model.enums.resources_enums.ResourceItem;
 import model.resources.*;
 
@@ -50,7 +52,7 @@ public class Tile
         {
             if (object instanceof Tree)
             {
-                object = new Resource(ResourceItem.WOOD);
+                object = new GameObject(GameObjectType.COAL, 3);
             }
 
             if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof Plant)
@@ -498,6 +500,9 @@ public class Tile
                         return "\uD83E\uDEB5";
 //                    return "\uD83D\uDFE7";
                 }
+            } else if (object.getObjectType().equals(GameObjectType.COAL))
+            {
+              return "⬛";
             } else if (object instanceof ForagingMineral)
             {
                 return "\uD83D\uDFE7";

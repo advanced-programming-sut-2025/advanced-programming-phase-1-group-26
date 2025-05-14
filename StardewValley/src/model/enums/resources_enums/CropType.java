@@ -154,9 +154,9 @@ public enum CropType
         output.append("Total Harvest Time: ").append(totalHarvestTime).append("\n");
         output.append("One Time: ").append(oneTime ? "TRUE" : "FALSE").append("\n");
         output.append("Regrowth Time: ").append(growthTime == -1 ? "-" : growthTime).append("\n");
-        output.append("Base Sell Price: ").append(baseSellPrice).append("\n");
+        output.append("Base Sell Price: ").append(baseSellPrice == -1 ? "-" : growthTime).append("\n");
         output.append("Is Edible: ").append(isEdible ? "TRUE" : "FALSE").append("\n");
-        output.append("Base Energy: ").append(energy).append("\n");
+        output.append("Base Energy: ").append(energy == -1 ? "-" : energy).append("\n");
 
         output.append("Season(s): ");
         for (int i = 0; i < getSeasons().size(); i++)
