@@ -78,12 +78,13 @@ public class Farm extends model.Map
     {
         int randomItemsCount = getFreeTiles().size() / 50;
 
-        for (int i = 0; i < randomItemsCount / 3; i++)
-        {
-            Tile random = getRandomFreeTile();
-            TreeType type = randomItem(TreeType.class);
-            random.setObject(new Tree(type));
-        }
+        // TODO: should this be here or not?
+//        for (int i = 0; i < randomItemsCount / 3; i++)
+//        {
+//            Tile random = getRandomFreeTile();
+//            TreeType type = randomItem(TreeType.class);
+//            random.setObject(new Tree(type, random));
+//        }
 
         for (int i = 0; i < randomItemsCount / 3; i++)
         {

@@ -3,13 +3,12 @@ package model;
 import model.animal.Animal;
 import model.animal.AnimalBuilding;
 import model.animal.Fish;
-import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
 import model.enums.animal_enums.FarmAnimals;
 import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.CraftingRecipeEnums;
-import model.enums.building_enums.KitchenItems;
+import model.enums.building_enums.KitchenRecipe;
 import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
@@ -55,7 +54,6 @@ public class Player {
 
     private boolean newMessage;
 
-
     private ArrayList<Gift> newGifts = new ArrayList<>();
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
@@ -78,12 +76,11 @@ public class Player {
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
-    private ArrayList<KitchenItems> cookingRecipes = new ArrayList<>(
-            Arrays.asList(KitchenItems.FRIED_EGG,
-                    KitchenItems.BAKED_FISH,
-                    KitchenItems.SALAD));
-    private ArrayList<EdibleThing> refrigerator = new ArrayList<>();
-    private ArrayList<FarmAnimals.Product> products = new ArrayList<>();
+    private ArrayList<KitchenRecipe> cookingRecipes = new ArrayList<>(
+            Arrays.asList(KitchenRecipe.FRIED_EGG,
+                    KitchenRecipe.BAKED_FISH,
+                    KitchenRecipe.SALAD));
+    private ArrayList<GameObject> refrigerator = new ArrayList<>();
 
     public static ArrayList<String> appearences = new ArrayList<>(List.of("\uD83D\uDC31", "\uD83E\uDD8A", "\uD83D\uDC3C", "\uD83E\uDD81"));
 
@@ -298,6 +295,12 @@ public class Player {
             City city = App.getCurrentGame().getCity();
             city.getPlayerPoints()[index] = location;
         }
+        if (isInCity)
+        {
+            int index = App.getCurrentGame().getPlayerIndex();
+            City city = App.getCurrentGame().getCity();
+            city.getPlayerPoints()[index] = location;
+        }
 
     }
 
@@ -310,7 +313,7 @@ public class Player {
     {
         for (GameObject obj : currentBackPack.getInventory())
         {
-            Enum<?> inventoryItemType = obj.getToolType();
+            Enum<?> inventoryItemType = obj.getObjectType();
 
             if (inventoryItemType.equals(type))
             {
@@ -342,11 +345,7 @@ public class Player {
     {
         if (this.currentBackPack.getInventory().contains(object))
         {
-            object.addNumber(-1);
-            if (object.number == 0)
-            {
-                this.currentBackPack.getInventory().remove(object);
-            }
+            this.currentBackPack.getInventory().remove(object);
         }
     }
 
@@ -478,7 +477,6 @@ public class Player {
         }
     }
 
-
     public int getInventoryCapacity()
     {
         int capacity = currentBackPack.getCapacity();
@@ -539,12 +537,12 @@ public class Player {
         animals.add(animal);
     }
 
-    public ArrayList<EdibleThing> getRefrigerator()
+    public ArrayList<GameObject> getRefrigerator()
     {
         return refrigerator;
     }
 
-    public ArrayList<KitchenItems> getCookingRecipes()
+    public ArrayList<KitchenRecipe> getCookingRecipes()
     {
         return cookingRecipes;
     }
@@ -559,9 +557,9 @@ public class Player {
         return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
     }
 
-    public EdibleThing getFromRefrigerator (GameObjectType type)
+    public GameObject getFromRefrigerator (GameObjectType type)
     {
-        for (EdibleThing thing : refrigerator)
+        for (GameObject thing : refrigerator)
         {
             if (thing.getObjectType().equals(type))
             {
@@ -573,7 +571,7 @@ public class Player {
 
     public int howManyInRefrigerator(GameObjectType type)
     {
-        for (EdibleThing thing : refrigerator)
+        for (GameObject thing : refrigerator)
         {
             if (thing.getObjectType().equals(type))
             {
@@ -585,7 +583,7 @@ public class Player {
 
     public void removeAmountFromRefrigerator(GameObjectType type, int amount)
     {
-        for (EdibleThing thing : refrigerator)
+        for (GameObject thing : refrigerator)
         {
             if (thing.getObjectType().equals(type))
             {

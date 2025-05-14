@@ -1,7 +1,9 @@
 package view;
 
+import control.GameController;
 import control.GeneralController;
 import control.game.activities.HomeController;
+import model.enums.regex_enums.GameCommands;
 import model.enums.regex_enums.GeneralCommands;
 import model.enums.regex_enums.HomeCommands;
 
@@ -12,6 +14,7 @@ public class HomeMenu implements AppMenu
 {
     HomeController homeController = new HomeController();
     GeneralController generalController = new GeneralController();
+    GameController gameController = new GameController();
 
     @Override
     public void check(Scanner scanner)
@@ -28,13 +31,15 @@ public class HomeMenu implements AppMenu
                 (matcher = GeneralCommands.INVENTORY_TRASH.getMatcher(input)) != null) {
             System.out.println(generalController.inventoryTrash(matcher));
         } else if ((matcher = GeneralCommands.TOOLS_EQUIP.getMatcher(input)) != null) {
-            System.out.println(generalController.toolsEquip(matcher));
+            System.out.println(gameController.toolsEquip(matcher));
         } else if ((matcher = GeneralCommands.TOOLS_SHOW_CURRENT.getMatcher(input)) != null) {
-            System.out.println(generalController.toolsShowCurrent());
+            System.out.println(gameController.toolsShowCurrent());
         } else if ((matcher = GeneralCommands.TOOLS_SHOW_AVAILABLE.getMatcher(input)) != null) {
-            generalController.toolsShowAvailable();
+            gameController.toolsShowAvailable();
         } else if ((matcher = GeneralCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
-            System.out.println(generalController.toolsUpgrade(matcher));
+            System.out.println(gameController.toolsUpgrade(matcher));
+        } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
+            System.out.println(gameController.toolsUse(matcher));
         }
 
         /* player cheat codes */
@@ -216,6 +221,9 @@ public class HomeMenu implements AppMenu
         } else if ((matcher = HomeCommands.PRINT_ENTIRE_MAP.getMatcher(input)) != null)
         {
             System.out.println(homeController.printEntireMap());
+        } else if ((matcher = HomeCommands.SHOW_REFRIGERATOR.getMatcher(input)) != null)
+        {
+            System.out.println(homeController.showRefrigerator());
         } else
         {
             System.out.println("invalid command");

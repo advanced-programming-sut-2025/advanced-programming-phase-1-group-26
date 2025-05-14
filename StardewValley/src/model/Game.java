@@ -97,7 +97,10 @@ public class Game
         {
             hitTilesByThunder();
         }
+
+        startPlants();
         growPlants();
+        killPlants();
     }
 
     public void distributeForagingItems()
@@ -346,6 +349,39 @@ public class Game
             for (Plant plant : plants)
             {
                 plant.update();
+            }
+        }
+    }
+
+    public void killPlants()
+    {
+        for (Player player : players)
+        {
+            ArrayList<Plant> plants = player.getAllPlants();
+            {
+                for (Plant plant : plants)
+                {
+                    if (plant.getLastWatered() > 2)
+                    {
+                        Tile tile = plant.getTile();
+                        tile.unPlant();
+                    }
+                }
+            }
+        }
+    }
+
+    public void startPlants()
+    {
+        for (Player player : players)
+        {
+            ArrayList<Plant> plants = player.getAllPlants();
+            for (Plant plant : plants)
+            {
+                if (!plant.hasStarted())
+                {
+                    plant.setHasStarted(true);
+                }
             }
         }
     }

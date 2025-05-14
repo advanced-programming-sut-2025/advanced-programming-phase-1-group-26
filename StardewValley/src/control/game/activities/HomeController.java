@@ -1,13 +1,13 @@
 package control.game.activities;
 
 import model.*;
-import model.building.Cooking.EdibleThing;
 import model.building.CraftingItems.CraftingItem;
 import model.building.CraftingItems.CraftingItemCreator;
 import model.enums.GameObjectType;
 import model.enums.Menu;
 import model.enums.building_enums.CraftingRecipeEnums;
-import model.enums.building_enums.KitchenItems;
+import model.enums.building_enums.KitchenRecipe;
+import model.tools.Tool;
 import view.HomeMenu;
 
 import java.util.ArrayList;
@@ -21,12 +21,17 @@ public class HomeController
 
         StringBuilder result = new StringBuilder();
         result.append("You have ").append(recipes.size()).append(" crafting recipes in total.\n");
-        result.append("Here they are: \n");
 
-        for (CraftingRecipeEnums c : recipes)
+        if (recipes.size() > 0)
         {
-            result.append(c.getInfo());
-            result.append("\n");
+            result.append("Here they are: \n");
+            result.append("------------------------------------\n");
+
+            for (CraftingRecipeEnums c : recipes)
+            {
+                result.append(c.getInfo());
+                result.append("------------------------------------\n");
+            }
         }
 
         return new Result(true, result.toString().trim());
@@ -75,9 +80,9 @@ public class HomeController
         {
             if (!player.hasEnoughInInventory(type, ingredients.get(type)))
             {
-                HomeMenu.println("I'm sorry. You don't have enough of " + type + " in your inventory.");
-                HomeMenu.println("you have: " + player.howManyInInventory(type));
-                HomeMenu.println("required: " + ingredients.get(type));
+                HomeMenu.println("You don't have enough of " + type + " in your inventory.");
+                HomeMenu.println("\tyou have: " + player.howManyInInventory(type));
+                HomeMenu.println("\trequired: " + ingredients.get(type));
                 canAfford = false;
             }
         }
@@ -102,7 +107,7 @@ public class HomeController
 
         player.addToInventory(product);
 
-        return new Result(true, recipe.getProduct() + "was added to your inventory.");
+        return new Result(true, recipe.getProduct() + " was added to your inventory.");
     }
 
     public Result placeItem(String itemName, String direction)
@@ -119,6 +124,11 @@ public class HomeController
         if (object == null)
         {
             return new Result(false, "You don't currently have this item in your inventory.");
+        }
+
+        if (object instanceof Tool)
+        {
+            return new Result(false, "You can't take tools out of your backpack.");
         }
 
         Tile tile = App.getCurrentGame().getTileFromDirection(direction);
@@ -153,6 +163,11 @@ public class HomeController
                     "What? I'm not a magician! If you want more capacity, update your f***ing backpack.");
         }
 
+        if (!count.matches("\\d+"))
+        {
+            return new Result(false, "invalid amount");
+        }
+
         int amount = Integer.parseInt(count);
         GameObject object = new GameObject(type, amount);
         player.addToInventory(object);
@@ -177,15 +192,17 @@ public class HomeController
             return new Result(false, "You don't currently have this item in your inventory.");
         }
 
-        KitchenItems kitchenItem = KitchenItems.isEdible(type);
-        if (kitchenItem == null)
+        if (!KitchenRecipe.isEdible(object.getObjectType()))
         {
-            return new Result(false, "This item is not edible, so you can't put it in the refrigerator.\n" +
-                    "Sorry, it's company policy.");
+            return new Result(false, "This item is not edible, so you can't put it in the refrigerator.");
         }
 
-        EdibleThing thing = new EdibleThing(kitchenItem, object.getNumber());
-        player.getRefrigerator().add(thing);
+        if (player.getRefrigerator().size() == 5)
+        {
+            return new Result(false, "You can't put more than 5 refrigerators.");
+        }
+
+        player.getRefrigerator().add(object);
         player.removeFromInventory(object);
 
         return new Result(true, "You successfully put " + itemName + " into your inventory.");
@@ -201,14 +218,13 @@ public class HomeController
             return new Result(false, "This item does not exist.");
         }
 
-        KitchenItems kitchenItem = KitchenItems.isEdible(type);
-        if (kitchenItem == null)
+        if (!KitchenRecipe.isEdible(type))
         {
-            return new Result(false, "This item is not edible");
+            return new Result(false, "This item is not even edible");
         }
 
-        EdibleThing thing = player.getFromRefrigerator(type);
-        if (thing == null)
+        GameObject object = player.getFromRefrigerator(type);
+        if (object == null)
         {
             return new Result(false, "This item is not currently in your refrigerator.");
         }
@@ -218,41 +234,41 @@ public class HomeController
             return new Result(false, "You don't have any capacity left in your backpack :(");
         }
 
-        GameObject object = new GameObject(type, thing.getNumber());
         player.addToInventory(object);
-        player.getRefrigerator().remove(thing);
+        player.getRefrigerator().remove(object);
 
         return new Result(true, "You successfully picked " + itemName + " from the refrigerator.");
     }
 
     public Result showCookingRecipes()
     {
-        ArrayList<KitchenItems> recipes = App.getCurrentGame().getCurrentPlayer().getCookingRecipes();
+        ArrayList<KitchenRecipe> recipes = App.getCurrentGame().getCurrentPlayer().getCookingRecipes();
 
         StringBuilder result = new StringBuilder();
         result.append("You have ").append(recipes.size()).append(" cooking recipes in total.\n");
-        result.append("Here they are: \n");
+        result.append("Here they are: \n\n");
 
-        for (KitchenItems c : recipes)
+        for (KitchenRecipe c : recipes)
         {
+            result.append("------------------------------------\n");
             result.append(c.getInfo());
-            result.append("\n");
+            result.append("\n------------------------------------\n\n");
         }
 
-        return new Result(true, result.toString().trim());
+        return new Result(true, result.toString().trim() + "\n");
     }
 
     public Result cheatAddCookingRecipe(String itemName)
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
 
-        KitchenItems recipe = KitchenItems.getKitchenRecipe(itemName);
+        KitchenRecipe recipe = KitchenRecipe.getKitchenRecipe(itemName);
         if (recipe == null)
         {
             return new Result(false, "There is no cooking recipe with that name.");
         }
 
-        ArrayList<KitchenItems> recipes = player.getCookingRecipes();
+        ArrayList<KitchenRecipe> recipes = player.getCookingRecipes();
         if (recipes.contains(recipe))
         {
             return new Result(false, "You already have access to this recipe.");
@@ -272,13 +288,13 @@ public class HomeController
             return new Result(false, "This item does not exist.");
         }
 
-        KitchenItems recipe = KitchenItems.getKitchenRecipe(itemName);
+        KitchenRecipe recipe = KitchenRecipe.getKitchenRecipe(itemName);
         if (recipe == null)
         {
             return new Result(false, "There is no cooking recipe for this item.");
         }
 
-        ArrayList<KitchenItems> recipes = player.getCookingRecipes();
+        ArrayList<KitchenRecipe> recipes = player.getCookingRecipes();
         if (!recipes.contains(recipe))
         {
             return new Result(false, "You do not have access to this recipe.");
@@ -289,7 +305,7 @@ public class HomeController
             return new Result(false, "You don't have any capacity left in your backpack.");
         }
 
-        ArrayList<EdibleThing> refrigerator = player.getRefrigerator();
+        ArrayList<GameObject> refrigerator = player.getRefrigerator();
         HashMap<GameObjectType, Integer> ingredients = recipe.getIngredients();
         boolean canAfford = true;
 
@@ -304,7 +320,7 @@ public class HomeController
 
         if (!canAfford)
         {
-            return new Result(false, "You don't have enough ingredients for this recipe.+");
+            return new Result(false, "You don't have enough ingredients for this recipe.");
         }
 
         for (GameObjectType a : ingredients.keySet())
@@ -324,10 +340,11 @@ public class HomeController
 
         player.increaseTurnEnergy(-3);
 
-        EdibleThing food = new EdibleThing(recipe, 5);
+        GameObject food = new GameObject(recipe.getType(), 1);
         player.addToInventory(food);
 
-        return new Result(true, food.getToolType() + " was added to your backpack.");
+        return new Result(true, "Did Gordon Ramsay teach you how to cook, or is he taking notes now?\n" +
+                "You just cooked one " + food.getObjectType() + ".");
     }
 
     public Result eat(String itemName)
@@ -340,8 +357,7 @@ public class HomeController
             return new Result(false, "This item does not exist.");
         }
 
-        KitchenItems kitchenItem = KitchenItems.isEdible(type);
-        if (kitchenItem == null)
+        if (!KitchenRecipe.isEdible(type))
         {
             return new Result(false, "This item is not edible :(");
         }
@@ -352,10 +368,16 @@ public class HomeController
             return new Result(false, "You don't currently have this food in your backpack.");
         }
 
-        player.removeAmountFromInventory(type, 1);
-        player.increaseTurnEnergy(kitchenItem.getEnergy());
+        KitchenRecipe food = KitchenRecipe.getKitchenRecipe(itemName);
+        if (food == null)
+        {
+            return new Result(false, "This item is not edible :(");
+        }
 
-        return new Result(true, "Yum Yum, you just ate " + kitchenItem.getType());
+        player.removeAmountFromInventory(type, 1);
+        player.increaseTurnEnergy(food.getEnergy());
+
+        return new Result(true, "Yum Yum, you just ate " + food.getType());
     }
 
     public Result printMap(String inputX, String inputY, String inputSize)
@@ -390,5 +412,25 @@ public class HomeController
         player.goToFarm();
         App.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "Going to farm...");
+    }
+
+    public Result showRefrigerator()
+    {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getRefrigerator());
+
+        if (inventory.size() == 0)
+        {
+            return new Result(false, "Your refrigerator is empty.");
+        }
+
+        StringBuilder output = new StringBuilder();
+        output.append("refrigerator items:\n");
+        output.append("----\n");
+        for (GameObject object : inventory) {
+            output.append(object.getObjectType().toString()).append(" x").append(object.getNumber()).append("\n");
+            output.append("----\n");
+        }
+        return new Result(true, output.toString());
     }
 }

@@ -19,16 +19,24 @@ public class Plant extends GameObject
     protected int energy;
     protected List<Season> seasons;
 
-    protected int lastWatered = 0;
+    protected boolean hasStarted = false;
+    protected int lastWatered = 1; // TODO: can this fix the problem?
     protected int currentStage = 0;
-    protected int lastHarvested = -1;
+    protected int lastHarvested = 0;
 
+    protected boolean hasHarvested = false;
     protected int harvestWaitTime;
 
     protected boolean isInGreenhouse = false;
+    protected Tile tile = null;
 
     public void water()
     {
+        if (!hasStarted)
+        {
+            hasStarted = true;
+        }
+
         lastWatered = 0;
     }
 
@@ -45,17 +53,27 @@ public class Plant extends GameObject
 
     public void update()
     {
-        grow();
-        lastWatered += 1;
-        if (currentStage == totalHarvestTime)
+        if (hasBeenWateredToday())
         {
-            lastHarvested += 1;
+            grow();
         }
+
+        if (hasHarvested)
+        {
+            lastHarvested = Math.min(harvestWaitTime, lastHarvested + 1);
+        }
+
+        lastWatered += 1;
     }
 
     public boolean canHarvest() // would be overridden
     {
-        return false;
+        if (!hasHarvested)
+        {
+            return (currentStage == totalHarvestTime);
+        }
+
+        return lastHarvested >= harvestWaitTime;
     }
 
     public Enum<?> getPlantType()
@@ -85,17 +103,62 @@ public class Plant extends GameObject
             output.append(((Crop) plant).getCropType().getCraftInfo());
         }
 
-        output.append("\n");
+        output.append("\n------------------------------------\n");
 
         output.append("Remaining Time: ").append(totalHarvestTime - currentStage).append(" (days)\n");
-        if (canHarvest())
+        output.append("Current Stage: ").append(currentStage).append(" (days ago)\n");
+
+        output.append("------------------------------------\n");
+        if (hasHarvested)
         {
             output.append("Harvest Wait Time: ").append(harvestWaitTime).append(" (days)\n");
+            output.append("Days required before Next Harvest: ").append(harvestWaitTime - lastHarvested).append(" (days)\n");
+            output.append("------------------------------------\n");
         }
-        output.append("Current Stage: ").append(currentStage).append(" (days ago)\n");
-        output.append("Watered Today: ").append(lastWatered == 0 ? "positive" : "negative").append(" (days)\n");
-        output.append("Has Been Fertilized: ").append(tile.isFertilized() ? "positive" : "negative").append(" (days)\n");
+
+        output.append("Watered Today: ").append(lastWatered == 0 ? "positive" : "negative").append("\n");
+        output.append("Has Been Fertilized: ").append(tile.isFertilized() ? "positive" : "negative").append("\n");
 
         return output.toString().trim();
+    }
+
+    public boolean hasBeenWateredToday()
+    {
+        if (!hasStarted)
+        {
+            return false;
+        }
+
+        return lastWatered == 0;
+    }
+
+    public int getLastWatered()
+    {
+        if (!hasStarted)
+        {
+            return -1;
+        }
+
+        return lastWatered;
+    }
+
+    public Tile getTile()
+    {
+        return tile;
+    }
+
+    public boolean hasStarted()
+    {
+        return hasStarted;
+    }
+
+    public void setHasStarted(boolean hasStarted)
+    {
+        this.hasStarted = hasStarted;
+    }
+
+    public void setHasStarted()
+    {
+        this.hasStarted = true;
     }
 }

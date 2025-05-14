@@ -116,9 +116,9 @@ public enum TreeType
         }
 
         output.append("Total Harvest Time: ").append(totalHarvestTime).append("\n");
-        output.append("Fruit Base Sell Price: ").append(fruitBaseSellPrice).append("\n");
+        output.append("Fruit Base Sell Price: ").append(fruitBaseSellPrice == -1 ? "-" : fruitBaseSellPrice).append("\n");
         output.append("Is Fruit Edible: ").append(isEdible ? "TRUE" : "FALSE").append("\n");
-        output.append("Fruit Base Energy: ").append(energy).append("\n");
+        output.append("Fruit Base Energy: ").append(energy == -1 ? "-" : energy).append("\n");
 
         output.append("Season(s): ");
         for (int i = 0; i < getSeasons().size(); i++)

@@ -3,6 +3,7 @@ package model.enums.resources_enums;
 import model.enums.Season;
 
 import java.util.List;
+import java.util.Random;
 
 public enum MixedSeedType
 {
@@ -31,5 +32,18 @@ public enum MixedSeedType
     public List<CropType> getPossibleCrops()
     {
         return possibleCrops;
+    }
+
+    public static CropType getRandomSeedCropBySeason(Season season)
+    {
+        for (MixedSeedType mixedSeedType : MixedSeedType.values())
+        {
+            if (mixedSeedType.getSeason().equals(season))
+            {
+                Random random = new Random();
+                return mixedSeedType.getPossibleCrops().get(random.nextInt(mixedSeedType.getPossibleCrops().size()));
+            }
+        }
+        return null;
     }
 }
