@@ -22,17 +22,19 @@ public class GeneralController
                         "\nthis turn energy: " + currentPlayer.getTurnEnergy());
     }
 
-    public void inventoryShow() {
+    public void inventoryShow()
+    {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getCurrentBackPack().getInventory());
         System.out.println("your items:");
         System.out.println("----");
         for (GameObject object : inventory) {
-            System.out.println(object.getObjectType().toString() + " x" + object.getNumber());
+            int number = object.getNumber();
+            if (object instanceof Tool) number = 1;
+            System.out.println(object.getObjectType().name() + " x" + number);
             System.out.println("----");
         }
     }
-
     public Result inventoryTrash(Matcher matcher) {
         String name = matcher.group("name");
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();

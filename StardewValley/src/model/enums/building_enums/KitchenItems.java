@@ -1,5 +1,6 @@
 package model.enums.building_enums;
 
+import model.GameObject;
 import model.enums.GameObjectType;
 import model.enums.SkillType;
 
@@ -177,14 +178,16 @@ public enum KitchenItems
     {
         StringBuilder output = new StringBuilder();
 
-        output.append("name: ").append(type).append("\n");
+        output.append("Name: ").append(type).append("\n");
+        output.append("------------------\n");
 
-        output.append("ingredients: \n");
+        output.append("Ingredients: \n");
         for (Map.Entry<GameObjectType, Integer> entry : ingredients.entrySet())
         {
             output.append("\t").append(entry.getKey()).append(": ").append(entry.getValue()).append('\n');
         }
 
+        output.append("------------------\n");
         output.append("energy: ").append(energy).append("\n");
         output.append("sell price: ").append(sellPrice).append("\n");
 
@@ -195,7 +198,7 @@ public enum KitchenItems
     {
         for (KitchenItems kitchenItems : KitchenItems.values())
         {
-            if (kitchenItems.name().equals(recipeName))
+            if (kitchenItems.getType().toString().equalsIgnoreCase(recipeName))
             {
                 return kitchenItems;
             }
@@ -213,5 +216,26 @@ public enum KitchenItems
             }
         }
         return null;
+    }
+
+//    public static boolean isEdible(GameObjectType type)
+//    {
+//        for (KitchenItems kitchenItems : KitchenItems.values())
+//        {
+//            if (kitchenItems.getType().equals(type))
+//            {
+//                return true;
+//            }
+//
+//            for (GameObjectType ingredientType : kitchenItems.getIngredients().keySet())
+//            {
+//                if (ingredientType.equals(type))
+//                {
+//                    return true;
+//                }
+//            }
+//        }
+//
+//        return false;
     }
 }

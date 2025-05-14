@@ -172,6 +172,17 @@ public class GameController
                     targetTile.setObject(null);
                     currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
                     return new Result(true, "seed is removed");
+                } else if (!targetTile.hasPlants() && targetTile.getObject() != null)
+                {
+                    GameObject object = targetTile.getObject();
+                    Player player = App.getCurrentGame().getCurrentPlayer();
+                    if (!player.inventoryHasCapacity())
+                    {
+                        return new Result(false, "you don't have enough space in your inventory");
+                    }
+                    player.addToInventory(object);
+                    targetTile.setObject(null);
+                    return new Result(true, object.getObjectType().toString() + " added to your inventory");
                 }
                 else {
                     currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getFailedEnergyUsage());

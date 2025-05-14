@@ -8,6 +8,7 @@ import model.enums.GameObjectType;
 import model.enums.Menu;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
+import model.tools.Tool;
 import view.HomeMenu;
 
 import java.util.ArrayList;
@@ -21,12 +22,17 @@ public class HomeController
 
         StringBuilder result = new StringBuilder();
         result.append("You have ").append(recipes.size()).append(" crafting recipes in total.\n");
-        result.append("Here they are: \n");
 
-        for (CraftingRecipeEnums c : recipes)
+        if (recipes.size() > 0)
         {
-            result.append(c.getInfo());
-            result.append("\n");
+            result.append("Here they are: \n");
+            result.append("------------------------------------\n");
+
+            for (CraftingRecipeEnums c : recipes)
+            {
+                result.append(c.getInfo());
+                result.append("------------------------------------\n");
+            }
         }
 
         return new Result(true, result.toString().trim());
@@ -75,9 +81,9 @@ public class HomeController
         {
             if (!player.hasEnoughInInventory(type, ingredients.get(type)))
             {
-                HomeMenu.println("I'm sorry. You don't have enough of " + type + " in your inventory.");
-                HomeMenu.println("you have: " + player.howManyInInventory(type));
-                HomeMenu.println("required: " + ingredients.get(type));
+                HomeMenu.println("You don't have enough of " + type + " in your inventory.");
+                HomeMenu.println("\tyou have: " + player.howManyInInventory(type));
+                HomeMenu.println("\trequired: " + ingredients.get(type));
                 canAfford = false;
             }
         }
@@ -97,12 +103,12 @@ public class HomeController
             player.removeAmountFromInventory(type, ingredients.get(type));
         }
 
-        player.increaseEnergy(-2);
+        player.increaseTurnEnergy(-2);
         CraftingItem product = CraftingItemCreator.create(recipe);
 
         player.addToInventory(product);
 
-        return new Result(true, recipe.getProduct() + "was added to your inventory.");
+        return new Result(true, recipe.getProduct() + " was added to your inventory.");
     }
 
     public Result placeItem(String itemName, String direction)
@@ -119,6 +125,11 @@ public class HomeController
         if (object == null)
         {
             return new Result(false, "You don't currently have this item in your inventory.");
+        }
+
+        if (object instanceof Tool)
+        {
+            return new Result(false, "You can't take tools out of your backpack.");
         }
 
         Tile tile = App.getCurrentGame().getTileFromDirection(direction);
@@ -151,6 +162,11 @@ public class HomeController
         {
             return new Result(false, "You don't have any capacity left in your backpack.\n" +
                     "What? I'm not a magician! If you want more capacity, update your f***ing backpack.");
+        }
+
+        if (!count.matches("\\d+"))
+        {
+            return new Result(false, "invalid amount");
         }
 
         int amount = Integer.parseInt(count);
@@ -232,11 +248,12 @@ public class HomeController
         StringBuilder result = new StringBuilder();
         result.append("You have ").append(recipes.size()).append(" cooking recipes in total.\n");
         result.append("Here they are: \n");
+        result.append("------------------------------------\n");
 
         for (KitchenItems c : recipes)
         {
             result.append(c.getInfo());
-            result.append("\n");
+            result.append("------------------------------------\n\n");
         }
 
         return new Result(true, result.toString().trim());
@@ -390,5 +407,25 @@ public class HomeController
         player.goToFarm();
         App.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "Going to farm...");
+    }
+
+    public Result showRefrigerator()
+    {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getRefrigerator());
+
+        if (inventory.size() == 0)
+        {
+            return new Result(false, "Your refrigerator is empty.");
+        }
+
+        StringBuilder output = new StringBuilder();
+        output.append("refrigerator items:\n");
+        output.append("----\n");
+        for (GameObject object : inventory) {
+            output.append(object.getObjectType().toString()).append(" x").append(object.getNumber()).append("\n");
+            output.append("----\n");
+        }
+        return new Result(true, output.toString());
     }
 }
