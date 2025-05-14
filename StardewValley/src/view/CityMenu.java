@@ -178,11 +178,11 @@ public class CityMenu implements AppMenu
         } else if ((matcher = CommunicateCommands.GIFT_HISTORY.getMatcher(input)) != null) {
             comController.giftHistory(matcher);
         } else if ((matcher = CommunicateCommands.HUG.getMatcher(input)) != null) {
-            comController.giveHug(matcher);
+            System.out.println(comController.giveHug(matcher));
         } else if ((matcher = CommunicateCommands.FLOWER.getMatcher(input)) != null) {
-            comController.giveFlower(matcher);
+            System.out.println(comController.giveFlower(matcher));
         } else if ((matcher = CommunicateCommands.ASK_MARRIAGE.getMatcher(input)) != null) {
-            comController.purposeAsk(matcher);
+            System.out.println(comController.purposeAsk(matcher));
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
         }

@@ -116,6 +116,8 @@ public class Game
            if (currentPlayer.getEnergy() > 0)
            {
                GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
+               System.out.println(currentPlayer.newMessages());
+               System.out.println(currentPlayer.newGifts());
                break;
            } else
            {
@@ -200,7 +202,7 @@ public class Game
 
     public Player getPlayerByNickname(String nickname) {
         for (Player player : this.players) {
-            if (player.getUser().getNickname().equals(nickname)) {
+            if (player.getUser().getNickname().equalsIgnoreCase(nickname)) {
                 return player;
             }
         }

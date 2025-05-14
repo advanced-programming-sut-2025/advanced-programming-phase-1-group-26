@@ -51,6 +51,7 @@ public class Player {
 
     private boolean newMessage;
 
+
     private ArrayList<Gift> newGifts = new ArrayList<>();
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
@@ -703,5 +704,25 @@ public class Player {
         }
 
         return allPlants;
+    }
+
+    public Result newMessages() {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (currentPlayer.isNewMessage()) {
+            currentPlayer.setNewMessage(false);
+            return new Result(true, "you have some new messages! check them");
+        } else {
+            return new Result(false, "you don't have any new message");
+        }
+    }
+
+    public Result newGifts() {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (!currentPlayer.getNewGifts().isEmpty()) {
+            getNewGifts().clear();
+            return new Result(true, "you have received new gifts");
+        } else {
+            return new Result(false, "you didn't receive gifts loser");
+        }
     }
 }
