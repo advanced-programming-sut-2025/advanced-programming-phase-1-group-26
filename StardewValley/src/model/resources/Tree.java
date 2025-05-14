@@ -27,12 +27,6 @@ public class Tree extends Plant
         this.tile = tile;
     }
 
-//    @Override
-//    public boolean canHarvest()
-//    {
-//        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
-//    }
-
     public void harvest()
     {
         hasHarvested = true;

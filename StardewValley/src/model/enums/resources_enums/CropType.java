@@ -1,5 +1,6 @@
 package model.enums.resources_enums;
 
+import model.App;
 import model.enums.GameObjectType;
 import model.enums.Season;
 
@@ -192,7 +193,7 @@ public enum CropType
     {
         if (seedType.equals(ForagingSeedType.MIXED_SEEDS.getType()))
         {
-            CropType random = CropType.values()[RANDOM.nextInt(CropType.values().length)];
+            CropType random = MixedSeedType.getRandomSeedCropBySeason(App.getCurrentGame().getCurrentTime().getSeason());
             return random;
         }
 

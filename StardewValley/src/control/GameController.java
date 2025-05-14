@@ -206,16 +206,28 @@ public class GameController
                     return new Result(true, "you harvested one " + fruit.getObjectType().toString() + ".");
                 } else if (plant instanceof Crop)
                 {
+                    boolean giant = false;
+
                     Crop crop = (Crop) plant;
-                    GameObject cropResult = new GameObject(crop.getCropType().getType(), 1);
-                    currentPlayer.addToInventory(cropResult);
+
+                    if (plant instanceof GiantCrop)
+                    {
+                        giant = true;
+                        GameObject cropResult = new GameObject(crop.getCropType().getType(), 10);
+                        currentPlayer.addToInventory(cropResult);
+                    } else
+                    {
+                        GameObject cropResult = new GameObject(crop.getCropType().getType(), 1);
+                        currentPlayer.addToInventory(cropResult);
+                    }
+
                     currentPlayer.getFarmingSkill().addUnit(5);
                     if (crop.harvest())
                     {
                         targetTile.unPlant();
                     }
 
-                    return new Result(true, "you harvested one " + crop.getObjectType().toString() + ".");
+                    return new Result(true, "you harvested " + (giant ? "ten " : "one ") + crop.getObjectType().toString() + ".");
                 }
 
             } else if (tool instanceof Shear) {
@@ -357,12 +369,42 @@ public class GameController
         {
             Crop crop = new Crop(cropType, tile);
             tile.setObject(crop);
-            if (player.isInGreenHouse())
+
+            Tile rootTile;
+            boolean giant = false;
+
+            if ((rootTile = crop.canBecomeGiant(0)) != null)
             {
-                crop.putInGreenhouse();
+                giant = crop.becomeGiant(rootTile);
+            } else if ((rootTile = crop.canBecomeGiant(1)) != null)
+            {
+                giant = crop.becomeGiant(rootTile);
+            } else if ((rootTile = crop.canBecomeGiant(2)) != null)
+            {
+                giant = crop.becomeGiant(rootTile);
+            } else if ((rootTile = crop.canBecomeGiant(3)) != null)
+            {
+                giant = crop.becomeGiant(rootTile);
             }
+
+            if (!giant)
+            {
+                if (player.isInGreenHouse())
+                {
+                    crop.putInGreenhouse();
+                }
+            }
+
             player.removeFromInventory(seed);
-            return new Result(true, "Successfully planted " + cropType.getName() + ".");
+
+            if (giant)
+            {
+                GameMenu.println("Successfully planted " + cropType.getName() + ".");
+                return new Result(true, "Agi magi, crops just became giant.");
+            } else
+            {
+                return new Result(true, "Successfully planted " + cropType.getName() + ".");
+            }
         }
 
         if (treeType != null)

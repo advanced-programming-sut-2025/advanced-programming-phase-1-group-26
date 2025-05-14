@@ -126,8 +126,25 @@ public class Tile
 
     public void unPlant()
     {
-        object = null;
-        isPloughed = false;
+        if (object != null && object instanceof GiantCrop)
+        {
+            GiantCrop crop = (GiantCrop) object;
+            ArrayList<Tile> tiles = GiantCrop.get2x2Tiles(crop.getRootTile());
+            for (Tile t : tiles)
+            {
+                t.setObject(null);
+                t.ploghInverse();
+                t.unFertilize();
+            }
+        }
+
+        setObject(null);
+        ploghInverse();
+        unFertilize();
+    }
+
+    public void unFertilize()
+    {
         isFertilized = false;
     }
 
@@ -483,8 +500,15 @@ public class Tile
 //                return "\uD83D\uDFEA";
             } else if (object instanceof Crop)
             {
+                if (object instanceof GiantCrop)
+                {
+                    return "\uD83C\uDF44"; // 🍄
+                }
+                else
+                {
                     return "\uD83C\uDF31"; // seed emoji
 //                return "\uD83D\uDFE5";
+                }
             } else if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof ForagingTree)
             {
                     return "\uD83C\uDF32";

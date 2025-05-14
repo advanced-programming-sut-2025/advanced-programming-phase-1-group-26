@@ -156,4 +156,9 @@ public class Plant extends GameObject
     {
         this.hasStarted = hasStarted;
     }
+
+    public void setHasStarted()
+    {
+        this.hasStarted = true;
+    }
 }
