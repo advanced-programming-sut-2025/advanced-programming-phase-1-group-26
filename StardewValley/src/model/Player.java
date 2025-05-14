@@ -1,6 +1,7 @@
 package model;
 
 import model.animal.Animal;
+import model.animal.AnimalBuilding;
 import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
@@ -68,6 +69,7 @@ public class Player {
     private double money;
 
     private ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<AnimalBuilding> animalBuildings = new ArrayList<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
@@ -198,6 +200,10 @@ public class Player {
         return money + zeidy.money;
     }
 
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
     public void increaseMoney(double money) {
         this.money += money;
     }
@@ -280,6 +286,11 @@ public class Player {
     public void setLocation(Point location)
     {
         this.location = location;
+    }
+
+    public void setCurrentMap(Map currentMap)
+    {
+        this.currentMap = currentMap;
     }
 
     public GameObject findObjectType(Enum<?> type)
@@ -645,6 +656,18 @@ public class Player {
     public boolean canAffordGreenhouse()
     {
         return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
+    }
+
+    public ArrayList<AnimalBuilding> getAnimalBuildings() {
+        return animalBuildings;
+    }
+
+    public void addAnimalBuilding(AnimalBuilding animalBuilding) {
+        animalBuildings.add(animalBuilding);
+    }
+
+    public void decreaseMoney(int amount) {
+        money -= amount;
     }
 
     public boolean hasEnoughEnergy(int required)

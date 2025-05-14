@@ -41,6 +41,34 @@ public class MarketingController {
         return new Result(true, shop.showProducts());
     }
 
+    public Result showAvailableProducts() {
+        ShopType targetType = null;
+        for(ShopType type : ShopType.values()){
+            if(App.getCurrentGame().getCity().isNearShop(type)){
+                targetType = type;
+            }
+        }
+        if(targetType == null) {
+            return new Result(false, "No shop found in this location");
+        }
+
+        Shop shop = null;
+
+        switch(targetType) {
+            case BLACK_SMITH -> shop = new Blacksmith();
+            case MARINE_RANCH -> shop = new MarniesRanch();
+            case JOJA_MART -> shop = new JojaMart();
+            case CARPENTER_SHOP -> shop = new CarpentersShop();
+            case PIERRE_GENERAL_STORE -> shop = new PierresGeneralStore();
+            case FISH_SHOP -> shop = new FishShop();
+            case STARDROP_SALOON -> shop = new TheStardropSaloon();
+        }
+        if(!shop.isOpen(App.getCurrentGame().getCurrentTime())) {
+            return new Result(false, "Shop is not open");
+        }
+        return new Result(true, shop.showAvailableProducts());
+    }
+
     public Result meetNPC(String input) {
         String npcName = GameCommands.MEET_NPC.getMatcher(input).group("NPCname");
         for(NPC npc : App.getCurrentGame().getNPCs()) {

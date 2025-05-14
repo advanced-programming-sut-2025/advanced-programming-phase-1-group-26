@@ -6,7 +6,7 @@ import model.Time;
 import model.enums.ShopType;
 
 public abstract class Shop {
-    private Point location;
+    //private Point location;
     private ShopType type;
     private String shopName;
     private String salesManName;
@@ -18,7 +18,6 @@ public abstract class Shop {
 
 
     public Shop(ShopType type, String shopName, String salesManName, int startWork, int endWork) {
-//        this.location = location;
         this.type = type;
         this.shopName = shopName;
         this.salesManName = salesManName;
