@@ -24,6 +24,8 @@ public class GameMenu implements AppMenu
     GeneralController generalController = new GeneralController();
     AnimalController animalController = new AnimalController();
     TradeController tradeController = new TradeController();
+    MarketingController marketingController = new MarketingController();
+    NPC npc;
 
     @Override
     public void check(Scanner scanner)
