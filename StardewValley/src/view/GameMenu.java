@@ -1,6 +1,7 @@
 package view;
 
 import control.GameController;
+import control.game.activities.AnimalController;
 import control.game.activities.MarketingController;
 import model.*;
 import model.enums.MapTypes;
@@ -20,6 +21,7 @@ public class GameMenu implements AppMenu
     MarketingController marketingController = new MarketingController();
     NPC npc;
     CommunicateController comController = new CommunicateController();
+    AnimalController animalController = new AnimalController();
 
     @Override
     public void check(Scanner scanner)
@@ -238,6 +240,30 @@ public class GameMenu implements AppMenu
             ShopMap shop = new ShopMap();
             System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
         }
+
+
+        else if((matcher = GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input)) != null) {
+            System.out.println(animalController.buildAnimalBuilding(input));
+        } else if((matcher = GameCommands.BUY_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.buyAnimal(input));
+        } else if((matcher = GameCommands.PET_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.pet(input));
+        } else if((matcher = GameCommands.ANIMAL_INFOS.getMatcher(input)) != null) {
+            System.out.println(animalController.pet(input));
+        } else if((matcher = GameCommands.SHEPHERD_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.shepherdAnimal(input));
+        } else if((matcher = GameCommands.FEED_HAY.getMatcher(input)) != null) {
+            System.out.println(animalController.feedHay(input));
+        } else if((matcher = GameCommands.PRODUCES.getMatcher(input)) != null) {
+            System.out.println(animalController.showProducts());
+        } else if((matcher = GameCommands.SELL_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.sellAnimal(input));
+        } else if((matcher = GameCommands.SET_FRIENDSHIP.getMatcher(input)) != null) {
+            animalController.cheatSetFriendship(input);
+        } else if((matcher = GameCommands.FISHING.getMatcher(input)) != null) {
+            animalController.fishing(input);
+        }
+
 
         else if((matcher = GameCommands.MEET_NPC.getMatcher(input)) != null) {
             System.out.println(marketingController.meetNPC(input));

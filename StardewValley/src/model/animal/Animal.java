@@ -1,7 +1,11 @@
 package model.animal;
 
+import model.GameObject;
 import model.enums.animal_enums.FarmAnimals;
 import model.enums.animal_enums.FarmBuilding;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Animal {
     private String name;
@@ -11,6 +15,7 @@ public class Animal {
     private boolean isFed;
     private boolean isIn;
     private boolean isPet;
+    private ArrayList<FarmAnimals.Product> produces;
 
     public Animal(String name, FarmAnimals animalType) {
         this.name = name;
@@ -20,6 +25,7 @@ public class Animal {
         this.isFed = false;
         this.isIn = false;
         this.isPet = false;
+        this.produces = animalType.getProducts();
     }
 
     public void feed() {
@@ -98,18 +104,51 @@ public class Animal {
     }
 
     public void checkAndReset() {
-        if(!isFed) {
+        if(!isFed()) {
             decreaseFriendship(20);
         }
-        if(!isIn) {
+        if(!isIn()) {
             decreaseFriendship(20);
         }
-        if(!isPet) {
-            decreaseFriendship(10 - friendship / 200);
+        if(!isPet()) {
+            decreaseFriendship(10 - getFriendship() / 200);
         }
 
-        isFed = false;
-        isPet = false;
+        setFed(false);
+        setPet(false);
+    }
+
+    public ArrayList<FarmAnimals.Product> getProduces() {
+        return produces;
+    }
+
+    public void removeProduct(FarmAnimals.Product product) {
+        produces.remove(product);
+    }
+
+    public void secondProductLogic(FarmAnimals.Product product) {
+        if(this.friendship <= 100) produces.remove(product);
+        else {
+            Random r = new Random();
+            double random1 = r.nextDouble(1);
+            double random2 = r.nextDouble(1);
+            if((this.friendship + 150 * (random1 + 0.5)) / 1500 < 0.5) {
+                produces.remove(product);
+                produces.add(produces.getFirst());
+            }
+            double quality =((double) this.friendship / 1000) * (0.5 + 0.5 * random2);
+            produces.remove(product);
+            if(quality <= 0.5) {
+                product = new FarmAnimals.Product(product.type(), product.price());
+            } else if(quality > 0.5 && quality <= 0.7) {
+                product = new FarmAnimals.Product(product.type(), (int) (product.price() * 1.25));
+            } else if(quality > 0.7 && quality <= 0.9) {
+                product = new FarmAnimals.Product(product.type(), (int) (product.price() * 1.5));
+            } else {
+                product = new FarmAnimals.Product(product.type(), product.price() * 2);
+            }
+            produces.add(product);
+        }
     }
 
     public boolean canGoInThere(FarmBuilding building) {

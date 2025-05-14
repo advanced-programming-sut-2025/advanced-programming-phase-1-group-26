@@ -364,6 +364,9 @@ public enum GameObjectType
     MAKI_ROLL_RECIPE("Maki Roll Recipe"),
     TRIPLE_SHOT_ESPRESSO_RECIPE("Triple Shot Espresso Recipe"),
     COOKIE_RECIPE("Cookie Recipe"),
+    DUCK_FEATHER("Duck Feather"),
+    RABBITS_FOOT("Rabbits Foot"),
+    GOAT_MILK("Goat Milk"),
 
     ;
 

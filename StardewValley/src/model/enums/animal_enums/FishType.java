@@ -28,11 +28,13 @@ public enum FishType
     private final String displayName;
     private final int basePrice;
     private final Season season;
+    private final boolean isLegendary;
 
     FishType(String displayName, int basePrice, Season season, boolean isLegendary) {
         this.displayName = displayName;
         this.basePrice = basePrice;
         this.season = season;
+        this.isLegendary = isLegendary;
     }
 
     public String getDisplayName() {
@@ -47,5 +49,7 @@ public enum FishType
         return season;
     }
 
-
+    public boolean isLegendary() {
+        return isLegendary;
+    }
 }

@@ -57,7 +57,7 @@ public class NPC {
 
     public boolean isQuestFinish = false;
     public boolean isTalked = false;
-    public boolean isGift = false; //TODO, should be reset everyday
+    public boolean isGifted = false; //TODO, should be reset everyday
     public String talk(Boolean isTalked, Time currentTime) {
         if(!isTalked) {
             friendshipWithNpcData.increaseXp(20);
@@ -93,5 +93,10 @@ public class NPC {
     }
     public void setFriendshipWithNpcData(FriendshipWithNpcData friendshipWithNpcData) {
         this.friendshipWithNpcData = friendshipWithNpcData;
+    }
+
+    public void reset() {
+        isTalked = false;
+        isGifted = false;
     }
 }

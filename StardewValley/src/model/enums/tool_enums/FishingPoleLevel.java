@@ -1,18 +1,20 @@
 package model.enums.tool_enums;
 
 public enum FishingPoleLevel {
-    Training (8, 25, 0),
-    Bamboo (8, 500, 0),
-    FiberGlass (6, 1800, 2),
-    Iridium (4, 7500, 4);
+    Training ("Training pole", 8, 25, 0),
+    Bamboo ("Bamboo pole", 8, 500, 0),
+    FiberGlass ("Fiberglass pole", 6, 1800, 2),
+    Iridium ("Iridium pole", 4, 7500, 4);
 
+    String name;
     int baseEnergyUsage;
     int price;
     int baseLevel;
     /* Different fish */
     /* Set FishingMaxxing Later*/
 
-    FishingPoleLevel(int baseEnergyUsage, int price, int baseLevel) {
+    FishingPoleLevel(String name, int baseEnergyUsage, int price, int baseLevel) {
+        this.name = name;
         this.baseEnergyUsage = baseEnergyUsage;
         this.price = price;
         this.baseLevel = baseLevel;
@@ -28,5 +30,9 @@ public enum FishingPoleLevel {
 
     public int getBaseLevel() {
         return baseLevel;
+    }
+
+    public String getName() {
+        return name;
     }
 }

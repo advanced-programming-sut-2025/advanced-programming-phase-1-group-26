@@ -66,6 +66,7 @@ public enum GameCommands implements Command
     PRODUCES("produces"),
     COLLECT_PRODUCES("collect produces -n (?<name>.*)"),
     SELL_ANIMAL("sell animal -n (?<name>.*)"),
+    FISHING("fishing -p (?<fishingPole>.*)"),
 
     EXIT_GAME("exit\\s+game"),
     DELETE_GAME("delete\\s+game"),
