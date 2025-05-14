@@ -46,6 +46,16 @@ public enum GameCommands implements Command
     PRODUCES("produces"),
     COLLECT_PRODUCES("collect produces -n (?<name>.*)"),
     SELL_ANIMAL("sell animal -n (?<name>.*)"),
+    FISHING("fishing -p (?<fishingPole>.*)"),
+
+    EXIT_GAME("exit\\s+game"),
+    DELETE_GAME("delete\\s+game"),
+    NEXT_TURN("next\\s+turn"),
+
+    GO_TO_CABIN("go\\s+to\\s+cabin"),
+    WHOAMI("whoami"),
+    SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
+    SHOW_AROUND("show\\s+around"),
     SET_FRIENDSHIP("cheat set friendship -n (?<name>.*) -c (?<amount>\\d+)"),
     ;
 

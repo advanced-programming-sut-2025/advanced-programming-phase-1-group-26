@@ -2,6 +2,7 @@ package model.tools;
 
 import model.GameObject;
 import model.enums.GameObjectType;
+import model.enums.animal_enums.FarmAnimals;
 import model.enums.tool_enums.BackPackLevel;
 import model.enums.tool_enums.ToolType;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 public class BackPack extends Tool {
     private BackPackLevel level;
     private ArrayList<GameObject> inventory = new ArrayList<>();
+    private ArrayList<FarmAnimals.Product> products = new ArrayList<>();
 
     public BackPack() {
         super.ObjectType = GameObjectType.BackPack;
@@ -45,5 +47,16 @@ public class BackPack extends Tool {
     public int getSize()
     {
         return inventory.size();
+    }
+
+    public ArrayList<FarmAnimals.Product> getProducts() {
+        return products;
+    }
+
+    public void addProduct(FarmAnimals.Product products) {
+        this.products.add(products);
+    }
+    public void removeProduct(FarmAnimals.Product products) {
+        this.products.remove(products);
     }
 }

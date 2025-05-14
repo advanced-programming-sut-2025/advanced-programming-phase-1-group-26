@@ -2,6 +2,10 @@ package view;
 
 import control.GameController;
 import control.GeneralController;
+import control.game.activities.AnimalController;
+import control.game.activities.MarketingController;
+import model.*;
+import model.enums.MapTypes;
 import control.game.activities.CommunicateController;
 import model.enums.regex_enums.CommunicateCommands;
 import model.enums.regex_enums.GameCommands;
@@ -15,6 +19,7 @@ public class GameMenu implements AppMenu
     GameController gameController = new GameController();
     CommunicateController comController = new CommunicateController();
     GeneralController generalController = new GeneralController();
+    AnimalController animalController = new AnimalController();
 
     @Override
     public void check(Scanner scanner)
@@ -226,6 +231,65 @@ public class GameMenu implements AppMenu
             comController.purposeAsk(matcher);
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
+        }
+
+        else if (input.equals("5"))
+        {
+            Cabin cabin = new Cabin();
+            System.out.println(cabin.getMapString(null, new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
+        }
+
+        else if (input.equals("6"))
+        {
+            GreenHouse greenHouse = new GreenHouse();
+            System.out.println(greenHouse.getMapString(null, new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
+        }
+
+        else if (input.equals("7"))
+        {
+            City city = new City();
+            System.out.println(city.getMapString(null, new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
+        }
+
+        else if (input.equals("8"))
+        {
+            ShopMap shop = new ShopMap();
+            System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
+        }
+
+
+        else if((matcher = GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input)) != null) {
+            System.out.println(animalController.buildAnimalBuilding(input));
+        } else if((matcher = GameCommands.BUY_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.buyAnimal(input));
+        } else if((matcher = GameCommands.PET_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.pet(input));
+        } else if((matcher = GameCommands.ANIMAL_INFOS.getMatcher(input)) != null) {
+            System.out.println(animalController.pet(input));
+        } else if((matcher = GameCommands.SHEPHERD_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.shepherdAnimal(input));
+        } else if((matcher = GameCommands.FEED_HAY.getMatcher(input)) != null) {
+            System.out.println(animalController.feedHay(input));
+        } else if((matcher = GameCommands.PRODUCES.getMatcher(input)) != null) {
+            System.out.println(animalController.showProducts());
+        } else if((matcher = GameCommands.SELL_ANIMAL.getMatcher(input)) != null) {
+            System.out.println(animalController.sellAnimal(input));
+        } else if((matcher = GameCommands.SET_FRIENDSHIP.getMatcher(input)) != null) {
+            animalController.cheatSetFriendship(input);
+        } else if((matcher = GameCommands.FISHING.getMatcher(input)) != null) {
+            animalController.fishing(input);
+        }
+
+
+        else if((matcher = GameCommands.MEET_NPC.getMatcher(input)) != null) {
+            System.out.println(marketingController.meetNPC(input));
+            if(marketingController.meetNPC(input).isSuccessful()) npc = marketingController.targetNPC(input);
+        } else if((matcher = GameCommands.GIFT_NPC.getMatcher(input)) != null) {
+            System.out.println(marketingController.giftNPC(input));
+        } else if((matcher = GameCommands.QUESTS_LIST.getMatcher(input)) != null) {
+            System.out.println(marketingController.questsNPCList(npc));
+        } else if((matcher = GameCommands.QUESTS_FINISH.getMatcher(input)) != null) {
+            System.out.println(marketingController.questsFinish(input, npc));
         }
 
         else

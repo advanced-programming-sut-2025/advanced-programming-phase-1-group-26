@@ -2,9 +2,12 @@ package model;
 
 import model.animal.Animal;
 import model.animal.AnimalBuilding;
+import model.animal.Fish;
 import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
+import model.enums.animal_enums.FarmAnimals;
+import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenItems;
 import model.enums.tool_enums.ToolType;
@@ -70,6 +73,7 @@ public class Player {
 
     private ArrayList<Animal> animals = new ArrayList<>();
     private ArrayList<AnimalBuilding> animalBuildings = new ArrayList<>();
+    private ArrayList<Fish> fishes = new ArrayList<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
@@ -78,6 +82,7 @@ public class Player {
                     KitchenItems.BAKED_FISH,
                     KitchenItems.SALAD));
     private ArrayList<EdibleThing> refrigerator = new ArrayList<>();
+    private ArrayList<FarmAnimals.Product> products = new ArrayList<>();
 
     public static ArrayList<String> appearences = new ArrayList<>(List.of("\uD83D\uDC31", "\uD83E\uDD8A", "\uD83D\uDC3C", "\uD83E\uDD81"));
 
@@ -668,6 +673,14 @@ public class Player {
 
     public void decreaseMoney(int amount) {
         money -= amount;
+    }
+
+    public ArrayList<Fish> getFishes() {
+        return fishes;
+    }
+
+    public void addFish(Fish fish) {
+        fishes.add(fish);
     }
 
     public boolean hasEnoughEnergy(int required)

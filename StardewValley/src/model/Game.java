@@ -1,6 +1,7 @@
 package model;
 
 import model.enums.Menu;
+import model.animal.Animal;
 import model.enums.NpcDetails;
 import model.enums.Weather;
 import model.player_data.FriendshipData;
@@ -73,6 +74,12 @@ public class Game
 
     public void endDay()
     {
+        for(Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
+            animal.checkAndReset();
+        }
+        for(NPC npc : NPCs) {
+            npc.reset();
+        }
         // TODO: add this methods later
         // resetPlayersEnergy();
         // growPlants();

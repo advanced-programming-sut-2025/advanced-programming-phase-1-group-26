@@ -108,7 +108,7 @@ public class MarketingController {
                 } else if(!npc.isNearPlayer(npc.getLocation(), App.getCurrentGame().getCurrentPlayer().getLocation())) {
                     return new Result(false, "You are not in a near NPC");
                 } else {
-                    npc.giftNPC(npc.isGift, myItem.getObjectType());
+                    npc.giftNPC(npc.isGifted, myItem.getObjectType());
                     return new Result(true, "thank you");
                 }
             }
