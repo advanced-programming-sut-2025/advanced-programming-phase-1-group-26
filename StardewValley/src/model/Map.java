@@ -2,8 +2,7 @@ package model;
 
 import model.enums.MapTypes;
 import model.enums.TileTexture;
-import model.resources.Plant;
-import model.resources.Tree;
+import model.resources.*;
 
 import java.util.*;
 
@@ -70,27 +69,68 @@ public abstract class Map
         return output.toString();
     }
 
-    protected boolean isWalkable(Tile tile)
+    public boolean isWalkable(Tile tile)
     {
-        if (tile.getTexture() == TileTexture.LAKE || // TODO: add some more types later
-                tile.getTexture() == TileTexture.GREEN_HOUSE ||
-                tile.getTexture() == TileTexture.CABIN)
+        GameObject object = tile.getObject();
+        if (object != null)
         {
-            return false;
+            if (object instanceof Tree || object instanceof ForagingTree ||
+                    object instanceof ForagingCrop || object instanceof Resource)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        if (tile.getObject() != null)
+        switch (tile.getTexture())
         {
-            if (tile.getObject() instanceof Tree)
-            {
-                return false;
-            } else if (tile.getObject() instanceof Resource)
-            {
-                return false;
-            } else
-            {
+            case LAND:
+            case GRASS:
+            case QUARRY:
+            case CABIN_INTERIOR_FLOOR:
+            case GREEN_HOUSE_FLOOR:
+            case GREEN_HOUSE_WOOD:
+            case DECOR_TILE:
+            case SHOP_DOOR:
+            case VILLAGE_GRASS:
+            case ROAD:
+            case GARDEN:
+            case FLOWER:
+            case FLOOR:
+            case BED_TILE:
                 return true;
-            }
+
+            case LAKE:
+            case CABIN:
+            case GREEN_HOUSE:
+            case CABIN_WALL:
+            case GREEN_HOUSE_WALL:
+            case FENCE:
+            case BUILDING:
+            case CITY_BOARD:
+            case TREE:
+            case EMPTY:
+            case BOOK:
+            case LAMP:
+            case TABLE:
+            case COMPUTER:
+            case WALL:
+            case SHOP_BLACKSMITH:
+            case NPC_BLACKSMITH:
+            case SHOP_JOJAMART:
+            case NPC_JOJAMART:
+            case SHOP_PIERRE:
+            case NPC_PIERRE:
+            case SHOP_CARPENTER:
+            case NPC_CARPENTER:
+            case SHOP_FISH:
+            case NPC_FISH:
+            case SHOP_MARNIE:
+            case NPC_MARNIE:
+            case SHOP_SALOON:
+            case NPC_SALOON:
+                return false;
         }
 
         return true;
@@ -367,7 +407,7 @@ public abstract class Map
                 Tile tile = tiles[y][x];
                 if (tile.getTexture().equals(TileTexture.LAND) || tile.getTexture().equals(TileTexture.GRASS))
                 {
-                    if (tile.getObject() != null && tile.getObject() instanceof Plant)
+                    if (tile.hasPlants())
                     {
                         allPlantTiles.add(tile);
                     }
