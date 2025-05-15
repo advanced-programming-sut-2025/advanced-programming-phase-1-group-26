@@ -40,10 +40,23 @@ public class GeneralController
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameObject object = null;
         for (GameObject gameObject : currentPlayer.getCurrentBackPack().getInventory()) {
-            if (gameObject.getObjectType().name().equals(name)) {
+            if (gameObject.getObjectType().name().equalsIgnoreCase(name)) {
                 object = gameObject;
             }
         }
+
+        TrashCan can = null;
+        for (GameObject gameObject : currentPlayer.getInventory()) {
+            if (gameObject instanceof TrashCan) {
+                can = (TrashCan) gameObject;
+                break;
+            }
+        }
+        if (can == null) { //impossible
+            return new Result(false, "you don't have trashcan");
+        }
+
+
 
         if (object == null) {
             return new Result(false, "you don't have this item in your inventory!");
@@ -54,6 +67,9 @@ public class GeneralController
             number = Integer.parseInt(matcher.group("number"));
         } catch (Exception ignored) {}
 
+        GameObject temp = new GameObject(object.getObjectType(), number);
+        int price = (int)(temp.getPrice() * can.getPercentage());
+        currentPlayer.increaseMoney(price);
         object.addNumber(-number);
         if (object.getNumber() < 1) currentPlayer.getCurrentBackPack().getInventory().remove(object);
         return new Result(true, "item deleted successfully");

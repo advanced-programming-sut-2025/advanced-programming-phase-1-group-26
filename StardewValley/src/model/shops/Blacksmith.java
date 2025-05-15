@@ -248,38 +248,38 @@ public class Blacksmith extends Shop {
 
     public void upgradeTrashCan(TrashCan trashCan) {
         switch (trashCan.getLevel()) {
-            case WateringCanLevel.base -> {
+            case TrashCanLevel.base -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.COPPER_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
-                    trashCan.setLevel(WateringCanLevel.Copper);
+                    trashCan.setLevel(TrashCanLevel.Copper);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.COPPER_TRASH_CAN.decreaseDailyLimit();
                 }
             }
-            case WateringCanLevel.Copper -> {
+            case TrashCanLevel.Copper -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.STEEL_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
-                    trashCan.setLevel(WateringCanLevel.Iron);
+                    trashCan.setLevel(TrashCanLevel.Iron);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.STEEL_TRASH_CAN.decreaseDailyLimit();
                 }
             }
-            case WateringCanLevel.Iron -> {
+            case TrashCanLevel.Iron -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.GOLD_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
-                    trashCan.setLevel(WateringCanLevel.Golden);
+                    trashCan.setLevel(TrashCanLevel.Golden);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.GOLD_TRASH_CAN.decreaseDailyLimit();
                 }
             }
-            case WateringCanLevel.Golden -> {
+            case TrashCanLevel.Golden -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
-                    trashCan.setLevel(WateringCanLevel.Iridium);
+                    trashCan.setLevel(TrashCanLevel.Iridium);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.decreaseDailyLimit();
                 }

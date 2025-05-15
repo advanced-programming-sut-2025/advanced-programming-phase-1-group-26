@@ -268,26 +268,25 @@ public class GameMenu implements AppMenu
             System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
         }
 
-
-        else if((matcher = GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input)) != null) {
+        else if(GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input) != null) {
             System.out.println(animalController.buildAnimalBuilding(input));
-        } else if((matcher = GameCommands.BUY_ANIMAL.getMatcher(input)) != null) {
+        } else if(GameCommands.BUY_ANIMAL.getMatcher(input) != null) {
             System.out.println(animalController.buyAnimal(input));
-        } else if((matcher = GameCommands.PET_ANIMAL.getMatcher(input)) != null) {
+        } else if(GameCommands.PET_ANIMAL.getMatcher(input) != null) {
             System.out.println(animalController.pet(input));
-        } else if((matcher = GameCommands.ANIMAL_INFOS.getMatcher(input)) != null) {
-            System.out.println(animalController.pet(input));
-        } else if((matcher = GameCommands.SHEPHERD_ANIMAL.getMatcher(input)) != null) {
+        } else if(GameCommands.ANIMAL_INFOS.getMatcher(input) != null) {
+            System.out.println(animalController.showAnimalDetails());
+        } else if(GameCommands.SHEPHERD_ANIMAL.getMatcher(input) != null) {
             System.out.println(animalController.shepherdAnimal(input));
-        } else if((matcher = GameCommands.FEED_HAY.getMatcher(input)) != null) {
+        } else if(GameCommands.FEED_HAY.getMatcher(input) != null) {
             System.out.println(animalController.feedHay(input));
-        } else if((matcher = GameCommands.PRODUCES.getMatcher(input)) != null) {
+        } else if(GameCommands.PRODUCES.getMatcher(input) != null) {
             System.out.println(animalController.showProducts());
-        } else if((matcher = GameCommands.SELL_ANIMAL.getMatcher(input)) != null) {
+        } else if(GameCommands.SELL_ANIMAL.getMatcher(input) != null) {
             System.out.println(animalController.sellAnimal(input));
-        } else if((matcher = GameCommands.SET_FRIENDSHIP.getMatcher(input)) != null) {
+        } else if(GameCommands.SET_FRIENDSHIP.getMatcher(input) != null) {
             animalController.cheatSetFriendship(input);
-        } else if((matcher = GameCommands.FISHING.getMatcher(input)) != null) {
+        } else if(GameCommands.FISHING.getMatcher(input) != null) {
             animalController.fishing(input);
         }
 

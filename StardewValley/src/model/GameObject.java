@@ -9,6 +9,7 @@ public class GameObject
     protected GameObjectType ObjectType;
     protected int number = 1;
     protected String appearance;
+    protected int price = 0;
 
     public GameObject(GameObjectType objectType, int number) {
         ObjectType = objectType;
@@ -39,6 +40,10 @@ public class GameObject
     public Enum<?> getToolType()
     {
         return null;
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     @Override
