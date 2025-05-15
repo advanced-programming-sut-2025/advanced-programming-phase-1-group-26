@@ -6,6 +6,7 @@ import model.enums.TileTexture;
 public class Cabin extends Map
 {
     private final String mapPath;
+    private Point bedPoint;
 
     public Cabin()
     {
@@ -39,6 +40,7 @@ public class Cabin extends Map
 
         applyMap();
         this.startingPoint = findDoor();
+        this.bedPoint = getStartBedPoint();
     }
 
     private Point findDoor()
@@ -55,5 +57,27 @@ public class Cabin extends Map
             }
         }
         return null;
+    }
+
+    private Point getStartBedPoint()
+    {
+        for (int y = HEIGHT - 1; y >= 0; y--)
+        {
+            for (int x = WIDTH - 1; x >= 0; x--)
+            {
+                Tile tile = tiles[y][x];
+                if (tile.getTexture().equals(TileTexture.BED_TILE))
+                {
+                    return tile.getPoint();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Point getBedPoint()
+    {
+        return bedPoint;
     }
 }

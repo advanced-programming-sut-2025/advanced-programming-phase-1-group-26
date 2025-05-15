@@ -32,6 +32,11 @@ public class Crop extends Plant
 
         this.harvestWaitTime = totalHarvestTime;
         this.tile = tile;
+
+        if (tile.isGrowFaster())
+        {
+            setGrowFaster();
+        }
     }
 
     public String getName()
@@ -158,5 +163,20 @@ public class Crop extends Plant
         }
 
         return true;
+    }
+
+    @Override
+    public void getAttacked()
+    {
+        if (!(this instanceof GiantCrop))
+        {
+            if (oneTime)
+            {
+                tile.unPlant();
+            } else
+            {
+                lastHarvested += 1;
+            }
+        }
     }
 }

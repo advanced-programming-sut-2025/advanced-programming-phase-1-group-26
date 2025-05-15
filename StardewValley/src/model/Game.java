@@ -86,6 +86,7 @@ public class Game
         // respawnPlayers();
 
         distributeForagingItems();
+        unleashTheCrows();
 
         if (currentTime.getCurrentWeather().equals(Weather.Rain) || currentTime.getCurrentWeather().equals(Weather.Storm))
         {
@@ -101,6 +102,8 @@ public class Game
         startPlants();
         growPlants();
         killPlants();
+
+        takePlayerHome();
     }
 
     public void distributeForagingItems()
@@ -123,7 +126,7 @@ public class Game
            currentPlayer = getNext(currentPlayer);
            currentIndex = players.indexOf(currentPlayer);
 
-           if (currentPlayer.getEnergy() > 0)
+           if (currentPlayer.getEnergy() > 0 && !currentPlayer.shouldBeSkipped())
            {
                GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
                System.out.println(currentPlayer.newMessages());
@@ -143,16 +146,7 @@ public class Game
             currentTime.updateHour(23 - currentTime.getHour());
         }
 
-        if (currentPlayer.isInCity())
-        {
-            App.setCurrentMenu(Menu.CityMenu);
-        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm())
-        {
-            App.setCurrentMenu(Menu.GameMenu);
-        } else
-        {
-            App.setCurrentMenu(Menu.HomeMenu);
-        }
+        updateMenu();
     }
 
     public Player getNext(Player player)
@@ -383,6 +377,57 @@ public class Game
                     plant.setHasStarted(true);
                 }
             }
+        }
+    }
+
+    public void takePlayerHome()
+    {
+        for (Player player : players)
+        {
+            int requiredEnergy = 5;
+            if (player.isInFarm())
+            {
+                Farm farm = player.getFarm();
+                requiredEnergy = farm.calculateEnergy(player.getLocation(), farm.getStartingPoint());
+            }
+
+            boolean done = false;
+            if (!player.isFainted() && player.hasEnoughEnergy(requiredEnergy))
+            {
+                done = true;
+                player.goHome();
+            }
+
+            player.resetEnergy();
+
+            if (done)
+            {
+                player.increaseTurnEnergy(-1 * requiredEnergy);
+            }
+
+            player.unFaint();
+        }
+    }
+
+    public void updateMenu()
+    {
+        if (currentPlayer.isInCity())
+        {
+            App.setCurrentMenu(Menu.CityMenu);
+        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm())
+        {
+            App.setCurrentMenu(Menu.GameMenu);
+        } else if (currentPlayer.isInHome())
+        {
+            App.setCurrentMenu(Menu.HomeMenu);
+        }
+    }
+
+    public void unleashTheCrows()
+    {
+        for (Player player : players)
+        {
+            player.getAttackedByCrows();
         }
     }
 }
