@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CarpentersShop extends Shop {
-    private CarpentersShopFarmBuilding farmBuilding; //TODO change it to farmbuilding
-    private CarpentersShopStock stock;
     private ArrayList<CarpentersShopStock> stocks = new ArrayList<>();
     private ArrayList<FarmBuilding> farmBuildings = new ArrayList<>();
 
@@ -58,7 +56,7 @@ public class CarpentersShop extends Shop {
     public void purchase(GameObject gameObject) {
         super.purchase(gameObject);
         GameObjectType targetType = gameObject.getObjectType();
-        for(CarpentersShopStock stock : CarpentersShopStock.values()) {
+        for(CarpentersShopStock stock : stocks) {
             if(stock.getGameObjectType() == targetType) {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(stock.getPrice());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
@@ -90,4 +88,8 @@ public class CarpentersShop extends Shop {
         return false;
     }
 
+    @Override
+    public boolean dailyLimitCheck(GameObject gameObject) {
+        return super.dailyLimitCheck(gameObject);
+    }
 }

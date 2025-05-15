@@ -1,5 +1,7 @@
 package model.shops;
 
+import model.App;
+import model.GameObject;
 import model.enums.ShopType;
 import model.enums.shop_enums.JojaMartPermanentStock;
 import model.enums.shop_enums.JojaMartSeasonalStock;
@@ -8,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class JojaMart extends Shop{
-    private JojaMartSeasonalStock seasonalStock;
-    private JojaMartPermanentStock permanentStock;
     private ArrayList<JojaMartPermanentStock> permanentStocks = new ArrayList<>();
     private ArrayList<JojaMartSeasonalStock> seasonalStocks = new ArrayList<>();
 
@@ -49,4 +49,83 @@ public class JojaMart extends Shop{
         }
         return products.toString();
     }
+
+    @Override
+    public void purchase(GameObject gameObject) {
+        super.purchase(gameObject);
+        for(JojaMartPermanentStock item : permanentStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                App.getCurrentGame().getCurrentPlayer().decreaseMoney(item.getPrice() * gameObject.getNumber());
+                App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
+                item.decreaseLimit();
+                if(item.getLimit() == 0) permanentStocks.remove(item);
+            }
+        }
+        for(JojaMartSeasonalStock item : seasonalStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                if (!item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
+                    isInSeason = false;
+                } else {
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(item.getPrice() * gameObject.getNumber());
+                    App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
+                    seasonalStocks.remove(item);
+                    item.decreaseLimit();
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean isAffordable(GameObject gameObject) {
+        super.isAffordable(gameObject);
+        for(JojaMartPermanentStock item : permanentStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                return App.getCurrentGame().getCurrentPlayer().getMoney() >= item.getPrice() * gameObject.getNumber();
+            }
+        }
+        for(JojaMartSeasonalStock item : seasonalStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                return App.getCurrentGame().getCurrentPlayer().getMoney() >= item.getPrice() * gameObject.getNumber();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isCorrectShop(GameObject gameObject) {
+        super.isCorrectShop(gameObject);
+        for(JojaMartPermanentStock item : permanentStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                return true;
+            }
+        }
+        for(JojaMartSeasonalStock item : seasonalStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean dailyLimitCheck(GameObject gameObject) {
+        super.dailyLimitCheck(gameObject);
+        for(JojaMartPermanentStock item : permanentStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                if(item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber()) {
+                    return false;
+                }
+            }
+        }
+        for(JojaMartSeasonalStock item : seasonalStocks) {
+            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+                if(item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isInSeason = true;
 }
