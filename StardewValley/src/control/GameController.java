@@ -20,7 +20,6 @@ import model.tools.Tool;
 import model.tools.*;
 import view.GameMenu;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class GameController
@@ -435,7 +434,7 @@ public class GameController
                 }
             }
 
-            player.removeFromInventory(seed);
+            player.removeAmountFromInventory(seed.getObjectType(), 1);
 
             if (giant)
             {
@@ -455,7 +454,7 @@ public class GameController
             {
                 tree.putInGreenhouse();
             }
-            player.removeFromInventory(tree);
+            player.removeAmountFromInventory(tree.getObjectType(), 1);
             return new Result(true, "Successfully planted " + treeType.getName() + ".");
         }
 
@@ -466,10 +465,16 @@ public class GameController
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
 
-        GameObject fertilizer = player.getItemInInventory(GameObjectType.FERTILIZER);
+        GameObjectType fertilizerType = GameObjectType.getGameObjectType(fertilizerName);
+        if (fertilizerType == null)
+        {
+            return new Result(false, "There is no such kind of fertilizer.");
+        }
+
+        GameObject fertilizer = player.getItemInInventory(fertilizerType);
         if (fertilizer == null)
         {
-            return new Result(false, "You don't have any fertilizer :(");
+            return new Result(false, "You don't have this kind of fertilizer in your inventory.");
         }
 
         Tile tile = App.getCurrentGame().getTileFromDirection(direction);
@@ -488,13 +493,43 @@ public class GameController
             return new Result(false, "This tile has already been fertilized.");
         }
 
-        if (tile.hasPlants()) // TODO: more debugging on this
+        if (fertilizer.getObjectType() == GameObjectType.FERTILIZER)
         {
-            return new Result(false, "ERROR: This should not happen.");
+            tile.fertilize();
+            tile.setWateringChance(0);
+            return new Result(true, "Tile fertilized with fertilizer.");
         }
 
-        tile.fertilize();
-        return new Result(true, "You have successfully fertilized this tile.");
+        if (fertilizer.getObjectType() == GameObjectType.SPECIAL_FERTILIZER)
+        {
+            tile.fertilize();
+            tile.setWateringChance(0);
+            tile.setGrowFaster();
+            return new Result(true, "Tile fertilized with special fertilizer.");
+        }
+
+        if (fertilizer.getObjectType() == GameObjectType.BASIC_RETAINING_SOIL)
+        {
+            tile.fertilize();
+            tile.setWateringChance(40);
+            return new Result(true, "Tile fertilized with basic retaining soil.");
+        }
+
+        if (fertilizer.getObjectType() == GameObjectType.QUALITY_RETAINING_SOIL)
+        {
+            tile.fertilize();
+            tile.setWateringChance(70);
+            return new Result(true, "Tile fertilized with quality retaining soil.");
+        }
+
+        if (fertilizer.getObjectType() == GameObjectType.DELUXE_RETAINING_SOIL)
+        {
+            tile.fertilize();
+            tile.setWateringChance(100);
+            return new Result(true, "Tile fertilized with deluxe retaining soil.");
+        }
+
+        return new Result(false, "There is no such kind of fertilizer.");
     }
 
     public Result howMuchWater()

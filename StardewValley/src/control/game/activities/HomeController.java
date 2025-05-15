@@ -137,6 +137,12 @@ public class HomeController
             return new Result(false, "invalid tile :(");
         }
 
+        Map map = App.getCurrentGame().getCurrentPlayer().getCurrentMap();
+        if (!map.isWalkable(tile))
+        {
+            return new Result(false, "You can't place an item on this kind of inventory.");
+        }
+
         if (tile.getObject() != null)
         {
             return new Result(false, "This tile already has something in it.");

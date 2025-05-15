@@ -143,7 +143,7 @@ public class GameMenu implements AppMenu
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
-            System.out.println(generalController.walk(x,y, scanner));
+            generalController.walk(x,y, scanner);
         } else if ((matcher = GeneralCommands.SHOW_PATH.getMatcher(input)) != null)
         {
             String x = matcher.group("x").trim();
@@ -307,6 +307,10 @@ public class GameMenu implements AppMenu
             tradeController.tradeList();
         }
 
+        else if ((matcher = GeneralCommands.CHEAT_TOOL_CHECK.getMatcher(input)) != null) {
+            System.out.println(gameController.cheatToolCheck(matcher));
+        }
+
         else
         {
             System.out.println("invalid command");
@@ -321,5 +325,10 @@ public class GameMenu implements AppMenu
     public static void println(String output)
     {
         System.out.println(output);
+    }
+
+    public static void print(String output)
+    {
+        System.out.print(output);
     }
 }

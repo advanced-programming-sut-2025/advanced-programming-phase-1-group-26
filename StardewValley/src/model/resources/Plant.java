@@ -2,6 +2,7 @@ package model.resources;
 
 import model.App;
 import model.GameObject;
+import model.Map;
 import model.Tile;
 import model.enums.Season;
 
@@ -53,7 +54,7 @@ public class Plant extends GameObject
 
     public void update()
     {
-        if (hasBeenWateredToday())
+        if (hasBeenWateredToday() || (Math.random() < tile.getWateringChance() / 100.0))
         {
             grow();
         }
@@ -160,5 +161,15 @@ public class Plant extends GameObject
     public void setHasStarted()
     {
         this.hasStarted = true;
+    }
+
+    protected void setGrowFaster()
+    {
+        totalHarvestTime -= 1;
+    }
+
+    public void getAttacked()
+    {
+        // overrided in Crop and Tree
     }
 }

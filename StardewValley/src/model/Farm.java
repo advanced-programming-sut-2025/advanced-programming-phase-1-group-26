@@ -9,6 +9,8 @@ import java.util.*;
 
 public class Farm extends model.Map
 {
+    private final Point homePoint;
+
     public Farm(MapTypes farmType) {
         this.mapType = farmType;
 
@@ -34,7 +36,12 @@ public class Farm extends model.Map
 
         applyMap();
         setRandomItems();
-        this.startingPoint = getRandomFreeTile().getPoint();
+
+        ArrayList<Tile> cabinNeighbors = getHouseNeighborTiles();
+        Random rand = new Random();
+
+        this.startingPoint = cabinNeighbors.get(rand.nextInt(cabinNeighbors.size())).getPoint();
+        this.homePoint = startingPoint;
     }
 
     public Tile getRandomFreeTile()
@@ -44,7 +51,7 @@ public class Farm extends model.Map
             int y = (int) (Math.random() * HEIGHT);
             int x = (int) (Math.random() * WIDTH);
             Tile tile = tiles[y][x];
-            if ((tile.getTexture() == TileTexture.LAND) || (tile.getTexture() == TileTexture.GRASS))
+            if ((tile.getTexture() == TileTexture.LAND) || (tile.getTexture() == TileTexture.GRASS) && tile.getObject() == null)
             {
                 return tile;
             }
@@ -59,7 +66,7 @@ public class Farm extends model.Map
             for (int x = 0; x < WIDTH; x++)
             {
                 Tile tile = tiles[y][x];
-                if ((tile.getTexture() == TileTexture.LAND) || (tile.getTexture() == TileTexture.GRASS))
+                if ((tile.getTexture() == TileTexture.LAND) || (tile.getTexture() == TileTexture.GRASS) && tile.getObject() == null)
                 {
                     freeTiles.add(tile);
                 }
@@ -78,13 +85,11 @@ public class Farm extends model.Map
     {
         int randomItemsCount = getFreeTiles().size() / 50;
 
-        // TODO: should this be here or not?
-//        for (int i = 0; i < randomItemsCount / 3; i++)
-//        {
-//            Tile random = getRandomFreeTile();
-//            TreeType type = randomItem(TreeType.class);
-//            random.setObject(new Tree(type, random));
-//        }
+        for (int i = 0; i < randomItemsCount / 3; i++)
+        {
+            Tile random = getRandomFreeTile();
+            random.setObject(new Resource(ResourceItem.STONE));
+        }
 
         for (int i = 0; i < randomItemsCount / 3; i++)
         {
@@ -107,19 +112,24 @@ public class Farm extends model.Map
 
     public void setRandomForagingItems()
     {
-        ArrayList<Tile> freeTiles = getFreeTiles();
-        for (Tile tile : freeTiles)
+        if (foragingCount() < 200)
         {
-            if (Math.random() < 0.01 && !tile.isHitByThunder())
+            ArrayList<Tile> freeTiles = getFreeTiles();
+            for (Tile tile : freeTiles)
             {
-                if (Math.random() < 0.5)
+                if (Math.random() < 0.01 && !tile.isHitByThunder())
                 {
-                    ForagingCropType type = ForagingCropType.getRandomSeasonCrop(App.getCurrentGame().getCurrentTime().getSeason());
-                    tile.setObject(new ForagingCrop(type));
-                } else if (tile.isPloughed())
-                {
-                    ForagingSeedType type = ForagingSeedType.getRandomSeasonSeed(App.getCurrentGame().getCurrentTime().getSeason());
-                    tile.setObject(new ForagingSeed(type));
+                    if (Math.random() < 0.5)
+                    {
+                        ForagingCropType type = ForagingCropType.getRandomSeasonCrop(App.getCurrentGame().getCurrentTime().getSeason());
+                        tile.setObject(new ForagingCrop(type));
+                        tile.setRandomForaging(true);
+                    } else if (tile.isPloughed())
+                    {
+                        ForagingSeedType type = ForagingSeedType.getRandomSeasonSeed(App.getCurrentGame().getCurrentTime().getSeason());
+                        tile.setObject(new ForagingSeed(type));
+                        tile.setRandomForaging(true);
+                    }
                 }
             }
         }
@@ -127,13 +137,17 @@ public class Farm extends model.Map
 
     public void setRandomForagingMinerals()
     {
-        ArrayList<Tile> freeTiles = getFreeQuarryTiles();
-        for (Tile tile : freeTiles)
+        if (foragingCount() < 200)
         {
-            if (Math.random() < 0.01)
+            ArrayList<Tile> freeTiles = getFreeQuarryTiles();
+            for (Tile tile : freeTiles)
             {
-                ForagingMineralType type = randomItem(ForagingMineralType.class);
-                tile.setObject(new ForagingMineral(type));
+                if (Math.random() < 0.01)
+                {
+                    ForagingMineralType type = randomItem(ForagingMineralType.class);
+                    tile.setObject(new ForagingMineral(type));
+                    tile.setRandomForaging(true);
+                }
             }
         }
     }
@@ -195,5 +209,72 @@ public class Farm extends model.Map
             }
         }
         return thunderedTiles;
+    }
+
+    private ArrayList<Tile> getHouseTiles()
+    {
+        ArrayList<Tile> houseNeighbors = new ArrayList<>();
+        for (int i = 0; i < HEIGHT; i++)
+        {
+            for (int j = 0; j < WIDTH; j++)
+            {
+                Tile tile = getTile(i, j);
+                if (tile.getTexture() == TileTexture.CABIN)
+                {
+                    houseNeighbors.add(tile);
+                }
+            }
+        }
+        return houseNeighbors;
+    }
+
+    private ArrayList<Tile> getHouseNeighborTiles()
+    {
+        ArrayList<Tile> houseNeighbors = getHouseTiles();
+        ArrayList<Point> points = new ArrayList<>();
+
+        for (Tile tile : houseNeighbors)
+        {
+            for (Point p : getNeighbors(tile.getPoint()))
+            {
+                if (!points.contains(p))
+                {
+                    Tile t = getTile(p.getX(), p.getY());
+                    if (t.getTexture() == TileTexture.LAND || t.getTexture() == TileTexture.GRASS)
+                    {
+                        points.add(p);
+                    }
+                }
+            }
+        }
+
+        ArrayList<Tile> neighbors = new ArrayList<>();
+        for (Point p : points)
+        {
+            neighbors.add(getTile(p.getX(), p.getY()));
+        }
+        return neighbors;
+    }
+
+    public Point getHomePoint()
+    {
+        return homePoint;
+    }
+
+    private int foragingCount()
+    {
+        int count = 0;
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = getTile(x, y);
+                if (tile.isRandomForaging())
+                {
+                    count += 1;
+                }
+            }
+        }
+        return count;
     }
 }
