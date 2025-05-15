@@ -126,7 +126,7 @@ public class CityMenu implements AppMenu
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
-            System.out.println(generalController.walk(x,y, scanner));
+            generalController.walk(x,y, scanner);
         } else if ((matcher = GeneralCommands.SHOW_PATH.getMatcher(input)) != null)
         {
             String x = matcher.group("x").trim();

@@ -302,6 +302,7 @@ public enum GameObjectType
     Mystic_Tree_Seed("mystic tree seeds"),
 
     FERTILIZER("fertilizer"),
+    SPECIAL_FERTILIZER("special fertilizer"),
 
     CHERRY_BOMB_RECIPE("Cherry Bomb"),
     BOMB_RECIPE("Bomb"),

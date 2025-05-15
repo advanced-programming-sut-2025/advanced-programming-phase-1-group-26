@@ -12,10 +12,12 @@ public enum GameCommands implements Command
     QUESTS_LIST("quests list"),
     QUESTS_FINISH("quests finish -i (?<index>.*)"),
     /* Marketing Commands*/
-    SHOW_ALL_PRODUCTS(""),
-    SHOW_AVAILABLE_PRODUCTS(""),
-    PURCHASE(""),
-    SELL(""),
+    SHOW_ALL_PRODUCTS("show all products"),
+    SHOW_AVAILABLE_PRODUCTS("show all available products"),
+    PURCHASE("purchase (?<productName>.*)"),
+    PURCHASE_N("purchase (?<productName>.*) -n (?<count>.*)"),
+    SELL("sell (?<productName>.*)"),
+    SELL_N("sell (?<productName>.*) -n (?<count>.*)"),
 
     HELP_READ_MAP("help\\s+reading\\s+map"),
     TOOLS_USE("tools use -d (?<direction>.*)"),

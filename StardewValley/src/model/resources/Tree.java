@@ -25,6 +25,11 @@ public class Tree extends Plant
 
         harvestWaitTime = this.totalHarvestTime;
         this.tile = tile;
+
+        if (tile.isGrowFaster())
+        {
+            setGrowFaster();
+        }
     }
 
     public void harvest()
@@ -42,5 +47,11 @@ public class Tree extends Plant
     public TreeType getTreeType()
     {
         return (TreeType)type;
+    }
+
+    @Override
+    public void getAttacked()
+    {
+        lastHarvested += 1;
     }
 }

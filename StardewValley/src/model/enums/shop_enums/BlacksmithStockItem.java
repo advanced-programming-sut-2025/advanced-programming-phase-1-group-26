@@ -32,4 +32,5 @@ public enum BlacksmithStockItem {
     public int getDailyLimit() {
         return dailyLimit;
     }
+    public GameObjectType getGameObjectType() { return gameObjectType; }
 }

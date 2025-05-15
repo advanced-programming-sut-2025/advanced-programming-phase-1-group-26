@@ -5,6 +5,7 @@ import model.animal.AnimalBuilding;
 import model.animal.Fish;
 import model.enums.GameObjectType;
 import model.enums.Gender;
+import model.enums.Menu;
 import model.enums.animal_enums.FarmAnimals;
 import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.CraftingRecipeEnums;
@@ -20,10 +21,7 @@ import model.tools.BackPack;
 import model.tools.Tool;
 import model.tools.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Player {
 
@@ -38,8 +36,8 @@ public class Player {
 
     private int energy;
     private int maxEnergy = 200;
-    private int turnEnergy;
-    /*TEMP*/ private boolean fainted;
+    private int turnEnergy = 50;
+    private boolean fainted = false;
 
     private Skill farmingSkill = new Skill(SkillType.Farming);
     private Skill miningSkill = new Skill(SkillType.Mining);
@@ -87,8 +85,12 @@ public class Player {
     private boolean isInFarm = true;
     private boolean isInCity = false;
     private boolean isInGreenHouse = false;
+    private boolean isInHome = false;
+    private boolean isInZeidiesFarm = false;
+    private boolean isInZeidiesHome = false;
 
     private final String apperance;
+    private boolean shouldBeSkipped = false;
 
     public Player(User user, Farm farm, int number) {
         this.user = user;
@@ -629,12 +631,18 @@ public class Player {
         this.isInCity = false;
         this.isInGreenHouse = false;
         this.isInFarm = true;
+        this.isInHome = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         this.currentMap = this.farm;
         this.location = farm.getStartingPoint();
     }
 
     public void goToCabin()
     {
+        this.isInHome = true;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         this.isInFarm = false;
         this.currentMap = this.cabin;
         this.location = cabin.getStartingPoint();
@@ -642,6 +650,9 @@ public class Player {
 
     public void goToGreenHouse()
     {
+        this.isInHome = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         this.isInFarm = false;
         this.isInGreenHouse = true;
         this.currentMap = this.greenHouse;
@@ -650,6 +661,9 @@ public class Player {
 
     public void goToCity()
     {
+        this.isInHome = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         City city = App.getCurrentGame().getCity();
         this.isInFarm = false;
         this.isInCity = true;
@@ -768,6 +782,103 @@ public class Player {
             return new Result(true, "you have received new gifts");
         } else {
             return new Result(false, "you didn't receive gifts loser");
+        }
+    }
+
+    public boolean shouldBeSkipped()
+    {
+        return shouldBeSkipped;
+    }
+
+    public void setShouldBeSkipped(boolean shouldBeSkipped)
+    {
+        this.shouldBeSkipped = shouldBeSkipped;
+    }
+
+    public void resetEnergy()
+    {
+        if (turnEnergy != -1) // not unlimited
+        {
+            turnEnergy = 50;
+        }
+
+        if (energy != -1) // not unlimited
+        {
+            energy = maxEnergy;
+            if (fainted)
+            {
+                energy = (int) (0.75 * maxEnergy);
+                fainted = false;
+            }
+        }
+    }
+
+    public void faint()
+    {
+        fainted = true;
+        shouldBeSkipped = true;
+    }
+
+    public boolean isInZeidiesFarm()
+    {
+        return isInZeidiesFarm;
+    }
+
+    public boolean isInZeidiesHome()
+    {
+        return isInZeidiesHome;
+    }
+
+    public boolean isShouldBeSkipped()
+    {
+        return shouldBeSkipped;
+    }
+
+    public void goHome()
+    {
+        this.isInFarm = false;
+        this.isInCity = false;
+        this.isInGreenHouse = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false; // TODO: add feature to wake up at zeidy's home [?]
+
+        this.isInHome = true;
+        this.currentMap = cabin;
+        this.location = cabin.getBedPoint();
+        App.setCurrentMenu(Menu.HomeMenu);
+    }
+
+    public void unFaint()
+    {
+        this.fainted = false;
+        shouldBeSkipped = false;
+    }
+
+    public boolean isInHome()
+    {
+        return isInHome;
+    }
+
+    public void getAttackedByCrows()
+    {
+        ArrayList<Tile> farmPlants = getFarmPlants();
+        int size = farmPlants.size();
+
+        for (int i = 0; i < (size / 16); i++)
+        {
+            if (Math.random() < 0.25)
+            {
+                Random rand = new Random();
+                Tile tile = farmPlants.get(rand.nextInt(size));
+                if (tile.hasPlants())
+                {
+                    Plant plant = (Plant) tile.getObject();
+                    if (!tile.isImmuneFromCrows())
+                    {
+                        plant.getAttacked();
+                    }
+                }
+            }
         }
     }
 }

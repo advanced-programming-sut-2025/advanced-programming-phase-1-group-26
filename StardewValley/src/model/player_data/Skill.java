@@ -1,6 +1,13 @@
 package model.player_data;
+import model.App;
+import model.Cabin;
 import model.Player;
 import model.enums.SkillType;
+import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.building_enums.KitchenRecipe;
+import view.HomeMenu;
+
+import java.util.HashMap;
 
 public class Skill {
 
@@ -65,6 +72,8 @@ public class Skill {
         if (delta >= 0) handleLevelUp();
         else handleLevelDown();
 
+        addCraftingRecipe();
+        addCookingRecipe();
     }
 
     private void handleLevelUp() {
@@ -121,5 +130,39 @@ public class Skill {
 
     public void setUnit(int unit) {
         this.unit = unit;
+    }
+
+    private void addCraftingRecipe()
+    {
+        HashMap<CraftingRecipeEnums, Integer> map = type.getCraftingRecipes();
+        for (CraftingRecipeEnums key : map.keySet())
+        {
+            if (level >= map.get(key))
+            {
+                Player player = App.getCurrentGame().getCurrentPlayer();
+                if (!player.getCraftingRecipes().contains(key))
+                {
+                    player.getCraftingRecipes().add(key);
+                    HomeMenu.println(key.getType().toString() + " recipe added to your crafting recipes.");
+                }
+            }
+        }
+    }
+
+    private void addCookingRecipe()
+    {
+        HashMap<KitchenRecipe, Integer> map = type.getCookingRecipes();
+        for (KitchenRecipe key : map.keySet())
+        {
+            if (level >= map.get(key))
+            {
+                Player player = App.getCurrentGame().getCurrentPlayer();
+                if (!player.getCookingRecipes().contains(key))
+                {
+                    player.getCookingRecipes().add(key);
+                    HomeMenu.println(key.getType().toString() + " recipe added to your cooking recipes.");
+                }
+            }
+        }
     }
 }

@@ -19,7 +19,11 @@ public class Tile
     private boolean isPloughed = false;
     private boolean isFertilized = false;
 
+    private int wateringChance = 0;
+    private boolean growFaster = false;
+
     private boolean isImmuneFromCrows = false;
+    private boolean isRandomForaging = false;
 
     public Tile(Point point)
     {
@@ -84,6 +88,10 @@ public class Tile
     public void setObject(GameObject object)
     {
         this.object = object;
+        if (object == null)
+        {
+            isRandomForaging = false;
+        }
     }
 
     public Point getPoint()
@@ -135,12 +143,16 @@ public class Tile
                 t.setObject(null);
                 t.ploghInverse();
                 t.unFertilize();
+                t.resetGrowFaster();
+                t.resetWateringChance();
             }
         }
 
         setObject(null);
         ploghInverse();
         unFertilize();
+        resetGrowFaster();
+        resetWateringChance();
     }
 
     public void unFertilize()
@@ -375,10 +387,10 @@ public class Tile
             {
                     if (Math.random() < 0.5)
                     {
-                        return "\uD83C\uDF0A"; // wave emoji
+                        return "\uD83C\uDF0A"; // 🌊
                     } else
                     {
-                        return "\uD83D\uDFE6";
+                        return "\uD83D\uDFE6"; // 🟦
                     }
 //                return "\uD83D\uDFE6";
             } else if (texture.equals(TileTexture.GRASS))
@@ -392,77 +404,78 @@ public class Tile
                 }
             } else if (texture.equals(TileTexture.CABIN))
             {
-                    return "\uD83C\uDFE0"; // maybe (?)
+                    return "\uD83C\uDFE0"; // 🏠
 //                return "⬜";
             } else if (texture.equals(TileTexture.GREEN_HOUSE))
             {
-                    return "\uD83E\uDE9F";
+                    return "\uD83E\uDE9F"; // 🪟
 //                return "⬜";
             } else if (texture.equals(TileTexture.QUARRY))
             {
-                    return "\uD83E\uDE76";
+                    return "\uD83E\uDE76"; // 🩶
 //                return "❤\uFE0F";
             } else if (texture.equals(TileTexture.CABIN_WALL) || texture.equals(TileTexture.GREEN_HOUSE_WALL) ||
                     texture.equals(TileTexture.WALL))
             {
-                return "\uD83D\uDFEB";
+//                return "\uD83D\uDFEB";
+                return "\uD83E\uDDF1"; // 🧱
             } else if (texture.equals(TileTexture.CABIN_INTERIOR_FLOOR) || texture.equals(TileTexture.FLOOR))
             {
-                return "\uD83D\uDFE9";
+                return "\uD83D\uDFE9"; // 🟩
             } else if (texture.equals(TileTexture.GREEN_HOUSE_FLOOR))
             {
-                return "\uD83D\uDFE9";
+                return "\uD83D\uDFE9"; // 🟩
             } else if (texture.equals(TileTexture.GREEN_HOUSE_WOOD))
             {
-                return "\uD83D\uDFE7";
+                return "\uD83D\uDFE7"; // 🟧
             } else if (texture.equals(TileTexture.BED_TILE))
             {
-                return "\uD83D\uDFE6";
+                return "\uD83D\uDFE6"; // 🟦
             } else if (texture.equals(TileTexture.DECOR_TILE))
             {
-                return "\uD83D\uDFEA";
+                return "\uD83D\uDFEA"; // 🟪
             } else if (texture.equals(TileTexture.VILLAGE_GRASS))
             {
-                return "\uD83D\uDFE9";
+                return "\uD83D\uDFE9"; // 🟩
             } else if (texture.equals(TileTexture.ROAD))
             {
-                return "\uD83D\uDD33";
+                return "\uD83D\uDD33"; // 🔳
             } else if (texture.equals(TileTexture.FENCE))
             {
-                return "⬜";
+                return "⬜"; // ⬜
             } else if (texture.equals(TileTexture.BUILDING))
             {
-                return "\uD83E\uDE9F";
+                return "\uD83E\uDE9F"; // 🪟
             } else if (texture.equals(TileTexture.SHOP_DOOR))
             {
-                return "\uD83D\uDEAA";
+                return "\uD83D\uDEAA"; // 🚪
             } else if (texture.equals(TileTexture.FLOWER))
             {
-                return "\uD83C\uDF39";
+                return "\uD83C\uDF39"; // 🌹
             } else if (texture.equals(TileTexture.CITY_BOARD))
             {
-                return "\uD83D\uDFE5";
+                return "\uD83D\uDFE5"; // 🟥
             } else if (texture.equals(TileTexture.GARDEN))
             {
-                return "\uD83D\uDFE9";
+                return "\uD83D\uDFE9"; // 🟩
             } else if (texture.equals(TileTexture.TREE))
             {
-                    return "\uD83C\uDF34";
+                    return "\uD83C\uDF34"; // 🌴
 //                return "❤\uFE0F";
             } else if (texture.equals(TileTexture.BOOK))
             {
-                    return "\uD83D\uDCDA";
+                    return "\uD83D\uDCDA"; // 📚
 //                return "\uD83D\uDFEA";
             } else if (texture.equals(TileTexture.LAMP))
             {
-                    return "\uD83D\uDCA1";
+                    return "\uD83D\uDCA1"; // 💡
 //                return "⬜";
             } else if (texture.equals(TileTexture.TABLE))
             {
-                return "\uD83E\uDEB4";
+                return "\uD83E\uDEB4"; // 🪴
             }else if (texture.equals(TileTexture.COMPUTER))
             {
-                return "\uD83D\uDCBB";
+                return "\uD83D\uDCBB"; // 💻
             }else if (texture.equals(TileTexture.SHOP_BLACKSMITH) ||
                     texture.equals(TileTexture.SHOP_JOJAMART) ||
                     texture.equals(TileTexture.SHOP_SALOON) ||
@@ -471,7 +484,7 @@ public class Tile
                     texture.equals(TileTexture.SHOP_PIERRE) ||
                     texture.equals(TileTexture.SHOP_CARPENTER))
             {
-                return "\uD83D\uDFE7";
+                return "\uD83D\uDFE7"; // 🟧
             }else if (texture.equals(TileTexture.NPC_BLACKSMITH) ||
                     texture.equals(TileTexture.NPC_JOJAMART) ||
                     texture.equals(TileTexture.NPC_SALOON) ||
@@ -480,7 +493,7 @@ public class Tile
                     texture.equals(TileTexture.NPC_PIERRE) ||
                     texture.equals(TileTexture.NPC_CARPENTER))
             {
-                return "\uD83E\uDD13";
+                return "\uD83E\uDD13"; // 🤓
             }
             else
             {
@@ -490,13 +503,8 @@ public class Tile
         {
             if (object instanceof Tree)
             {
-                    if (Math.random() < 0.5)
-                    {
-                        return "\uD83C\uDF32"; // tree emoji type 1
-                    } else
-                    {
-                        return "\uD83C\uDF33"; // tree emoji type 2
-                    }
+
+                return "\uD83C\uDF33"; // 🌳
 //                return "\uD83D\uDFEA";
             } else if (object instanceof Crop)
             {
@@ -506,22 +514,26 @@ public class Tile
                 }
                 else
                 {
-                    return "\uD83C\uDF31"; // seed emoji
+                    return "\uD83C\uDF31"; // 🌱 emoji
 //                return "\uD83D\uDFE5";
                 }
-            } else if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof ForagingTree)
+            } else if (object instanceof ForagingCrop)
             {
-                    return "\uD83C\uDF32";
+                    return "\uD83E\uDD6C"; // 🥬
 //                return "⬛";
-            } else if (object instanceof Resource)
+            } else if (object instanceof ForagingTree)
+            {
+                return "\uD83C\uDF32"; // 🌲
+            }
+            else if (object instanceof Resource)
             {
                 Resource r = (Resource) object;
                 if (r.getResourceType().equals(ResourceItem.STONE))
                 {
-                    return "\uD83D\uDFE7";
+                    return "\uD83E\uDEA8"; // 🪨
                 } else if (r.getResourceType().equals(ResourceItem.WOOD))
                 {
-                        return "\uD83E\uDEB5";
+                        return "\uD83E\uDEB5"; // 🪵
 //                    return "\uD83D\uDFE7";
                 }
             } else if (object.getObjectType().equals(GameObjectType.COAL))
@@ -529,10 +541,10 @@ public class Tile
               return "⬛";
             } else if (object instanceof ForagingMineral)
             {
-                return "\uD83D\uDFE7";
+                return "\uD83D\uDC8E"; // 💎
             } else
             {
-                return "\uD83D\uDFE5"; // ERROR
+                return "\uD83D\uDFE5"; // 🟥 ERROR
             }
         }
 
@@ -557,5 +569,45 @@ public class Tile
     public void unHitByThunder()
     {
         hitByThunder = false;
+    }
+
+    public int getWateringChance()
+    {
+        return wateringChance;
+    }
+
+    public void setWateringChance(int wateringChance)
+    {
+        this.wateringChance = wateringChance;
+    }
+
+    public boolean isGrowFaster()
+    {
+        return growFaster;
+    }
+
+    public void resetWateringChance()
+    {
+        wateringChance = 0;
+    }
+
+    public void resetGrowFaster()
+    {
+        growFaster = false;
+    }
+
+    public void setGrowFaster()
+    {
+        growFaster = true;
+    }
+
+    public boolean isRandomForaging()
+    {
+        return isRandomForaging;
+    }
+
+    public void setRandomForaging(boolean randomForaging)
+    {
+        isRandomForaging = randomForaging;
     }
 }
