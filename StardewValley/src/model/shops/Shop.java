@@ -1,15 +1,16 @@
 package model.shops;
 
-import model.GameObject;
-import model.Point;
-import model.Time;
+import model.*;
 import model.enums.ShopType;
 
-public abstract class Shop {
-    //private Point location;
-    private ShopType type;
-    private String shopName;
-    private String salesManName;
+import java.util.ArrayList;
+
+public abstract class Shop
+{
+//    private final ArrayList<Tile> shopTiles;
+    private final ShopType type;
+    private final String shopName;
+    private final String salesManName;
     private int startWork;
     private int endWork;
     public String showProducts(){return "products:\n";}
@@ -32,6 +33,7 @@ public abstract class Shop {
         this.salesManName = salesManName;
         this.startWork = startWork;
         this.endWork = endWork;
+//        this.shopTiles =
     }
 
     public boolean isOpen(Time currentTime) {

@@ -87,20 +87,21 @@ public class MarketingController {
         return new Result(true, shop.showAvailableProducts());
     }
 
-    public Result purchase(String input) {
+    public Result purchase(String input, boolean flagged) {
         String productName;
         int numberOfProductsToPurchase = 0;
-        if(GameCommands.PURCHASE.matches(input)) {
-            productName = GameCommands.PURCHASE.getMatcher(input).group("productName");
+
+        if (flagged) {
+            productName = GameCommands.PURCHASE_N.getMatcher(input).group("productName").trim();
+            numberOfProductsToPurchase = Integer.parseInt(GameCommands.PURCHASE_N.getMatcher(input).group("count").trim());
+        } else {
+            productName = GameCommands.PURCHASE.getMatcher(input).group("productName").trim();
             numberOfProductsToPurchase = 1;
         }
-        else {
-            productName = GameCommands.PURCHASE_N.getMatcher(input).group("productName");
-            numberOfProductsToPurchase = Integer.parseInt(GameCommands.PURCHASE_N.getMatcher(input).group("count"));
-        }
+
         GameObjectType gameObjectType = null;
         for(GameObjectType type : GameObjectType.values()){
-            if(type.name().equals(productName)){
+            if(type.toString().equals(productName)){
                 gameObjectType = type;
             }
         }
@@ -108,19 +109,21 @@ public class MarketingController {
         GameObject gameObject = new GameObject(gameObjectType, numberOfProductsToPurchase);
         Shop shop = null;
 
-        if(App.getCurrentGame().isNearShop(ShopType.MARINE_RANCH)) {
+        City city = App.getCurrentGame().getCity();
+
+        if(city.isNearShop(ShopType.MARINE_RANCH)) {
             shop = new MarniesRanch();
-        } else if(App.getCurrentGame().isNearShop(ShopType.JOJA_MART)) {
+        } else if(city.isNearShop(ShopType.JOJA_MART)) {
             shop = new JojaMart();
-        } else if(App.getCurrentGame().isNearShop(ShopType.CARPENTER_SHOP)) {
+        } else if(city.isNearShop(ShopType.CARPENTER_SHOP)) {
             shop = new CarpentersShop();
-        } else if(App.getCurrentGame().isNearShop(ShopType.PIERRE_GENERAL_STORE)) {
+        } else if(city.isNearShop(ShopType.PIERRE_GENERAL_STORE)) {
             shop = new PierresGeneralStore();
-        } else if(App.getCurrentGame().isNearShop(ShopType.FISH_SHOP)) {
+        } else if(city.isNearShop(ShopType.FISH_SHOP)) {
             shop = new FishShop();
-        } else if(App.getCurrentGame().isNearShop(ShopType.STARDROP_SALOON)) {
+        } else if(city.isNearShop(ShopType.STARDROP_SALOON)) {
             shop = new TheStardropSaloon();
-        } else if(App.getCurrentGame().isNearShop(ShopType.BLACK_SMITH)) {
+        } else if(city.isNearShop(ShopType.BLACK_SMITH)) {
             shop = new Blacksmith();
         }
         if(shop == null) {return new Result(false, "You are not in a shop");}
@@ -250,14 +253,15 @@ public class MarketingController {
         }
         for(ToolType type : ToolType.values()){
             if(type.name().equals(toolName)) {
-                if(!App.getCurrentGame().getCurrentShop().getType().equals(ShopType.BLACK_SMITH)) {
+                if(!App.getCurrentGame().getCity().isNearShop(ShopType.BLACK_SMITH)) {
                     return new Result(false, "You are not in the correct shop");
                 } else {
                     Blacksmith blacksmith = new Blacksmith();
                     if(!blacksmith.isOpen(App.getCurrentGame().getCurrentTime())) {
                         return new Result(false, "Shop is not open");
                     }
-                    if(!blacksmith.canWeUpgrade) return new Result(false, "You can't upgrade");
+//                    if(!blacksmith.canWeUpgrade) return new Result(false, "You can't upgrade");
+                    if(false) return new Result(false, "You can't upgrade");
                     assert targetTool != null;
                     blacksmith.upgrade(targetTool);
                     return new Result(true, "Upgrade successful");

@@ -126,11 +126,11 @@ public class Blacksmith extends Shop {
     public void upgradeAxe(Axe axe) {
         switch (axe.getLevel()) {
             case AxeLevel.base -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost() &&
+                if((App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost()) &&
                 BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Copper);
-                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
+                    App.getCurrentGame().getCurrentPlayer().increaseMoney(-1 * BlacksmithUpgradeTools.COPPER_TOOL.getCost());
                     BlacksmithUpgradeTools.COPPER_TOOL.decreaseDailyLimit();
                 }
             }

@@ -59,7 +59,12 @@ public class PierresGeneralStore extends Shop{
             products.append(backpack.getName()).append(" ").append(backpack.getPrice()).append("\n");
         }
         for(PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks) {
-            products.append(seasonalStock.getName()).append(" ").append(seasonalStock.getBasePrice()).append("\n");
+            if(seasonalStock.getSeasons().contains(App.getCurrentGame().getCurrentTime().getSeason()))
+            {
+                products.append(seasonalStock.getName()).append(" this season ").append(seasonalStock.getBasePrice()).append("\n");
+            } else {
+                products.append(seasonalStock.getName()).append(" this season ").append(seasonalStock.getOutOfSeasonPrice()).append("\n");
+            }
         }
         for(PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks) {
             products.append(yearRoundStock.getDisplayName()).append(" ").append(yearRoundStock.getPrice()).append("\n");

@@ -76,7 +76,7 @@ public class GeneralController
     }
 
     public Result toolsEquip(Matcher matcher) {
-        String toolName = matcher.group("toolName");
+        String toolName = matcher.group("name");
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
             if (object.getObjectType().name().equals(toolName)) {
@@ -111,26 +111,6 @@ public class GeneralController
         for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
             System.out.println(object.getObjectType().name());
         }
-    }
-
-    public Result toolsUpgrade(Matcher matcher) { //TODO: add later
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        String toolName = matcher.group("toolName");
-        //check if in blacksmith
-
-        for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
-            if (object.getObjectType().name().equals(toolName)) {
-                if (object instanceof Tool) {
-                    if (object instanceof Axe) {
-
-                    }
-                } else {
-                    return new Result(false, "pick a valid tool name");
-                }
-
-            }
-        }
-        return new Result(true, "");
     }
 
     /* player cheat codes */

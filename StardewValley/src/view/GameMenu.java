@@ -244,30 +244,6 @@ public class GameMenu implements AppMenu
             comController.purposeRespond(matcher);
         }
 
-        else if (input.equals("5"))
-        {
-            Cabin cabin = new Cabin();
-            System.out.println(cabin.getMapString(null, new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
-        }
-
-        else if (input.equals("6"))
-        {
-            GreenHouse greenHouse = new GreenHouse();
-            System.out.println(greenHouse.getMapString(null, new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
-        }
-
-        else if (input.equals("7"))
-        {
-            City city = new City();
-            System.out.println(city.getMapString(null, new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
-        }
-
-        else if (input.equals("8"))
-        {
-            ShopMap shop = new ShopMap();
-            System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
-        }
-
         else if(GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input) != null) {
             System.out.println(animalController.buildAnimalBuilding(input));
         } else if(GameCommands.BUY_ANIMAL.getMatcher(input) != null) {
@@ -289,25 +265,6 @@ public class GameMenu implements AppMenu
         } else if(GameCommands.FISHING.getMatcher(input) != null) {
             animalController.fishing(input);
         }
-
-        else if((matcher = GameCommands.SHOW_ALL_PRODUCTS.getMatcher(input)) != null) {
-            System.out.println(marketingController.showAllProducts());
-        } else if((matcher = GameCommands.SHOW_AVAILABLE_PRODUCTS.getMatcher(input)) != null) {
-            System.out.println(marketingController.showAvailableProducts());
-        } else if((matcher = GameCommands.PURCHASE.getMatcher(input)) != null) {
-            System.out.println(marketingController.purchase(input));
-        } else if((matcher = GameCommands.PURCHASE_N.getMatcher(input)) != null) {
-            System.out.println(marketingController.purchase(input));
-        } else if((matcher = GameCommands.SELL.getMatcher(input)) != null) {
-            System.out.println(marketingController.sell(input));
-        } else if((matcher = GameCommands.SELL_N.getMatcher(input)) != null) {
-            System.out.println(marketingController.sell(input));
-        } else if((matcher = GeneralCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
-            System.out.println(marketingController.upgradeTool(input));
-        } else if((matcher = GameCommands.CHEAT_ADD_MONEY.getMatcher(input)) != null) {
-            marketingController.cheatAddMoney(input);
-        }
-
 
         else if (GeneralCommands.START_TRADE.getMatcher(input) != null)
         {

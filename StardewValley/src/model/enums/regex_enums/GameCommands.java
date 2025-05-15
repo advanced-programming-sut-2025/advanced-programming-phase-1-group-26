@@ -8,10 +8,10 @@ public enum GameCommands implements Command
     /* Marketing Commands*/
     SHOW_ALL_PRODUCTS("show\\s+all\\s+products"),
     SHOW_AVAILABLE_PRODUCTS("show\\s+all\\s+available\\s+products"),
-    PURCHASE("purchase\\s+(?<productName>\\s+)"),
-    PURCHASE_N("purchase\\s+(?<productName>\\s+)\\s+-n\\s+(?<count>\\d+)"),
-    SELL("sell\\s+(?<productName>\\s+)"),
-    SELL_N("sell\\s+(?<productName>\\s+)\\s+-n\\s+(?<count>\\d+)"),
+    PURCHASE("purchase\\s+(?<productName>.+)"),
+    PURCHASE_N("purchase\\s+(?<productName>.+)\\s+-n\\s+(?<count>\\d+)"),
+    SELL("sell\\s+(?<productName>.+)"),
+    SELL_N("sell\\s+(?<productName>.+)\\s+-n\\s+(?<count>\\d+)"),
 
     HELP_READ_MAP("help\\s+reading\\s+map"),
     TOOLS_USE("tools use -d (?<direction>.*)"),

@@ -181,4 +181,24 @@ public class City extends Map
             }
         }
     }
+
+    public ArrayList<Tile> getShopTiles (ShopType type)
+    {
+        ArrayList<Tile> shopTiles = new ArrayList<>();
+        TileTexture texture = getShopTileTexture(type);
+
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                if (tile.getTexture().equals(texture))
+                {
+                    shopTiles.add(tile);
+                }
+            }
+        }
+
+        return shopTiles;
+    }
 }

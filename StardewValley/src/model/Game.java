@@ -444,10 +444,6 @@ public class Game
         this.currentShop = currentShop;
     }
 
-    public boolean isNearShop(ShopType type) {
-        return true;
-    }
-
     public void takePlayerHome()
     {
         for (Player player : players)

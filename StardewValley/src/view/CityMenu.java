@@ -39,7 +39,7 @@ public class CityMenu implements AppMenu
         } else if ((matcher = GeneralCommands.TOOLS_SHOW_AVAILABLE.getMatcher(input)) != null) {
             generalController.toolsShowAvailable();
         } else if ((matcher = GeneralCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
-            System.out.println(generalController.toolsUpgrade(matcher));
+            System.out.println(marketingController.upgradeTool(input));
         }
 
         /* player cheat codes */
@@ -220,6 +220,25 @@ public class CityMenu implements AppMenu
             String npcName = matcher.group("NPCname");
             System.out.println(marketingController.showNpcLocation(npcName));
         }
+
+        else if((matcher = GameCommands.SHOW_ALL_PRODUCTS.getMatcher(input)) != null) {
+            System.out.println(marketingController.showAllProducts());
+        } else if((matcher = GameCommands.SHOW_AVAILABLE_PRODUCTS.getMatcher(input)) != null) {
+            System.out.println(marketingController.showAvailableProducts());
+        } else if((matcher = GameCommands.PURCHASE_N.getMatcher(input)) != null) {
+            System.out.println(marketingController.purchase(input, true));
+        } else if((matcher = GameCommands.PURCHASE.getMatcher(input)) != null) {
+            System.out.println(marketingController.purchase(input, false));
+        } else if((matcher = GameCommands.SELL.getMatcher(input)) != null) {
+            System.out.println(marketingController.sell(input));
+        } else if((matcher = GameCommands.SELL_N.getMatcher(input)) != null) {
+            System.out.println(marketingController.sell(input));
+        } else if((matcher = GeneralCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
+            System.out.println(marketingController.upgradeTool(input));
+        } else if((matcher = GameCommands.CHEAT_ADD_MONEY.getMatcher(input)) != null) {
+            marketingController.cheatAddMoney(input);
+        }
+
         else
         {
             System.out.println("invalid command");
