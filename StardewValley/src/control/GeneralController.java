@@ -394,7 +394,7 @@ public class GeneralController
             String input = GameMenu.scan(scanner);
             if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
             {
-                player.increaseEnergy(-requiredEnergy);
+                player.increaseTurnEnergy(-requiredEnergy);
                 player.setLocation(destination);
                 return new Result(true, "You have successfully get to the destination.");
             }
@@ -402,7 +402,7 @@ public class GeneralController
         }
 
         player.setLocation(destination);
-        player.increaseEnergy(-1 * requiredEnergy);
+        player.increaseTurnEnergy(-1 * requiredEnergy);
         return new Result(true, "You have successfully reached your destination.");
     }
 

@@ -14,6 +14,7 @@ public enum GeneralCommands implements Command
     TOOLS_SHOW_CURRENT("tools show current"),
     TOOLS_SHOW_AVAILABLE("tools show available"),
     TOOLS_UPGRADE("tools upgrade (?<toolName>.*)"),
+    CHEAT_TOOL_CHECK("tools check (?<direction>.*)"),
 
     /* player cheat codes */
     ENERGY_SET("energy set -v (?<value>\\d+)"),

@@ -54,6 +54,8 @@ public class GameMenu implements AppMenu
             System.out.println(gameController.toolsUpgrade(matcher));
         } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
             System.out.println(gameController.toolsUse(matcher));
+        } else if ((matcher = GeneralCommands.CHEAT_TOOL_CHECK.getMatcher(input)) != null) {
+            System.out.println(gameController.cheatToolCheck(matcher));
         }
 
         /* player cheat codes */

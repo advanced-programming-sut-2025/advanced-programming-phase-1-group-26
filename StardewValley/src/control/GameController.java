@@ -80,7 +80,7 @@ public class GameController
         return new Result(true, "");
     }
 
-    public Result toolsUse(Matcher matcher) { // might change to enum direction
+    public Result toolsUse(Matcher matcher) {
         String direction = matcher.group("direction");
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Tile targetTile = App.getCurrentGame().getTileFromDirection(direction);
@@ -107,7 +107,10 @@ public class GameController
                 if (targetTile.getObject() instanceof Tree ||
                         targetTile.getObject() instanceof ForagingTree ||
                         targetTile.getObject().getObjectType().equals(ResourceItem.WOOD.getType())) {
-                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
+                    if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * ((Axe) tool).getLevel().getBaseEnergyUsage())) {
+                        return new Result(false, "you don't have enough energy");
+                    }
+                    currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Axe) tool).getLevel().getBaseEnergyUsage()));
                     currentPlayer.addToInventory(ResourceItem.WOOD.getType(), 3);
                     GameMenu.println("3 units of wood added to inventory.");
                     if (targetTile.getObject() instanceof Tree) {
@@ -122,23 +125,25 @@ public class GameController
                             currentPlayer.addToInventory(new GameObject(GameObjectType.MYSTIC_SYRUP, 3));
                         }
                     }
+                    targetTile.setObject(null);
                     return new Result(true, "axe used successfully");
                 } else {
-                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getFailedEnergyUsage());
+                    currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Axe) tool).getLevel().getFailedEnergyUsage()));
                     return new Result(false, "you can't use axe on this tile");
                 }
             } else if (tool instanceof Hoe) {
                 if (!targetTile.getTexture().equals(TileTexture.LAND) && !targetTile.getTexture().equals(TileTexture.GRASS))
                 {
+                    currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Hoe) tool).getLevel().getFailedEnergyUsage()));
                     return new Result(false, "you can't use hoe on this tile");
                 }
                 if (targetTile.getObject() == null && !targetTile.isPloughed()) {
+                    if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * -((Hoe) tool).getLevel().getFailedEnergyUsage())) {
+                        return new Result(false, "you don't have enough energy");
+                    }
                     targetTile.plough();
-                    currentPlayer.increaseTurnEnergy(-((Hoe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Hoe) tool).getLevel().getBaseEnergyUsage()));
                     return new Result(true, "hoe used");
-                } else {
-                    currentPlayer.increaseTurnEnergy(-((Hoe) tool).getLevel().getFailedEnergyUsage());
-                    return new Result(false, "you can't use hoe on this tile");
                 }
             } else if (tool instanceof MilkPail) {
                 Animal animal = null;
@@ -146,31 +151,48 @@ public class GameController
 
             } else if (tool instanceof Pickaxe) {
                 if (targetTile.getObject() instanceof ForagingMineral) {
+                    if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage())){
+                        return new Result(false, "you don't have enough energy");
+                    }
                     currentPlayer.addToInventory(targetTile.getObject());
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
-                    currentPlayer.getGashtogozarSkill().addUnit(5);
+                    currentPlayer.increaseTurnEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.getGashtogozarSkill().changeUnit(5);
+                    targetTile.setObject(null);
                     return new Result(true, "pickaxe used on mineral");
-                } else if (targetTile.getTexture().equals(TileTexture.QUARRY)) {
+                } else if (targetTile.getTexture().equals(TileTexture.QUARRY) &&
+                targetTile.getObject() == null) {
+                    if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage())){
+                        return new Result(false, "you don't have enough energy");
+                    }
                     if (currentPlayer.getMiningSkill().getLevel() > 1) {
                         currentPlayer.addToInventory(ResourceItem.STONE.getType(), 5);
                     } else {
                         currentPlayer.addToInventory(ResourceItem.STONE.getType(), 3);
                     }
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
-                    currentPlayer.getMiningSkill().addUnit(10);
-                    return new Result(true, "pickaxe used on querry");
+                    currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage()));
+                    currentPlayer.getMiningSkill().changeUnit(10);
+                    return new Result(true, "pickaxe used on query");
                 } else if (targetTile.getTexture().equals(TileTexture.LAND)) {
+                    if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage())){
+                        return new Result(false, "you don't have enough energy");
+                    }
                     if (targetTile.isPloughed()) {
+                        if (targetTile.hasPlants()) {
+                            targetTile.unPlant();
+                        }
                         targetTile.ploghInverse();
-                        currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                        currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage()));
                         return new Result(true, "tile is not ploughed anymore");
                     } else {
-                        currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getFailedEnergyUsage());
+                        if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * -((Pickaxe) tool).getLevel().getFailedEnergyUsage())){
+                            return new Result(false, "you don't have enough energy");
+                        }
+                        currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getFailedEnergyUsage()));
                         return new Result(false, "tile is not ploughed");
                     }
                 } else if (targetTile.getObject() instanceof  ForagingSeed) {
                     targetTile.setObject(null);
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage()));
                     return new Result(true, "seed is removed");
                 } else if (!targetTile.hasPlants() && targetTile.getObject() != null)
                 {
@@ -185,12 +207,21 @@ public class GameController
                     return new Result(true, object.getObjectType().toString() + " added to your inventory");
                 }
                 else {
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getFailedEnergyUsage());
+                    currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getFailedEnergyUsage()));
                     return new Result(false, "you can't use pickaxe on this tile");
                 }
             } else if (tool instanceof Seythe)
             {
-                currentPlayer.increaseEnergy((int)(weatherModifier * -((Seythe) tool).getEnergyUsage()));
+                if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * -((Seythe) tool).getEnergyUsage())){
+                    return new Result(false, "you don't have enough energy");
+                }
+                currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Seythe) tool).getEnergyUsage()));
+
+                if (targetTile.getTexture().equals(TileTexture.GRASS) &&
+                targetTile.getObject() == null) {
+                    targetTile.setTexture(TileTexture.LAND);
+                    return new Result(true, "alaf is harzed successfully");
+                }
 
                 if (!targetTile.hasPlants())
                 {
@@ -213,7 +244,7 @@ public class GameController
                     GameObject fruit = new GameObject(tree.getFruit().getType(), 1);
                     currentPlayer.addToInventory(fruit);
                     tree.harvest();
-                    currentPlayer.getFarmingSkill().addUnit(5);
+                    currentPlayer.getFarmingSkill().changeUnit(5);
                     return new Result(true, "you harvested one " + fruit.getObjectType().toString() + ".");
                 } else if (plant instanceof Crop)
                 {
@@ -232,7 +263,7 @@ public class GameController
                         currentPlayer.addToInventory(cropResult);
                     }
 
-                    currentPlayer.getFarmingSkill().addUnit(5);
+                    currentPlayer.getFarmingSkill().changeUnit(5);
                     if (crop.harvest())
                     {
                         targetTile.unPlant();
@@ -242,35 +273,33 @@ public class GameController
                 }
 
             } else if (tool instanceof Shear) {
-                //doesn't have level
+
                 //TODO:
 
             } else if (tool instanceof WateringCan) {
-                currentPlayer.increaseEnergy((int)(weatherModifier * -((WateringCan) tool).getLevel().getBaseEnergyUsage()));
-                if (!targetTile.getTexture().equals(TileTexture.GRASS) && !targetTile.getTexture().equals(TileTexture.LAND))
-                {
-                    return new Result(false, "you can't use shears on this type of tile");
+                if (currentPlayer.getTurnEnergy() < (int)(weatherModifier * -((WateringCan) tool).getLevel().getBaseEnergyUsage())){
+                    return new Result(false, "you don't have enough energy");
                 }
-                if (targetTile.hasPlants())
-                {
-                    Plant plant = (Plant) targetTile.getObject();
+                currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((WateringCan) tool).getLevel().getBaseEnergyUsage()));
+                if (targetTile.getTexture().equals(TileTexture.LAND) ||
+                        targetTile.getTexture().equals(TileTexture.GRASS)) {
+                    if (targetTile.hasPlants()) {
+                        Plant plant = (Plant) targetTile.getObject();
 
-                    if (plant.hasBeenWateredToday())
-                    {
-                        return new Result(true, "You have already watered this plant today.");
+                        if (plant.hasBeenWateredToday()) {
+                            return new Result(true, "You have already watered this plant today.");
+                        }
+
+                        if (((WateringCan) tool).getCurrentVolume() == 0) {
+                            return new Result(true, "You should refill your watering can.");
+                        }
+
+                        ((WateringCan) tool).decreaseVolume(1);
+                        plant.water();
+                        return new Result(true, "Plant has been watered.");
+                    } else if (!targetTile.hasPlants()) {
+                        return new Result(false, "There are no plants in this tile.");
                     }
-
-                    if (((WateringCan) tool).getCurrentVolume() == 0)
-                    {
-                        return new Result(true, "You should refill your watering can.");
-                    }
-
-                    ((WateringCan) tool).decreaseVolume(1);
-                    plant.water();
-                    return new Result(true, "Plant has been watered.");
-                } else if (!targetTile.hasPlants())
-                {
-                    return new Result(false, "There are no plants in this tile.");
                 } else if (targetTile.getTexture().equals(TileTexture.LAKE))
                 {
                     WateringCan can = (WateringCan) tool;
@@ -288,7 +317,7 @@ public class GameController
                 if (targetTile.getTexture().equals(TileTexture.LAKE)) {
                     //TODO: fishing
                 }
-                currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
+                currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((FishingPole) tool).getLevel().getBaseEnergyUsage()));
             }
             currentPlayer.checkEnergy();
         }
@@ -506,7 +535,7 @@ public class GameController
 
             player.goToCabin();
             App.setCurrentMenu(Menu.HomeMenu);
-            player.increaseEnergy(-1 * requiredEnergy);
+            player.increaseTurnEnergy(-1 * requiredEnergy);
             return new Result(true, "Going to cabin...");
         } else if (placeName.equalsIgnoreCase("greenhouse") ||
                 placeName.equalsIgnoreCase("green house"))
@@ -526,7 +555,7 @@ public class GameController
             }
 
             player.goToGreenHouse();
-            player.increaseEnergy(-1 * requiredEnergy);
+            player.increaseTurnEnergy(-1 * requiredEnergy);
             return new Result(false, "Going to green house...");
         } else if (placeName.equalsIgnoreCase("city"))
         {
@@ -540,7 +569,7 @@ public class GameController
 
             player.goToCity();
             App.setCurrentMenu(Menu.CityMenu);
-            player.increaseEnergy(-1 * requiredEnergy);
+            player.increaseTurnEnergy(-1 * requiredEnergy);
             return new Result(true, "Going to city...");
         }
 
@@ -658,5 +687,17 @@ public class GameController
     public Result showMoney() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         return new Result(true, "your money: " + player.getMoney());
+    }
+
+    public Result cheatToolCheck(Matcher matcher) {
+        String direction = matcher.group("direction");
+        Tile targetTile = App.getCurrentGame().getTileFromDirection(direction);
+        if (targetTile == null) {
+            return new Result(false, "wrong tile");
+        } else if (targetTile.getObject() == null) {
+            return new Result(false, "no object " + "texture: "+ targetTile.getTexture());
+        }
+        return new Result(true, "object: " + targetTile.getObject().getObjectType().name() +
+                "texture: " + targetTile.getTexture());
     }
 }
