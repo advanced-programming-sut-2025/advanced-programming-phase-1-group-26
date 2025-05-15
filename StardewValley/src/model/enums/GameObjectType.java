@@ -379,6 +379,8 @@ public enum GameObjectType
     TRASH_CAN("Trash Can"),
     WATERING_CAN("Watering Can"),
 
+    ANIMAL_BUILDING("animal building")
+
     ;
 
     private final String name;

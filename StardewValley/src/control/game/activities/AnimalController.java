@@ -5,6 +5,7 @@ import model.animal.Animal;
 import model.animal.AnimalBuilding;
 import model.animal.Fish;
 import model.enums.GameObjectType;
+import model.enums.TileTexture;
 import model.enums.Weather;
 import model.enums.animal_enums.FarmAnimals;
 import model.enums.animal_enums.FarmBuilding;
@@ -22,16 +23,20 @@ public class AnimalController {
         String buildingName = GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input).group("name");
         int x = Integer.parseInt(GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input).group("x"));
         int y = Integer.parseInt(GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input).group("y"));
+        Tile targetTile = App.getCurrentGame().findTile(y, x);
         for(FarmBuilding building : FarmBuilding.values()) {
-            if(building.getName().equals(buildingName)) {
-                if(!isInBounds(x, y)) {return new Result(false, "invalid bounds");}
-                if(!isBuildable(x, y, building)) {
+            if(building.getName().equalsIgnoreCase(buildingName)) {
+                if(!isInBounds(x, y)) return new Result(false, "invalid bounds");
+
+                if(!isBuildable(targetTile)) {
                     return new Result(false, "we can't build in this place");
                 } else if(!canWeBuild(building)) {
                     return new Result(false, "you can't afford to build in this place");
                 } else {
+                    AnimalBuilding newAnimalBuilding = new AnimalBuilding(building, x, y);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(building.getPrice());
-                    App.getCurrentGame().getCurrentPlayer().addAnimalBuilding(new AnimalBuilding(building, x, y));
+                    App.getCurrentGame().getCurrentPlayer().addAnimalBuilding(newAnimalBuilding);
+                    targetTile.setObject(newAnimalBuilding);
                     return new Result(true, "building built successfully");
                 }
             }
@@ -42,10 +47,11 @@ public class AnimalController {
     public Result buyAnimal(String input) {
         String animal = GameCommands.BUY_ANIMAL.getMatcher(input).group("animal");
         String name = GameCommands.BUY_ANIMAL.getMatcher(input).group("name");
-        Animal targetAnimal = null;
+        boolean capacity = false;
 
+        Animal targetAnimal = null;
         for(FarmAnimals animalType : FarmAnimals.values()) {
-            if(animalType.getName().equals(animal)) {
+            if(animalType.getName().equalsIgnoreCase(animal)) {
                 targetAnimal = new Animal(name, animalType);
             }
         }
@@ -55,6 +61,19 @@ public class AnimalController {
                 if(targetAnimal.getPrice() > App.getCurrentGame().getCurrentPlayer().getMoney()) {
                     return new Result(false, "you can't buy this animal");
                 }
+                for (AnimalBuilding animalBuilding : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
+                    if (targetAnimal.canGoInThere(animalBuilding.getFarmBuilding())) {
+                        if (animalBuilding.getAnimals().size() < animalBuilding.getCapacity()) {
+                            animalBuilding.getAnimals().add(targetAnimal);
+                            capacity = true;
+                            break;
+                        }
+                    }
+                }
+                if (!capacity) {
+                    return new Result(false, "you don't have capacity. build animal building");
+                }
+
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(targetAnimal.getPrice());
                 App.getCurrentGame().getCurrentPlayer().addAnimal(targetAnimal);
                 return new Result(true, "You just bought this animal");
@@ -65,8 +84,11 @@ public class AnimalController {
 
     public Result pet(String input) {
         String name = GameCommands.PET_ANIMAL.getMatcher(input).group("name");
-        for(Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
-            if(animal.getName().equals(name)) {
+        if (name == null) {
+            return new Result(false, "wrong name");
+        }
+        for (Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
+            if (animal.getName().equals(name)) {
                 animal.pet();
                 return new Result(true, "animal pet");
             }
@@ -89,10 +111,10 @@ public class AnimalController {
     public String showAnimalDetails() {
         ArrayList<Animal> animals = App.getCurrentGame().getCurrentPlayer().getAnimals();
         StringBuilder animalDetails = new StringBuilder();
-
+        animalDetails.append("animals:\n");
         for(Animal animal : animals) {
             animalDetails.append(animal.getName()).append(" ").append(animal.getFriendship()).append(" ")
-                    .append(animal.isPet()).append(" ").append(animal.isFed()).append("\n");
+                    .append(animal.isPet()).append(" ").append(animal.isFed()).append("\n").append("----\n");
         }
         return animalDetails.toString();
     }
@@ -116,7 +138,7 @@ public class AnimalController {
         ArrayList<Animal> animals = App.getCurrentGame().getCurrentPlayer().getAnimals();
 
         for(Animal animal : animals) {
-            if(animal.getName().equals(name)) {
+            if(animal.getName().equalsIgnoreCase(name)) {
                 //TODO : check for having item in inventory
                 if(animal.getProduces().isEmpty()) {
                     return new Result(false, "no more products");
@@ -174,8 +196,14 @@ public class AnimalController {
             if(animal.getName().equals(name)) {
                 int price = (int) (animal.getPrice() * ((double) animal.getFriendship() / 1000 + 0.3));
                 App.getCurrentGame().getCurrentPlayer().getAnimals().remove(animal);
+                for (AnimalBuilding animalBuilding : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
+                    if (animalBuilding.getAnimals().contains(animal)) {
+                        animalBuilding.getAnimals().remove(animal);
+                        break;
+                    }
+                }
                 App.getCurrentGame().getCurrentPlayer().increaseMoney(price);
-                return new Result(true, "animal selled");
+                return new Result(true, "animal sold");
             }
         }
         return new Result(false, "animal not found");
@@ -227,19 +255,27 @@ public class AnimalController {
         return x >= 0 && x < 70 && y >= 0 && y < 70;
     }
 
-    public boolean isBuildable(int x, int y, FarmBuilding building) {
-        //TODO
-        return true;
+    public boolean isBuildable(Tile targetTile) {
+        if (targetTile.getObject() == null &&
+                (targetTile.getTexture().equals(TileTexture.LAND) ||
+                        targetTile.getTexture().equals(TileTexture.GRASS))) {
+            return true;
+        }
+        return false;
     }
 
     public boolean canWeBuild(FarmBuilding building) {
-        boolean affordable = App.getCurrentGame().getCurrentPlayer().getMoney() >= building.getPrice();
-        boolean requirements =
-                App.getCurrentGame().getCurrentPlayer().getInventory().contains(
-                        building.getRequirements()
-                );
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        boolean affordable = player.getMoney() >= building.getPrice();
 
-        return affordable && requirements;
+        for (GameObject required : building.getRequirements()) {
+            GameObject inventoryItem = player.getItemInInventory(required.getObjectType());
+            if (inventoryItem == null || inventoryItem.getNumber() < required.getNumber()) {
+                return false;
+            }
+        }
+
+        return affordable;
     }
 
     public int numberOfFishes() {
