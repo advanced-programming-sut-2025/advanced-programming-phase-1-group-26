@@ -20,7 +20,6 @@ import model.tools.Tool;
 import model.tools.*;
 import view.GameMenu;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class GameController
@@ -107,7 +106,7 @@ public class GameController
                 if (targetTile.getObject() instanceof Tree ||
                         targetTile.getObject() instanceof ForagingTree ||
                         targetTile.getObject().getObjectType().equals(ResourceItem.WOOD.getType())) {
-                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseTurnEnergy(-((Axe) tool).getLevel().getBaseEnergyUsage());
                     currentPlayer.addToInventory(ResourceItem.WOOD.getType(), 3);
                     GameMenu.println("3 units of wood added to inventory.");
                     if (targetTile.getObject() instanceof Tree) {
@@ -122,9 +121,10 @@ public class GameController
                             currentPlayer.addToInventory(new GameObject(GameObjectType.MYSTIC_SYRUP, 3));
                         }
                     }
+                    targetTile.setObject(null);
                     return new Result(true, "axe used successfully");
                 } else {
-                    currentPlayer.increaseEnergy(-((Axe) tool).getLevel().getFailedEnergyUsage());
+                    currentPlayer.increaseTurnEnergy(-((Axe) tool).getLevel().getFailedEnergyUsage());
                     return new Result(false, "you can't use axe on this tile");
                 }
             } else if (tool instanceof Hoe) {
@@ -147,8 +147,8 @@ public class GameController
             } else if (tool instanceof Pickaxe) {
                 if (targetTile.getObject() instanceof ForagingMineral) {
                     currentPlayer.addToInventory(targetTile.getObject());
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
-                    currentPlayer.getGashtogozarSkill().addUnit(5);
+                    currentPlayer.increaseTurnEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.getGashtogozarSkill().changeUnit(5);
                     return new Result(true, "pickaxe used on mineral");
                 } else if (targetTile.getTexture().equals(TileTexture.QUARRY)) {
                     if (currentPlayer.getMiningSkill().getLevel() > 1) {
@@ -156,21 +156,21 @@ public class GameController
                     } else {
                         currentPlayer.addToInventory(ResourceItem.STONE.getType(), 3);
                     }
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
-                    currentPlayer.getMiningSkill().addUnit(10);
-                    return new Result(true, "pickaxe used on querry");
+                    currentPlayer.increaseTurnEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.getMiningSkill().changeUnit(10);
+                    return new Result(true, "pickaxe used on quarry");
                 } else if (targetTile.getTexture().equals(TileTexture.LAND)) {
                     if (targetTile.isPloughed()) {
                         targetTile.ploghInverse();
-                        currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                        currentPlayer.increaseTurnEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
                         return new Result(true, "tile is not ploughed anymore");
                     } else {
-                        currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getFailedEnergyUsage());
+                        currentPlayer.increaseTurnEnergy(-((Pickaxe) tool).getLevel().getFailedEnergyUsage());
                         return new Result(false, "tile is not ploughed");
                     }
                 } else if (targetTile.getObject() instanceof  ForagingSeed) {
                     targetTile.setObject(null);
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
+                    currentPlayer.increaseTurnEnergy(-((Pickaxe) tool).getLevel().getBaseEnergyUsage());
                     return new Result(true, "seed is removed");
                 } else if (!targetTile.hasPlants() && targetTile.getObject() != null)
                 {
@@ -185,12 +185,12 @@ public class GameController
                     return new Result(true, object.getObjectType().toString() + " added to your inventory");
                 }
                 else {
-                    currentPlayer.increaseEnergy(-((Pickaxe) tool).getLevel().getFailedEnergyUsage());
+                    currentPlayer.increaseTurnEnergy(-((Pickaxe) tool).getLevel().getFailedEnergyUsage());
                     return new Result(false, "you can't use pickaxe on this tile");
                 }
             } else if (tool instanceof Seythe)
             {
-                currentPlayer.increaseEnergy((int)(weatherModifier * -((Seythe) tool).getEnergyUsage()));
+                currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Seythe) tool).getEnergyUsage()));
 
                 if (!targetTile.hasPlants())
                 {
@@ -213,7 +213,7 @@ public class GameController
                     GameObject fruit = new GameObject(tree.getFruit().getType(), 1);
                     currentPlayer.addToInventory(fruit);
                     tree.harvest();
-                    currentPlayer.getFarmingSkill().addUnit(5);
+                    currentPlayer.getFarmingSkill().changeUnit(5);
                     return new Result(true, "you harvested one " + fruit.getObjectType().toString() + ".");
                 } else if (plant instanceof Crop)
                 {
@@ -232,7 +232,7 @@ public class GameController
                         currentPlayer.addToInventory(cropResult);
                     }
 
-                    currentPlayer.getFarmingSkill().addUnit(5);
+                    currentPlayer.getFarmingSkill().changeUnit(5);
                     if (crop.harvest())
                     {
                         targetTile.unPlant();
@@ -246,31 +246,30 @@ public class GameController
                 //TODO:
 
             } else if (tool instanceof WateringCan) {
-                currentPlayer.increaseEnergy((int)(weatherModifier * -((WateringCan) tool).getLevel().getBaseEnergyUsage()));
-                if (!targetTile.getTexture().equals(TileTexture.GRASS) && !targetTile.getTexture().equals(TileTexture.LAND))
+                currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((WateringCan) tool).getLevel().getBaseEnergyUsage()));
+                if (targetTile.getTexture().equals(TileTexture.LAND) || targetTile.getTexture().equals(TileTexture.GRASS))
                 {
-                    return new Result(false, "you can't use shears on this type of tile");
-                }
-                if (targetTile.hasPlants())
-                {
-                    Plant plant = (Plant) targetTile.getObject();
-
-                    if (plant.hasBeenWateredToday())
+                    if (targetTile.hasPlants())
                     {
-                        return new Result(true, "You have already watered this plant today.");
-                    }
+                        Plant plant = (Plant) targetTile.getObject();
 
-                    if (((WateringCan) tool).getCurrentVolume() == 0)
+                        if (plant.hasBeenWateredToday())
+                        {
+                            return new Result(true, "You have already watered this plant today.");
+                        }
+
+                        if (((WateringCan) tool).getCurrentVolume() == 0)
+                        {
+                            return new Result(true, "You should refill your watering can.");
+                        }
+
+                        ((WateringCan) tool).decreaseVolume(1);
+                        plant.water();
+                        return new Result(true, "Plant has been watered.");
+                    } else if (!targetTile.hasPlants())
                     {
-                        return new Result(true, "You should refill your watering can.");
+                        return new Result(false, "There are no plants in this tile.");
                     }
-
-                    ((WateringCan) tool).decreaseVolume(1);
-                    plant.water();
-                    return new Result(true, "Plant has been watered.");
-                } else if (!targetTile.hasPlants())
-                {
-                    return new Result(false, "There are no plants in this tile.");
                 } else if (targetTile.getTexture().equals(TileTexture.LAKE))
                 {
                     WateringCan can = (WateringCan) tool;
@@ -288,7 +287,7 @@ public class GameController
                 if (targetTile.getTexture().equals(TileTexture.LAKE)) {
                     //TODO: fishing
                 }
-                currentPlayer.increaseEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
+                currentPlayer.increaseTurnEnergy(-((FishingPole) tool).getLevel().getBaseEnergyUsage());
             }
             currentPlayer.checkEnergy();
         }
@@ -406,7 +405,7 @@ public class GameController
                 }
             }
 
-            player.removeFromInventory(seed);
+            player.removeAmountFromInventory(seed.getObjectType(), 1);
 
             if (giant)
             {
@@ -426,7 +425,7 @@ public class GameController
             {
                 tree.putInGreenhouse();
             }
-            player.removeFromInventory(tree);
+            player.removeAmountFromInventory(tree.getObjectType(), 1);
             return new Result(true, "Successfully planted " + treeType.getName() + ".");
         }
 
@@ -437,10 +436,16 @@ public class GameController
     {
         Player player = App.getCurrentGame().getCurrentPlayer();
 
-        GameObject fertilizer = player.getItemInInventory(GameObjectType.FERTILIZER);
+        GameObjectType fertilizerType = GameObjectType.getGameObjectType(fertilizerName);
+        if (fertilizerType == null)
+        {
+            return new Result(false, "There is no such kind of fertilizer.");
+        }
+
+        GameObject fertilizer = player.getItemInInventory(fertilizerType);
         if (fertilizer == null)
         {
-            return new Result(false, "You don't have any fertilizer :(");
+            return new Result(false, "You don't have this kind of fertilizer in your inventory.");
         }
 
         Tile tile = App.getCurrentGame().getTileFromDirection(direction);
@@ -459,13 +464,43 @@ public class GameController
             return new Result(false, "This tile has already been fertilized.");
         }
 
-        if (tile.hasPlants()) // TODO: more debugging on this
+        if (fertilizer.getObjectType() == GameObjectType.FERTILIZER)
         {
-            return new Result(false, "ERROR: This should not happen.");
+            tile.fertilize();
+            tile.setWateringChance(0);
+            return new Result(true, "Tile fertilized with fertilizer.");
         }
 
-        tile.fertilize();
-        return new Result(true, "You have successfully fertilized this tile.");
+        if (fertilizer.getObjectType() == GameObjectType.SPECIAL_FERTILIZER)
+        {
+            tile.fertilize();
+            tile.setWateringChance(0);
+            tile.setGrowFaster();
+            return new Result(true, "Tile fertilized with special fertilizer.");
+        }
+
+        if (fertilizer.getObjectType() == GameObjectType.BASIC_RETAINING_SOIL)
+        {
+            tile.fertilize();
+            tile.setWateringChance(40);
+            return new Result(true, "Tile fertilized with basic retaining soil.");
+        }
+
+        if (fertilizer.getObjectType() == GameObjectType.QUALITY_RETAINING_SOIL)
+        {
+            tile.fertilize();
+            tile.setWateringChance(70);
+            return new Result(true, "Tile fertilized with quality retaining soil.");
+        }
+
+        if (fertilizer.getObjectType() == GameObjectType.DELUXE_RETAINING_SOIL)
+        {
+            tile.fertilize();
+            tile.setWateringChance(100);
+            return new Result(true, "Tile fertilized with deluxe retaining soil.");
+        }
+
+        return new Result(false, "There is no such kind of fertilizer.");
     }
 
     public Result howMuchWater()
@@ -506,7 +541,7 @@ public class GameController
 
             player.goToCabin();
             App.setCurrentMenu(Menu.HomeMenu);
-            player.increaseEnergy(-1 * requiredEnergy);
+            player.increaseTurnEnergy(-1 * requiredEnergy);
             return new Result(true, "Going to cabin...");
         } else if (placeName.equalsIgnoreCase("greenhouse") ||
                 placeName.equalsIgnoreCase("green house"))
@@ -526,7 +561,7 @@ public class GameController
             }
 
             player.goToGreenHouse();
-            player.increaseEnergy(-1 * requiredEnergy);
+            player.increaseTurnEnergy(-1 * requiredEnergy);
             return new Result(false, "Going to green house...");
         } else if (placeName.equalsIgnoreCase("city"))
         {
@@ -540,7 +575,7 @@ public class GameController
 
             player.goToCity();
             App.setCurrentMenu(Menu.CityMenu);
-            player.increaseEnergy(-1 * requiredEnergy);
+            player.increaseTurnEnergy(-1 * requiredEnergy);
             return new Result(true, "Going to city...");
         }
 
@@ -658,5 +693,17 @@ public class GameController
     public Result showMoney() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         return new Result(true, "your money: " + player.getMoney());
+    }
+
+    public Result cheatToolCheck(Matcher matcher) {
+        String direction = matcher.group("direction");
+        Tile targetTile = App.getCurrentGame().getTileFromDirection(direction);
+        if (targetTile == null) {
+            return new Result(false, "wrong tile");
+        } else if (targetTile.getObject() == null) {
+            return new Result(false, "no object " + "texture: "+ targetTile.getTexture());
+        }
+        return new Result(true, "object: " + targetTile.getObject().getObjectType().name() +
+                "texture: " + targetTile.getTexture());
     }
 }
