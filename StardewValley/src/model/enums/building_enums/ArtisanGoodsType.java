@@ -204,11 +204,11 @@ public enum ArtisanGoodsType
         return true;
     }
 
-    public static ArtisanGoodsType getArtisanType(String name)
-    {
-        for (ArtisanGoodsType type : ArtisanGoodsType.values())
-        {
-            if (type.name().equalsIgnoreCase(name))
-        }
-    }
+//    public static ArtisanGoodsType getArtisanType(String name)
+//    {
+//        for (ArtisanGoodsType type : ArtisanGoodsType.values())
+//        {
+//            if (type.name().equalsIgnoreCase(name))
+//        }
+//    }
 }

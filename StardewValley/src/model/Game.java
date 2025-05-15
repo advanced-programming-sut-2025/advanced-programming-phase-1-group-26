@@ -1,8 +1,15 @@
 package model;
 
+import control.game.activities.MarketingController;
+import model.animal.AnimalBuilding;
+import model.enums.Menu;
 import model.building.CraftingItems.CraftingItem;
 import model.enums.*;
 import model.animal.Animal;
+import model.enums.NpcDetails;
+import model.enums.ShopType;
+import model.enums.Weather;
+import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenRecipe;
 import model.enums.resources_enums.*;
@@ -10,6 +17,7 @@ import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
 import model.resources.ForagingMineral;
 import model.resources.Plant;
+import model.shops.*;
 import view.GameMenu;
 import view.HomeMenu;
 
@@ -110,6 +118,18 @@ public class Game
     {
         for(Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
             animal.checkAndReset();
+        }
+
+        for(Player player : players) {
+            for(AnimalBuilding animalBuilding : player.getAnimalBuildings()) {
+                if(animalBuilding.getFarmBuilding().equals(FarmBuilding.SHIPPING_BIN)) {
+                    for(GameObject gameObject : animalBuilding.getFaghatVaseShipingBin()) {
+                        player.increaseMoney
+                                (MarketingController.getPrice(gameObject.getObjectType()) * gameObject.getNumber());
+                    }
+                }
+            }
+
         }
 
         // TODO: add this methods later
@@ -412,6 +432,20 @@ public class Game
                 }
             }
         }
+    }
+
+    private Shop currentShop;
+
+    public Shop getCurrentShop() {
+        return currentShop;
+    }
+
+    public void setCurrentShop(Shop currentShop) {
+        this.currentShop = currentShop;
+    }
+
+    public boolean isNearShop(ShopType type) {
+        return true;
     }
 
     public void takePlayerHome()

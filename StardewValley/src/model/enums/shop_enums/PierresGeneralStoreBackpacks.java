@@ -14,7 +14,7 @@ public enum PierresGeneralStoreBackpacks {
     private final String description;
     private final int price;
     private final String availability;
-    private final int dailyLimit;
+    private int dailyLimit;
     private final BackPackLevel level;
 
     PierresGeneralStoreBackpacks(String name, String description, int price, String availability, int dailyLimit,
@@ -32,10 +32,24 @@ public enum PierresGeneralStoreBackpacks {
     public int getPrice() {return price;}
     public String getAvailability() {return availability;}
     public int getDailyLimit() {return dailyLimit;}
+
+    public void setDailyLimit(int dailyLimit) {
+        this.dailyLimit = dailyLimit;
+    }
+
     public BackPackLevel getLevel() {return level;}
 
     @Override
     public String toString() {
         return name;
+    }
+
+    public void decreaseDailyLimit() {
+        this.dailyLimit -= 1;
+    }
+    public void resetDailyLimit() {
+        for(PierresGeneralStoreBackpacks backpack : PierresGeneralStoreBackpacks.values()) {
+            backpack.setDailyLimit(1);
+        }
     }
 }

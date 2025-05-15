@@ -27,7 +27,7 @@ public enum MarniesRanchLivestock {
     private final String description;
     private final int price;
     private final CarpentersShopFarmBuilding buildingRequired;
-    private final int dailyLimit;
+    private int dailyLimit;
     private final FarmAnimals animalType;
 
     MarniesRanchLivestock(String name, String description, int price, CarpentersShopFarmBuilding buildingRequired,
@@ -50,5 +50,17 @@ public enum MarniesRanchLivestock {
 
     public FarmAnimals getAnimalType() {
         return animalType;
+    }
+
+    public void setDailyLimit(int dailyLimit) {
+        this.dailyLimit = dailyLimit;
+    }
+
+    public void decreaseDailyLimit() {
+        this.dailyLimit -= 1;
+    }
+
+    public void resetDailyLimit() {
+        this.dailyLimit = 2;
     }
 }

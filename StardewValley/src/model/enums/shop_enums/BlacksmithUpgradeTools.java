@@ -51,8 +51,8 @@ public enum BlacksmithUpgradeTools {
     }
 
     public void resetDailyLimit() {
-        for (GameObjectType gameObjectType : GameObjectType.values()) {
-            setDailyLimit(1);
+        for (BlacksmithUpgradeTools tool : BlacksmithUpgradeTools.values()) {
+            tool.setDailyLimit(1);
         }
     }
 

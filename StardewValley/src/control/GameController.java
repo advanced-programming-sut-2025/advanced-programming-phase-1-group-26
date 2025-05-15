@@ -736,8 +736,8 @@ public class GameController
                 "texture: " + targetTile.getTexture());
     }
 
-    public Result artisanUse(String artisanName, String ingredientNameOne, String ingredientNameTwo)
-    {
-
-    }
+//    public Result artisanUse(String artisanName, String ingredientNameOne, String ingredientNameTwo)
+//    {
+//
+//    }
 }
