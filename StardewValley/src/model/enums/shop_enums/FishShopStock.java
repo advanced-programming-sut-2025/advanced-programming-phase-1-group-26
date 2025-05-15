@@ -22,7 +22,7 @@ public enum FishShopStock {
     private final String description;
     private final int price;
     private final int fishingSkillRequired;
-    private final int dailyLimit;
+    private int dailyLimit;
     private final GameObjectType gameObjectType;
 
     FishShopStock(String name, String description, int price, int fishingSkillRequired,
@@ -40,10 +40,25 @@ public enum FishShopStock {
     public int getPrice() { return price; }
     public int getFishingSkillRequired() { return fishingSkillRequired; } // -1 means N/A
     public int getDailyLimit() { return dailyLimit; }
+
+    public void setDailyLimit(int dailyLimit) {
+        this.dailyLimit = dailyLimit;
+    }
+
     public GameObjectType getGameObjectType() { return gameObjectType; }
 
     @Override
     public String toString() {
         return name;
+    }
+
+    public void decreaseDailyLimit() {
+        this.dailyLimit--;
+    }
+
+    public void resetDailyLimit() {
+        for(FishShopStock gameObjectType : FishShopStock.values()) {
+            gameObjectType.setDailyLimit(1);
+        }
     }
 }

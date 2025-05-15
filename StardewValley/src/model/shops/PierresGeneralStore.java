@@ -1,23 +1,28 @@
 package model.shops;
 
+import model.App;
+import model.GameObject;
+import model.enums.GameObjectType;
 import model.enums.ShopType;
 import model.enums.shop_enums.PierresGeneralStoreBackpacks;
 import model.enums.shop_enums.PierresGeneralStoreSeasonalStock;
 import model.enums.shop_enums.PierresGeneralStoreYearRoundStock;
+import model.enums.tool_enums.BackPackLevel;
+import model.tools.BackPack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PierresGeneralStore extends Shop{
-    private PierresGeneralStoreBackpacks backpack;
-    private PierresGeneralStoreSeasonalStock seasonalStock;
-    private PierresGeneralStoreYearRoundStock yearRoundStock;
     private ArrayList<PierresGeneralStoreSeasonalStock> seasonalStocks = new ArrayList<>();
     private ArrayList<PierresGeneralStoreYearRoundStock> yearRoundStocks = new ArrayList<>();
     private ArrayList<PierresGeneralStoreBackpacks> backpacks = new ArrayList<>();
 
     public PierresGeneralStore() {
         super(ShopType.PIERRE_GENERAL_STORE, ShopType.PIERRE_GENERAL_STORE.name(), "Pierre", 9, 17);
+        setSeasonalStocks();
+        setYearRoundStocks();
+        setBackpacks();
     }
 
     public void setSeasonalStocks() {
@@ -61,4 +66,44 @@ public class PierresGeneralStore extends Shop{
         }
         return products.toString();
     }
+
+    @Override
+    public void purchase(GameObject gameObject) {
+        super.purchase(gameObject);
+        for(PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks) {
+            if(gameObject.getObjectType().equals(yearRoundStock.getGameObjectType())) {
+                App.getCurrentGame().getCurrentPlayer().decreaseMoney
+                        (yearRoundStock.getPrice() * gameObject.getNumber());
+                App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
+                yearRoundStock.decreaseLimit();
+                yearRoundStocks.remove(yearRoundStock);
+            }
+        }
+        for(PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks) {
+            if(!seasonalStock.getSeasons().contains(App.getCurrentGame().getCurrentTime().getSeason())) {
+                isInSeason = false;
+                if(gameObject.getObjectType().equals(seasonalStock.getType())) {
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney
+                            (seasonalStock.getOutOfSeasonPrice() * gameObject.getNumber());
+                    App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
+                    seasonalStock.decreaseDailyLimit();
+                    seasonalStocks.remove(seasonalStock);
+                }
+            } else {
+                if(gameObject.getObjectType().equals(seasonalStock.getType())) {
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney
+                            (seasonalStock.getBasePrice() * gameObject.getNumber());
+                    App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
+                    seasonalStocks.remove(seasonalStock);
+                }
+            }
+        }
+        for(PierresGeneralStoreBackpacks backpack : PierresGeneralStoreBackpacks.values()) {
+            if(gameObject instanceof BackPack) {
+
+            }
+        }
+    }
+
+    public boolean isInSeason = true;
 }

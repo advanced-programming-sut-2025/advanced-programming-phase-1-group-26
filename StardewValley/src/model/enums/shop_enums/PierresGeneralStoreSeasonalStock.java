@@ -73,7 +73,7 @@ public enum PierresGeneralStoreSeasonalStock {
     private final String description;
     private final int basePrice;
     private final int outOfSeasonPrice;
-    private final int dailyLimit;
+    private int dailyLimit;
     private final Set<Season> seasons;
     private final GameObjectType type;
 
@@ -93,6 +93,21 @@ public enum PierresGeneralStoreSeasonalStock {
     public int getBasePrice() { return basePrice; }
     public int getOutOfSeasonPrice() { return outOfSeasonPrice; }
     public int getDailyLimit() { return dailyLimit; }
+
+    public void setDailyLimit(int dailyLimit) {
+        this.dailyLimit = dailyLimit;
+    }
+
+    public void decreaseDailyLimit() {
+        this.dailyLimit--;
+    }
+
+    public void resetDailyLimit() {
+        for(PierresGeneralStoreSeasonalStock gameObjectType : PierresGeneralStoreSeasonalStock.values()) {
+            gameObjectType.setDailyLimit(5);
+        }
+    }
+
     public Set<Season> getSeasons() { return seasons; }
     public GameObjectType getType() { return type; }
 
