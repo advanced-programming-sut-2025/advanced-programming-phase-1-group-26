@@ -3,13 +3,12 @@ package model;
 import model.animal.Animal;
 import model.animal.AnimalBuilding;
 import model.animal.Fish;
-import model.building.Cooking.EdibleThing;
 import model.enums.GameObjectType;
 import model.enums.Gender;
 import model.enums.animal_enums.FarmAnimals;
 import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.CraftingRecipeEnums;
-import model.enums.building_enums.KitchenItems;
+import model.enums.building_enums.KitchenRecipe;
 import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
@@ -77,12 +76,11 @@ public class Player {
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
-    private ArrayList<KitchenItems> cookingRecipes = new ArrayList<>(
-            Arrays.asList(KitchenItems.FRIED_EGG,
-                    KitchenItems.BAKED_FISH,
-                    KitchenItems.SALAD));
-    private ArrayList<EdibleThing> refrigerator = new ArrayList<>();
-    private ArrayList<FarmAnimals.Product> products = new ArrayList<>();
+    private ArrayList<KitchenRecipe> cookingRecipes = new ArrayList<>(
+            Arrays.asList(KitchenRecipe.FRIED_EGG,
+                    KitchenRecipe.BAKED_FISH,
+                    KitchenRecipe.SALAD));
+    private ArrayList<GameObject> refrigerator = new ArrayList<>();
 
     public static ArrayList<String> appearences = new ArrayList<>(List.of("\uD83D\uDC31", "\uD83E\uDD8A", "\uD83D\uDC3C", "\uD83E\uDD81"));
 
@@ -291,6 +289,19 @@ public class Player {
     public void setLocation(Point location)
     {
         this.location = location;
+        if (isInCity)
+        {
+            int index = App.getCurrentGame().getPlayerIndex();
+            City city = App.getCurrentGame().getCity();
+            city.getPlayerPoints()[index] = location;
+        }
+        if (isInCity)
+        {
+            int index = App.getCurrentGame().getPlayerIndex();
+            City city = App.getCurrentGame().getCity();
+            city.getPlayerPoints()[index] = location;
+        }
+
     }
 
     public void setCurrentMap(Map currentMap)
@@ -302,7 +313,7 @@ public class Player {
     {
         for (GameObject obj : currentBackPack.getInventory())
         {
-            Enum<?> inventoryItemType = obj.getToolType();
+            Enum<?> inventoryItemType = obj.getObjectType();
 
             if (inventoryItemType.equals(type))
             {
@@ -334,11 +345,7 @@ public class Player {
     {
         if (this.currentBackPack.getInventory().contains(object))
         {
-            object.addNumber(-1);
-            if (object.number == 0)
-            {
-                this.currentBackPack.getInventory().remove(object);
-            }
+            this.currentBackPack.getInventory().remove(object);
         }
     }
 
@@ -374,8 +381,16 @@ public class Player {
 
     public void addToInventory(GameObject object)
     {
-        currentBackPack.getInventory().add(object);
+        GameObject o = getItemInInventory(object.getObjectType());
+        if (o != null)
+        {
+            addToInventory(object.getObjectType(), object.getNumber());
+        } else
+        {
+            currentBackPack.getInventory().add(object);
+        }
     }
+
 
     public ArrayList<CraftingRecipeEnums> getCraftingRecipes()
     {
@@ -446,10 +461,12 @@ public class Player {
 
     public void addToInventory(GameObjectType objectType, int amount)
     {
+        boolean added = false;
         GameObject object = getItemInInventory(objectType);
         if (object != null)
         {
             object.addNumber(amount);
+            added = true;
         } else
         {
             if (inventoryHasCapacity())
@@ -520,41 +537,29 @@ public class Player {
         animals.add(animal);
     }
 
-    public ArrayList<EdibleThing> getRefrigerator()
+    public ArrayList<GameObject> getRefrigerator()
     {
         return refrigerator;
     }
 
-    public ArrayList<KitchenItems> getCookingRecipes()
+    public ArrayList<KitchenRecipe> getCookingRecipes()
     {
         return cookingRecipes;
     }
 
-    public boolean isNear(Point location)
+    public boolean isNear(Point otherLocation)
     {
-        int playerX = this.location.getX();
-        int playerY = this.location.getY();
 
-        for (int x = -1; x <= 1; x++)
-        {
-            for (int y = -1; y <= 1; y++)
-            {
-                if (x != 0 && y != 0)
-                {
-                    if (location.getX() == playerX + x && location.getY() == playerY + y)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
+        Point location = this.location;
+        int dx = Math.abs(location.getX() - otherLocation.getX());
+        int dy = Math.abs(location.getY() - otherLocation.getY());
 
-        return false;
+        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
     }
 
-    public EdibleThing getFromRefrigerator (GameObjectType type)
+    public GameObject getFromRefrigerator (GameObjectType type)
     {
-        for (EdibleThing thing : refrigerator)
+        for (GameObject thing : refrigerator)
         {
             if (thing.getObjectType().equals(type))
             {
@@ -566,7 +571,7 @@ public class Player {
 
     public int howManyInRefrigerator(GameObjectType type)
     {
-        for (EdibleThing thing : refrigerator)
+        for (GameObject thing : refrigerator)
         {
             if (thing.getObjectType().equals(type))
             {
@@ -578,7 +583,7 @@ public class Player {
 
     public void removeAmountFromRefrigerator(GameObjectType type, int amount)
     {
-        for (EdibleThing thing : refrigerator)
+        for (GameObject thing : refrigerator)
         {
             if (thing.getObjectType().equals(type))
             {
@@ -619,7 +624,7 @@ public class Player {
         if (isInCity)
         {
             City city = App.getCurrentGame().getCity();
-            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = this.location;
+            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = null;
         }
         this.isInCity = false;
         this.isInGreenHouse = false;
@@ -685,12 +690,12 @@ public class Player {
 
     public boolean hasEnoughEnergy(int required)
     {
-        if (energy == -1)
+        if (turnEnergy == -1)
         {
             return true;
         }
 
-        return energy > required;
+        return turnEnergy > required;
     }
 
     public ArrayList<Tile> getFarmPlants()
@@ -744,5 +749,25 @@ public class Player {
         }
 
         return allPlants;
+    }
+
+    public Result newMessages() {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (currentPlayer.isNewMessage()) {
+            currentPlayer.setNewMessage(false);
+            return new Result(true, "you have some new messages! check them");
+        } else {
+            return new Result(false, "you don't have any new message");
+        }
+    }
+
+    public Result newGifts() {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (!currentPlayer.getNewGifts().isEmpty()) {
+            getNewGifts().clear();
+            return new Result(true, "you have received new gifts");
+        } else {
+            return new Result(false, "you didn't receive gifts loser");
+        }
     }
 }

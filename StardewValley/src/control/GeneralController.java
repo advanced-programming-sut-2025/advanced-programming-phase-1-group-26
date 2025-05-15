@@ -22,17 +22,19 @@ public class GeneralController
                         "\nthis turn energy: " + currentPlayer.getTurnEnergy());
     }
 
-    public void inventoryShow() {
+    public void inventoryShow()
+    {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         ArrayList<GameObject> inventory = new ArrayList<>(currentPlayer.getCurrentBackPack().getInventory());
         System.out.println("your items:");
         System.out.println("----");
         for (GameObject object : inventory) {
-            System.out.println(object.getObjectType().name() + " x" + object.getNumber());
+            int number = object.getNumber();
+            if (object instanceof Tool) number = 1;
+            System.out.println(object.getObjectType().toString() + " x" + number);
             System.out.println("----");
         }
     }
-
     public Result inventoryTrash(Matcher matcher) {
         String name = matcher.group("name");
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
@@ -309,7 +311,9 @@ public class GeneralController
         Player player = App.getCurrentGame().getCurrentPlayer();
         Map map = player.getCurrentMap();
         return new Result(true,
-                map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim());
+                "\n" +
+                        map.getMapString(player.getLocation(), new Point(0,0), map.getHEIGHT(), map.getWIDTH()).trim()
+        + "\n");
     }
 
     /* walk commands */
@@ -336,11 +340,11 @@ public class GeneralController
         if (player.hasEnoughEnergy(requiredEnergy))
         {
             return new Result(true, "positive\n" +
-                    "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
+                    "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy);
         }
 
         return new Result(false, "negative\n" +
-                "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy + ".");
+                "\tRequired energy: " + requiredEnergy + "\n\tEnergy: " + energy);
     }
 
     public Result walk(String inputX, String inputY, Scanner scanner)
@@ -376,7 +380,7 @@ public class GeneralController
             String input = GameMenu.scan(scanner);
             if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes"))
             {
-                player.increaseEnergy(-energy);
+                player.increaseTurnEnergy(-energy);
                 player.setLocation(destination);
                 return new Result(true, "You have successfully get to this place.");
             }
@@ -460,6 +464,18 @@ public class GeneralController
         Player player = game.getCurrentPlayer();
         game.setCurrentPlayer(game.getNext(player));
         game.getCurrentPlayer().setEnergyToMax();
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer.isInCity())
+        {
+            App.setCurrentMenu(Menu.CityMenu);
+        } else if (currentPlayer.isInFarm() || currentPlayer.isInGreenHouse())
+        {
+            App.setCurrentMenu(Menu.GameMenu);
+        } else
+        {
+            App.setCurrentMenu(Menu.HomeMenu);
+        }
+
         return new Result(true, game.getCurrentPlayer().getUser().getNickname() + " is now playing.");
     }
 

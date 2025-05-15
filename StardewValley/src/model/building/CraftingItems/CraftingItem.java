@@ -12,8 +12,8 @@ public abstract class CraftingItem extends GameObject
 
     public CraftingItem(CraftingRecipeEnums craftType)
     {
+        super(craftType.getType(), 1);
         this.craftType = craftType;
-        this.ObjectType = craftType.getProduct();
     }
 
     public abstract void doItsThing();

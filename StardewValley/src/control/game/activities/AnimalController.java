@@ -189,8 +189,7 @@ public class AnimalController {
         for(FishingPoleLevel pole : FishingPoleLevel.values()) {
             if(pole.getName().equals(fishingPoleName)) {
                 level = pole;
-                fishingPole = new FishingPole();
-                fishingPole.setType(ToolType.FishingPole);
+                fishingPole = new FishingPole(FishingPoleLevel.Bamboo);
                 fishingPole.setLevel(pole);
                 fishingPole.setName(fishingPoleName);
             }

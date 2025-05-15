@@ -1,5 +1,6 @@
 package model.resources;
 
+import model.Tile;
 import model.enums.resources_enums.FruitType;
 import model.enums.resources_enums.TreeType;
 
@@ -8,7 +9,7 @@ public class Tree extends Plant
     private FruitType fruit;
     private int fruitHarvestCycle;
 
-    public Tree(TreeType treeType)
+    public Tree(TreeType treeType, Tile tile)
     {
         this.type = treeType;
         this.name = treeType.getName();
@@ -23,16 +24,12 @@ public class Tree extends Plant
         this.seasons = treeType.getSeasons();
 
         harvestWaitTime = this.totalHarvestTime;
-    }
-
-    @Override
-    public boolean canHarvest()
-    {
-        return currentStage == totalHarvestTime && lastHarvested >= harvestWaitTime;
+        this.tile = tile;
     }
 
     public void harvest()
     {
+        hasHarvested = true;
         lastHarvested = 0;
         harvestWaitTime = fruitHarvestCycle;
     }

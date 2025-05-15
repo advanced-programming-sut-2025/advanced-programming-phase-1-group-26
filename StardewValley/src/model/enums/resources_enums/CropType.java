@@ -1,5 +1,6 @@
 package model.enums.resources_enums;
 
+import model.App;
 import model.enums.GameObjectType;
 import model.enums.Season;
 
@@ -153,10 +154,10 @@ public enum CropType
 
         output.append("Total Harvest Time: ").append(totalHarvestTime).append("\n");
         output.append("One Time: ").append(oneTime ? "TRUE" : "FALSE").append("\n");
-        output.append("Regrowth Time: ").append(growthTime == -1 ? "" : growthTime).append("\n");
-        output.append("Base Sell Price: ").append(baseSellPrice).append("\n");
+        output.append("Regrowth Time: ").append(growthTime == -1 ? "-" : growthTime).append("\n");
+        output.append("Base Sell Price: ").append(baseSellPrice == -1 ? "-" : growthTime).append("\n");
         output.append("Is Edible: ").append(isEdible ? "TRUE" : "FALSE").append("\n");
-        output.append("Base Energy: ").append(energy).append("\n");
+        output.append("Base Energy: ").append(energy == -1 ? "-" : energy).append("\n");
 
         output.append("Season(s): ");
         for (int i = 0; i < getSeasons().size(); i++)
@@ -192,7 +193,7 @@ public enum CropType
     {
         if (seedType.equals(ForagingSeedType.MIXED_SEEDS.getType()))
         {
-            CropType random = CropType.values()[RANDOM.nextInt(CropType.values().length)];
+            CropType random = MixedSeedType.getRandomSeedCropBySeason(App.getCurrentGame().getCurrentTime().getSeason());
             return random;
         }
 

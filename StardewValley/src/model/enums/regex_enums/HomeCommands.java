@@ -12,10 +12,10 @@ public enum HomeCommands implements Command
             "-d\\s+(?<direction>\\S+)"),
     CHEAT_ADD_ITEM("cheat\\s+add\\s+item\\s+" +
             "-n\\s+(?<itemName>.*)\\s+" +
-            "-c\\s+(?<count>\\d+)"),
+            "-c\\s+(?<count>\\S+)"),
     COOKING_PUT("cooking\\s+refrigerator\\s+put\\s+(?<item>.*)"),
     COOKING_PICK("cooking\\s+refrigerator\\s+pick\\s+(?<item>.*)"),
-    COOKING_SHOW_RECIPES("cooking\\s+show\\s+recipe"),
+    COOKING_SHOW_RECIPES("cooking\\s+show\\s+recipes"),
     COOKING_PREPARE("cooking\\s+prepare\\s+(?<recipeName>.*)"),
     EAT("eat\\s+(?<foodName>.*)"),
     CHEAT_ADD_CRAFTING_RECIPE("cheat\\s+add\\s+crafting\\s+recipe\\s+(?<recipeName>.*)"),
@@ -25,6 +25,7 @@ public enum HomeCommands implements Command
     PRINT_MAP("print\\s+map\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)-s\\s+(?<size>\\d+)"),
     PRINT_ENTIRE_MAP("print\\s+entire\\s+map"),
     SHOW_AROUND("show\\s+around"),
+    SHOW_REFRIGERATOR("show\\s+refrigerator"),
     ;
 
     private final Pattern pattern;

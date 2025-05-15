@@ -6,7 +6,7 @@ import model.enums.TradeType;
 
 public class Trade {
     private final int id;
-    private int lastIdAssigned = 0;
+    private static int lastIdAssigned = 0;
     private final Player sent;
     private final Player received;
     private final TradeType type;
@@ -15,6 +15,7 @@ public class Trade {
     private final double price;
     private final GameObjectType targetItem;
     private final int targetAmount;
+    private boolean respond = false;
 
     public Trade(Player request, Player offer, TradeType type, GameObjectType item, int amount, double price) {
         this.id = ++lastIdAssigned;
@@ -75,5 +76,13 @@ public class Trade {
 
     public int getTargetAmount() {
         return targetAmount;
+    }
+
+    public boolean isRespond() {
+        return respond;
+    }
+
+    public void setRespond(boolean respond) {
+        this.respond = respond;
     }
 }

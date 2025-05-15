@@ -1,6 +1,8 @@
 package model;
 
+import model.enums.GameObjectType;
 import model.enums.TileTexture;
+import model.enums.resources_enums.ForagingMineralType;
 import model.enums.resources_enums.ResourceItem;
 import model.resources.*;
 
@@ -50,7 +52,7 @@ public class Tile
         {
             if (object instanceof Tree)
             {
-                object = new Resource(ResourceItem.WOOD);
+                object = new GameObject(GameObjectType.COAL, 3);
             }
 
             if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof Plant)
@@ -124,8 +126,25 @@ public class Tile
 
     public void unPlant()
     {
-        object = null;
-        isPloughed = false;
+        if (object != null && object instanceof GiantCrop)
+        {
+            GiantCrop crop = (GiantCrop) object;
+            ArrayList<Tile> tiles = GiantCrop.get2x2Tiles(crop.getRootTile());
+            for (Tile t : tiles)
+            {
+                t.setObject(null);
+                t.ploghInverse();
+                t.unFertilize();
+            }
+        }
+
+        setObject(null);
+        ploghInverse();
+        unFertilize();
+    }
+
+    public void unFertilize()
+    {
         isFertilized = false;
     }
 
@@ -347,10 +366,10 @@ public class Tile
             {
                 if (isPloughed)
                 {
-                    return "\uD83D\uDFEB";
+                    return "\uD83D\uDFEB"; // 🟫
                 } else
                 {
-                    return "\uD83D\uDFE8";
+                    return "\uD83D\uDFE8"; // 🟨
                 }
             } else if (texture.equals(TileTexture.LAKE))
             {
@@ -364,7 +383,13 @@ public class Tile
 //                return "\uD83D\uDFE6";
             } else if (texture.equals(TileTexture.GRASS))
             {
-                return "\uD83D\uDFE9";
+                if (isPloughed)
+                {
+                    return "\uD83D\uDFEB"; // 🟫
+                } else
+                {
+                    return "\uD83D\uDFE9"; // 🟩
+                }
             } else if (texture.equals(TileTexture.CABIN))
             {
                     return "\uD83C\uDFE0"; // maybe (?)
@@ -475,8 +500,15 @@ public class Tile
 //                return "\uD83D\uDFEA";
             } else if (object instanceof Crop)
             {
+                if (object instanceof GiantCrop)
+                {
+                    return "\uD83C\uDF44"; // 🍄
+                }
+                else
+                {
                     return "\uD83C\uDF31"; // seed emoji
 //                return "\uD83D\uDFE5";
+                }
             } else if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof ForagingTree)
             {
                     return "\uD83C\uDF32";
@@ -492,6 +524,9 @@ public class Tile
                         return "\uD83E\uDEB5";
 //                    return "\uD83D\uDFE7";
                 }
+            } else if (object.getObjectType().equals(GameObjectType.COAL))
+            {
+              return "⬛";
             } else if (object instanceof ForagingMineral)
             {
                 return "\uD83D\uDFE7";

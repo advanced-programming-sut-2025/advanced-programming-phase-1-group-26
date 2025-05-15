@@ -192,11 +192,12 @@ public enum CraftingRecipeEnums
     {
         StringBuilder output = new StringBuilder();
 
-        output.append("name: ").append(type).append('\n');
-        output.append("product: ").append(product).append('\n');
-        output.append("description: ").append(description).append('\n');
+        output.append("Name: ").append(type).append('\n');
+        output.append("Product: ").append(product).append('\n');
+        output.append("Description: ").append(description).append('\n');
 
-        output.append("ingredients: \n");
+        output.append("------------------\n");
+        output.append("Ingredients: \n");
         for (Map.Entry<GameObjectType, Integer> entry : ingredients.entrySet())
         {
             output.append("\t").append(entry.getKey()).append(": ").append(entry.getValue()).append('\n');

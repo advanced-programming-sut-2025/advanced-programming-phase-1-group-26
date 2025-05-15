@@ -4,6 +4,7 @@ import model.enums.Season;
 import model.enums.TimeOfDay;
 import model.enums.Weather;
 import model.enums.regex_enums.GameCommands;
+import model.player_data.FriendshipData;
 
 import java.util.List;
 import java.util.Random;
@@ -21,15 +22,17 @@ public class Time
     public void updateHour(int hourNum)
     {
         hour += hourNum;
-        if(hour > 9 && hour <= 12) timeOfDay = TimeOfDay.MORNING;
-        if(hour > 12 && hour <= 17) timeOfDay = TimeOfDay.AFTERNOON;
-        if(hour > 17 && hour <= 23) timeOfDay = TimeOfDay.EVENING;
-        if (hour >= 23)
+
+        if (hour > 22)
         {
             int dayNum = ((hour - 23) / 14) + 1;
             hour = ((hour - 23) % 14) + 9;
             updateDay(dayNum, false); // TODO: if uses cheat code for advance time in large amount,
         }
+
+        if(hour > 9 && hour <= 12) timeOfDay = TimeOfDay.MORNING;
+        if(hour > 12 && hour <= 17) timeOfDay = TimeOfDay.AFTERNOON;
+        if(hour > 17 && hour <= 23) timeOfDay = TimeOfDay.EVENING;
     }
 
     public void updateDay(int dayNum, boolean hasCheated)
@@ -42,19 +45,20 @@ public class Time
 
         day += dayNum;
 
-        for (int i = 0; i < day; i++)
+        for (int i = 0; i < dayNum; i++)
         {
-            App.getCurrentGame().endDay();
-
             if (hasCheated)
             {
                 App.getCurrentGame().waterAllFarmPlants();
             }
+
+            App.getCurrentGame().endDay();
         }
 
         updateWeather();
+        friendshipUpdate();
 
-        if (day >= 29)
+        if (day > 28)
         {
             int seasonNum = ((day - 29) / 28) + 1;
             day = ((day - 29) % 28) + 1;
@@ -107,5 +111,16 @@ public class Time
         tomorrowWeather = list.get(random.nextInt(list.size()));
     }
 
-
+    public void friendshipUpdate() {
+        for (Player player1 : App.getCurrentGame().getPlayers()) {
+            for (Player player2 : App.getCurrentGame().getPlayers()) {
+                if (player1 != player2) {
+                    FriendshipData data1 = player1.getFriendships().get(player2);
+                    FriendshipData data2 = player2.getFriendships().get(player1);
+                    data1.setIntrcatedToday(false);
+                    data2.setIntrcatedToday(false);
+                }
+            }
+        }
+    }
 }
