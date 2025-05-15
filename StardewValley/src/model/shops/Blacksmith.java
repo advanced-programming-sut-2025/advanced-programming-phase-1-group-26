@@ -126,7 +126,8 @@ public class Blacksmith extends Shop {
     public void upgradeAxe(Axe axe) {
         switch (axe.getLevel()) {
             case AxeLevel.base -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost() &&
+                BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Copper);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
@@ -134,7 +135,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case AxeLevel.Copper -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost() &&
+                BlacksmithUpgradeTools.STEEL_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Iron);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TOOL.getCost());
@@ -142,7 +144,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case AxeLevel.Iron -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost() &&
+                BlacksmithUpgradeTools.GOLD_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Golden);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TOOL.getCost());
@@ -150,7 +153,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case AxeLevel.Golden -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost() &&
+                BlacksmithUpgradeTools.IRIDIUM_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Iridium);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost());
@@ -163,7 +167,8 @@ public class Blacksmith extends Shop {
     public void upgradePickaxe(Pickaxe pickaxe) {
         switch (pickaxe.getLevel()) {
             case PickaxeLevel.base -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost() &&
+                BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Copper);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
@@ -171,7 +176,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case PickaxeLevel.Copper -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost() &&
+                BlacksmithUpgradeTools.STEEL_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Iron);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TOOL.getCost());
@@ -179,7 +185,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case PickaxeLevel.Iron -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost() &&
+                BlacksmithUpgradeTools.GOLD_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Golden);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TOOL.getCost());
@@ -187,7 +194,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case PickaxeLevel.Golden -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost() &&
+                BlacksmithUpgradeTools.IRIDIUM_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Iridium);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost());
@@ -200,7 +208,8 @@ public class Blacksmith extends Shop {
     public void upgradeHoe(Hoe hoe) {
         switch (hoe.getLevel()) {
             case HoeLevel.base -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost() &&
+                BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Copper);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
@@ -208,7 +217,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case HoeLevel.Copper -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost() &&
+                BlacksmithUpgradeTools.STEEL_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Iron);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TOOL.getCost());
@@ -216,7 +226,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case HoeLevel.Iron -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost() &&
+                BlacksmithUpgradeTools.GOLD_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Golden);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TOOL.getCost());
@@ -224,7 +235,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case HoeLevel.Golden -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost() &&
+                BlacksmithUpgradeTools.IRIDIUM_TOOL.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Iridium);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost());
@@ -237,7 +249,8 @@ public class Blacksmith extends Shop {
     public void upgradeTrashCan(TrashCan trashCan) {
         switch (trashCan.getLevel()) {
             case WateringCanLevel.base -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TRASH_CAN.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TRASH_CAN.getCost() &&
+                BlacksmithUpgradeTools.COPPER_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     trashCan.setLevel(WateringCanLevel.Copper);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TRASH_CAN.getCost());
@@ -245,7 +258,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case WateringCanLevel.Copper -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TRASH_CAN.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TRASH_CAN.getCost() &&
+                BlacksmithUpgradeTools.STEEL_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     trashCan.setLevel(WateringCanLevel.Iron);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TRASH_CAN.getCost());
@@ -253,7 +267,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case WateringCanLevel.Iron -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TRASH_CAN.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TRASH_CAN.getCost() &&
+                BlacksmithUpgradeTools.GOLD_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     trashCan.setLevel(WateringCanLevel.Golden);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TRASH_CAN.getCost());
@@ -261,7 +276,8 @@ public class Blacksmith extends Shop {
                 }
             }
             case WateringCanLevel.Golden -> {
-                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getCost()) {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getCost() &&
+                BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getDailyLimit() != 0) {
                     canWeUpgrade = true;
                     trashCan.setLevel(WateringCanLevel.Iridium);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getCost());
@@ -273,4 +289,8 @@ public class Blacksmith extends Shop {
 
     public boolean canWeUpgrade = false;
 
+    @Override
+    public boolean dailyLimitCheck(GameObject gameObject) {
+        return super.dailyLimitCheck(gameObject);
+    }
 }

@@ -1,11 +1,16 @@
 package model;
 
+import control.game.activities.MarketingController;
+import model.animal.AnimalBuilding;
 import model.enums.Menu;
 import model.animal.Animal;
 import model.enums.NpcDetails;
+import model.enums.ShopType;
 import model.enums.Weather;
+import model.enums.animal_enums.FarmBuilding;
 import model.player_data.FriendshipData;
 import model.resources.Plant;
+import model.shops.*;
 import view.GameMenu;
 import view.HomeMenu;
 
@@ -80,6 +85,18 @@ public class Game
         for(NPC npc : NPCs) {
             npc.reset();
         }
+        for(Player player : players) {
+            for(AnimalBuilding animalBuilding : player.getAnimalBuildings()) {
+                if(animalBuilding.getFarmBuilding().equals(FarmBuilding.SHIPPING_BIN)) {
+                    for(GameObject gameObject : animalBuilding.getFaghatVaseShipingBin()) {
+                        player.increaseMoney
+                                (MarketingController.getPrice(gameObject.getObjectType()) * gameObject.getNumber());
+                    }
+                }
+            }
+
+        }
+
         // TODO: add this methods later
         // resetPlayersEnergy();
         // growPlants();
@@ -378,6 +395,20 @@ public class Game
                 }
             }
         }
+    }
+
+    private Shop currentShop;
+
+    public Shop getCurrentShop() {
+        return currentShop;
+    }
+
+    public void setCurrentShop(Shop currentShop) {
+        this.currentShop = currentShop;
+    }
+
+    public boolean isNearShop(ShopType type) {
+        return true;
     }
 
     public void takePlayerHome()

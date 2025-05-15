@@ -100,9 +100,89 @@ public class PierresGeneralStore extends Shop{
         }
         for(PierresGeneralStoreBackpacks backpack : PierresGeneralStoreBackpacks.values()) {
             if(gameObject instanceof BackPack) {
-
+                if(gameObject.toString().equals(backpack.getName())) {
+                    App.getCurrentGame().getCurrentPlayer().getCurrentBackPack().setLevel(backpack.getLevel());
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(backpack.getPrice());
+                    backpack.decreaseDailyLimit();
+                    backpacks.remove(backpack);
+                }
             }
         }
+    }
+
+    @Override
+    public boolean dailyLimitCheck(GameObject gameObject) {
+        super.dailyLimitCheck(gameObject);
+        for(PierresGeneralStoreBackpacks backpack : backpacks) {
+            if(gameObject instanceof BackPack) {
+                if(gameObject.toString().equals(backpack.getName())) {
+                    if(backpack.getDailyLimit() >= 0 && backpack.getDailyLimit() < gameObject.getNumber()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        for(PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks) {
+            if(gameObject.getObjectType().equals(seasonalStock.getType())) {
+                if(seasonalStock.getDailyLimit() >= 0 && seasonalStock.getDailyLimit() < gameObject.getNumber()) {
+                    return false;
+                }
+            }
+        }
+        for(PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks) {
+            if(gameObject.getObjectType().equals(yearRoundStock.getGameObjectType())) {
+                if(yearRoundStock.getDailyLimit() >= 0 && yearRoundStock.getDailyLimit() < gameObject.getNumber()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isCorrectShop(GameObject gameObject) {
+        super.isCorrectShop(gameObject);
+        for(PierresGeneralStoreBackpacks backpack : backpacks) {
+            if(gameObject instanceof BackPack) {
+                return true;
+            }
+        }
+        for(PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks) {
+            if(yearRoundStock.getGameObjectType().equals(gameObject.getObjectType())) {
+                return true;
+            }
+        }
+        for(PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks) {
+            if(seasonalStock.getType().equals(gameObject.getObjectType())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isAffordable(GameObject gameObject) {
+        super.isAffordable(gameObject);
+        for(PierresGeneralStoreBackpacks backpack : backpacks) {
+            if(gameObject instanceof BackPack) {
+                return App.getCurrentGame().getCurrentPlayer().getMoney() >= backpack.getPrice();
+            }
+        }
+        for(PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks) {
+            if(yearRoundStock.getGameObjectType().equals(gameObject.getObjectType())) {
+                return App.getCurrentGame().getCurrentPlayer().getMoney() >= yearRoundStock.getPrice();
+            }
+        }
+        for(PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks) {
+            if(seasonalStock.getType().equals(gameObject.getObjectType())) {
+                if(isInSeason) {
+                    return App.getCurrentGame().getCurrentPlayer().getMoney() >= seasonalStock.getBasePrice();
+                } else {
+                    return App.getCurrentGame().getCurrentPlayer().getMoney() >= seasonalStock.getOutOfSeasonPrice();
+                }
+            }
+        }
+        return false;
     }
 
     public boolean isInSeason = true;

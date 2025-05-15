@@ -1,15 +1,28 @@
 package control.game.activities;
 
 import model.*;
+import model.animal.AnimalBuilding;
 import model.enums.GameObjectType;
 import model.enums.NpcDetails;
 import model.enums.Season;
 import model.enums.ShopType;
+import model.enums.animal_enums.FarmAnimals;
+import model.enums.animal_enums.FarmBuilding;
+import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.building_enums.KitchenRecipe;
 import model.enums.regex_enums.GameCommands;
+import model.enums.regex_enums.GeneralCommands;
+import model.enums.resources_enums.CropType;
+import model.enums.resources_enums.ForagingCropType;
+import model.enums.resources_enums.ForagingMineralType;
+import model.enums.resources_enums.TreeType;
+import model.enums.shop_enums.BlacksmithStockItem;
+import model.enums.tool_enums.ToolType;
 import model.shops.*;
 import model.tools.Tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 
 public class MarketingController {
@@ -67,6 +80,186 @@ public class MarketingController {
             return new Result(false, "Shop is not open");
         }
         return new Result(true, shop.showAvailableProducts());
+    }
+
+    public Result purchase(String input) {
+        String productName;
+        int numberOfProductsToPurchase = 0;
+        if(GameCommands.PURCHASE.matches(input)) {
+            productName = GameCommands.PURCHASE.getMatcher(input).group("productName");
+            numberOfProductsToPurchase = 1;
+        }
+        else {
+            productName = GameCommands.PURCHASE_N.getMatcher(input).group("productName");
+            numberOfProductsToPurchase = Integer.parseInt(GameCommands.PURCHASE_N.getMatcher(input).group("count"));
+        }
+        GameObjectType gameObjectType = null;
+        for(GameObjectType type : GameObjectType.values()){
+            if(type.name().equals(productName)){
+                gameObjectType = type;
+            }
+        }
+        if(gameObjectType == null) {return new Result(false, "No such product");}
+        GameObject gameObject = new GameObject(gameObjectType, numberOfProductsToPurchase);
+        Shop shop = null;
+
+        if(App.getCurrentGame().isNearShop(ShopType.MARINE_RANCH)) {
+            shop = new MarniesRanch();
+        } else if(App.getCurrentGame().isNearShop(ShopType.JOJA_MART)) {
+            shop = new JojaMart();
+        } else if(App.getCurrentGame().isNearShop(ShopType.CARPENTER_SHOP)) {
+            shop = new CarpentersShop();
+        } else if(App.getCurrentGame().isNearShop(ShopType.PIERRE_GENERAL_STORE)) {
+            shop = new PierresGeneralStore();
+        } else if(App.getCurrentGame().isNearShop(ShopType.FISH_SHOP)) {
+            shop = new FishShop();
+        } else if(App.getCurrentGame().isNearShop(ShopType.STARDROP_SALOON)) {
+            shop = new TheStardropSaloon();
+        } else if(App.getCurrentGame().isNearShop(ShopType.BLACK_SMITH)) {
+            shop = new Blacksmith();
+        }
+        if(shop == null) {return new Result(false, "You are not in a shop");}
+
+        if(!shop.isOpen(App.getCurrentGame().getCurrentTime())) {
+            return new Result(false, "Shop is not open");
+        }
+
+        if(!shop.isCorrectShop(gameObject)) {
+            return new Result(false, "This item is not in this shop");
+        }
+
+        if(!shop.isAffordable(gameObject)) {
+            return new Result(false, "You don't have enough money");
+        }
+
+        if(!shop.dailyLimitCheck(gameObject)) {
+            return new Result(false, "You can't purchase due to a daily limit");
+        }
+
+        shop.purchase(gameObject);
+        return new Result(true, "Purchase successful");
+    }
+
+    public void cheatAddMoney(String input) {
+        int amount = Integer.parseInt(GameCommands.CHEAT_ADD_MONEY.getMatcher(input).group("amount"));
+        App.getCurrentGame().getCurrentPlayer().increaseMoney(amount);
+    }
+
+    public Result sell(String input) {
+        String productName;
+        int numberOfProductsToSell = 0;
+        if(GameCommands.SELL.matches(input)) {
+        productName = GameCommands.SELL.getMatcher(input).group("productName");
+            numberOfProductsToSell = 1;
+        }
+        else {
+            productName = GameCommands.SELL_N.getMatcher(input).group("productName");
+            numberOfProductsToSell = Integer.parseInt(GameCommands.SELL_N.getMatcher(input).group("count"));
+        }
+
+        GameObject sellGameObject = null;
+        for(GameObjectType type : GameObjectType.values()){
+            if(type.name().equals(productName)){
+                sellGameObject = new GameObject(type, numberOfProductsToSell);
+            }
+        }
+        if(sellGameObject == null) {return new Result(false, "No such product");}
+        int price = getPrice(sellGameObject.getObjectType());
+        if(price < 0) {
+            return new Result(false, "You can't sell this product");
+        }
+        for(AnimalBuilding building : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
+            if(building.getFarmBuilding().equals(FarmBuilding.SHIPPING_BIN)) {
+                if(App.getCurrentGame().getCurrentPlayer().getLocation().equals(building.getLocation())) {
+                    building.addFaghatVaseShipingBin(sellGameObject);
+                    App.getCurrentGame().getCurrentPlayer().removeFromInventory(sellGameObject);
+                    return new Result(true, "You have successfully add this product to shipping bin");
+                }
+            }
+        }
+        return new Result(false, "Shipping bin unavailable");
+    }
+
+    public static int getPrice(GameObjectType type)
+    {
+        for (ForagingMineralType fm : ForagingMineralType.values())
+        {
+            if (fm.getType().equals(type))
+            {
+                return fm.getSellPrice();
+            }
+        }
+
+        for (ForagingCropType fc : ForagingCropType.values())
+        {
+            if (fc.getType().equals(type))
+            {
+                return fc.getBaseSellPrice();
+            }
+        }
+
+        for (TreeType t : TreeType.values())
+        {
+            if (t.getFruit().getType().equals(type))
+            {
+                return t.getFruitBaseSellPrice();
+            }
+        }
+
+        for (CropType c : CropType.values())
+        {
+            if (c.getType().equals(type))
+            {
+                return c.getBaseSellPrice();
+            }
+        }
+
+        for (CraftingRecipeEnums r : CraftingRecipeEnums.values())
+        {
+            if (r.getProduct().equals(type))
+            {
+                return r.getPrice();
+            }
+        }
+
+        for (KitchenRecipe k : KitchenRecipe.values())
+        {
+            if (k.getType().equals(type))
+            {
+                return k.getSellPrice();
+            }
+        }
+
+        return -1;
+    }
+
+    public Result upgradeTool(String input) {
+        String toolName = GeneralCommands.TOOLS_UPGRADE.getMatcher(input).group("toolName");
+        Tool targetTool = null;
+        for(GameObject eachObject : App.getCurrentGame().getCurrentPlayer().getInventory()) {
+            if(eachObject instanceof Tool) {
+                if(toolName.equals(((Tool)eachObject).getName())) {
+                    targetTool = (Tool)eachObject;
+                }
+            }
+        }
+        for(ToolType type : ToolType.values()){
+            if(type.name().equals(toolName)) {
+                if(!App.getCurrentGame().getCurrentShop().getType().equals(ShopType.BLACK_SMITH)) {
+                    return new Result(false, "You are not in the correct shop");
+                } else {
+                    Blacksmith blacksmith = new Blacksmith();
+                    if(!blacksmith.isOpen(App.getCurrentGame().getCurrentTime())) {
+                        return new Result(false, "Shop is not open");
+                    }
+                    if(!blacksmith.canWeUpgrade) return new Result(false, "You can't upgrade");
+                    assert targetTool != null;
+                    blacksmith.upgrade(targetTool);
+                    return new Result(true, "Upgrade successful");
+                }
+            }
+        }
+        return new Result(false, "tool does not exist");
     }
 
     public Result meetNPC(String input) {
