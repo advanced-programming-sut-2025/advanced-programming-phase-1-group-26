@@ -3,9 +3,7 @@ package model;
 import model.animal.Animal;
 import model.animal.AnimalBuilding;
 import model.animal.Fish;
-import model.enums.GameObjectType;
-import model.enums.Gender;
-import model.enums.Menu;
+import model.enums.*;
 import model.enums.animal_enums.FarmAnimals;
 import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.CraftingRecipeEnums;
@@ -15,11 +13,11 @@ import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
 import model.player_data.Skill;
 import model.player_data.Trade;
-import model.enums.SkillType;
 import model.resources.Plant;
 import model.tools.BackPack;
 import model.tools.Tool;
 import model.tools.*;
+import view.CityMenu;
 
 import java.util.*;
 
@@ -56,11 +54,11 @@ public class Player {
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
 
-    private FriendshipWithNpcData SebastianFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData AbigailFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData HarveyFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData LiaFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData RobinFriendship = new FriendshipWithNpcData();
+    private FriendshipWithNpcData SebastianFriendship;
+    private FriendshipWithNpcData AbigailFriendship;
+    private FriendshipWithNpcData HarveyFriendship;
+    private FriendshipWithNpcData LiaFriendship;
+    private FriendshipWithNpcData RobinFriendship;
 
     private HashMap<Player, GameObjectType> purposeList = new HashMap<>();
     private Player zeidy;
@@ -91,6 +89,10 @@ public class Player {
 
     private final String apperance;
     private boolean shouldBeSkipped = false;
+
+    private NPC currentNPC = null;
+    private ArrayList<GameObject> npcGiftsObject = new ArrayList<>();
+    private ArrayList<NPC> npcGiftsNPC = new ArrayList<>();
 
     public Player(User user, Farm farm, int number) {
         this.user = user;
@@ -880,5 +882,77 @@ public class Player {
                 }
             }
         }
+    }
+
+    public FriendshipWithNpcData getNpcFriendship(NPC npc)
+    {
+        return switch (npc.getNpcDetails())
+        {
+            case NpcDetails.Lia -> LiaFriendship;
+            case NpcDetails.Abigail -> AbigailFriendship;
+            case NpcDetails.Harvey -> HarveyFriendship;
+            case NpcDetails.Robin -> RobinFriendship;
+            case NpcDetails.Sebastian -> SebastianFriendship;
+            default -> null;
+        };
+    }
+
+    public ArrayList<FriendshipWithNpcData> getAllNpcFriendships()
+    {
+        ArrayList<FriendshipWithNpcData> friendships = new ArrayList<>();
+
+        friendships.add(LiaFriendship);
+        friendships.add(AbigailFriendship);
+        friendships.add(HarveyFriendship);
+        friendships.add(RobinFriendship);
+        friendships.add(SebastianFriendship);
+
+        return friendships;
+    }
+
+    public NPC getCurrentNPC()
+    {
+        return currentNPC;
+    }
+
+    public void setCurrentNPC(NPC currentNPC)
+    {
+        this.currentNPC = currentNPC;
+    }
+
+    public void addNpcGiftObject(GameObject object)
+    {
+        npcGiftsObject.add(object);
+    }
+
+    public void addNpcGiftNPC(NPC npc)
+    {
+        npcGiftsNPC.add(npc);
+    }
+
+    public ArrayList<GameObject> getNpcGiftsObject()
+    {
+        return npcGiftsObject;
+    }
+
+    public ArrayList<NPC> getNpcGiftsNPC()
+    {
+        return npcGiftsNPC;
+    }
+
+    public boolean recieveNpcGifts()
+    {
+        boolean recieved = false;
+        while (inventoryHasCapacity() && npcGiftsObject.size() > 0)
+        {
+            GameObject gift = npcGiftsObject.get(0);
+            NPC npc = npcGiftsNPC.get(0);
+            addToInventory(gift);
+            npcGiftsObject.remove(0);
+            npcGiftsNPC.remove(0);
+            CityMenu.println("You just recieved a " + gift.getObjectType().toString() + " from " + npc.getName() + ".");
+            recieved = true;
+        }
+        return recieved;
     }
 }

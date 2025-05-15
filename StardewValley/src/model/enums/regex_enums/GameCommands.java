@@ -5,19 +5,13 @@ import java.util.regex.Pattern;
 
 public enum GameCommands implements Command
 {
-    /* NPC Commands */
-    MEET_NPC("meet NPC (?<NPCname>\\w+)"),
-    GIFT_NPC("gift NPC (?<NPCname>\\w+) -i (?<item>.*)"),
-    FRIENDSHIP_NPC_LIST("friendship NPC list"),
-    QUESTS_LIST("quests list"),
-    QUESTS_FINISH("quests finish -i (?<index>.*)"),
     /* Marketing Commands*/
-    SHOW_ALL_PRODUCTS("show all products"),
-    SHOW_AVAILABLE_PRODUCTS("show all available products"),
-    PURCHASE("purchase (?<productName>.*)"),
-    PURCHASE_N("purchase (?<productName>.*) -n (?<count>.*)"),
-    SELL("sell (?<productName>.*)"),
-    SELL_N("sell (?<productName>.*) -n (?<count>.*)"),
+    SHOW_ALL_PRODUCTS("show\\s+all\\s+products"),
+    SHOW_AVAILABLE_PRODUCTS("show\\s+all\\s+available\\s+products"),
+    PURCHASE("purchase\\s+(?<productName>\\s+)"),
+    PURCHASE_N("purchase\\s+(?<productName>\\s+)\\s+-n\\s+(?<count>\\d+)"),
+    SELL("sell\\s+(?<productName>\\s+)"),
+    SELL_N("sell\\s+(?<productName>\\s+)\\s+-n\\s+(?<count>\\d+)"),
 
     HELP_READ_MAP("help\\s+reading\\s+map"),
     TOOLS_USE("tools use -d (?<direction>.*)"),

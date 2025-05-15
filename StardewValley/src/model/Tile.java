@@ -25,6 +25,13 @@ public class Tile
     private boolean isImmuneFromCrows = false;
     private boolean isRandomForaging = false;
 
+    private boolean isInCity = false;
+
+    public void setInCity()
+    {
+        isInCity = true;
+    }
+
     public Tile(Point point)
     {
         this.point = point;
@@ -373,6 +380,11 @@ public class Tile
             }
         }
 
+        if (isInCity && hasNpc())
+        {
+            return getNpc().getAppearance();
+        }
+
         if (object == null)
         {
             if (hitByThunder)
@@ -613,5 +625,29 @@ public class Tile
     public void setRandomForaging(boolean randomForaging)
     {
         isRandomForaging = randomForaging;
+    }
+
+    public boolean hasNpc()
+    {
+        for (NPC npc : App.getCurrentGame().getNPCs())
+        {
+            if (npc.getLocation().equals(point))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public NPC getNpc()
+    {
+        for (NPC npc : App.getCurrentGame().getNPCs())
+        {
+            if (npc.getLocation().equals(point))
+            {
+                return npc;
+            }
+        }
+        return null;
     }
 }

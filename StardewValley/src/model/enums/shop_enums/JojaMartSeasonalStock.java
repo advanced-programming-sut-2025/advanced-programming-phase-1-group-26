@@ -121,4 +121,21 @@ public enum JojaMartSeasonalStock {
                 .filter(item -> item.getSeason() == season)
                 .toList();
     }
+
+    public GameObjectType getGameObjectType()
+    {
+        return gameObjectType;
+    }
+
+    public JojaMartSeasonalStock getByType(GameObjectType gameObjectType)
+    {
+        for (JojaMartSeasonalStock item : JojaMartSeasonalStock.values())
+        {;
+            if (item.getGameObjectType().equals(gameObjectType))
+            {
+                return item;
+            }
+        }
+        return null;
+    }
 }

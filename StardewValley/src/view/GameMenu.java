@@ -25,7 +25,6 @@ public class GameMenu implements AppMenu
     AnimalController animalController = new AnimalController();
     TradeController tradeController = new TradeController();
     MarketingController marketingController = new MarketingController();
-    NPC npc;
 
     @Override
     public void check(Scanner scanner)
@@ -292,16 +291,8 @@ public class GameMenu implements AppMenu
         }
 
 
-        else if((matcher = GameCommands.MEET_NPC.getMatcher(input)) != null) {
-            System.out.println(marketingController.meetNPC(input));
-            if(marketingController.meetNPC(input).isSuccessful()) npc = marketingController.targetNPC(input);
-        } else if((matcher = GameCommands.GIFT_NPC.getMatcher(input)) != null) {
-            System.out.println(marketingController.giftNPC(input));
-        } else if((matcher = GameCommands.QUESTS_LIST.getMatcher(input)) != null) {
-            System.out.println(marketingController.questsNPCList(npc));
-        } else if((matcher = GameCommands.QUESTS_FINISH.getMatcher(input)) != null) {
-            System.out.println(marketingController.questsFinish(input, npc));
-        } else if (GeneralCommands.START_TRADE.getMatcher(input) != null) {
+        else if (GeneralCommands.START_TRADE.getMatcher(input) != null)
+        {
             App.setCurrentMenu(Menu.TradeMenu);
             System.out.println("redirecting to trade menu...");
             tradeController.tradeList();

@@ -3,10 +3,9 @@ package view;
 import control.GeneralController;
 import control.game.activities.CityController;
 import control.game.activities.CommunicateController;
-import model.enums.regex_enums.CityCommands;
-import model.enums.regex_enums.CommunicateCommands;
-import model.enums.regex_enums.GameCommands;
-import model.enums.regex_enums.GeneralCommands;
+import control.game.activities.HomeController;
+import control.game.activities.MarketingController;
+import model.enums.regex_enums.*;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -16,11 +15,13 @@ public class CityMenu implements AppMenu
     GeneralController generalController = new GeneralController();
     CityController cityController = new CityController();
     CommunicateController comController = new CommunicateController();
+    MarketingController marketingController = new MarketingController();
+    HomeController homeController = new HomeController();
 
     @Override
     public void check(Scanner scanner)
     {
-        String input = scanner.nextLine();
+        String input = scanner.nextLine().trim();
         Matcher matcher;
 
         /* Player Commands */
@@ -186,5 +187,57 @@ public class CityMenu implements AppMenu
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
         }
+
+        else if((matcher = CityCommands.MEET_NPC.getMatcher(input)) != null)
+        {
+            System.out.println(marketingController.meetNPC(input));
+        } else if((matcher = CityCommands.GIFT_NPC.getMatcher(input)) != null)
+        {
+            marketingController.giftNPC(input);
+        } else if ((matcher = CityCommands.FRIENDSHIP_NPC_LIST.getMatcher(input)) != null)
+        {
+            System.out.println(marketingController.showFriendshipNPCList());
+        }
+        else if((matcher = CityCommands.QUESTS_LIST.getMatcher(input)) != null)
+        {
+            marketingController.questsNPCList();
+        } else if((matcher = CityCommands.QUESTS_FINISH.getMatcher(input)) != null)
+        {
+            System.out.println(marketingController.questsFinish(input));
+        } else if ((matcher = CityCommands.SHOW_GIFTS.getMatcher(input)) != null)
+        {
+            marketingController.showNpcGifts();
+        } else if ((matcher = CityCommands.OPEN_GIFTS.getMatcher(input)) != null)
+        {
+            System.out.println(marketingController.openGifts());
+        } else if ((matcher = HomeCommands.CHEAT_ADD_ITEM.getMatcher(input)) != null)
+        {
+            String itemName = matcher.group("itemName");
+            String count = matcher.group("count");
+            System.out.println(homeController.cheatAddItem(itemName, count));
+        } else if ((matcher = CityCommands.WHERE_NPC.getMatcher(input)) != null)
+        {
+            String npcName = matcher.group("NPCname");
+            System.out.println(marketingController.showNpcLocation(npcName));
+        }
+        else
+        {
+            System.out.println("invalid command");
+        }
+    }
+
+    public static String scan(Scanner scanner)
+    {
+        return scanner.nextLine().trim();
+    }
+
+    public static void println(String output)
+    {
+        System.out.println(output);
+    }
+
+    public static void print(String output)
+    {
+        System.out.print(output);
     }
 }

@@ -1,16 +1,20 @@
 package model;
 
+import model.enums.GameObjectType;
 import model.enums.Menu;
 import model.animal.Animal;
 import model.enums.NpcDetails;
 import model.enums.Weather;
 import model.player_data.FriendshipData;
+import model.player_data.FriendshipWithNpcData;
 import model.resources.Plant;
 import view.GameMenu;
 import view.HomeMenu;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Game
 {
@@ -22,14 +26,10 @@ public class Game
     private Player oppenheimer; // I actually wanted to call this "opener", but thought it would be funnier this way
     private City city = new City();
 
-    public Game() //TODO: this is only for test, should be removed later
-    {
-
-    }
-
     public Game(ArrayList<Player> players)
     {
         this.players = players;
+
         for (Player player : players)
         {
             for (Player other : players)
@@ -41,8 +41,34 @@ public class Game
                 }
             }
         }
-    }
 
+        setNPCs();
+
+        for (NPC npc : NPCs)
+        {
+            for (Player player : players)
+            {
+                switch (npc.getName())
+                {
+                    case "Robin":
+                        player.setRobinFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "Abigail":
+                        player.setAbigailFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "Sebastian":
+                        player.setSebastianFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "Harvey":
+                        player.setHarveyFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "Lia":
+                        player.setLiaFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                }
+            }
+        }
+    }
 
     public Time getCurrentTime()
     {
@@ -52,9 +78,15 @@ public class Game
     public ArrayList<NPC> getNPCs() {
         return NPCs;
     }
-    public void setNPCs() { //TODO, should add where the game starts
-        for(NpcDetails npcDetails : NpcDetails.values()) {
-            NPCs.add(new NPC(npcDetails));
+
+    private void setNPCs()
+    {
+        ArrayList<Point> locations = city.getNpcLocations();
+        for(int i = 0; i < (NpcDetails.values()).length; i++)
+        {
+            NpcDetails details = NpcDetails.values()[i];
+            Point location = locations.get(i);
+            NPCs.add(new NPC(details, location));
         }
     }
 
@@ -77,9 +109,7 @@ public class Game
         for(Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
             animal.checkAndReset();
         }
-        for(NPC npc : NPCs) {
-            npc.reset();
-        }
+
         // TODO: add this methods later
         // resetPlayersEnergy();
         // growPlants();
@@ -104,6 +134,8 @@ public class Game
         killPlants();
 
         takePlayerHome();
+        resetNPCs();
+        npcGiveGift();
     }
 
     public void distributeForagingItems()
@@ -428,6 +460,50 @@ public class Game
         for (Player player : players)
         {
             player.getAttackedByCrows();
+        }
+    }
+
+    public NPC getNpc(NpcDetails npcDetails)
+    {
+        for (NPC npc : NPCs)
+        {
+            if (npc.getNpcDetails().equals(npcDetails))
+            {
+                return npc;
+            }
+        }
+
+        return null;
+    }
+
+    public void resetNPCs()
+    {
+        for (Player player : players)
+        {
+            player.setCurrentNPC(null);
+            for (NPC npc : NPCs)
+            {
+                FriendshipWithNpcData data = player.getNpcFriendship(npc);
+                data.reset();
+            }
+        }
+    }
+
+    public void npcGiveGift()
+    {
+        for (NPC npc : NPCs)
+        {
+            for (Player player : players)
+            {
+                FriendshipWithNpcData data = player.getNpcFriendship(npc);
+                if (data.getLevel() >= 3)
+                {
+                    List<GameObjectType> giftTypes = npc.getNpcDetails().getGifts();
+                    GameObject gift = new GameObject(giftTypes.get(new Random().nextInt(3)), 1);
+                    player.addNpcGiftObject(gift);
+                    player.addNpcGiftNPC(npc);
+                }
+            }
         }
     }
 }

@@ -62,7 +62,6 @@ public enum GeneralCommands implements Command
     SHOW_MONEY("show\\s+money"),
     START_TRADE("start\\s+trade"),
 
-    CHEAT_TOOL_CHECK("tools check (?<direction>.*)"),
     ;
 
     private final Pattern pattern;

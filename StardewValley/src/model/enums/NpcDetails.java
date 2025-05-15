@@ -3,12 +3,12 @@ package model.enums;
 import model.GameObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public enum NpcDetails {
-    Sebastian("Sebastian",
+    // 😎
+    Sebastian("Sebastian", "\uD83D\uDE0E",
             List.of(GameObjectType.WOOL, GameObjectType.PUMPKIN_PIE, GameObjectType.PIZZA),
             List.of(new GameObject(GameObjectType.IRON_BAR, 50),
                     new GameObject(GameObjectType.PUMPKIN_PIE, 1),
@@ -37,10 +37,11 @@ public enum NpcDetails {
                             TimeOfDay.AFTERNOON, "Time for a hot drink and some reading.",
                             TimeOfDay.EVENING, "I could code all night in this weather."
                     )
-            ))
+            )), List.of(GameObjectType.COAL, GameObjectType.IRON_BAR, GameObjectType.QUARTZ), 5
     ),
 
-    Abigail("Abigail",
+    // 😜
+    Abigail("Abigail", "\uD83D\uDE1C",
             List.of(GameObjectType.STONE, GameObjectType.IRON, GameObjectType.COFFEE),
             List.of(new GameObject(GameObjectType.GOLD_BAR, 1),
                     new GameObject(GameObjectType.PUMPKIN, 1),
@@ -68,10 +69,11 @@ public enum NpcDetails {
                             TimeOfDay.AFTERNOON, "Snow crunches in such a satisfying way.",
                             TimeOfDay.EVENING, "Let’s curl up and play some games."
                     )
-            ))
+            )), List.of(GameObjectType.AMETHYST, GameObjectType.QUARTZ, GameObjectType.CAULIFLOWER_SEEDS), 30
     ),
 
-    Harvey("Harvey",
+    // 🙂
+    Harvey("Harvey", "\uD83D\uDE42",
             List.of(GameObjectType.COFFEE, GameObjectType.PICKLE, GameObjectType.WINE),
             List.of(new GameObject(GameObjectType.FLOWER, 12),
                     new GameObject(GameObjectType.SALMON, 1),
@@ -99,10 +101,11 @@ public enum NpcDetails {
                             TimeOfDay.AFTERNOON, "The fireplace at the clinic is cozy.",
                             TimeOfDay.EVENING, "I hope everyone’s staying warm and healthy."
                     )
-            ))
+            )), List.of(GameObjectType.COFFEE_BEAN, GameObjectType.HONEY, GameObjectType.CARROT), 69
     ),
 
-    Lia("Lia",
+    // 😊
+    Lia("Lia", "\uD83D\uDE0A",
             List.of(GameObjectType.SALAD, GameObjectType.GRAPE, GameObjectType.WINE),
             List.of(new GameObject(GameObjectType.HARD_WOOD, 10),
                     new GameObject(GameObjectType.SALMON, 1),
@@ -131,10 +134,11 @@ public enum NpcDetails {
                             TimeOfDay.AFTERNOON, "I made a sculpture from ice!",
                             TimeOfDay.EVENING, "Even winter has its charm."
                     )
-            ))
+            )), List.of(GameObjectType.SALAD, GameObjectType.GRAPE, GameObjectType.WINE), 78
     ),
 
-    Robin("Robin",
+    // 😁
+    Robin("Robin", "\uD83D\uDE01",
             List.of(GameObjectType.SPAGHETTI, GameObjectType.WOOD, GameObjectType.IRON_BAR),
             List.of(new GameObject(GameObjectType.WOOD, 80),
                     new GameObject(GameObjectType.IRON_BAR, 10),
@@ -163,22 +167,29 @@ public enum NpcDetails {
                             TimeOfDay.AFTERNOON, "Watch out for icy scaffolding.",
                             TimeOfDay.EVENING, "Cold days make hot meals extra nice."
                     )
-            ))
+            )), List.of(GameObjectType.WOOD, GameObjectType.COOKIE, GameObjectType.STONE), 360
     );
 
     private final String name;
+    private final String apperance;
     private final List<GameObjectType> favorites;
     private final List<GameObject> requests;
     private final List<GameObject> rewards;
     private final Map<Season, Map<TimeOfDay, String>> dialogues;
+    private final List<GameObjectType> gifts;
+    private final int daysUntilQuestUnlocked;
 
-    NpcDetails(String name, List<GameObjectType> favorites, List<GameObject> requests,
-               List<GameObject> rewards, Map<Season, Map<TimeOfDay, String>> dialogues) {
+    NpcDetails(String name, String apperance, List<GameObjectType> favorites, List<GameObject> requests,
+               List<GameObject> rewards, Map<Season, Map<TimeOfDay, String>> dialogues, List<GameObjectType> gifts,
+               int daysUntilQuestUnlocked) {
         this.name = name;
+        this.apperance = apperance;
         this.favorites = favorites;
         this.requests = requests;
         this.rewards = rewards;
         this.dialogues = dialogues;
+        this.gifts = gifts;
+        this.daysUntilQuestUnlocked = daysUntilQuestUnlocked;
     }
 
     public String getDialogue(Season season, TimeOfDay time) {
@@ -208,5 +219,42 @@ public enum NpcDetails {
 
     private static Map<Season, Map<TimeOfDay, String>> createDialogues(Map<Season, Map<TimeOfDay, String>> map) {
         return map;
+    }
+
+    public String getAppearance()
+    {
+        return apperance;
+    }
+
+    public static NpcDetails getNpcByName(String name)
+    {
+        for (NpcDetails details : NpcDetails.values())
+        {
+            if (details.getName().equalsIgnoreCase(name))
+            {
+                return details;
+            }
+        }
+        return null;
+    }
+
+    public List<GameObjectType> getGifts()
+    {
+        return gifts;
+    }
+
+    public int getDaysUntilQuestUnlocked()
+    {
+        return daysUntilQuestUnlocked;
+    }
+
+    public GameObject getQuestRequest(int questId)
+    {
+        return requests.get(questId);
+    }
+
+    public GameObject getQuestReward(int questId)
+    {
+        return rewards.get(questId);
     }
 }

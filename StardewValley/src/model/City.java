@@ -4,6 +4,8 @@ import model.enums.MapTypes;
 import model.enums.ShopType;
 import model.enums.TileTexture;
 
+import java.util.ArrayList;
+
 public class City extends Map
 {
     private final String mapPath;
@@ -41,6 +43,15 @@ public class City extends Map
 
         applyMap();
         this.startingPoint = findFreeStartingPoint();
+
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                tile.setInCity();
+            }
+        }
     }
 
     public Point findFreeStartingPoint()
@@ -81,5 +92,22 @@ public class City extends Map
     public Point[] getPlayerPoints()
     {
         return playerPoints;
+    }
+
+    public ArrayList<Point> getNpcLocations()
+    {
+        ArrayList<Point> npcLocations = new ArrayList<>();
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                if (tile.getTexture().equals(TileTexture.NPC_BLACKSMITH))
+                {
+                    npcLocations.add(tile.getPoint());
+                }
+            }
+        }
+        return npcLocations;
     }
 }
