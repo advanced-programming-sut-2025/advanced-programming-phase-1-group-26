@@ -84,11 +84,6 @@ public class City extends Map
         return null;
     }
 
-    public static boolean isNearShop(ShopType type)
-    {
-        return true; // TODO: add later
-    }
-
     public Point[] getPlayerPoints()
     {
         return playerPoints;
@@ -109,5 +104,81 @@ public class City extends Map
             }
         }
         return npcLocations;
+    }
+
+    public boolean isNearShop(ShopType type)
+    {
+        TileTexture texture = getShopTileTexture(type);
+
+        if (texture == null)
+        {
+            return false;
+        }
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Point location = player.getLocation();
+
+        for (int dy = -1; dy <= 1; dy++)
+        {
+            for (int dx = -1; dx <= 1; dx++)
+            {
+                if (isInBounds(location.getX() + dx, location.getY() + dy))
+                {
+                    Tile tile = tiles[location.getY() + dy][location.getX() + dx];
+                    if (tile.getTexture().equals(texture))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private TileTexture getShopTileTexture(ShopType type)
+    {
+        switch (type)
+        {
+            case ShopType.CARPENTER_SHOP ->
+            {
+                return TileTexture.SHOP_CARPENTER;
+            }
+
+            case ShopType.BLACK_SMITH ->
+            {
+                return TileTexture.SHOP_BLACKSMITH;
+            }
+
+            case ShopType.JOJA_MART ->
+            {
+                return TileTexture.SHOP_JOJAMART;
+            }
+
+            case ShopType.STARDROP_SALOON ->
+            {
+                return TileTexture.SHOP_SALOON;
+            }
+
+            case ShopType.PIERRE_GENERAL_STORE ->
+            {
+                return TileTexture.SHOP_PIERRE;
+            }
+
+            case ShopType.FISH_SHOP ->
+            {
+                return TileTexture.SHOP_FISH;
+            }
+
+            case ShopType.MARINE_RANCH ->
+            {
+                return TileTexture.SHOP_MARNIE;
+            }
+
+            default ->
+            {
+                return null;
+            }
+        }
     }
 }

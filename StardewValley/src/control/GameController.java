@@ -735,4 +735,9 @@ public class GameController
         return new Result(true, "object: " + targetTile.getObject().getObjectType().name() +
                 "texture: " + targetTile.getTexture());
     }
+
+    public Result artisanUse(String artisanName, String ingredientNameOne, String ingredientNameTwo)
+    {
+
+    }
 }

@@ -6,6 +6,7 @@ import model.animal.Fish;
 import model.enums.*;
 import model.enums.animal_enums.FarmAnimals;
 import model.enums.animal_enums.FarmBuilding;
+import model.enums.building_enums.ArtisanGoodsType;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenRecipe;
 import model.enums.tool_enums.ToolType;
@@ -93,6 +94,8 @@ public class Player {
     private NPC currentNPC = null;
     private ArrayList<GameObject> npcGiftsObject = new ArrayList<>();
     private ArrayList<NPC> npcGiftsNPC = new ArrayList<>();
+
+    private ArrayList<ArtisanGood> artisanGoods = new ArrayList<>();
 
     public Player(User user, Farm farm, int number) {
         this.user = user;

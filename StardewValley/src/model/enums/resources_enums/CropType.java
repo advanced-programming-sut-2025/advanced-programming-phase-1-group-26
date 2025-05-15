@@ -71,7 +71,6 @@ public enum CropType
              boolean canBecomeGiant)
     {
         this.type = type;
-//        this.result = result;
         this.name = name;
         this.seedType = seedType;
         this.stages = stages;

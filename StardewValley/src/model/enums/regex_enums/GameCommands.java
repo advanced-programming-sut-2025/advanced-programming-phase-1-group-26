@@ -52,7 +52,10 @@ public enum GameCommands implements Command
     WHOAMI("whoami"),
     SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
     SHOW_AROUND("show\\s+around"),
-    SET_FRIENDSHIP("cheat set friendship -n (?<name>.*) -c (?<amount>\\d+)"),
+    SET_FRIENDSHIP("cheat\\s+set\\s+friendship\\s+-n\\s+(?<name>.*)\\s+-c\\s+(?<amount>\\d+)"),
+
+    ARTISAN_USE("artisan\\s+use\\s+(?<artisanName>\\S+)(\\s+(?<ingredientOne>\\S+))?(\\s+(?<ingredientTwo>\\S+))?"),
+    ARTISAN_GET("artisan\\s+get\\s+(?<artisanName>\\S+)"),
     ;
 
     private final Pattern pattern;

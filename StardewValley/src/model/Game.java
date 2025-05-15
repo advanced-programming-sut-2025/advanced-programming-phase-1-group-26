@@ -1,12 +1,14 @@
 package model;
 
-import model.enums.GameObjectType;
-import model.enums.Menu;
+import model.building.CraftingItems.CraftingItem;
+import model.enums.*;
 import model.animal.Animal;
-import model.enums.NpcDetails;
-import model.enums.Weather;
+import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.building_enums.KitchenRecipe;
+import model.enums.resources_enums.*;
 import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
+import model.resources.ForagingMineral;
 import model.resources.Plant;
 import view.GameMenu;
 import view.HomeMenu;
@@ -505,5 +507,58 @@ public class Game
                 }
             }
         }
+    }
+
+    public int getPrice(GameObjectType type)
+    {
+        for (ForagingMineralType fm : ForagingMineralType.values())
+        {
+            if (fm.getType().equals(type))
+            {
+                return fm.getSellPrice();
+            }
+        }
+
+        for (ForagingCropType fc : ForagingCropType.values())
+        {
+            if (fc.getType().equals(type))
+            {
+                return fc.getBaseSellPrice();
+            }
+        }
+
+        for (TreeType t : TreeType.values())
+        {
+           if (t.getFruit().getType().equals(type))
+           {
+               return t.getFruitBaseSellPrice();
+           }
+        }
+
+        for (CropType c : CropType.values())
+        {
+            if (c.getType().equals(type))
+            {
+                return c.getBaseSellPrice();
+            }
+        }
+
+        for (CraftingRecipeEnums r : CraftingRecipeEnums.values())
+        {
+            if (r.getProduct().equals(type))
+            {
+                return r.getPrice();
+            }
+        }
+
+        for (KitchenRecipe k : KitchenRecipe.values())
+        {
+            if (k.getType().equals(type))
+            {
+                return k.getSellPrice();
+            }
+        }
+
+        return -1;
     }
 }
