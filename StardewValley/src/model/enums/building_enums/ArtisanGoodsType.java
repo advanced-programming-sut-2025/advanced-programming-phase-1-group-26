@@ -204,11 +204,23 @@ public enum ArtisanGoodsType
         return true;
     }
 
-//    public static ArtisanGoodsType getArtisanType(String name)
-//    {
-//        for (ArtisanGoodsType type : ArtisanGoodsType.values())
-//        {
-//            if (type.name().equalsIgnoreCase(name))
-//        }
-//    }
+    public static ArtisanGoodsType getArtisanType(String name)
+    {
+        CraftingRecipeEnums craft = CraftingRecipeEnums.getRecipeFromItemName(name);
+
+        if (craft == null)
+        {
+            return null;
+        }
+
+        for (ArtisanGoodsType type : ArtisanGoodsType.values())
+        {
+            if (type.getDevice() == craft)
+            {
+                return type;
+            }
+        }
+
+        return null;
+    }
 }

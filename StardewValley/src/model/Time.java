@@ -10,9 +10,12 @@ import java.util.Random;
 
 public class Time
 {
-    private int totalDaysPassed = 1;
     private int hour = 9;
     private int day = 1;
+
+    private int totalDaysPassed = 0;
+    private int totalHoursPassed = 0;
+
     private Season season = Season.Spring;
     private TimeOfDay timeOfDay = TimeOfDay.MORNING;
 

@@ -6,6 +6,7 @@ import model.animal.AnimalBuilding;
 import model.enums.*;
 import model.enums.animal_enums.AnimalType;
 import model.enums.animal_enums.FarmAnimals;
+import model.enums.building_enums.ArtisanGoodsType;
 import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ResourceItem;
 import model.enums.resources_enums.TreeType;
@@ -773,6 +774,20 @@ public class GameController
 
 //    public Result artisanUse(String artisanName, String ingredientNameOne, String ingredientNameTwo)
 //    {
+//        ArtisanGoodsType type = ArtisanGoodsType.getArtisanType(artisanName);
+//        if (type == null)
+//        {
+//            return new Result(false, "unknown artisan type");
+//        }
+//
+//        Player player = App.getCurrentGame().getCurrentPlayer();
+//        ArtisanGood good = player.getArtisan(type);
+//
+//        if (good == null)
+//        {
+//            return new Result(false, "You don't have this type of artisan device.");
+//        }
+//
 //
 //    }
 }

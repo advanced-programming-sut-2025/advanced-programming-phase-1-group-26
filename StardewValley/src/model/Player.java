@@ -958,4 +958,16 @@ public class Player {
         }
         return recieved;
     }
+
+    public ArtisanGood getArtisan(ArtisanGoodsType type)
+    {
+        for (ArtisanGood good : artisanGoods)
+        {
+            if (good.getArtisanType() == type)
+            {
+                return good;
+            }
+        }
+        return null;
+    }
 }
