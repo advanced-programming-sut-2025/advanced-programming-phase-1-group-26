@@ -40,4 +40,9 @@ public class Fish {
     public Fish(FishType type) {
         this.type = type;
     }
+
+    public FishType getType()
+    {
+        return type;
+    }
 }

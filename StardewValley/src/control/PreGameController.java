@@ -173,7 +173,7 @@ public class PreGameController
                         PreGameMenu.print("Please enter a valid number: ");
                     } else
                     {
-                        MapTypes type = MapTypes.values()[number - 1];
+                        MapTypes type = MapTypes.getMapType(number - 1);
                         Player player = new Player(user, new Farm(type), count++);
                         players.add(player);
                         break;

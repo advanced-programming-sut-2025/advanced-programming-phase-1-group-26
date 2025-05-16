@@ -2,6 +2,8 @@ package model.enums.animal_enums;
 
 import model.enums.Season;
 
+import java.util.ArrayList;
+
 public enum FishType
 {
     SALMON("Salmon", 75, Season.Fall, false),
@@ -51,5 +53,33 @@ public enum FishType
 
     public boolean isLegendary() {
         return isLegendary;
+    }
+
+    public static ArrayList<FishType> getOrdinaryFishTypes(Season season)
+    {
+        ArrayList<FishType> fishTypes = new ArrayList<>();
+
+        for (FishType fishType : FishType.values())
+        {
+            if (fishType.getSeason() == season && !fishType.isLegendary())
+            {
+                fishTypes.add(fishType);
+            }
+        }
+
+        return fishTypes;
+    }
+
+    public static FishType getLegendaryFishType(Season season)
+    {
+        for (FishType fishType : FishType.values())
+        {
+            if (fishType.getSeason() == season && fishType.isLegendary())
+            {
+                return fishType;
+            }
+        }
+
+        return null;
     }
 }

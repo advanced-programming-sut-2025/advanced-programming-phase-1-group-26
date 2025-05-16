@@ -1,7 +1,10 @@
 package model;
 
+import model.animal.Fish;
 import model.enums.MapTypes;
+import model.enums.Season;
 import model.enums.TileTexture;
+import model.enums.animal_enums.FishType;
 import model.enums.resources_enums.*;
 import model.resources.*;
 
@@ -10,6 +13,7 @@ import java.util.*;
 public class Farm extends model.Map
 {
     private final Point homePoint;
+    private final ArrayList<Tile> lakeTiles;
 
     public Farm(MapTypes farmType) {
         this.mapType = farmType;
@@ -42,6 +46,9 @@ public class Farm extends model.Map
 
         this.startingPoint = cabinNeighbors.get(rand.nextInt(cabinNeighbors.size())).getPoint();
         this.homePoint = startingPoint;
+
+        this.lakeTiles = getLakeTiles();
+        putFishInLake(Season.Spring);
     }
 
     public Tile getRandomFreeTile()
@@ -277,4 +284,75 @@ public class Farm extends model.Map
         }
         return count;
     }
+
+    private ArrayList<Tile> getLakeTiles()
+    {
+        ArrayList<Tile> lakeTiles = new ArrayList<>();
+
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = getTile(x, y);
+                if (tile.getTexture() == TileTexture.LAKE)
+                {
+                    lakeTiles.add(tile);
+                }
+            }
+        }
+
+        return lakeTiles;
+    }
+
+    public void putFishInLake(Season season)
+    {
+        Random random = new Random();
+        int fishCount = random.nextInt(10) + 10 + (int)(0.2 * lakeTiles.size());
+
+        ArrayList<Tile> randomLakeTiles = getRandomLakeTiles(fishCount);
+
+        ArrayList<FishType> fishTypes = FishType.getOrdinaryFishTypes(season);
+
+        for (Tile tile : randomLakeTiles)
+        {
+            FishType randomType = fishTypes.get(new Random().nextInt(fishTypes.size()));
+            Fish fish = new Fish(randomType);
+            tile.setFish(fish);
+        }
+    }
+
+    public void putLegendaryFishInLake(Player player, Season currentSeason)
+    {
+        if (player.getFishingSkill().getLevel() >= 2) // TODO: what is the amount?
+        {
+            Random random = new Random();
+            ArrayList<Tile> randomLakeTiles = getRandomLakeTiles(random.nextInt(20));
+
+            FishType legendaryType = FishType.getLegendaryFishType(currentSeason);
+
+            for (Tile tile : randomLakeTiles)
+            {
+                Fish legend = new Fish(legendaryType);
+                tile.setFish(legend);
+            }
+        }
+    }
+
+    public void resetFish()
+    {
+        for (Tile tile : lakeTiles)
+        {
+            tile.setFish(null);
+        }
+    }
+
+    private ArrayList<Tile> getRandomLakeTiles(int count)
+    {
+        ArrayList<Tile> shuffled = new ArrayList<>(lakeTiles);
+        Collections.shuffle(shuffled);
+
+        int actualCount = Math.min(count, shuffled.size());
+        return new ArrayList<>(shuffled.subList(0, actualCount));
+    }
+
 }

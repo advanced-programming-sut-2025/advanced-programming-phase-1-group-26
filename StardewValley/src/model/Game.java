@@ -158,6 +158,8 @@ public class Game
         takePlayerHome();
         resetNPCs();
         npcGiveGift();
+
+        distributeFish();
     }
 
     public void distributeForagingItems()
@@ -590,5 +592,18 @@ public class Game
         }
 
         return -1;
+    }
+
+    private void distributeFish()
+    {
+        for (Player player : players)
+        {
+            Farm farm = player.getFarm();
+            Season season = currentTime.getSeason();
+
+            farm.resetFish();
+            farm.putFishInLake(season);
+            farm.putLegendaryFishInLake(player, season);
+        }
     }
 }

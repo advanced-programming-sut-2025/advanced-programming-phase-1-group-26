@@ -68,4 +68,21 @@ public enum MapTypes
 
         return null;
     }
+
+    public static MapTypes getMapType(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                return STANDARD;
+            case 1:
+                return RIVERLAND;
+            case 2:
+                return HILL_TOP;
+            case 3:
+                return BEACH;
+        }
+
+        return STANDARD;
+    }
 }

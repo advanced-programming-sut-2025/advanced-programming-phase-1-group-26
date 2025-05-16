@@ -1,5 +1,7 @@
 package model;
 
+import model.animal.Animal;
+import model.animal.Fish;
 import model.enums.GameObjectType;
 import model.enums.TileTexture;
 import model.enums.resources_enums.ForagingMineralType;
@@ -26,6 +28,7 @@ public class Tile
     private boolean isRandomForaging = false;
 
     private boolean isInCity = false;
+    private Fish fish = null;
 
     public void setInCity()
     {
@@ -385,6 +388,17 @@ public class Tile
             return getNpc().getAppearance();
         }
 
+        if (fish != null)
+        {
+            if (fish.getType().isLegendary())
+            {
+                return "\uD83D\uDC21"; // 🐡
+            } else
+            {
+                return "\uD83D\uDC20"; // 🐠
+            }
+        }
+
         if (object == null)
         {
             if (hitByThunder)
@@ -649,5 +663,15 @@ public class Tile
             }
         }
         return null;
+    }
+
+    public Fish getFish()
+    {
+        return fish;
+    }
+
+    public void setFish(Fish fish)
+    {
+        this.fish = fish;
     }
 }
