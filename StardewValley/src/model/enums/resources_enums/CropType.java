@@ -205,4 +205,16 @@ public enum CropType
         }
         return null;
     }
+
+    public static CropType getCrop(GameObjectType type)
+    {
+        for (CropType crop : CropType.values())
+        {
+            if (crop.getType() == type)
+            {
+                return crop;
+            }
+        }
+        return null;
+    }
 }

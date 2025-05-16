@@ -38,4 +38,17 @@ public enum FruitType
     {
         return type;
     }
+
+    public static FruitType getFruitByType(GameObjectType type)
+    {
+        for (FruitType fruitType : FruitType.values())
+        {
+            if (fruitType.getType() == type)
+            {
+                return fruitType;
+            }
+        }
+
+        return null;
+    }
 }

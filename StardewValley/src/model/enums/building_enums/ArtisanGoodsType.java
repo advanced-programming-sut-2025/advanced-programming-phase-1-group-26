@@ -2,12 +2,25 @@ package model.enums.building_enums;
 
 import model.Game;
 import model.GameObject;
+import model.animal.Fish;
+import model.building.CraftingItems.CraftingItem;
 import model.enums.GameObjectType;
+import model.enums.animal_enums.FishType;
+import model.enums.resources_enums.CropType;
+import model.enums.resources_enums.ForagingCropType;
+import model.enums.resources_enums.FruitType;
+import model.enums.resources_enums.TreeType;
+import model.resources.Crop;
+import model.resources.ForagingCrop;
+import model.resources.Tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static model.enums.GameObjectType.FISH_SMOKER;
+import static model.enums.GameObjectType.JELLY;
 
 public enum ArtisanGoodsType
 {
@@ -96,7 +109,7 @@ public enum ArtisanGoodsType
     PICKLES(GameObjectType.PICKLE, CraftingRecipeEnums.PRESERVES_JAR_RECIPE, "A jar of your home-made pickles.",
             -1, 6, null, -1),
 
-    JELLY_1(GameObjectType.JELLY, CraftingRecipeEnums.PRESERVES_JAR_RECIPE, "Gooey.",
+    JELLY(GameObjectType.JELLY, CraftingRecipeEnums.PRESERVES_JAR_RECIPE, "Gooey.",
             -1, 42, null, -1),
 
     SMOKED_FISH(GameObjectType.SMOKED_FISH, CraftingRecipeEnums.FISH_SMOKER_RECIPE, "A whole fish, smoked to perfection.",
@@ -184,16 +197,6 @@ public enum ArtisanGoodsType
         return sellPrice;
     }
 
-    public boolean isIngredient(GameObjectType ingredient)
-    {
-        if (ingredient == null)
-        {
-            return false;
-        }
-
-        return ingredient.equals(this.ingredient.getObjectType());
-    }
-
     public boolean isEdible()
     {
         if ( type == null || type.equals(GameObjectType.COAL) || type.equals(GameObjectType.CLOTH))
@@ -218,6 +221,110 @@ public enum ArtisanGoodsType
             if (type.getDevice() == craft)
             {
                 return type;
+            }
+        }
+
+        return null;
+    }
+
+    private GameObject isIngredient(GameObjectType type)
+    {
+        switch (this)
+        {
+            case JUICE, PICKLES:
+            {
+                CropType c = CropType.getCrop(type);
+                if (c != null)
+                {
+                    return new Crop(c, null);
+                } else
+                {
+                    return null;
+                }
+            }
+
+            case WINE, JELLY:
+            {
+                TreeType t = TreeType.getTreeByFruit(FruitType.getFruitByType(type));
+                if (t != null)
+                {
+                    return new Tree(t, null);
+                } else
+                {
+                    return null;
+                }
+            }
+
+            case DRIED_FRUIT:
+            {
+                if (type == GameObjectType.GRAPE)
+                {
+                    return null;
+                }
+
+                TreeType tt = TreeType.getTreeByFruit(FruitType.getFruitByType(type));
+                if (tt != null)
+                {
+                    return new Tree(tt, null);
+                } else
+                {
+                    return null;
+                }
+            }
+
+            case DRIED_MUSHROOMS:
+            {
+                ForagingCropType mushroom = ForagingCropType.getMushroom(type);
+                if (mushroom != null)
+                {
+                    return new ForagingCrop(mushroom);
+                } else
+                {
+                    return null;
+                }
+            }
+
+            case SMOKED_FISH:
+            {
+                FishType f = FishType.getFishFromType(type);
+                if (f != null)
+                {
+                    return new Fish(f);
+                } else
+                {
+                    return null;
+                }
+            }
+
+            case ANY_METAL_BAR:
+            {
+
+            }
+
+            default:
+            {
+                if (this.ingredient.getObjectType() == type)
+                {
+                    return this.ingredient;
+                } else
+                {
+                    return null;
+                }
+            }
+        }
+    }
+
+    public static ArtisanGoodsType getTypeFromDevicesAndIngredient(CraftingRecipeEnums craftingItem, GameObjectType ingredient)
+    {
+        for (ArtisanGoodsType type : ArtisanGoodsType.values())
+        {
+            if (type.getDevice().equals(craftingItem) && type.getIngredient() != null &&
+                    type.getIngredient().getObjectType().equals(ingredient))
+            {
+                if (type.isIngredient(ingredient) != null)
+                {
+                    return type;
+                }
             }
         }
 
