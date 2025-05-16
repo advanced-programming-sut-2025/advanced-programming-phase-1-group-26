@@ -7,7 +7,7 @@ import model.enums.animal_enums.FarmBuilding;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Animal {
+public class Animal extends GameObject {
     private String name;
     private FarmAnimals animalType;
     private int price;

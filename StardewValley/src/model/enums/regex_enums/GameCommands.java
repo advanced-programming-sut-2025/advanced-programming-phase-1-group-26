@@ -59,6 +59,8 @@ public enum GameCommands implements Command
     SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
     SHOW_AROUND("show\\s+around"),
     SET_FRIENDSHIP("cheat set friendship -n (?<name>.*) -c (?<amount>\\d+)"),
+    SHOW_SHOP_LOCATION("show (?<shop>.*)"),
+    CHECK_SHOP("check shop"),
     ;
 
     private final Pattern pattern;
