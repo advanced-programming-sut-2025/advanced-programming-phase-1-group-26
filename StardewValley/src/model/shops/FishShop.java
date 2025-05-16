@@ -1,7 +1,6 @@
 package model.shops;
 
 import model.App;
-import model.Game;
 import model.GameObject;
 import model.building.CraftingItems.FishSmoker;
 import model.enums.GameObjectType;
@@ -17,7 +16,7 @@ public class FishShop extends Shop{
     private ArrayList<FishShopStock> fishShopStocks = new ArrayList<>();
 
     public FishShop() {
-        super(ShopType.FISH_SHOP, ShopType.FISH_SHOP.name(), "Willy", 9, 17);
+        super(ShopType.FISH_SHOP, "Willy", 9, 17);
         setFishShopStocks();
     }
 
@@ -26,22 +25,31 @@ public class FishShop extends Shop{
     }
 
     @Override
-    public String showProducts() {
+    public String showProducts()
+    {
         StringBuilder products = new StringBuilder();
         products.append(super.showProducts());
-        for(FishShopStock item : FishShopStock.values()) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (FishShopStock item : FishShopStock.values())
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
     @Override
     public String showAvailableProducts() {
         StringBuilder products = new StringBuilder();
+
         products.append(super.showAvailableProducts());
-        for(FishShopStock item : fishShopStocks) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+        for (FishShopStock item : fishShopStocks)
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
@@ -58,6 +66,7 @@ public class FishShop extends Shop{
                 }
             }
         }
+
         switch (gameObject.getObjectType())
         {
             case FISH_SMOKER_RECIPE ->
@@ -153,11 +162,14 @@ public class FishShop extends Shop{
     }
 
     @Override
-    public boolean dailyLimitCheck(GameObject gameObject) {
-        super.dailyLimitCheck(gameObject);
-        for(FishShopStock stock : fishShopStocks) {
-            if(stock.getGameObjectType() == gameObject.getObjectType()) {
-                if(stock.getDailyLimit() >= 0 && stock.getDailyLimit() < gameObject.getNumber()) {
+    public boolean dailyLimitCheck(GameObject gameObject)
+    {
+        for (FishShopStock stock : fishShopStocks)
+        {
+            if (stock.getGameObjectType() == gameObject.getObjectType())
+            {
+                if (stock.getDailyLimit() >= 0 && stock.getDailyLimit() < gameObject.getNumber())
+                {
                     return false;
                 }
             }
@@ -167,10 +179,12 @@ public class FishShop extends Shop{
     }
 
     @Override
-    public boolean isCorrectShop(GameObject gameObject) {
-        super.isCorrectShop(gameObject);
-        for(FishShopStock stock : fishShopStocks) {
-            if(stock.getGameObjectType() == gameObject.getObjectType()) {
+    public boolean isCorrectShop(GameObject gameObject)
+    {
+        for (FishShopStock stock : fishShopStocks)
+        {
+            if (stock.getGameObjectType() == gameObject.getObjectType())
+            {
                 return true;
             }
         }
@@ -178,10 +192,12 @@ public class FishShop extends Shop{
     }
 
     @Override
-    public boolean isAffordable(GameObject gameObject) {
-        super.isAffordable(gameObject);
-        for(FishShopStock stock : fishShopStocks) {
-            if(stock.getGameObjectType() == gameObject.getObjectType()) {
+    public boolean isAffordable(GameObject gameObject)
+    {
+        for (FishShopStock stock : fishShopStocks)
+        {
+            if (stock.getGameObjectType() == gameObject.getObjectType())
+            {
                 return App.getCurrentGame().getCurrentPlayer().getMoney() >= stock.getPrice() * gameObject.getNumber();
             }
         }

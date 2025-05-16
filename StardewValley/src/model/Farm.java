@@ -389,7 +389,7 @@ public class Farm extends model.Map
     private boolean isTileGoodForAnimalBuilding(Tile tile)
     {
         return (tile.getTexture() == TileTexture.GRASS || tile.getTexture() == TileTexture.LAND)
-                && tile.getObject() != null;
+                && tile.getObject() == null;
     }
 
     public boolean isGoodForAnimalBuilding(Tile tile, int width, int height)
@@ -437,7 +437,7 @@ public class Farm extends model.Map
     {
         for (AnimalBuilding animalBuilding : animalBuildings)
         {
-            if (animalType.getBuilding().equals(animalBuilding.getFarmBuildingType()))
+            if (animalType.getBuilding().contains(animalBuilding.getFarmBuildingType()))
             {
                 if (animalBuilding.hasCapacity())
                 {

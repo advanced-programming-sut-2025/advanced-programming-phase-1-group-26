@@ -3,8 +3,6 @@ package model.shops;
 import model.*;
 import model.enums.ShopType;
 
-import java.util.ArrayList;
-
 public abstract class Shop
 {
 //    private final ArrayList<Tile> shopTiles;
@@ -26,26 +24,16 @@ public abstract class Shop
 
     public abstract void purchase(GameObject gameObject);
 
-    public boolean isAffordable(GameObject gameObject)
-    {
-        return true;
-    }
+    public abstract boolean isAffordable(GameObject gameObject);
 
-    public boolean isCorrectShop(GameObject gameObject)
-    {
-        return true;
-    }
+    public abstract boolean isCorrectShop(GameObject gameObject);
 
-    public boolean dailyLimitCheck(GameObject gameObject)
-    {
-        return true;
-    }
+    public abstract boolean dailyLimitCheck(GameObject gameObject);
 
-
-    public Shop(ShopType type, String shopName, String salesManName, int startWork, int endWork)
+    public Shop(ShopType type, String salesManName, int startWork, int endWork)
     {
         this.type = type;
-        this.shopName = shopName;
+        this.shopName = type.getName();
         this.salesManName = salesManName;
         this.startWork = startWork;
         this.endWork = endWork;

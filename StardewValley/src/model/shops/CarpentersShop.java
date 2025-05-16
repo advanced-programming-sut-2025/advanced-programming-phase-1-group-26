@@ -15,7 +15,7 @@ public class CarpentersShop extends Shop {
     private ArrayList<FarmBuildingType> farmBuildings = new ArrayList<>();
 
     public CarpentersShop() {
-        super(ShopType.CARPENTER_SHOP, ShopType.CARPENTER_SHOP.name(), "Robin", 9, 20);
+        super(ShopType.CARPENTER_SHOP, "Robin", 9, 20);
     }
 
     public void setStocks() {
@@ -26,28 +26,47 @@ public class CarpentersShop extends Shop {
     }
 
     @Override
-    public String showProducts() {
+    public String showProducts()
+    {
         StringBuilder products = new StringBuilder();
+
         products.append(super.showProducts());
-        for(FarmBuildingType farmBuilding : FarmBuildingType.values()) {
-            products.append(farmBuilding.getName()).append(" ").append(farmBuilding.getPrice()).append("\n");
+
+        for(FarmBuildingType farmBuilding : FarmBuildingType.values())
+        {
+            products.append("\tfarm building: ").append(farmBuilding.getName()).append("\n\tprice: ")
+                    .append(farmBuilding.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(CarpentersShopStock stock : CarpentersShopStock.values()) {
-            products.append(stock.getName()).append(" ").append(stock.getPrice()).append("\n");
+
+        for(CarpentersShopStock stock : CarpentersShopStock.values())
+        {
+            products.append("\tstock: ").append(stock.getName()).append("\n\tprice: ").append(stock.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
     @Override
-    public String showAvailableProducts() {
+    public String showAvailableProducts()
+    {
         StringBuilder products = new StringBuilder();
         products.append(super.showAvailableProducts());
-        for(FarmBuildingType farmBuilding : farmBuildings) {
-            products.append(farmBuilding.getName()).append(" ").append(farmBuilding.getPrice()).append("\n");
+
+        for(FarmBuildingType farmBuilding : farmBuildings)
+        {
+            products.append("\tfarm building: ").append(farmBuilding.getName()).append("\n\tprice: ")
+                    .append(farmBuilding.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(CarpentersShopStock stock : stocks) {
-            products.append(stock.getName()).append(" ").append(stock.getPrice()).append("\n");
+
+        for(CarpentersShopStock stock : stocks)
+        {
+            products.append("\tstock: ").append(stock.getName()).append("\n\tprice: ").append(stock.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
@@ -67,10 +86,11 @@ public class CarpentersShop extends Shop {
 
     @Override
     public boolean isAffordable(GameObject gameObject) {
-        super.isAffordable(gameObject);
         GameObjectType targetType = gameObject.getObjectType();
-        for(CarpentersShopStock stock : CarpentersShopStock.values()) {
-            if(stock.getGameObjectType() == targetType) {
+        for (CarpentersShopStock stock : CarpentersShopStock.values())
+        {
+            if (stock.getGameObjectType() == targetType)
+            {
                 return App.getCurrentGame().getCurrentPlayer().getMoney() >= stock.getPrice();
             }
         }
@@ -78,11 +98,13 @@ public class CarpentersShop extends Shop {
     }
 
     @Override
-    public boolean isCorrectShop(GameObject gameObject) {
-        super.isCorrectShop(gameObject);
+    public boolean isCorrectShop(GameObject gameObject)
+    {
         GameObjectType targetType = gameObject.getObjectType();
-        for(CarpentersShopStock stock : CarpentersShopStock.values()) {
-            if(stock.getGameObjectType() == targetType) {
+        for (CarpentersShopStock stock : CarpentersShopStock.values())
+        {
+            if (stock.getGameObjectType() == targetType)
+            {
                 return true;
             }
         }
@@ -90,7 +112,8 @@ public class CarpentersShop extends Shop {
     }
 
     @Override
-    public boolean dailyLimitCheck(GameObject gameObject) {
-        return super.dailyLimitCheck(gameObject);
+    public boolean dailyLimitCheck(GameObject gameObject)
+    {
+        return true;
     }
 }

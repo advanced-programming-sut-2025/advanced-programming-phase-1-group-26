@@ -33,16 +33,16 @@ public enum GameCommands implements Command
     CHEAT_ADD_MONEY("cheat\\s+add\\s+money\\s+-a\\s+(?<amount>\\d+)"),
 
     /*Animal Commands*/
-    BUILD_ANIMAL_HOUSE("build\\s+-a\\s+(?<name>\\S+)\\s+-l\\s+(?<x>\\d+)\\s+(?<y>\\d+)"),
-    BUY_ANIMAL("buy\\s+animal\\s+-a\\s+(?<animal>\\S+)\\s+-n (?<name>.*)"),
+    BUILD_ANIMAL_HOUSE("build\\s+-a\\s+(?<name>.+)\\s+-l\\s+(?<x>\\d+)\\s+(?<y>\\d+)"),
+    BUY_ANIMAL("buy\\s+animal\\s+-a\\s+(?<animal>.+)\\s+-n (?<name>.*)"),
     PET_ANIMAL("pet\\s+-n\\s+(?<name>\\S+)"),
     ANIMAL_INFOS("animals"),
-    SHEPHERD_ANIMAL("shepherd\\s+animals\\s+-n\\s+(?<name>\\S+)\\s+-l\\s+(?<x>\\d+)\\s+(?<y>\\d+)"),
-    FEED_HAY("feed\\s+hay\\s+-n\\s+(?<name>\\S+)"),
+    SHEPHERD_ANIMAL("shepherd\\s+animals\\s+-n\\s+(?<name>.+)\\s+-l\\s+(?<x>\\d+)\\s+(?<y>\\d+)"),
+    FEED_HAY("feed\\s+hay\\s+-n\\s+(?<name>.+)"),
     PRODUCES("produces"),
-    COLLECT_PRODUCES("collect\\s+produces\\s+-n\\s+(?<name>\\S+)"),
-    SELL_ANIMAL("sell\\s+animal\\s+-n\\s+(?<name>\\S+)"),
-    FISHING("fishing\\s+-p\\s+(?<fishingPole>\\S+)"),
+    COLLECT_PRODUCES("collect\\s+produces\\s+-n\\s+(?<name>.+)"),
+    SELL_ANIMAL("sell\\s+animal\\s+-n\\s+(?<name>.+)"),
+    FISHING("fishing\\s+-p\\s+(?<fishingPole>.+)"),
 
     EXIT_GAME("exit\\s+game"),
     DELETE_GAME("delete\\s+game"),

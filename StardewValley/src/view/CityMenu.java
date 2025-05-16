@@ -2,6 +2,9 @@ package view;
 
 import control.GeneralController;
 import control.game.activities.*;
+import model.App;
+import model.City;
+import model.Player;
 import model.enums.regex_enums.*;
 
 import java.util.Scanner;
@@ -247,7 +250,8 @@ public class CityMenu implements AppMenu
 
         else
         {
-            System.out.println("invalid command");
+//            System.out.println("invalid command");
+            System.out.println(animalController.showShop(input));
         }
     }
 

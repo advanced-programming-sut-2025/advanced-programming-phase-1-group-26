@@ -35,9 +35,10 @@ public class AnimalController
         Tile targetTile = farm.getTile(x, y);
         FarmBuildingType farmBuilding = FarmBuildingType.getFarmBuilding(buildingName);
 
-        if (player.getCurrentShop() == null || !player.getCurrentShop().equals(ShopType.BLACK_SMITH))
+
+        if (!city.isNearShop(ShopType.CARPENTER_SHOP))
         {
-            return new Result(false, "you should be in Blacksmith Shop for this command");
+            return new Result(false, "you should be in Carpenter's Shop for this command");
         }
 
         if (farmBuilding == null)
@@ -53,10 +54,10 @@ public class AnimalController
         int width = farmBuilding.getWidth();
         int height = farmBuilding.getHeight();
 
-        if (!farm.isGoodForAnimalBuilding(targetTile, width, height))
-        {
-            return new Result(false, "you can't build this building here");
-        }
+//        if (!farm.isGoodForAnimalBuilding(targetTile, width, height))
+//        {
+//            return new Result(false, "you can't build this building here");
+//        }
 
         int price = farmBuilding.getPrice();
         int wood = farmBuilding.getWoodNumber();
@@ -155,6 +156,11 @@ public class AnimalController
         if (animal == null)
         {
             return new Result(false, "you have no animal named " + name + " in your farm");
+        }
+
+        if (!player.isNear(animal.getTile().getPoint()))
+        {
+            return new Result(false, "you are not near " + name);
         }
 
         animal.pet();
@@ -305,9 +311,11 @@ public class AnimalController
         for (Animal animal : animalsWithProducts)
         {
             GameObject product = animal.getProduct();
+            animal.calculateProductPrice(product);
             GameMenu.println(animal.getName());
             GameMenu.println("\tproduct: " + product.getObjectType().toString() + " x" + product.getNumber());
-            GameMenu.println("\tquality: " + animal.getQuality());
+            GameMenu.println("\tquality: " + String.format("%.2f", animal.getQuality()));
+            GameMenu.println("\tprice: " + animal.getPrice());
             GameMenu.println("--------------------------------");
         }
     }
@@ -335,7 +343,7 @@ public class AnimalController
         }
 
         GameObject product = animal.getProduct();
-        player.addToInventory(product);
+        player.addToInventory(product.getObjectType(), 1);
 
         return new Result(true, product.getNumber() + " " + product.getObjectType().toString()
                 + " was just added to your inventory");
@@ -353,13 +361,19 @@ public class AnimalController
             return new Result(false, "you have no animal named " + name + " in your farm");
         }
 
+        if (!player.hasEnoughInInventory(GameObjectType.HAY, 1))
+        {
+            return new Result(false, "you have no hay in your inventory");
+        }
+
+        player.removeAmountFromInventory(GameObjectType.HAY, 1);
         animal.feed();
 
         return new Result(false, "you just fed " + name + "!");
     }
 
     public Result sellAnimal(String input, Scanner scanner) {
-        String name = GameCommands.FEED_HAY.getMatcher(input).group("name").trim();
+        String name = GameCommands.SELL_ANIMAL.getMatcher(input).group("name").trim();
 
         Player player = App.getCurrentGame().getCurrentPlayer();
         Animal animal = player.findAnimal(name);
@@ -388,7 +402,7 @@ public class AnimalController
         AnimalBuilding animalBuilding = farm.getAnimalBuilding(animal);
         animalBuilding.sellAnimal(animal);
 
-        player.increaseEnergy(price); // TODO: add shipping bin mechanism later
+        player.increaseMoney(price); // TODO: add shipping bin mechanism later
 
         return new Result(true, price + " $ was added to your bank account, dork");
     }
@@ -423,7 +437,20 @@ public class AnimalController
         }
 
         Farm farm = player.getFarm();
-        ArrayList<Point> neighborPoints = farm.getNeighbors(player.getLocation());
+
+        ArrayList<Point> neighborPoints = new ArrayList<>();
+        int baseX = player.getLocation().getX();
+        int baseY = player.getLocation().getY();
+        for (int y = -1; y <= 1; y++)
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                if (farm.isInBounds(baseX + x, baseY + y))
+                {
+                    neighborPoints.add(new Point(baseX + x, baseY + y));
+                }
+            }
+        }
 
         boolean isNearSee = false;
 
@@ -441,46 +468,17 @@ public class AnimalController
             return new Result(false, "you should be around at least one lake tile to do fishing");
         }
 
-        ArrayList<Tile> fishTiles = farm.getListOfNearbyFish();
-        if (fishTiles.isEmpty())
-        {
-            return new Result(false, "there are no fish here, try another location");
-        }
-
-        ArrayList<Fish> fishes = new ArrayList<>();
+        int numberOfFishes = numberOfFishes();
 
         FishingPole pole = (FishingPole) player.getCurrentTool();
-        Season season = App.getCurrentGame().getCurrentTime().getSeason();
-
-        switch (pole.getLevel())
+        ArrayList<Fish> fishes = new ArrayList<>();
+        for (int i = 0; i < numberOfFishes; i++)
         {
-            case FishingPoleLevel.Training:
+            FishType type = FishType.getRandomFish(pole.getLevel());
+            if (type != null)
             {
-                for (Tile tile : fishTiles)
-                {
-                    Fish fish = tile.getFish();
-                    if (FishType.isCheapestOfTheSeason(fish.getType()))
-                    {
-                        fishes.add(fish);
-                    }
-                }
+                fishes.add(new Fish(type));
             }
-            break;
-
-            case FishingPoleLevel.Bamboo:
-            case FishingPoleLevel.Iridium:
-            case FishingPoleLevel.FiberGlass:
-            {
-                for (Tile tile : fishTiles)
-                {
-                    Fish fish = tile.getFish();
-                    if (fishes.add(fish))
-                    {
-                        fishes.add(fish);
-                    }
-                }
-            }
-            break;
         }
 
         if (fishes.isEmpty())
@@ -493,16 +491,53 @@ public class AnimalController
             return new Result(false, "you don't have enough capacity in your inventory");
         }
 
-        int index = 0;
-        while (player.inventoryHasCapacity() && index < fishes.size())
+        for (Fish fish : fishes)
         {
-            Fish fish = fishes.get(index);
             fish.calculateQuality(pole.getLevel());
 
             player.getFishingSkill().changeUnit(5);
-            GameMenu.println("\tYou caught a " + fish.getQuality() + " with a quality of " + fish.getQuality() + ".");
+            player.addToInventory(fish);
+            GameMenu.println("\tYou caught a " + fish.getType().getType().toString() + " with a quality of " + String.format("%.2f", fish.getQuality()) + ".");
         }
 
         return new Result(true, "That's all!");
     }
+
+    public Result showShop(String shop_name)
+    {
+        ShopType type = ShopType.getShop(shop_name);
+        if (type == null)
+        {
+            return new Result(false, "invalidd");
+        }
+
+        City city = App.getCurrentGame().getCity();
+        ArrayList<Tile> tiles = city.getShopTiles(type);
+
+        for (Tile tile : tiles)
+        {
+            System.out.println("x: " + tile.getX() + " - y: " + tile.getY());
+        }
+
+        return new Result(true, "done");
+    }
+
+    private int numberOfFishes()
+    {
+        Random random = new Random();
+        double R = 0.5 + 0.5 * random.nextDouble();
+        double M;
+        int skill = App.getCurrentGame().getCurrentPlayer().getFishingSkill().getLevel();
+
+        switch (App.getCurrentGame().getCurrentTime().getCurrentWeather()) {
+            case Weather.Sunny -> M = 1.5;
+            case Weather.Rain -> M = 1.2;
+            case Weather.Storm -> M = 0.5;
+            default -> M = 1;
+        }
+
+        int result = (int) (R * M * (skill + 2));
+        return result;
+    }
+
 }

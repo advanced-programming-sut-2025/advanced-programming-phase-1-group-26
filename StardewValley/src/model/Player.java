@@ -687,7 +687,8 @@ public class Player {
         animalBuildings.add(animalBuilding);
     }
 
-    public void decreaseMoney(int amount) {
+    public void decreaseMoney(int amount)
+    {
         money -= amount;
     }
 
@@ -793,6 +794,8 @@ public class Player {
 
         if (energy != -1) // not unlimited
         {
+            // TODO
+
             energy = maxEnergy;
             if (fainted)
             {

@@ -1,10 +1,8 @@
 package model.animal;
 
-import model.Farm;
 import model.GameObject;
 import model.Tile;
 import model.enums.animal_enums.FarmAnimalsType;
-import model.enums.animal_enums.FarmBuildingType;
 import view.GameMenu;
 
 import java.util.ArrayList;
@@ -24,17 +22,18 @@ public class Animal extends GameObject
     private boolean hasProduct = false;
     private boolean secondProduct = false;
 
-    private int quality = 0;
+    private double quality = 0;
 
     public Animal(String name, FarmAnimalsType animalType)
     {
+        this.ObjectType = animalType.getType();
         this.name = name;
         this.animalType = animalType;
         this.price = animalType.getPurchaseCost();
         this.isFed = false;
-        this.isIn = false;
+        this.isIn = true;
         this.isPet = false;
-        this.products = animalType.getProducts();
+        this.products = (ArrayList<GameObject>) animalType.getProducts();
     }
 
     public void feed()
@@ -73,7 +72,7 @@ public class Animal extends GameObject
 
     public void setFriendship(int friendship)
     {
-        this.friendship = Math.max(1000, friendship);
+        this.friendship = Math.min(1000, friendship);
     }
 
     public void increaseFriendship(int amount)
@@ -131,9 +130,6 @@ public class Animal extends GameObject
                 secondProduct = true;
             }
         }
-
-        Random rand = new Random();
-        quality = (int) (((double) friendship / 1000) * (0.5 + (0.5 * rand.nextDouble())));
     }
 
 
@@ -153,7 +149,7 @@ public class Animal extends GameObject
 
         output.append(name).append("\n");
         output.append("\t").append("kind: ").append(animalType.getName()).append("\n");
-        output.append("\t").append("friendship: ").append(friendship).append("xp \n");
+        output.append("\t").append("friendship: ").append(friendship).append(" xp \n");
         output.append("\t").append("is fed today: ").append(isFed ? "positive" : "negative").append("\n");
         output.append("\t").append("is pet today: ").append(isPet ? "positive" : "negative").append("\n");
         output.append("--------------------------------");
@@ -188,13 +184,30 @@ public class Animal extends GameObject
         return product;
     }
 
-    public int getQuality()
+    public void calculateProductPrice(GameObject product)
     {
-        return quality;
+        quality = getQuality();
+
+        if(quality <= 0.5)
+        {
+            product.setPrice(price);
+        } else if(quality > 0.5 && quality <= 0.7) {
+            product.setPrice((int) (price * 1.25));
+        } else if(quality > 0.7 && quality <= 0.9) {
+            product.setPrice((int) (price * 1.5));
+        } else {
+            product.setPrice((int) (price * 2.0));
+        }
+    }
+
+    public double getQuality()
+    {
+        Random rand = new Random();
+        return ((double) friendship / 1000) * (0.5 + 0.5 * rand.nextDouble());
     }
 
     public int getPrice()
     {
-        return animalType.getPurchaseCost() * (int) (((double) friendship / 1000) + 0.3);
+        return (int) (animalType.getPurchaseCost() * (((double) friendship / 1000) + 0.3));
     }
 }

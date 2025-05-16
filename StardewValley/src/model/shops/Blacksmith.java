@@ -16,7 +16,7 @@ public class Blacksmith extends Shop {
     private ArrayList<BlacksmithStockItem> stockItems = new ArrayList<>();
 
     public Blacksmith() {
-        super(ShopType.BLACK_SMITH, ShopType.BLACK_SMITH.name(), "Clint", 9, 16);
+        super(ShopType.BLACK_SMITH, "Clint", 9, 16);
         setStockItems();
         setUpgradeTools();
     }
@@ -33,32 +33,49 @@ public class Blacksmith extends Shop {
     {
         StringBuilder products = new StringBuilder();
         products.append(super.showProducts());
-        for(BlacksmithStockItem item : BlacksmithStockItem.values()) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (BlacksmithStockItem item : BlacksmithStockItem.values())
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(BlacksmithUpgradeTools tool : BlacksmithUpgradeTools.values()) {
-            products.append(tool.getName()).append(" ").append(tool.getCost()).append("\n");
+
+        for (BlacksmithUpgradeTools tool : BlacksmithUpgradeTools.values())
+        {
+            products.append("\titem: ").append(tool.getName()).append("\n\tprice: ").append(tool.getCost()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
     @Override
     public String showAvailableProducts() {
         StringBuilder products = new StringBuilder();
-        super.showAvailableProducts();
-        for(BlacksmithStockItem item : stockItems) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+        products.append(super.showAvailableProducts());
+
+        for (BlacksmithStockItem item : stockItems)
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(BlacksmithUpgradeTools tool : upgradeToolsList) {
-            products.append(tool.getName()).append(" ").append(tool.getCost()).append("\n");
+
+        for (BlacksmithUpgradeTools tool : upgradeToolsList)
+        {
+            products.append("\titem: ").append(tool.getName()).append("\n\tprice: ").append(tool.getCost()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
     @Override
-    public void purchase(GameObject gameObject) {
-        for(BlacksmithStockItem stockItem : stockItems) {
-            if(stockItem.getGameObjectType().equals(gameObject.getObjectType())) {
+    public void purchase(GameObject gameObject)
+    {
+        for (BlacksmithStockItem stockItem : stockItems)
+        {
+            if (stockItem.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(stockItem.getPrice());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
             }
@@ -66,10 +83,12 @@ public class Blacksmith extends Shop {
     }
 
     @Override
-    public boolean isAffordable(GameObject gameObject) {
-        super.isAffordable(gameObject);
-        for(BlacksmithStockItem stockItem : stockItems) {
-            if(stockItem.getGameObjectType().equals(gameObject.getObjectType())) {
+    public boolean isAffordable(GameObject gameObject)
+    {
+        for (BlacksmithStockItem stockItem : stockItems)
+        {
+            if (stockItem.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return App.getCurrentGame().getCurrentPlayer().getMoney() >= stockItem.getPrice();
             }
         }
@@ -77,10 +96,12 @@ public class Blacksmith extends Shop {
     }
 
     @Override
-    public boolean isCorrectShop(GameObject gameObject) {
-        super.isCorrectShop(gameObject);
-        for(BlacksmithStockItem stockItem : stockItems) {
-            if(stockItem.getGameObjectType().equals(gameObject.getObjectType())) {
+    public boolean isCorrectShop(GameObject gameObject)
+    {
+        for (BlacksmithStockItem stockItem : stockItems)
+        {
+            if (stockItem.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return true;
             }
         }
@@ -290,7 +311,8 @@ public class Blacksmith extends Shop {
     public boolean canWeUpgrade = false;
 
     @Override
-    public boolean dailyLimitCheck(GameObject gameObject) {
-        return super.dailyLimitCheck(gameObject);
+    public boolean dailyLimitCheck(GameObject gameObject)
+    {
+        return true;
     }
 }

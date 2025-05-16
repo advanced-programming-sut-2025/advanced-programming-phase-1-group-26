@@ -113,10 +113,6 @@ public class Game
 
     public void endDay()
     {
-        for(Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
-            animal.checkAndReset();
-        }
-
 //        for(Player player : players) {
 //            for(AnimalBuilding animalBuilding : player.getAnimalBuildings()) {
 //                if(animalBuilding.getFarmBuilding().equals(FarmBuildingType.SHIPPING_BIN)) {

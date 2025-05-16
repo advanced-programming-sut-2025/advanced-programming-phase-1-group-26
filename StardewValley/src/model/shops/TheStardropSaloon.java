@@ -13,7 +13,7 @@ public class TheStardropSaloon extends Shop {
     private ArrayList<TheStardropSaloonStock> stocks = new ArrayList<>();
 
     public TheStardropSaloon() {
-        super(ShopType.STARDROP_SALOON, ShopType.STARDROP_SALOON.name(), "Gus", 12, 24);
+        super(ShopType.STARDROP_SALOON, "Gus", 12, 24);
         setStocks();
     }
 
@@ -24,20 +24,28 @@ public class TheStardropSaloon extends Shop {
     @Override
     public String showProducts() {
         StringBuilder products = new StringBuilder();
-        super.showProducts();
-        for(TheStardropSaloonStock stock : TheStardropSaloonStock.values()) {
-            products.append(stock.getName()).append(" ").append(stock.getPrice()).append("\n");
+        products.append(super.showProducts());
+
+        for (TheStardropSaloonStock stock : TheStardropSaloonStock.values())
+        {
+            products.append("\tstock: ").append(stock.getName()).append("\n\tprice: ").append(stock.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
     @Override
     public String showAvailableProducts() {
         StringBuilder products = new StringBuilder();
-        super.showAvailableProducts();
-        for(TheStardropSaloonStock stock : stocks) {
-            products.append(stock.getName()).append(" ").append(stock.getPrice()).append("\n");
+        products.append(super.showAvailableProducts());
+
+        for(TheStardropSaloonStock stock : stocks)
+        {
+            products.append("\tstock: ").append(stock.getName()).append("\n\tprice: ").append(stock.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
@@ -55,16 +63,16 @@ public class TheStardropSaloon extends Shop {
                 stock.decreaseLimit();
                 if (stock.getLimit() == 0)
                 {
-                    iterator.remove(); // ✅ safe removal
+                    iterator.remove();
                 }
             }
         }
     }
 
     @Override
-    public boolean isCorrectShop(GameObject gameObject) {
-        super.isCorrectShop(gameObject);
-        for(TheStardropSaloonStock stock : stocks) {
+    public boolean isCorrectShop(GameObject gameObject)
+    {
+        for (TheStardropSaloonStock stock : stocks) {
             if(gameObject.getObjectType().equals(stock.getGameObjectType())) {
                 return true;
             }
@@ -74,7 +82,6 @@ public class TheStardropSaloon extends Shop {
 
     @Override
     public boolean isAffordable(GameObject gameObject) {
-        super.isAffordable(gameObject);
         for(TheStardropSaloonStock stock : stocks) {
             if(gameObject.getObjectType().equals(stock.getGameObjectType())) {
                 return App.getCurrentGame().getCurrentPlayer().getMoney() >= stock.getPrice() * gameObject.getNumber();
@@ -85,7 +92,6 @@ public class TheStardropSaloon extends Shop {
 
     @Override
     public boolean dailyLimitCheck(GameObject gameObject) {
-        super.dailyLimitCheck(gameObject);
         for(TheStardropSaloonStock stock : stocks) {
             if(gameObject.getObjectType().equals(stock.getGameObjectType())) {
                 if(stock.getDailyLimit() > 0 && stock.getLimit() < gameObject.getNumber()) {

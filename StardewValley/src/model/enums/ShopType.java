@@ -16,4 +16,21 @@ public enum ShopType
     {
         this.name = name;
     }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public static ShopType getShop (String name)
+    {
+        for (ShopType shopType : ShopType.values())
+        {
+            if (shopType.getName().equalsIgnoreCase(name))
+            {
+                return shopType;
+            }
+        }
+        return null;
+    }
 }
