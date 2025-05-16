@@ -328,7 +328,7 @@ public class Farm extends model.Map
 
     public void putLegendaryFishInLake(Player player, Season currentSeason)
     {
-        if (player.getFishingSkill().getLevel() >= 2) // TODO: what is the amount?
+        if (player.getFishingSkill().getLevel() >= 4)
         {
             Random random = new Random();
             ArrayList<Tile> randomLakeTiles = getRandomLakeTiles(random.nextInt(20));

@@ -10,11 +10,13 @@ import model.enums.shop_enums.MarniesRanchShopInventory;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MarniesRanch extends Shop {
+public class MarniesRanch extends Shop
+{
     private ArrayList<MarniesRanchShopInventory> inventory = new ArrayList<>();
     private ArrayList<FarmAnimalsType> livestocks = new ArrayList<>();
 
-    public MarniesRanch() {
+    public MarniesRanch()
+    {
         super(ShopType.MARINE_RANCH, ShopType.MARINE_RANCH.name(), "Marnie", 9, 16);
         setInventory();
         setLivestocks();
@@ -54,14 +56,16 @@ public class MarniesRanch extends Shop {
     }
 
     @Override
-    public void purchase(GameObject gameObject) {
-        super.purchase(gameObject);
-        for(MarniesRanchShopInventory item : inventory) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+    public void purchase(GameObject gameObject)
+    {
+        for (MarniesRanchShopInventory item : inventory)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(item.getPrice() * gameObject.getNumber());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
                 item.decreaseLimit();
-                if(item.getLimit() == 0) inventory.remove(item);
+                if (item.getLimit() == 0) inventory.remove(item);
             }
         }
     }

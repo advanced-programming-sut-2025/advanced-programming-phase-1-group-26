@@ -1,10 +1,7 @@
 package view;
 
 import control.GeneralController;
-import control.game.activities.CityController;
-import control.game.activities.CommunicateController;
-import control.game.activities.HomeController;
-import control.game.activities.MarketingController;
+import control.game.activities.*;
 import model.enums.regex_enums.*;
 
 import java.util.Scanner;
@@ -17,6 +14,7 @@ public class CityMenu implements AppMenu
     CommunicateController comController = new CommunicateController();
     MarketingController marketingController = new MarketingController();
     HomeController homeController = new HomeController();
+    AnimalController animalController = new AnimalController();
 
     @Override
     public void check(Scanner scanner)
@@ -186,6 +184,14 @@ public class CityMenu implements AppMenu
             System.out.println(comController.purposeAsk(matcher));
         } else if ((matcher = CommunicateCommands.RESPOND.getMatcher(input)) != null) {
             comController.purposeRespond(matcher);
+        }
+
+        else if(GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input) != null)
+        {
+            System.out.println(animalController.buildAnimalBuilding(input));
+        } else if(GameCommands.BUY_ANIMAL.getMatcher(input) != null)
+        {
+            System.out.println(animalController.buyAnimal(input));
         }
 
         else if((matcher = CityCommands.MEET_NPC.getMatcher(input)) != null)

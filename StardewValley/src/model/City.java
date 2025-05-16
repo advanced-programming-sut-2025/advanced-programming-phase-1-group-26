@@ -214,7 +214,7 @@ public class City extends Map
         shops.add (new TheStardropSaloon());
         shops.add (new PierresGeneralStore());
         shops.add (new FishShop());
-//        shops.add (new MarniesRanch());
+        shops.add (new MarniesRanch());
         shops.add (new CarpentersShop());
     }
 

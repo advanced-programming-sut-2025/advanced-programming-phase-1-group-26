@@ -28,7 +28,7 @@ public class CarpentersShop extends Shop {
     @Override
     public String showProducts() {
         StringBuilder products = new StringBuilder();
-        super.showProducts();
+        products.append(super.showProducts());
         for(FarmBuildingType farmBuilding : FarmBuildingType.values()) {
             products.append(farmBuilding.getName()).append(" ").append(farmBuilding.getPrice()).append("\n");
         }
@@ -41,7 +41,7 @@ public class CarpentersShop extends Shop {
     @Override
     public String showAvailableProducts() {
         StringBuilder products = new StringBuilder();
-        super.showAvailableProducts();
+        products.append(super.showAvailableProducts());
         for(FarmBuildingType farmBuilding : farmBuildings) {
             products.append(farmBuilding.getName()).append(" ").append(farmBuilding.getPrice()).append("\n");
         }
@@ -52,11 +52,13 @@ public class CarpentersShop extends Shop {
     }
 
     @Override
-    public void purchase(GameObject gameObject) {
-        super.purchase(gameObject);
+    public void purchase(GameObject gameObject)
+    {
         GameObjectType targetType = gameObject.getObjectType();
-        for(CarpentersShopStock stock : stocks) {
-            if(stock.getGameObjectType() == targetType) {
+        for (CarpentersShopStock stock : stocks)
+        {
+            if (stock.getGameObjectType() == targetType)
+            {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(stock.getPrice());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
             }

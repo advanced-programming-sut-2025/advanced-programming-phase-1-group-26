@@ -42,16 +42,19 @@ public class TheStardropSaloon extends Shop {
     }
 
     @Override
-    public void purchase(GameObject gameObject) {
-        super.purchase(gameObject);
+    public void purchase(GameObject gameObject)
+    {
         Iterator<TheStardropSaloonStock> iterator = stocks.iterator();
-        while (iterator.hasNext()) {
+        while (iterator.hasNext())
+        {
             TheStardropSaloonStock stock = iterator.next();
-            if (gameObject.getObjectType().equals(stock.getGameObjectType())) {
+            if (gameObject.getObjectType().equals(stock.getGameObjectType()))
+            {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(stock.getPrice() * gameObject.getNumber());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
                 stock.decreaseLimit();
-                if (stock.getLimit() == 0) {
+                if (stock.getLimit() == 0)
+                {
                     iterator.remove(); // ✅ safe removal
                 }
             }

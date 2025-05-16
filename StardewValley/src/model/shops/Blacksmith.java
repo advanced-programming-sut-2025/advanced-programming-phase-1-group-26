@@ -29,9 +29,10 @@ public class Blacksmith extends Shop {
     }
 
     @Override
-    public String showProducts() {
+    public String showProducts()
+    {
         StringBuilder products = new StringBuilder();
-        super.showProducts();
+        products.append(super.showProducts());
         for(BlacksmithStockItem item : BlacksmithStockItem.values()) {
             products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
         }
@@ -56,7 +57,6 @@ public class Blacksmith extends Shop {
 
     @Override
     public void purchase(GameObject gameObject) {
-        super.purchase(gameObject);
         for(BlacksmithStockItem stockItem : stockItems) {
             if(stockItem.getGameObjectType().equals(gameObject.getObjectType())) {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(stockItem.getPrice());

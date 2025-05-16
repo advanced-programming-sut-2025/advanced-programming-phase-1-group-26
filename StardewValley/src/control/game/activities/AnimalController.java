@@ -499,6 +499,7 @@ public class AnimalController
             Fish fish = fishes.get(index);
             fish.calculateQuality(pole.getLevel());
 
+            player.getFishingSkill().changeUnit(5);
             GameMenu.println("\tYou caught a " + fish.getQuality() + " with a quality of " + fish.getQuality() + ".");
         }
 
