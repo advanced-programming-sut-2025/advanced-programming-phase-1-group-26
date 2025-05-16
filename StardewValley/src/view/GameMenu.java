@@ -28,7 +28,6 @@ public class GameMenu implements AppMenu
     AnimalController animalController = new AnimalController();
     TradeController tradeController = new TradeController();
     MarketingController marketingController = new MarketingController();
-    NPC npc;
 
     @Override
     public void check(Scanner scanner)
@@ -57,6 +56,8 @@ public class GameMenu implements AppMenu
             System.out.println(gameController.toolsUpgrade(matcher));
         } else if ((matcher = GameCommands.TOOLS_USE.getMatcher(input)) != null) {
             System.out.println(gameController.toolsUse(matcher));
+        } else if ((matcher = GeneralCommands.CHEAT_TOOL_CHECK.getMatcher(input)) != null) {
+            System.out.println(gameController.cheatToolCheck(matcher));
         }
 
         /* player cheat codes */
@@ -144,7 +145,7 @@ public class GameMenu implements AppMenu
         {
             String x = matcher.group("x");
             String y = matcher.group("y");
-            System.out.println(generalController.walk(x,y, scanner));
+            generalController.walk(x,y, scanner);
         } else if ((matcher = GeneralCommands.SHOW_PATH.getMatcher(input)) != null)
         {
             String x = matcher.group("x").trim();
@@ -245,82 +246,40 @@ public class GameMenu implements AppMenu
             comController.purposeRespond(matcher);
         }
 
-        else if (input.equals("5"))
+        else if(GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input) != null)
         {
-            Cabin cabin = new Cabin();
-            System.out.println(cabin.getMapString(null, new Point(0, 0), cabin.getHEIGHT(), cabin.getWIDTH()));
-        }
-
-        else if (input.equals("6"))
-        {
-            GreenHouse greenHouse = new GreenHouse();
-            System.out.println(greenHouse.getMapString(null, new Point(0, 0), greenHouse.getHEIGHT(), greenHouse.getWIDTH()));
-        }
-
-        else if (input.equals("7"))
-        {
-            City city = new City();
-            System.out.println(city.getMapString(null, new Point(0, 0), city.getHEIGHT(), city.getWIDTH()));
-        }
-
-        else if (input.equals("8"))
-        {
-            ShopMap shop = new ShopMap();
-            System.out.println(shop.getMapString(null, new Point(0, 0), shop.getHEIGHT(), shop.getWIDTH()));
-        }
-
-
-        else if((matcher = GameCommands.BUILD_ANIMAL_HOUSE.getMatcher(input)) != null) {
             System.out.println(animalController.buildAnimalBuilding(input));
-        } else if((matcher = GameCommands.BUY_ANIMAL.getMatcher(input)) != null) {
+        } else if(GameCommands.BUY_ANIMAL.getMatcher(input) != null)
+        {
             System.out.println(animalController.buyAnimal(input));
-        } else if((matcher = GameCommands.PET_ANIMAL.getMatcher(input)) != null) {
+        } else if(GameCommands.PET_ANIMAL.getMatcher(input) != null)
+        {
             System.out.println(animalController.pet(input));
-        } else if((matcher = GameCommands.ANIMAL_INFOS.getMatcher(input)) != null) {
-            System.out.println(animalController.pet(input));
-        } else if((matcher = GameCommands.SHEPHERD_ANIMAL.getMatcher(input)) != null) {
+        } else if(GameCommands.ANIMAL_INFOS.getMatcher(input) != null)
+        {
+            animalController.showAnimalDetails();
+        } else if(GameCommands.SHEPHERD_ANIMAL.getMatcher(input) != null)
+        {
             System.out.println(animalController.shepherdAnimal(input));
-        } else if((matcher = GameCommands.FEED_HAY.getMatcher(input)) != null) {
+        } else if(GameCommands.FEED_HAY.getMatcher(input) != null)
+        {
             System.out.println(animalController.feedHay(input));
-        } else if((matcher = GameCommands.PRODUCES.getMatcher(input)) != null) {
-            System.out.println(animalController.showProducts());
-        } else if((matcher = GameCommands.SELL_ANIMAL.getMatcher(input)) != null) {
-            System.out.println(animalController.sellAnimal(input));
-        } else if((matcher = GameCommands.SET_FRIENDSHIP.getMatcher(input)) != null) {
+        } else if(GameCommands.PRODUCES.getMatcher(input) != null)
+        {
+            animalController.showProducts();
+        } else if(GameCommands.SELL_ANIMAL.getMatcher(input) != null)
+        {
+            System.out.println(animalController.sellAnimal(input, scanner));
+        } else if(GameCommands.SET_FRIENDSHIP.getMatcher(input) != null)
+        {
             animalController.cheatSetFriendship(input);
-        } else if((matcher = GameCommands.FISHING.getMatcher(input)) != null) {
+        } else if(GameCommands.FISHING.getMatcher(input) != null)
+        {
             animalController.fishing(input);
         }
 
-        else if((matcher = GameCommands.SHOW_ALL_PRODUCTS.getMatcher(input)) != null) {
-            System.out.println(marketingController.showAllProducts());
-        } else if((matcher = GameCommands.SHOW_AVAILABLE_PRODUCTS.getMatcher(input)) != null) {
-            System.out.println(marketingController.showAvailableProducts());
-        } else if((matcher = GameCommands.PURCHASE.getMatcher(input)) != null) {
-            System.out.println(marketingController.purchase(input));
-        } else if((matcher = GameCommands.PURCHASE_N.getMatcher(input)) != null) {
-            System.out.println(marketingController.purchase(input));
-        } else if((matcher = GameCommands.SELL.getMatcher(input)) != null) {
-            System.out.println(marketingController.sell(input));
-        } else if((matcher = GameCommands.SELL_N.getMatcher(input)) != null) {
-            System.out.println(marketingController.sell(input));
-        } else if((matcher = GeneralCommands.TOOLS_UPGRADE.getMatcher(input)) != null) {
-            System.out.println(marketingController.upgradeTool(input));
-        } else if((matcher = GameCommands.CHEAT_ADD_MONEY.getMatcher(input)) != null) {
-            marketingController.cheatAddMoney(input);
-        }
-
-
-        else if((matcher = GameCommands.MEET_NPC.getMatcher(input)) != null) {
-            System.out.println(marketingController.meetNPC(input));
-            if(marketingController.meetNPC(input).isSuccessful()) npc = marketingController.targetNPC(input);
-        } else if((matcher = GameCommands.GIFT_NPC.getMatcher(input)) != null) {
-            System.out.println(marketingController.giftNPC(input));
-        } else if((matcher = GameCommands.QUESTS_LIST.getMatcher(input)) != null) {
-            System.out.println(marketingController.questsNPCList(npc));
-        } else if((matcher = GameCommands.QUESTS_FINISH.getMatcher(input)) != null) {
-            System.out.println(marketingController.questsFinish(input, npc));
-        } else if (GeneralCommands.START_TRADE.getMatcher(input) != null) {
+        else if (GeneralCommands.START_TRADE.getMatcher(input) != null)
+        {
             App.setCurrentMenu(Menu.TradeMenu);
             System.out.println("redirecting to trade menu...");
             tradeController.tradeList();
@@ -329,6 +288,10 @@ public class GameMenu implements AppMenu
             App.setCurrentMenu(Menu.ShopMenu);
             Shop shop = new Blacksmith();
             App.getCurrentGame().setCurrentShop(shop);
+        }
+
+        else if ((matcher = GeneralCommands.CHEAT_TOOL_CHECK.getMatcher(input)) != null) {
+            System.out.println(gameController.cheatToolCheck(matcher));
         }
 
         else
@@ -345,5 +308,10 @@ public class GameMenu implements AppMenu
     public static void println(String output)
     {
         System.out.println(output);
+    }
+
+    public static void print(String output)
+    {
+        System.out.print(output);
     }
 }

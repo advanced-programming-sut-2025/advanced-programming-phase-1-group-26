@@ -2,40 +2,36 @@ package model;
 
 import model.enums.GameObjectType;
 import model.enums.NpcDetails;
-import model.enums.Season;
 import model.player_data.FriendshipWithNpcData;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class NPC {
-    private Point location;
-    public NpcDetails npcDetails;
-    private String name;
-    private ArrayList<String> dialogues = new ArrayList<>();
-    private List<GameObjectType> favorites;
-    private List<GameObject> requests;
-    private List<GameObject> rewards;
-    private ArrayList<GameObject> openQuests = new ArrayList<>();
-    private FriendshipWithNpcData friendshipWithNpcData;
+    private final Point location;
+    private final NpcDetails npcDetails;
+    private final String name;
+    private final ArrayList<String> dialogues = new ArrayList<>();
+    private final List<GameObjectType> favorites;
+    private final List<GameObject> requests;
+    private final List<GameObject> rewards;
+    private final ArrayList<GameObject> openQuests = new ArrayList<>();
+    private final String appearance;
 
-    public NPC(NpcDetails npcDetails) {
-        this.friendshipWithNpcData.setXp(0);
-        this.friendshipWithNpcData.setLevel(0);
+    private boolean firstQuestDone = false;
+    private boolean secondQuestDone = false;
+    private boolean thirdQuestDone = false;
+
+    public NPC(NpcDetails npcDetails, Point location) {
+        this.location = location;
         this.npcDetails = npcDetails;
         this.name = npcDetails.getName();
-        switch (name) {
-            case "Robin" -> App.getCurrentGame().getCurrentPlayer().setRobinFriendship(friendshipWithNpcData);
-            case "Abigail" -> App.getCurrentGame().getCurrentPlayer().setAbigailFriendship(friendshipWithNpcData);
-            case "Sebastian" -> App.getCurrentGame().getCurrentPlayer().setSebastianFriendship(friendshipWithNpcData);
-            case "Harvey" -> App.getCurrentGame().getCurrentPlayer().setHarveyFriendship(friendshipWithNpcData);
-            case "Lia" -> App.getCurrentGame().getCurrentPlayer().setLiaFriendship(friendshipWithNpcData);
-        }
+
         this.favorites = npcDetails.getFavorites();
         this.requests = npcDetails.getRequests();
         this.rewards = npcDetails.getRewards();
         this.openQuests.add(requests.getFirst());
+        this.appearance = npcDetails.getAppearance();
     }
 
     public NpcDetails getNpcDetails() {
@@ -45,58 +41,96 @@ public class NPC {
     public Point getLocation() {
         return location;
     }
-    public void setLocation(Point location) {
-        this.location = location;
-    }
 
-    public boolean isNearPlayer(Point npcLocation, Point playerLocation) {
-        int xDiff = npcLocation.getX() - playerLocation.getX();
-        int yDiff = npcLocation.getY() - playerLocation.getY();
-        return xDiff >= -1 && xDiff <= 1 && yDiff >= -1 && yDiff <= 1;
+    public boolean isNearPlayer(Point playerLocation)
+    {
+        int dx = Math.abs(location.getX() - playerLocation.getX());
+        int dy = Math.abs(location.getY() - playerLocation.getY());
+
+        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
     }
 
     public boolean isQuestFinish = false;
-    public boolean isTalked = false;
     public boolean isGifted = false; //TODO, should be reset everyday
-    public String talk(Boolean isTalked, Time currentTime) {
-        if(!isTalked) {
-            friendshipWithNpcData.increaseXp(20);
-        }
+
+    public String talk() {
+        Time currentTime = App.getCurrentGame().getCurrentTime();
         return this.getNpcDetails().getDialogue(currentTime.getSeason(), currentTime.getTimeOfDay());
-    }
-    public void giftNPC(boolean isGift, GameObjectType gift) {
-        if(!isGift) {
-            friendshipWithNpcData.increaseXp(50);
-        }
-        if(favorites.contains(gift)) {
-            friendshipWithNpcData.increaseXp(200);
-        }
-    }
-
-    public ArrayList<GameObject> updateQuests(Season season, Time currentTime) {
-        if(friendshipWithNpcData.getLevel() == 1) {
-            if(!openQuests.contains(requests.get(1))) openQuests.add(requests.get(1));
-        }
-        if(season != currentTime.getSeason()) {
-            if(!openQuests.contains(requests.get(2))) openQuests.add(requests.get(2));
-        }
-
-        return openQuests;
     }
 
     public void removeQuest(int index) {
         openQuests.remove(index);
     }
 
-    public FriendshipWithNpcData getFriendshipWithNpcData() {
-        return friendshipWithNpcData;
-    }
-    public void setFriendshipWithNpcData(FriendshipWithNpcData friendshipWithNpcData) {
-        this.friendshipWithNpcData = friendshipWithNpcData;
+    public String getAppearance()
+    {
+        return appearance;
     }
 
-    public void reset() {
-        isTalked = false;
-        isGifted = false;
+    public String getName()
+    {
+        return name;
+    }
+
+    public boolean isFavorite(GameObjectType type)
+    {
+        return favorites.contains(type);
+    }
+
+    public boolean isFirstQuestAvailable()
+    {
+        return !firstQuestDone;
+    }
+
+    public boolean isSecondQuestAvailable()
+    {
+        if (!secondQuestDone)
+        {
+            Player player = App.getCurrentGame().getCurrentPlayer();
+            FriendshipWithNpcData friendship = player.getNpcFriendship(this);
+            return friendship.getLevel() >= 1;
+        }
+        return false;
+    }
+
+    public boolean isThirdQuestAvailable()
+    {
+        if(!thirdQuestDone)
+        {
+            Time time = App.getCurrentGame().getCurrentTime();
+            return (time.getTotalDaysPassed() >= npcDetails.getDaysUntilQuestUnlocked());
+        }
+        return false;
+    }
+
+    public String getQuestDescription(int index)
+    {
+        StringBuilder output = new StringBuilder();
+        output.append(name).append("'s Quest: (index ").append(index + 1).append(") \n");
+
+        GameObject request = npcDetails.getQuestRequest(index);
+        output.append("\trequest: ").append(request.getObjectType().toString()).append(" x").append(request.getNumber()).append("\n");
+
+        GameObject reward = npcDetails.getQuestReward(index);
+        output.append("\treward: ").append(reward.getObjectType().toString()).append(" x").append(reward.getNumber()).append("\n");
+
+        output.append("--------------------------------");
+
+        return output.toString();
+    }
+
+    public void firstQuestDone()
+    {
+        firstQuestDone = true;
+    }
+
+    public void secondQuestDone()
+    {
+        secondQuestDone = true;
+    }
+
+    public void thirdQuestDone()
+    {
+        thirdQuestDone = true;
     }
 }

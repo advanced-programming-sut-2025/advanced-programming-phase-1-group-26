@@ -1,80 +1,88 @@
 package model.animal;
 
+import model.Farm;
 import model.GameObject;
-import model.enums.animal_enums.FarmAnimals;
-import model.enums.animal_enums.FarmBuilding;
+import model.Tile;
+import model.enums.animal_enums.FarmAnimalsType;
+import model.enums.animal_enums.FarmBuildingType;
+import view.GameMenu;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+public class Animal extends GameObject
+{
 public class Animal extends GameObject {
     private String name;
-    private FarmAnimals animalType;
-    private int price;
-    private int friendship;
-    private boolean isFed;
-    private boolean isIn;
-    private boolean isPet;
-    private ArrayList<FarmAnimals.Product> produces;
+    private FarmAnimalsType animalType;
+    private int friendship = 0;
+    private boolean isFed = false;
+    private boolean isIn = true;
+    private boolean isPet = false;
+    private final ArrayList<GameObject> products;
+    private Tile tile = null;
 
-    public Animal(String name, FarmAnimals animalType) {
+    private boolean hasProduct = false;
+    private boolean secondProduct = false;
+
+    private int quality = 0;
+
+    public Animal(String name, FarmAnimalsType animalType)
+    {
         this.name = name;
         this.animalType = animalType;
         this.price = animalType.getPurchaseCost();
-        this.friendship = 0;
         this.isFed = false;
         this.isIn = false;
         this.isPet = false;
-        this.produces = animalType.getProducts();
+        this.products = animalType.getProducts();
     }
 
-    public void feed() {
-        isFed = true;
-    }
-    public void pet() {
-        increaseFriendship(15);
-    }
-
-    public void feedFromOutside() {
-        isFed = true;
-        increaseFriendship(8);
-    }
-    public int getPrice()
+    public void feed()
     {
-        return price;
+        if (!isFed)
+        {
+            GameMenu.println("You fed " + name + " for the first time today!\n" +
+                    "Your friendship level was increased 8 units!");
+            increaseFriendship(8);
+            isFed = true;
+        }
+    }
+
+    public void pet()
+    {
+        if (!isPet)
+        {
+            GameMenu.println("You pet " + name + " for the first time today!\n" +
+                    "Your friendship level was increased 15 units!");
+            increaseFriendship(15);
+            isPet = true;
+        }
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public FarmAnimals getAnimalType() {
+    public FarmAnimalsType getAnimalType() {
         return animalType;
-    }
-
-    public void setAnimalType(FarmAnimals animalType) {
-        this.animalType = animalType;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public int getFriendship() {
         return friendship;
     }
 
-    public void setFriendship(int friendship) {
-        this.friendship = friendship;
+    public void setFriendship(int friendship)
+    {
+        this.friendship = Math.max(1000, friendship);
     }
-    public void increaseFriendship(int amount) {
+
+    public void increaseFriendship(int amount)
+    {
         this.friendship += amount;
         if(friendship >= 1000) friendship = 1000;
     }
+
     public void decreaseFriendship(int amount) {
         this.friendship -= amount;
     }
@@ -83,88 +91,111 @@ public class Animal extends GameObject {
         return isFed;
     }
 
-    public void setFed(boolean fed) {
-        isFed = fed;
-    }
-
     public boolean isIn() {
         return isIn;
-    }
-
-    public void setIn(boolean in) {
-        isIn = in;
     }
 
     public boolean isPet() {
         return isPet;
     }
 
-    public void setPet(boolean pet) {
-        isPet = pet;
-    }
+    public void checkAndReset()
+    {
+        if(!isFed)
+        {
+            decreaseFriendship(20);
+        }
 
-    public void checkAndReset() {
-        if(!isFed()) {
+        if(!isIn)
+        {
             decreaseFriendship(20);
         }
-        if(!isIn()) {
-            decreaseFriendship(20);
-        }
-        if(!isPet()) {
+
+        if(!isPet)
+        {
             decreaseFriendship(10 - getFriendship() / 200);
         }
 
-        setFed(false);
-        setPet(false);
-    }
+        hasProduct = isFed;
 
-    public ArrayList<FarmAnimals.Product> getProduces() {
-        return produces;
-    }
+        isFed = false;
+        isPet = false;
+        isIn = true;
 
-    public void removeProduct(FarmAnimals.Product product) {
-        produces.remove(product);
-    }
+        secondProduct = false;
 
-    public void secondProductLogic(FarmAnimals.Product product) {
-        if(this.friendship <= 100) produces.remove(product);
-        else {
-            Random r = new Random();
-            double random1 = r.nextDouble(1);
-            double random2 = r.nextDouble(1);
-            if((this.friendship + 150 * (random1 + 0.5)) / 1500 < 0.5) {
-                produces.remove(product);
-                produces.add(produces.getFirst());
+        if (friendship > 100)
+        {
+            Random rand = new Random();
+            if ((friendship + (rand.nextInt(3) / 3.0 + 1)) / 1500 >= 1)
+            {
+                secondProduct = true;
             }
-            double quality =((double) this.friendship / 1000) * (0.5 + 0.5 * random2);
-            produces.remove(product);
-            if(quality <= 0.5) {
-                product = new FarmAnimals.Product(product.type(), product.price());
-            } else if(quality > 0.5 && quality <= 0.7) {
-                product = new FarmAnimals.Product(product.type(), (int) (product.price() * 1.25));
-            } else if(quality > 0.7 && quality <= 0.9) {
-                product = new FarmAnimals.Product(product.type(), (int) (product.price() * 1.5));
-            } else {
-                product = new FarmAnimals.Product(product.type(), product.price() * 2);
-            }
-            produces.add(product);
         }
+
+        Random rand = new Random();
+        quality = (int) (((double) friendship / 1000) * (0.5 + (0.5 * rand.nextDouble())));
     }
 
-    public boolean canGoInThere(FarmBuilding building) {
-        switch(this.animalType.getBuilding()) {
-            case BIG_BARN : if(building.equals(FarmBuilding.BARN)) return false; break;
-            case DELUXE_BARN : if(building.equals(FarmBuilding.BARN) ||
-                    building.equals(FarmBuilding.BIG_BARN)) return false; break;
-            case BIG_COOP : if(building.equals(FarmBuilding.COOP)) return false; break;
-            case DELUXE_COOP : if(building.equals(FarmBuilding.COOP) ||
-                    building.equals(FarmBuilding.BIG_COOP)) return false; break;
-        }
-        return true;
+
+    public Tile getTile()
+    {
+        return tile;
     }
 
-    public void shepherdAnimal() {
-        isIn = !isIn;
-        if(!isIn) feedFromOutside();
+    public void setTile(Tile tile)
+    {
+        this.tile = tile;
+    }
+
+    public String getInfo()
+    {
+        StringBuilder output = new StringBuilder();
+
+        output.append(name).append("\n");
+        output.append("\t").append("kind: ").append(animalType.getName()).append("\n");
+        output.append("\t").append("friendship: ").append(friendship).append("xp \n");
+        output.append("\t").append("is fed today: ").append(isFed ? "positive" : "negative").append("\n");
+        output.append("\t").append("is pet today: ").append(isPet ? "positive" : "negative").append("\n");
+        output.append("--------------------------------");
+        return output.toString();
+    }
+
+    public void goOut()
+    {
+        isIn = false;
+        isFed = true;
+        increaseFriendship(8);
+    }
+
+    public void goIn()
+    {
+        isIn = true;
+    }
+
+    public boolean hasProduct()
+    {
+        return hasProduct;
+    }
+
+    public GameObject getProduct()
+    {
+        GameObject product = products.get(0);
+        if (secondProduct && products.size() > 1)
+        {
+            product = products.get(1);
+        }
+
+        return product;
+    }
+
+    public int getQuality()
+    {
+        return quality;
+    }
+
+    public int getPrice()
+    {
+        return animalType.getPurchaseCost() * (int) (((double) friendship / 1000) + 0.3);
     }
 }

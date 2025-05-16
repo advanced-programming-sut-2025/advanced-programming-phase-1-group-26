@@ -7,9 +7,10 @@ import model.enums.shop_enums.TheStardropSaloonStock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class TheStardropSaloon extends Shop {
-    private ArrayList<TheStardropSaloonStock> stocks;
+    private ArrayList<TheStardropSaloonStock> stocks = new ArrayList<>();
 
     public TheStardropSaloon() {
         super(ShopType.STARDROP_SALOON, ShopType.STARDROP_SALOON.name(), "Gus", 12, 24);
@@ -41,14 +42,21 @@ public class TheStardropSaloon extends Shop {
     }
 
     @Override
-    public void purchase(GameObject gameObject) {
-        super.purchase(gameObject);
-        for(TheStardropSaloonStock stock : stocks) {
-            if(gameObject.getObjectType().equals(stock.getGameObjectType())) {
+    public void purchase(GameObject gameObject)
+    {
+        Iterator<TheStardropSaloonStock> iterator = stocks.iterator();
+        while (iterator.hasNext())
+        {
+            TheStardropSaloonStock stock = iterator.next();
+            if (gameObject.getObjectType().equals(stock.getGameObjectType()))
+            {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(stock.getPrice() * gameObject.getNumber());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
                 stock.decreaseLimit();
-                if(stock.getLimit() == 0) stocks.remove(stock);
+                if (stock.getLimit() == 0)
+                {
+                    iterator.remove(); // ✅ safe removal
+                }
             }
         }
     }

@@ -3,7 +3,6 @@ package model;
 import model.enums.Season;
 import model.enums.TimeOfDay;
 import model.enums.Weather;
-import model.enums.regex_enums.GameCommands;
 import model.player_data.FriendshipData;
 
 import java.util.List;
@@ -13,6 +12,10 @@ public class Time
 {
     private int hour = 9;
     private int day = 1;
+
+    private int totalDaysPassed = 0;
+    private int totalHoursPassed = 0;
+
     private Season season = Season.Spring;
     private TimeOfDay timeOfDay = TimeOfDay.MORNING;
 
@@ -44,6 +47,7 @@ public class Time
         }
 
         day += dayNum;
+        totalDaysPassed += dayNum;
 
         for (int i = 0; i < dayNum; i++)
         {
@@ -122,5 +126,10 @@ public class Time
                 }
             }
         }
+    }
+
+    public int getTotalDaysPassed()
+    {
+        return totalDaysPassed;
     }
 }

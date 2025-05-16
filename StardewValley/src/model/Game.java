@@ -3,12 +3,16 @@ package model;
 import control.game.activities.MarketingController;
 import model.animal.AnimalBuilding;
 import model.enums.Menu;
+import model.enums.*;
 import model.animal.Animal;
 import model.enums.NpcDetails;
-import model.enums.ShopType;
 import model.enums.Weather;
-import model.enums.animal_enums.FarmBuilding;
+import model.enums.animal_enums.FarmBuildingType;
+import model.enums.building_enums.CraftingRecipeEnums;
+import model.enums.building_enums.KitchenRecipe;
+import model.enums.resources_enums.*;
 import model.player_data.FriendshipData;
+import model.player_data.FriendshipWithNpcData;
 import model.resources.Plant;
 import model.shops.*;
 import view.GameMenu;
@@ -16,6 +20,8 @@ import view.HomeMenu;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Game
 {
@@ -27,14 +33,10 @@ public class Game
     private Player oppenheimer; // I actually wanted to call this "opener", but thought it would be funnier this way
     private City city = new City();
 
-    public Game() //TODO: this is only for test, should be removed later
-    {
-
-    }
-
     public Game(ArrayList<Player> players)
     {
         this.players = players;
+
         for (Player player : players)
         {
             for (Player other : players)
@@ -46,8 +48,34 @@ public class Game
                 }
             }
         }
-    }
 
+        setNPCs();
+
+        for (NPC npc : NPCs)
+        {
+            for (Player player : players)
+            {
+                switch (npc.getName().toLowerCase())
+                {
+                    case "robin":
+                        player.setRobinFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "abigail":
+                        player.setAbigailFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "sebastian":
+                        player.setSebastianFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "harvey":
+                        player.setHarveyFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                    case "lia":
+                        player.setLiaFriendship(new FriendshipWithNpcData(npc, player));
+                        break;
+                }
+            }
+        }
+    }
 
     public Time getCurrentTime()
     {
@@ -57,9 +85,15 @@ public class Game
     public ArrayList<NPC> getNPCs() {
         return NPCs;
     }
-    public void setNPCs() { //TODO, should add where the game starts
-        for(NpcDetails npcDetails : NpcDetails.values()) {
-            NPCs.add(new NPC(npcDetails));
+
+    private void setNPCs()
+    {
+        ArrayList<Point> locations = city.getNpcLocations();
+        for(int i = 0; i < (NpcDetails.values()).length; i++)
+        {
+            NpcDetails details = NpcDetails.values()[i];
+            Point location = locations.get(i);
+            NPCs.add(new NPC(details, location));
         }
     }
 
@@ -82,20 +116,18 @@ public class Game
         for(Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
             animal.checkAndReset();
         }
-        for(NPC npc : NPCs) {
-            npc.reset();
-        }
-        for(Player player : players) {
-            for(AnimalBuilding animalBuilding : player.getAnimalBuildings()) {
-                if(animalBuilding.getFarmBuilding().equals(FarmBuilding.SHIPPING_BIN)) {
-                    for(GameObject gameObject : animalBuilding.getFaghatVaseShipingBin()) {
-                        player.increaseMoney
-                                (MarketingController.getPrice(gameObject.getObjectType()) * gameObject.getNumber());
-                    }
-                }
-            }
 
-        }
+//        for(Player player : players) {
+//            for(AnimalBuilding animalBuilding : player.getAnimalBuildings()) {
+//                if(animalBuilding.getFarmBuilding().equals(FarmBuildingType.SHIPPING_BIN)) {
+//                    for(GameObject gameObject : animalBuilding.getFaghatVaseShipingBin()) {
+//                        player.increaseMoney
+//                                (MarketingController.getPrice(gameObject.getObjectType()) * gameObject.getNumber());
+//                    }
+//                }
+//            }
+//
+//        }
 
         // TODO: add this methods later
         // resetPlayersEnergy();
@@ -103,6 +135,7 @@ public class Game
         // respawnPlayers();
 
         distributeForagingItems();
+        unleashTheCrows();
 
         if (currentTime.getCurrentWeather().equals(Weather.Rain) || currentTime.getCurrentWeather().equals(Weather.Storm))
         {
@@ -118,6 +151,13 @@ public class Game
         startPlants();
         growPlants();
         killPlants();
+
+        takePlayerHome();
+        resetNPCs();
+        npcGiveGift();
+
+        distributeFish();
+        resetAnimals();
     }
 
     public void distributeForagingItems()
@@ -140,7 +180,7 @@ public class Game
            currentPlayer = getNext(currentPlayer);
            currentIndex = players.indexOf(currentPlayer);
 
-           if (currentPlayer.getEnergy() > 0)
+           if (currentPlayer.getEnergy() > 0 && !currentPlayer.shouldBeSkipped())
            {
                GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
                System.out.println(currentPlayer.newMessages());
@@ -160,16 +200,7 @@ public class Game
             currentTime.updateHour(23 - currentTime.getHour());
         }
 
-        if (currentPlayer.isInCity())
-        {
-            App.setCurrentMenu(Menu.CityMenu);
-        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm())
-        {
-            App.setCurrentMenu(Menu.GameMenu);
-        } else
-        {
-            App.setCurrentMenu(Menu.HomeMenu);
-        }
+        updateMenu();
     }
 
     public Player getNext(Player player)
@@ -413,7 +444,175 @@ public class Game
         this.currentShop = currentShop;
     }
 
-    public boolean isNearShop(ShopType type) {
-        return true;
+    public void takePlayerHome()
+    {
+        for (Player player : players)
+        {
+            int requiredEnergy = 5;
+            if (player.isInFarm())
+            {
+                Farm farm = player.getFarm();
+                requiredEnergy = farm.calculateEnergy(player.getLocation(), farm.getStartingPoint());
+            }
+
+            boolean done = false;
+            if (!player.isFainted() && player.hasEnoughEnergy(requiredEnergy))
+            {
+                done = true;
+                player.goHome();
+            }
+
+            player.resetEnergy();
+
+            if (done)
+            {
+                player.increaseTurnEnergy(-1 * requiredEnergy);
+            }
+
+            player.unFaint();
+        }
+    }
+
+    public void updateMenu()
+    {
+        if (currentPlayer.isInCity())
+        {
+            App.setCurrentMenu(Menu.CityMenu);
+        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm())
+        {
+            App.setCurrentMenu(Menu.GameMenu);
+        } else if (currentPlayer.isInHome())
+        {
+            App.setCurrentMenu(Menu.HomeMenu);
+        }
+    }
+
+    public void unleashTheCrows()
+    {
+        for (Player player : players)
+        {
+            player.getAttackedByCrows();
+        }
+    }
+
+    public NPC getNpc(NpcDetails npcDetails)
+    {
+        for (NPC npc : NPCs)
+        {
+            if (npc.getNpcDetails().equals(npcDetails))
+            {
+                return npc;
+            }
+        }
+
+        return null;
+    }
+
+    public void resetNPCs()
+    {
+        for (Player player : players)
+        {
+            player.setCurrentNPC(null);
+            for (NPC npc : NPCs)
+            {
+                FriendshipWithNpcData data = player.getNpcFriendship(npc);
+                data.reset();
+            }
+        }
+    }
+
+    public void npcGiveGift()
+    {
+        for (NPC npc : NPCs)
+        {
+            for (Player player : players)
+            {
+                FriendshipWithNpcData data = player.getNpcFriendship(npc);
+                if (data.getLevel() >= 3)
+                {
+                    List<GameObjectType> giftTypes = npc.getNpcDetails().getGifts();
+                    GameObject gift = new GameObject(giftTypes.get(new Random().nextInt(3)), 1);
+                    player.addNpcGiftObject(gift);
+                    player.addNpcGiftNPC(npc);
+                }
+            }
+        }
+    }
+
+    public int getPrice(GameObjectType type)
+    {
+        for (ForagingMineralType fm : ForagingMineralType.values())
+        {
+            if (fm.getType().equals(type))
+            {
+                return fm.getSellPrice();
+            }
+        }
+
+        for (ForagingCropType fc : ForagingCropType.values())
+        {
+            if (fc.getType().equals(type))
+            {
+                return fc.getBaseSellPrice();
+            }
+        }
+
+        for (TreeType t : TreeType.values())
+        {
+           if (t.getFruit().getType().equals(type))
+           {
+               return t.getFruitBaseSellPrice();
+           }
+        }
+
+        for (CropType c : CropType.values())
+        {
+            if (c.getType().equals(type))
+            {
+                return c.getBaseSellPrice();
+            }
+        }
+
+        for (CraftingRecipeEnums r : CraftingRecipeEnums.values())
+        {
+            if (r.getProduct().equals(type))
+            {
+                return r.getPrice();
+            }
+        }
+
+        for (KitchenRecipe k : KitchenRecipe.values())
+        {
+            if (k.getType().equals(type))
+            {
+                return k.getSellPrice();
+            }
+        }
+
+        return -1;
+    }
+
+    private void distributeFish()
+    {
+        for (Player player : players)
+        {
+            Farm farm = player.getFarm();
+            Season season = currentTime.getSeason();
+
+            farm.resetFish();
+            farm.putFishInLake(season);
+            farm.putLegendaryFishInLake(player, season);
+        }
+    }
+
+    public void resetAnimals()
+    {
+        for (Player player : players)
+        {
+            for (Animal animal : player.getAnimals())
+            {
+                animal.checkAndReset();
+            }
+        }
     }
 }

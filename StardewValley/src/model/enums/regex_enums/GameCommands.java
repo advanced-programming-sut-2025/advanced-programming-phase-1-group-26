@@ -5,19 +5,13 @@ import java.util.regex.Pattern;
 
 public enum GameCommands implements Command
 {
-    /* NPC Commands */
-    MEET_NPC("meet NPC (?<NPCname>\\w+)"),
-    GIFT_NPC("gift NPC (?<NPCname>\\w+) -i (?<item>.*)"),
-    FRIENDSHIP_NPC_LIST("friendship NPC list"),
-    QUESTS_LIST("quests list"),
-    QUESTS_FINISH("quests finish -i (?<index>.*)"),
     /* Marketing Commands*/
-    SHOW_ALL_PRODUCTS("show all products"),
-    SHOW_AVAILABLE_PRODUCTS("show all available products"),
-    PURCHASE("purchase (?<productName>.*)"),
-    PURCHASE_N("purchase (?<productName>.*) -n (?<count>.*)"),
-    SELL("sell (?<productName>.*)"),
-    SELL_N("sell (?<productName>.*) -n (?<count>.*)"),
+    SHOW_ALL_PRODUCTS("show\\s+all\\s+products"),
+    SHOW_AVAILABLE_PRODUCTS("show\\s+all\\s+available\\s+products"),
+    PURCHASE("purchase\\s+(?<productName>.+)"),
+    PURCHASE_N("purchase\\s+(?<productName>.+)\\s+-n\\s+(?<count>\\d+)"),
+    SELL("sell\\s+(?<productName>.+)"),
+    SELL_N("sell\\s+(?<productName>.+)\\s+-n\\s+(?<count>\\d+)"),
 
     HELP_READ_MAP("help\\s+reading\\s+map"),
     TOOLS_USE("tools use -d (?<direction>.*)"),
@@ -39,16 +33,16 @@ public enum GameCommands implements Command
     CHEAT_ADD_MONEY("cheat\\s+add\\s+money\\s+-a\\s+(?<amount>\\d+)"),
 
     /*Animal Commands*/
-    BUILD_ANIMAL_HOUSE("build -a (?<name>.*) -l (?<y>\\d+) (?<x>\\d+)"),
-    BUY_ANIMAL("buy animal -a (?<animal>.*) -n (?<name>.*)"),
-    PET_ANIMAL("pet -n (?<name>.*)"),
+    BUILD_ANIMAL_HOUSE("build\\s+-a\\s+(?<name>\\S+)\\s+-l\\s+(?<x>\\d+)\\s+(?<y>\\d+)"),
+    BUY_ANIMAL("buy\\s+animal\\s+-a\\s+(?<animal>\\S+)\\s+-n (?<name>.*)"),
+    PET_ANIMAL("pet\\s+-n\\s+(?<name>\\S+)"),
     ANIMAL_INFOS("animals"),
-    SHEPHERD_ANIMAL("shepherd animals -n (?<name>.*) -l (?<y>\\d+) (?<x>\\d+)"),
-    FEED_HAY("feed hay -n (?<name>.*)"),
+    SHEPHERD_ANIMAL("shepherd\\s+animals\\s+-n\\s+(?<name>\\S+)\\s+-l\\s+(?<x>\\d+)\\s+(?<y>\\d+)"),
+    FEED_HAY("feed\\s+hay\\s+-n\\s+(?<name>\\S+)"),
     PRODUCES("produces"),
-    COLLECT_PRODUCES("collect produces -n (?<name>.*)"),
-    SELL_ANIMAL("sell animal -n (?<name>.*)"),
-    FISHING("fishing -p (?<fishingPole>.*)"),
+    COLLECT_PRODUCES("collect\\s+produces\\s+-n\\s+(?<name>\\S+)"),
+    SELL_ANIMAL("sell\\s+animal\\s+-n\\s+(?<name>\\S+)"),
+    FISHING("fishing\\s+-p\\s+(?<fishingPole>\\S+)"),
 
     EXIT_GAME("exit\\s+game"),
     DELETE_GAME("delete\\s+game"),
@@ -58,9 +52,10 @@ public enum GameCommands implements Command
     WHOAMI("whoami"),
     SUDO_NEXT_TURN("sudo\\s+next\\s+turn"),
     SHOW_AROUND("show\\s+around"),
-    SET_FRIENDSHIP("cheat set friendship -n (?<name>.*) -c (?<amount>\\d+)"),
-    SHOW_SHOP_LOCATION("show (?<shop>.*)"),
-    CHECK_SHOP("check shop"),
+    SET_FRIENDSHIP("cheat\\s+set\\s+friendship\\s+-n\\s+(?<name>.*)\\s+-c\\s+(?<amount>\\d+)"),
+
+    ARTISAN_USE("artisan\\s+use\\s+(?<artisanName>\\S+)(\\s+(?<ingredientOne>\\S+))?(\\s+(?<ingredientTwo>\\S+))?"),
+    ARTISAN_GET("artisan\\s+get\\s+(?<artisanName>\\S+)"),
     ;
 
     private final Pattern pattern;

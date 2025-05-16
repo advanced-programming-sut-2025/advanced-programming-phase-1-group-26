@@ -4,26 +4,25 @@ import model.*;
 import model.animal.AnimalBuilding;
 import model.enums.GameObjectType;
 import model.enums.NpcDetails;
-import model.enums.Season;
 import model.enums.ShopType;
-import model.enums.animal_enums.FarmAnimals;
-import model.enums.animal_enums.FarmBuilding;
+import model.enums.animal_enums.FarmBuildingType;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenRecipe;
+import model.enums.regex_enums.CityCommands;
 import model.enums.regex_enums.GameCommands;
 import model.enums.regex_enums.GeneralCommands;
 import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingCropType;
 import model.enums.resources_enums.ForagingMineralType;
 import model.enums.resources_enums.TreeType;
-import model.enums.shop_enums.BlacksmithStockItem;
 import model.enums.tool_enums.ToolType;
+import model.player_data.FriendshipWithNpcData;
 import model.shops.*;
 import model.tools.Tool;
+import view.CityMenu;
+import view.GameMenu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.regex.Matcher;
 
 public class MarketingController {
     public Result showAllProducts() {
@@ -82,20 +81,21 @@ public class MarketingController {
         return new Result(true, shop.showAvailableProducts());
     }
 
-    public Result purchase(String input) {
+    public Result purchase(String input, boolean flagged) {
         String productName;
         int numberOfProductsToPurchase = 0;
-        if(GameCommands.PURCHASE.matches(input)) {
-            productName = GameCommands.PURCHASE.getMatcher(input).group("productName");
+
+        if (flagged) {
+            productName = GameCommands.PURCHASE_N.getMatcher(input).group("productName").trim();
+            numberOfProductsToPurchase = Integer.parseInt(GameCommands.PURCHASE_N.getMatcher(input).group("count").trim());
+        } else {
+            productName = GameCommands.PURCHASE.getMatcher(input).group("productName").trim();
             numberOfProductsToPurchase = 1;
         }
-        else {
-            productName = GameCommands.PURCHASE_N.getMatcher(input).group("productName");
-            numberOfProductsToPurchase = Integer.parseInt(GameCommands.PURCHASE_N.getMatcher(input).group("count"));
-        }
+
         GameObjectType gameObjectType = null;
         for(GameObjectType type : GameObjectType.values()){
-            if(type.name().equals(productName)){
+            if(type.toString().equals(productName)){
                 gameObjectType = type;
             }
         }
@@ -103,19 +103,21 @@ public class MarketingController {
         GameObject gameObject = new GameObject(gameObjectType, numberOfProductsToPurchase);
         Shop shop = null;
 
-        if(App.getCurrentGame().isNearShop(ShopType.MARINE_RANCH)) {
+        City city = App.getCurrentGame().getCity();
+
+        if(city.isNearShop(ShopType.MARINE_RANCH)) {
             shop = new MarniesRanch();
-        } else if(App.getCurrentGame().isNearShop(ShopType.JOJA_MART)) {
+        } else if(city.isNearShop(ShopType.JOJA_MART)) {
             shop = new JojaMart();
-        } else if(App.getCurrentGame().isNearShop(ShopType.CARPENTER_SHOP)) {
+        } else if(city.isNearShop(ShopType.CARPENTER_SHOP)) {
             shop = new CarpentersShop();
-        } else if(App.getCurrentGame().isNearShop(ShopType.PIERRE_GENERAL_STORE)) {
+        } else if(city.isNearShop(ShopType.PIERRE_GENERAL_STORE)) {
             shop = new PierresGeneralStore();
-        } else if(App.getCurrentGame().isNearShop(ShopType.FISH_SHOP)) {
+        } else if(city.isNearShop(ShopType.FISH_SHOP)) {
             shop = new FishShop();
-        } else if(App.getCurrentGame().isNearShop(ShopType.STARDROP_SALOON)) {
+        } else if(city.isNearShop(ShopType.STARDROP_SALOON)) {
             shop = new TheStardropSaloon();
-        } else if(App.getCurrentGame().isNearShop(ShopType.BLACK_SMITH)) {
+        } else if(city.isNearShop(ShopType.BLACK_SMITH)) {
             shop = new Blacksmith();
         }
         if(shop == null) {return new Result(false, "You are not in a shop");}
@@ -168,15 +170,15 @@ public class MarketingController {
         if(price < 0) {
             return new Result(false, "You can't sell this product");
         }
-        for(AnimalBuilding building : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
-            if(building.getFarmBuilding().equals(FarmBuilding.SHIPPING_BIN)) {
-                if(App.getCurrentGame().getCurrentPlayer().getLocation().equals(building.getLocation())) {
-                    building.addFaghatVaseShipingBin(sellGameObject);
-                    App.getCurrentGame().getCurrentPlayer().removeFromInventory(sellGameObject);
-                    return new Result(true, "You have successfully add this product to shipping bin");
-                }
-            }
-        }
+//        for(AnimalBuilding building : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
+//            if(building.getFarmBuilding().equals(FarmBuildingType.SHIPPING_BIN)) {
+//                if(App.getCurrentGame().getCurrentPlayer().getLocation().equals(building.getLocation())) {
+//                    building.addFaghatVaseShipingBin(sellGameObject);
+//                    App.getCurrentGame().getCurrentPlayer().removeFromInventory(sellGameObject);
+//                    return new Result(true, "You have successfully add this product to shipping bin");
+//                }
+//            }
+//        }
         return new Result(false, "Shipping bin unavailable");
     }
 
@@ -245,14 +247,15 @@ public class MarketingController {
         }
         for(ToolType type : ToolType.values()){
             if(type.name().equals(toolName)) {
-                if(!App.getCurrentGame().getCurrentShop().getType().equals(ShopType.BLACK_SMITH)) {
+                if(!App.getCurrentGame().getCity().isNearShop(ShopType.BLACK_SMITH)) {
                     return new Result(false, "You are not in the correct shop");
                 } else {
                     Blacksmith blacksmith = new Blacksmith();
                     if(!blacksmith.isOpen(App.getCurrentGame().getCurrentTime())) {
                         return new Result(false, "Shop is not open");
                     }
-                    if(!blacksmith.canWeUpgrade) return new Result(false, "You can't upgrade");
+//                    if(!blacksmith.canWeUpgrade) return new Result(false, "You can't upgrade");
+                    if(false) return new Result(false, "You can't upgrade");
                     assert targetTool != null;
                     blacksmith.upgrade(targetTool);
                     return new Result(true, "Upgrade successful");
@@ -262,92 +265,297 @@ public class MarketingController {
         return new Result(false, "tool does not exist");
     }
 
-    public Result meetNPC(String input) {
-        String npcName = GameCommands.MEET_NPC.getMatcher(input).group("NPCname");
-        for(NPC npc : App.getCurrentGame().getNPCs()) {
-            if(npc.getNpcDetails().getName().equals(npcName)) {
-                if(!npc.isNearPlayer(npc.getLocation(), App.getCurrentGame().getCurrentPlayer().getLocation())) {
-                    return new Result(false, "You are not in a near NPC");
-                }
-                return new Result(true, npc.talk(npc.isTalked, App.getCurrentGame().getCurrentTime()));
+    public Result meetNPC(String input)
+    {
+        String npcName = CityCommands.MEET_NPC.getMatcher(input).group("NPCname").trim();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        NpcDetails details = NpcDetails.getNpcByName(npcName);
+        if (details == null)
+        {
+            return new Result(false, "There's no such NPC in this city.");
+        }
+
+        NPC npc = App.getCurrentGame().getNpc(details);
+        if (npc == null)
+        {
+            return new Result(false, "There's no such NPC in this city.");
+        }
+
+        if (!npc.isNearPlayer(App.getCurrentGame().getCurrentPlayer().getLocation()))
+        {
+            return new Result(false, "You are not near " + npc.getName() + ".");
+        }
+
+        FriendshipWithNpcData friendship = player.getNpcFriendship(npc);
+        if (friendship == null)
+        {
+            return new Result(false, "ERROR, this should NOT happen.");
+        }
+
+        player.setCurrentNPC(npc);
+        friendship.talk();
+        return new Result(true, "\n" + npc.getName() + ": " + npc.talk());
+    }
+
+    public void giftNPC(String input)
+    {
+        String npcName = CityCommands.GIFT_NPC.getMatcher(input).group("NPCname").trim();
+        String item = CityCommands.GIFT_NPC.getMatcher(input).group("item").trim();
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        NpcDetails details = NpcDetails.getNpcByName(npcName);
+        if (details == null)
+        {
+           GameMenu.println("There's no such NPC in this city.");
+           return;
+        }
+
+        NPC npc = App.getCurrentGame().getNpc(details);
+        if (npc == null)
+        {
+            GameMenu.println("There's no such NPC in this city.");
+            return;
+        }
+
+        if (!npc.isNearPlayer(App.getCurrentGame().getCurrentPlayer().getLocation()))
+        {
+            GameMenu.println("You are not near " + npc.getName() + ".");
+            return;
+        }
+
+        FriendshipWithNpcData friendship = player.getNpcFriendship(npc);
+        if (friendship == null)
+        {
+            GameMenu.println("ERROR, this should NOT happen.");
+            return;
+        }
+
+        GameObjectType type = GameObjectType.getGameObjectType(item);
+        if (type == null)
+        {
+            GameMenu.println("This item does not exist.");
+            return;
+        }
+
+        GameObject gameObject = player.getItemInInventory(type);
+        if (gameObject == null)
+        {
+            GameMenu.println("You don't have this item in your inventory :(");
+            return;
+        }
+
+        if (gameObject instanceof Tool)
+        {
+            GameMenu.println("Are you kidding me? You can't give a " + item + " as a gift >:(");
+            return;
+        }
+
+        if (gameObject.getNumber() < 1)
+        {
+            GameMenu.println("You don't have enough " + item + " in your inventory :(");
+            return;
+        }
+
+        player.removeAmountFromInventory(type, 1);
+        GameMenu.println("You gifted " + npc.getName() + ".");
+
+        boolean isFavorite = npc.isFavorite(type);
+        friendship.gift(isFavorite);
+    }
+
+    public Result showFriendshipNPCList()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Game game = App.getCurrentGame();
+        StringBuilder output = new StringBuilder();
+
+        output.append("Your Friends\n");
+        output.append("--------------------------------\n");
+
+        for (NPC npc : game.getNPCs())
+        {
+            FriendshipWithNpcData friendship = player.getNpcFriendship(npc);
+            output.append(npc.getName()).append("\n ");
+            output.append("\txp: ").append(friendship.getXp()).append("\n");
+            output.append("\tlevel: ").append(friendship.getLevel()).append("\n");
+            output.append("--------------------------------\n");
+        }
+
+        return new Result(true, output.toString());
+    }
+
+    public void questsNPCList()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        NPC npc = player.getCurrentNPC();
+
+        if (npc == null)
+        {
+            GameMenu.println("You haven't talked to any NPC today.");
+            return;
+        }
+
+        GameMenu.println(npc.getName() + "'s Available quests for you:");
+        GameMenu.println("--------------------------------");
+
+        if (npc.isFirstQuestAvailable())
+        {
+            GameMenu.println(npc.getQuestDescription(0));
+        }
+
+        if (npc.isSecondQuestAvailable())
+        {
+            GameMenu.println(npc.getQuestDescription(1));
+        }
+
+        if (npc.isThirdQuestAvailable())
+        {
+            GameMenu.println(npc.getQuestDescription(2));
+        }
+    }
+
+    public Result questsFinish(String input)
+    {
+        String questIndex = CityCommands.QUESTS_FINISH.getMatcher(input).group("index").trim();
+        int index = Integer.parseInt(questIndex) - 1;
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        NPC npc = player.getCurrentNPC();
+
+        if (npc == null)
+        {
+            GameMenu.println("You haven't talked to any NPC today.");
+        }
+
+        if (!npc.isNearPlayer(player.getLocation()))
+        {
+            return new Result(false, "You are not near " + npc.getName() + ".");
+        }
+
+        if (index != 0 && index != 1 && index != 2)
+        {
+            return new Result(false, "invalid quest index");
+        }
+
+        GameObject request = npc.getNpcDetails().getQuestRequest(index);
+        GameObject reward = npc.getNpcDetails().getQuestReward(index);
+
+        if (index == 0)
+        {
+            if (!npc.isFirstQuestAvailable())
+            {
+                return new Result(false, "This quest is not available.");
             }
         }
-        return new Result(false, "not a valid NPC name");
-    }
 
-    public NPC targetNPC(String input) {
-        String npcName = GameCommands.MEET_NPC.getMatcher(input).group("NPCname");
-        for(NPC npc : App.getCurrentGame().getNPCs()) {
-            if(npc.getNpcDetails().getName().equals(npcName)) {
-                return npc;
+        if (index == 1)
+        {
+            if (!npc.isSecondQuestAvailable())
+            {
+                return new Result(false, "This quest is not available.");
             }
         }
-        return null;
-    }
 
-    public Result giftNPC(String input) {
-        String npcName = GameCommands.GIFT_NPC.getMatcher(input).group("NPCname");
-        String item = GameCommands.GIFT_NPC.getMatcher(input).group("item");
-        GameObject myItem = new GameObject();
-        for(GameObjectType type : GameObjectType.values()) {
-            if(type.name().equals(item)) {
-                myItem = new GameObject(type, 1);
+        if (index == 2)
+        {
+            if (!npc.isThirdQuestAvailable())
+            {
+                return new Result(false, "This quest is not available.");
             }
         }
-        for(NPC npc : App.getCurrentGame().getNPCs()) {
-            if(npc.getNpcDetails().getName().equals(npcName)) {
-                if(myItem instanceof Tool) {
-                    return new Result(false, "You can't gift a tool");
-                } else if(!npc.isNearPlayer(npc.getLocation(), App.getCurrentGame().getCurrentPlayer().getLocation())) {
-                    return new Result(false, "You are not in a near NPC");
-                } else {
-                    npc.giftNPC(npc.isGifted, myItem.getObjectType());
-                    return new Result(true, "thank you");
-                }
-            }
-        }
-        return new Result(false, "not a valid NPC name");
-    }
 
-    public Result friendshipNPCList() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Abigail :" + App.getCurrentGame().getCurrentPlayer().getAbigailFriendship().getLevel()
-        + " " + App.getCurrentGame().getCurrentPlayer().getAbigailFriendship().getXp() + "\n");
-        sb.append("Sebastian :" + App.getCurrentGame().getCurrentPlayer().getSebastianFriendship().getLevel()
-        + " " + App.getCurrentGame().getCurrentPlayer().getSebastianFriendship().getXp() + "\n");
-        sb.append("Harvey :" + App.getCurrentGame().getCurrentPlayer().getHarveyFriendship().getLevel()
-        + " " + App.getCurrentGame().getCurrentPlayer().getHarveyFriendship().getXp() + "\n");
-        sb.append("Lia :" + App.getCurrentGame().getCurrentPlayer().getLiaFriendship().getLevel()
-        + " " + App.getCurrentGame().getCurrentPlayer().getLiaFriendship().getXp() + "\n");
-        sb.append("Robin :" + App.getCurrentGame().getCurrentPlayer().getRobinFriendship().getLevel()
-        + " " + App.getCurrentGame().getCurrentPlayer().getRobinFriendship().getXp() + "\n");
-
-        return new Result(true, sb.toString());
-    }
-
-    public Result questsNPCList(NPC npc) {
-        StringBuilder sb = new StringBuilder();
-        for(GameObject quest : npc.updateQuests(Season.Spring, App.getCurrentGame().getCurrentTime())) {
-            sb.append(quest.getObjectType().toString() + " " + quest.getNumber() + "\n");
+        if (!player.hasEnoughInInventory(request.getObjectType(), request.getNumber()))
+        {
+            return new Result(false, "You don't have " + request.getObjectType().toString() + " in your inventory.\n" +
+                    "\trequired: " + request.getNumber() + "\n" +
+                    "\tyou have: " + player.howManyInInventory(request.getObjectType()));
         }
 
-        return new Result(true, sb.toString());
+        if (!player.inventoryHasCapacity())
+        {
+            return new Result(false, "You don't have any capacity in your inventory. You can't recieve the prize.");
+        }
+
+        player.removeAmountFromInventory(request.getObjectType(), request.getNumber());
+        player.addToInventory(reward);
+
+        switch (index)
+        {
+            case 0:
+                npc.firstQuestDone();
+                break;
+            case 1:
+                npc.secondQuestDone();
+                break;
+            case 2:
+                npc.thirdQuestDone();
+                break;
+        }
+
+        return new Result(true, "Congratulations! You were the first person to do this quest.\n" +
+                "You just received " + reward.getNumber() + " " + reward.getObjectType().toString() + ".");
     }
 
-    public Result questsFinish(String input, NPC npc) {
-        if(npc.isQuestFinish) return new Result(false, "Quest finished by someone else");
-        if(!npc.isNearPlayer(npc.getLocation(), App.getCurrentGame().getCurrentPlayer().getLocation()))
-            return new Result(false, "You are not in a near NPC");
-        int index = Integer.parseInt(GameCommands.QUESTS_FINISH.getMatcher(input).group("index"));
-        GameObject request = npc.getNpcDetails().getRequests().get(index);
-        GameObject reward = npc.getNpcDetails().getRewards().get(index);
-        if(npc.getFriendshipWithNpcData().getLevel() == 2) {
-            reward.addNumber(reward.getNumber());
-        }
-        App.getCurrentGame().getCurrentPlayer().addToInventory(reward);
-        App.getCurrentGame().getCurrentPlayer().removeFromInventory(request);
-        npc.removeQuest(index);
+    public void showNpcGifts()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
 
-        return new Result(true, "Quest finished");
+        ArrayList<NPC> NPCs = player.getNpcGiftsNPC();
+        ArrayList<GameObject> gifts = player.getNpcGiftsObject();
+
+        if (NPCs.isEmpty())
+        {
+            CityMenu.println("You didn't get any gifts :(");
+        }
+
+        for (int i = 0; i < NPCs.size(); i++)
+        {
+            NPC npc = NPCs.get(i);
+            GameObject gift = gifts.get(i);
+
+            CityMenu.println(npc.getName() + " gave you a " + gift.getObjectType().toString() + ".");
+        }
+    }
+
+    public Result openGifts()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        ArrayList<NPC> NPCs = player.getNpcGiftsNPC();
+        ArrayList<GameObject> gifts = player.getNpcGiftsObject();
+
+        if (NPCs.isEmpty())
+        {
+            CityMenu.println("You have no gifts.");
+        }
+
+        Boolean success = player.recieveNpcGifts();
+
+        if (!success)
+        {
+            return new Result(false, "You couldn't open any gifts.");
+        }
+
+        return new Result(true, "That's all for now.");
+    }
+
+    public Result showNpcLocation(String npcName)
+    {
+        NpcDetails details = NpcDetails.getNpcByName(npcName);
+        if (details == null)
+        {
+            return new Result(false, "There's no such NPC in this city.");
+        }
+
+        NPC npc = App.getCurrentGame().getNpc(details);
+        if (npc == null)
+        {
+            return new Result(false, "There's no such NPC in this city.");
+        }
+
+        Point location = npc.getLocation();
+        return new Result(true, "city/X:" + location.getX() + "/Y:" + location.getY());
     }
 }

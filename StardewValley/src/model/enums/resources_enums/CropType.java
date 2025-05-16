@@ -71,7 +71,6 @@ public enum CropType
              boolean canBecomeGiant)
     {
         this.type = type;
-//        this.result = result;
         this.name = name;
         this.seedType = seedType;
         this.stages = stages;
@@ -202,6 +201,18 @@ public enum CropType
             if (cropType.getSeedType().getType().equals(seedType))
             {
                 return cropType;
+            }
+        }
+        return null;
+    }
+
+    public static CropType getCrop(GameObjectType type)
+    {
+        for (CropType crop : CropType.values())
+        {
+            if (crop.getType() == type)
+            {
+                return crop;
             }
         }
         return null;

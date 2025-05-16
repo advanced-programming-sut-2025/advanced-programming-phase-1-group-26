@@ -1,33 +1,45 @@
 package model.animal;
 
 import model.App;
+import model.GameObject;
 import model.enums.Weather;
 import model.enums.animal_enums.FishType;
 import model.enums.tool_enums.FishingPoleLevel;
 
 import java.util.Random;
 
-public class Fish {
+public class Fish extends GameObject
+{
     private FishType type;
-    private double quality;
+    private double quality = 0.0;
 
-    public double getQuality() {
+    public Fish(FishType type)
+    {
+        super.ObjectType = type.getType();
+        this.type = type;
+    }
+
+    public double getQuality()
+    {
         return quality;
     }
 
-    public void calculateQuality(FishingPoleLevel level) {
+    public void calculateQuality(FishingPoleLevel level)
+    {
         Random random = new Random();
         int R = random.nextInt(2);
         int skill = App.getCurrentGame().getCurrentPlayer().getFishingSkill().getLevel();
         double M;
         double pole = 0;
-        switch (App.getCurrentGame().getCurrentTime().getCurrentWeather()) {
+        switch (App.getCurrentGame().getCurrentTime().getCurrentWeather())
+        {
             case Weather.Sunny -> M = 1.5;
             case Weather.Rain -> M = 1.2;
             case Weather.Storm -> M = 0.5;
             default -> M = 1;
         }
-        switch (level) {
+        switch (level)
+        {
             case FishingPoleLevel.Training -> pole = 0.1;
             case FishingPoleLevel.Bamboo -> pole = 0.5;
             case FishingPoleLevel.FiberGlass -> pole = 0.9;
@@ -37,7 +49,8 @@ public class Fish {
         this.quality = (R * (skill + 2) * pole) / (7 - M);
     }
 
-    public Fish(FishType type) {
-        this.type = type;
+    public FishType getType()
+    {
+        return type;
     }
 }

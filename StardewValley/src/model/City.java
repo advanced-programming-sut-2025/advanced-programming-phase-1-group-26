@@ -3,17 +3,24 @@ package model;
 import model.enums.MapTypes;
 import model.enums.ShopType;
 import model.enums.TileTexture;
+import model.shops.*;
+
+import java.util.ArrayList;
 
 public class City extends Map
 {
     private final String mapPath;
     Point[] playerPoints = new Point[4];
 
+    private final ArrayList<Shop> shops = new ArrayList<>();
+
     public City()
     {
         this.mapType = MapTypes.CITY;
         this.mapPath = mapType.getMapPath();
+
         initialize();
+        initializeShops();
     }
 
     private void initialize()
@@ -41,6 +48,15 @@ public class City extends Map
 
         applyMap();
         this.startingPoint = findFreeStartingPoint();
+
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                tile.setInCity();
+            }
+        }
     }
 
     public Point findFreeStartingPoint()
@@ -71,6 +87,28 @@ public class City extends Map
             }
         }
         return null;
+    }
+
+    public Point[] getPlayerPoints()
+    {
+        return playerPoints;
+    }
+
+    public ArrayList<Point> getNpcLocations()
+    {
+        ArrayList<Point> npcLocations = new ArrayList<>();
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                if (tile.getTexture().equals(TileTexture.NPC_BLACKSMITH))
+                {
+                    npcLocations.add(tile.getPoint());
+                }
+            }
+        }
+        return npcLocations;
     }
 
     public boolean isNearShop(ShopType type)
@@ -149,8 +187,47 @@ public class City extends Map
         }
     }
 
-    public Point[] getPlayerPoints()
+    public ArrayList<Tile> getShopTiles (ShopType type)
     {
-        return playerPoints;
+        ArrayList<Tile> shopTiles = new ArrayList<>();
+        TileTexture texture = getShopTileTexture(type);
+
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = tiles[y][x];
+                if (tile.getTexture().equals(texture))
+                {
+                    shopTiles.add(tile);
+                }
+            }
+        }
+
+        return shopTiles;
+    }
+
+    private void initializeShops()
+    {
+        shops.add (new Blacksmith());
+        shops.add (new JojaMart());
+        shops.add (new TheStardropSaloon());
+        shops.add (new PierresGeneralStore());
+        shops.add (new FishShop());
+        shops.add (new MarniesRanch());
+        shops.add (new CarpentersShop());
+    }
+
+    public Shop getShop(ShopType type)
+    {
+        for (Shop shop : shops)
+        {
+            if (shop.getType() == type)
+            {
+                return shop;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,39 +1,43 @@
 package model.animal;
 
+import model.App;
 import model.GameObject;
 import model.Point;
-import model.enums.animal_enums.FarmBuilding;
+import model.Tile;
+import model.enums.GameObjectType;
+import model.enums.animal_enums.FarmBuildingType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class AnimalBuilding {
-    private Point location;
-    private FarmBuilding farmBuilding;
-    private int capacity;
-    private int cost;
-    private ArrayList<GameObject> faghatVaseShipingBin;
+public class AnimalBuilding extends GameObject
+{
+    private final Tile startTile;
+    private final FarmBuildingType farmBuildingType;
+    private final int cost;
+    private final int capacity;
+    private ArrayList<GameObject> faghatVaseShipingBin = new ArrayList<>(); // TODO: ???
+    private final ArrayList<Animal> animals = new ArrayList<>();
+    private final int height;
+    private final int width;
 
-    public AnimalBuilding(FarmBuilding farmBuilding, int x, int y) {
-        this.location = new Point(x, y);
-        this.farmBuilding = farmBuilding;
+    public AnimalBuilding(Tile startTile, FarmBuildingType farmBuilding)
+    {
+        this.startTile = startTile;
+        this.farmBuildingType = farmBuilding;
         this.capacity = farmBuilding.getCapacity();
         this.cost = farmBuilding.getPrice();
+        super.ObjectType = GameObjectType.ANIMAL_BUILDING;
+        this.height = farmBuilding.getHeight();
+        this.width = farmBuilding.getWidth();
     }
 
-    public FarmBuilding getFarmBuilding() {
-        return farmBuilding;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public int getCost() {
-        return cost;
+    public FarmBuildingType getFarmBuildingType() {
+        return farmBuildingType;
     }
 
     public Point getLocation() {
-        return location;
+        return startTile.getPoint();
     }
 
     public ArrayList<GameObject> getFaghatVaseShipingBin() {
@@ -42,5 +46,67 @@ public class AnimalBuilding {
 
     public void addFaghatVaseShipingBin(GameObject gameObject) {
         faghatVaseShipingBin.add(gameObject);
+    }
+
+    public ArrayList<Animal> getAnimals() {
+        return animals;
+    }
+
+    public ArrayList<Tile> getTiles()
+    {
+        int baseX = startTile.getPoint().getX();
+        int baseY = startTile.getPoint().getY();
+
+        ArrayList<Tile> temp = new ArrayList<>();
+        for (int y = 0; y <= height; y++)
+        {
+            for (int x = 0; x <= width; x++)
+            {
+                Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().getTile(baseX + x, baseY + y);
+                temp.add(tile);
+            }
+        }
+
+        return temp;
+    }
+
+    public boolean hasCapacity()
+    {
+        if (capacity == -1)
+        {
+            return true;
+        }
+
+        return (capacity - faghatVaseShipingBin.size()) > 0;
+    }
+
+    public void putAnimalInBuilding(Animal animal)
+    {
+        animals.add(animal);
+
+        ArrayList<Tile> tiles = getTiles();
+        ArrayList<Tile> copy = new ArrayList<>(tiles);
+
+        for (Tile tile : copy)
+        {
+            if (tile.getObject() != null)
+            {
+                copy.remove(tile);
+            }
+        }
+
+       if (copy.size() > 0)
+       {
+           Collections.shuffle(copy);
+
+           Tile tile = copy.get(0);
+           animal.setTile(tile);
+           tile.setObject(animal);
+       }
+    }
+
+    public void sellAnimal(Animal animal)
+    {
+        animals.remove(animal);
     }
 }

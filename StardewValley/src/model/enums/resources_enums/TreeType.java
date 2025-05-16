@@ -152,4 +152,22 @@ public enum TreeType
         }
         return null;
     }
+
+    public static TreeType getTreeByFruit(FruitType fruitType)
+    {
+        if (fruitType == null)
+        {
+            return null;
+        }
+
+        for (TreeType type : TreeType.values())
+        {
+            if (type.getFruit().getType().equals(fruitType.getType()))
+            {
+                return type;
+            }
+        }
+
+        return null;
+    }
 }

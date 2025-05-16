@@ -59,7 +59,12 @@ public class PierresGeneralStore extends Shop{
             products.append(backpack.getName()).append(" ").append(backpack.getPrice()).append("\n");
         }
         for(PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks) {
-            products.append(seasonalStock.getName()).append(" ").append(seasonalStock.getBasePrice()).append("\n");
+            if(seasonalStock.getSeasons().contains(App.getCurrentGame().getCurrentTime().getSeason()))
+            {
+                products.append(seasonalStock.getName()).append(" this season ").append(seasonalStock.getBasePrice()).append("\n");
+            } else {
+                products.append(seasonalStock.getName()).append(" this season ").append(seasonalStock.getOutOfSeasonPrice()).append("\n");
+            }
         }
         for(PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks) {
             products.append(yearRoundStock.getDisplayName()).append(" ").append(yearRoundStock.getPrice()).append("\n");
@@ -68,10 +73,12 @@ public class PierresGeneralStore extends Shop{
     }
 
     @Override
-    public void purchase(GameObject gameObject) {
-        super.purchase(gameObject);
-        for(PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks) {
-            if(gameObject.getObjectType().equals(yearRoundStock.getGameObjectType())) {
+    public void purchase(GameObject gameObject)
+    {
+        for (PierresGeneralStoreYearRoundStock yearRoundStock : yearRoundStocks)
+        {
+            if (gameObject.getObjectType().equals(yearRoundStock.getGameObjectType()))
+            {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney
                         (yearRoundStock.getPrice() * gameObject.getNumber());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
@@ -79,18 +86,23 @@ public class PierresGeneralStore extends Shop{
                 yearRoundStocks.remove(yearRoundStock);
             }
         }
-        for(PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks) {
-            if(!seasonalStock.getSeasons().contains(App.getCurrentGame().getCurrentTime().getSeason())) {
+        for (PierresGeneralStoreSeasonalStock seasonalStock : seasonalStocks)
+        {
+            if (!seasonalStock.getSeasons().contains(App.getCurrentGame().getCurrentTime().getSeason()))
+            {
                 isInSeason = false;
-                if(gameObject.getObjectType().equals(seasonalStock.getType())) {
+                if (gameObject.getObjectType().equals(seasonalStock.getType()))
+                {
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney
                             (seasonalStock.getOutOfSeasonPrice() * gameObject.getNumber());
                     App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
                     seasonalStock.decreaseDailyLimit();
                     seasonalStocks.remove(seasonalStock);
                 }
-            } else {
-                if(gameObject.getObjectType().equals(seasonalStock.getType())) {
+            } else
+            {
+                if (gameObject.getObjectType().equals(seasonalStock.getType()))
+                {
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney
                             (seasonalStock.getBasePrice() * gameObject.getNumber());
                     App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
@@ -98,9 +110,12 @@ public class PierresGeneralStore extends Shop{
                 }
             }
         }
-        for(PierresGeneralStoreBackpacks backpack : PierresGeneralStoreBackpacks.values()) {
-            if(gameObject instanceof BackPack) {
-                if(gameObject.toString().equals(backpack.getName())) {
+        for (PierresGeneralStoreBackpacks backpack : PierresGeneralStoreBackpacks.values())
+        {
+            if (gameObject instanceof BackPack)
+            {
+                if (gameObject.toString().equals(backpack.getName()))
+                {
                     App.getCurrentGame().getCurrentPlayer().getCurrentBackPack().setLevel(backpack.getLevel());
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(backpack.getPrice());
                     backpack.decreaseDailyLimit();

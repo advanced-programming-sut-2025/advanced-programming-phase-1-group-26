@@ -20,11 +20,7 @@ public class RegisterMenu implements AppMenu
         String input = scanner.nextLine().trim();
         Matcher matcher;
 
-        if (input.equals("cheat god")) // for debugging, TODO: remove later
-        {
-            App.setCurrentGame(new Game());
-            App.setCurrentMenu(Menu.GameMenu);
-        } else if ((matcher = RegisterCommands.REGISTER.getMatcher(input)) != null) {
+        if ((matcher = RegisterCommands.REGISTER.getMatcher(input)) != null) {
             Result result = controller.register(matcher, scanner);
             System.out.println(result);
             if (result.isSuccessful()) {

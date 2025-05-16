@@ -3,10 +3,8 @@ package model;
 import model.animal.Animal;
 import model.animal.AnimalBuilding;
 import model.animal.Fish;
-import model.enums.GameObjectType;
-import model.enums.Gender;
-import model.enums.animal_enums.FarmAnimals;
-import model.enums.animal_enums.FarmBuilding;
+import model.enums.*;
+import model.enums.building_enums.ArtisanGoodsType;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenRecipe;
 import model.enums.tool_enums.ToolType;
@@ -14,16 +12,13 @@ import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
 import model.player_data.Skill;
 import model.player_data.Trade;
-import model.enums.SkillType;
 import model.resources.Plant;
 import model.tools.BackPack;
 import model.tools.Tool;
 import model.tools.*;
+import view.CityMenu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Player {
 
@@ -38,8 +33,8 @@ public class Player {
 
     private int energy;
     private int maxEnergy = 200;
-    private int turnEnergy;
-    /*TEMP*/ private boolean fainted;
+    private int turnEnergy = 50;
+    private boolean fainted = false;
 
     private Skill farmingSkill = new Skill(SkillType.Farming);
     private Skill miningSkill = new Skill(SkillType.Mining);
@@ -58,11 +53,11 @@ public class Player {
     private ArrayList<Gift> archiveGifts = new ArrayList<>();
     private ArrayList<Gift> givenGifts = new ArrayList<>();
 
-    private FriendshipWithNpcData SebastianFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData AbigailFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData HarveyFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData LiaFriendship = new FriendshipWithNpcData();
-    private FriendshipWithNpcData RobinFriendship = new FriendshipWithNpcData();
+    private FriendshipWithNpcData SebastianFriendship;
+    private FriendshipWithNpcData AbigailFriendship;
+    private FriendshipWithNpcData HarveyFriendship;
+    private FriendshipWithNpcData LiaFriendship;
+    private FriendshipWithNpcData RobinFriendship;
 
     private HashMap<Player, GameObjectType> purposeList = new HashMap<>();
     private Player zeidy;
@@ -70,9 +65,7 @@ public class Player {
     private Tool currentTool;
     private double money;
 
-    private ArrayList<Animal> animals = new ArrayList<>();
     private ArrayList<AnimalBuilding> animalBuildings = new ArrayList<>();
-    private ArrayList<Fish> fishes = new ArrayList<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
@@ -87,8 +80,22 @@ public class Player {
     private boolean isInFarm = true;
     private boolean isInCity = false;
     private boolean isInGreenHouse = false;
+    private boolean isInHome = false;
+    private boolean isInZeidiesFarm = false;
+    private boolean isInZeidiesHome = false;
 
     private final String apperance;
+    private boolean shouldBeSkipped = false;
+
+    private NPC currentNPC = null;
+    private ArrayList<GameObject> npcGiftsObject = new ArrayList<>();
+    private ArrayList<NPC> npcGiftsNPC = new ArrayList<>();
+
+    private ArrayList<ArtisanGood> artisanGoods = new ArrayList<>();
+
+    private ShopType currentShop;
+
+    private ArrayList<Fish> fishes = new ArrayList<>();
 
     public Player(User user, Farm farm, int number) {
         this.user = user;
@@ -529,14 +536,6 @@ public class Player {
         RobinFriendship = robinFriendship;
     }
 
-    public ArrayList<Animal> getAnimals() {
-        return animals;
-    }
-
-    public void addAnimal(Animal animal) {
-        animals.add(animal);
-    }
-
     public ArrayList<GameObject> getRefrigerator()
     {
         return refrigerator;
@@ -629,12 +628,18 @@ public class Player {
         this.isInCity = false;
         this.isInGreenHouse = false;
         this.isInFarm = true;
+        this.isInHome = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         this.currentMap = this.farm;
         this.location = farm.getStartingPoint();
     }
 
     public void goToCabin()
     {
+        this.isInHome = true;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         this.isInFarm = false;
         this.currentMap = this.cabin;
         this.location = cabin.getStartingPoint();
@@ -642,6 +647,9 @@ public class Player {
 
     public void goToGreenHouse()
     {
+        this.isInHome = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         this.isInFarm = false;
         this.isInGreenHouse = true;
         this.currentMap = this.greenHouse;
@@ -650,6 +658,9 @@ public class Player {
 
     public void goToCity()
     {
+        this.isInHome = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false;
         City city = App.getCurrentGame().getCity();
         this.isInFarm = false;
         this.isInCity = true;
@@ -678,14 +689,6 @@ public class Player {
 
     public void decreaseMoney(int amount) {
         money -= amount;
-    }
-
-    public ArrayList<Fish> getFishes() {
-        return fishes;
-    }
-
-    public void addFish(Fish fish) {
-        fishes.add(fish);
     }
 
     public boolean hasEnoughEnergy(int required)
@@ -769,5 +772,280 @@ public class Player {
         } else {
             return new Result(false, "you didn't receive gifts loser");
         }
+    }
+
+    public boolean shouldBeSkipped()
+    {
+        return shouldBeSkipped;
+    }
+
+    public void setShouldBeSkipped(boolean shouldBeSkipped)
+    {
+        this.shouldBeSkipped = shouldBeSkipped;
+    }
+
+    public void resetEnergy()
+    {
+        if (turnEnergy != -1) // not unlimited
+        {
+            turnEnergy = 50;
+        }
+
+        if (energy != -1) // not unlimited
+        {
+            energy = maxEnergy;
+            if (fainted)
+            {
+                energy = (int) (0.75 * maxEnergy);
+                fainted = false;
+            }
+        }
+    }
+
+    public void faint()
+    {
+        fainted = true;
+        shouldBeSkipped = true;
+    }
+
+    public boolean isInZeidiesFarm()
+    {
+        return isInZeidiesFarm;
+    }
+
+    public boolean isInZeidiesHome()
+    {
+        return isInZeidiesHome;
+    }
+
+    public boolean isShouldBeSkipped()
+    {
+        return shouldBeSkipped;
+    }
+
+    public void goHome()
+    {
+        this.isInFarm = false;
+        this.isInCity = false;
+        this.isInGreenHouse = false;
+        this.isInZeidiesFarm = false;
+        this.isInZeidiesHome = false; // TODO: add feature to wake up at zeidy's home [?]
+
+        this.isInHome = true;
+        this.currentMap = cabin;
+        this.location = cabin.getBedPoint();
+        App.setCurrentMenu(Menu.HomeMenu);
+    }
+
+    public void unFaint()
+    {
+        this.fainted = false;
+        shouldBeSkipped = false;
+    }
+
+    public boolean isInHome()
+    {
+        return isInHome;
+    }
+
+    public void getAttackedByCrows()
+    {
+        ArrayList<Tile> farmPlants = getFarmPlants();
+        int size = farmPlants.size();
+
+        for (int i = 0; i < (size / 16); i++)
+        {
+            if (Math.random() < 0.25)
+            {
+                Random rand = new Random();
+                Tile tile = farmPlants.get(rand.nextInt(size));
+                if (tile.hasPlants())
+                {
+                    Plant plant = (Plant) tile.getObject();
+                    if (!tile.isImmuneFromCrows())
+                    {
+                        plant.getAttacked();
+                    }
+                }
+            }
+        }
+    }
+
+    public FriendshipWithNpcData getNpcFriendship(NPC npc)
+    {
+        return switch (npc.getNpcDetails())
+        {
+            case NpcDetails.Lia -> LiaFriendship;
+            case NpcDetails.Abigail -> AbigailFriendship;
+            case NpcDetails.Harvey -> HarveyFriendship;
+            case NpcDetails.Robin -> RobinFriendship;
+            case NpcDetails.Sebastian -> SebastianFriendship;
+            default -> null;
+        };
+    }
+
+    public ArrayList<FriendshipWithNpcData> getAllNpcFriendships()
+    {
+        ArrayList<FriendshipWithNpcData> friendships = new ArrayList<>();
+
+        friendships.add(LiaFriendship);
+        friendships.add(AbigailFriendship);
+        friendships.add(HarveyFriendship);
+        friendships.add(RobinFriendship);
+        friendships.add(SebastianFriendship);
+
+        return friendships;
+    }
+
+    public NPC getCurrentNPC()
+    {
+        return currentNPC;
+    }
+
+    public void setCurrentNPC(NPC currentNPC)
+    {
+        this.currentNPC = currentNPC;
+    }
+
+    public void addNpcGiftObject(GameObject object)
+    {
+        npcGiftsObject.add(object);
+    }
+
+    public void addNpcGiftNPC(NPC npc)
+    {
+        npcGiftsNPC.add(npc);
+    }
+
+    public ArrayList<GameObject> getNpcGiftsObject()
+    {
+        return npcGiftsObject;
+    }
+
+    public ArrayList<NPC> getNpcGiftsNPC()
+    {
+        return npcGiftsNPC;
+    }
+
+    public boolean recieveNpcGifts()
+    {
+        boolean recieved = false;
+        while (inventoryHasCapacity() && npcGiftsObject.size() > 0)
+        {
+            GameObject gift = npcGiftsObject.get(0);
+            NPC npc = npcGiftsNPC.get(0);
+            addToInventory(gift);
+            npcGiftsObject.remove(0);
+            npcGiftsNPC.remove(0);
+            CityMenu.println("You just recieved a " + gift.getObjectType().toString() + " from " + npc.getName() + ".");
+            recieved = true;
+        }
+        return recieved;
+    }
+
+    public ArtisanGood getArtisan(ArtisanGoodsType type)
+    {
+        for (ArtisanGood good : artisanGoods)
+        {
+            if (good.getArtisanType() == type)
+            {
+                return good;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasFishingPole()
+    {
+        for (GameObject object : currentBackPack.getInventory())
+        {
+            if (object instanceof FishingPole)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ShopType getCurrentShop()
+    {
+        return currentShop;
+    }
+
+    public void setCurrentShop(ShopType currentShop)
+    {
+        this.currentShop = currentShop;
+    }
+
+    public ArrayList<Animal> getAnimals()
+    {
+        ArrayList<Animal> animals = new ArrayList<>();
+        for (AnimalBuilding animalBuilding : farm.getAnimalBuildings())
+        {
+            for (Animal animal : animalBuilding.getAnimals())
+            {
+                animals.add(animal);
+            }
+        }
+        return animals;
+    }
+
+    public Animal findAnimal(String name)
+    {
+        for (Animal animal : getAnimals())
+        {
+            if (animal.getName().equalsIgnoreCase(name))
+            {
+                return animal;
+            }
+        }
+        return null;
+    }
+
+    public boolean validAnimalName(String name)
+    {
+        for (Animal animal : getAnimals())
+        {
+            if (animal.getName().equalsIgnoreCase(name))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isNearAnimal(Animal animal)
+    {
+        for (Animal a : getAnimals())
+        {
+            if (a.getName().equalsIgnoreCase(animal.getName()))
+            {
+                Tile tile = a.getTile();
+
+                if (tile == null) // TODO: technically should be changed later
+                {
+                    return false;
+                }
+
+                Point p = tile.getPoint();
+                ArrayList<Point> neighbors = App.getCurrentGame().getCurrentPlayer().getFarm().getNeighbors(
+                        App.getCurrentGame().getCurrentPlayer().getLocation());
+
+                for (Point neighbor : neighbors)
+                {
+                    if (neighbor.equals(p))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public ArrayList<Fish> getFishes()
+    {
+        return fishes;
     }
 }

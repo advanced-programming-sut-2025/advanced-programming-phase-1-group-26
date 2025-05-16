@@ -2,11 +2,14 @@ package model;
 
 import model.enums.GameObjectType;
 
+import java.util.Objects;
+
 public class GameObject
 {
     protected GameObjectType ObjectType;
-    protected int number = 0;
+    protected int number = 1;
     protected String appearance;
+    protected int price = 0;
 
     public GameObject(GameObjectType objectType, int number) {
         ObjectType = objectType;
@@ -37,5 +40,22 @@ public class GameObject
     public Enum<?> getToolType()
     {
         return null;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof GameObject object)) return false;
+        return number == object.number && ObjectType == object.ObjectType;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(ObjectType, number);
     }
 }

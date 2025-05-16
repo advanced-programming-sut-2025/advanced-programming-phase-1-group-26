@@ -2,16 +2,10 @@ package model.enums.animal_enums;
 
 import model.GameObject;
 import model.enums.GameObjectType;
-import model.enums.resources_enums.ResourceItem;
-
-import java.util.Map;
-import java.util.HashMap;
-
-import java.util.*;
 
 import java.util.List;
 
-public enum FarmBuilding
+public enum FarmBuildingType
 {
     BARN("Barn", "Houses 4 barn-dwelling animals.", 6000,
             List.of(new GameObject(GameObjectType.WOOD, 350),
@@ -51,7 +45,7 @@ public enum FarmBuilding
     private final int capacity;
     private final int dailyLimit;
 
-    FarmBuilding(String name, String description, int price, List<GameObject> requirements, List<Integer> size, int capacity, int dailyLimit) {
+    FarmBuildingType(String name, String description, int price, List<GameObject> requirements, List<Integer> size, int capacity, int dailyLimit) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -77,15 +71,57 @@ public enum FarmBuilding
         return requirements;
     }
 
-    public List<Integer> getSize() {
-        return size;
-    }
-
     public int getDailyLimit() {
         return dailyLimit;
     }
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public static FarmBuildingType getFarmBuilding(String name)
+    {
+        for (FarmBuildingType farmBuilding : FarmBuildingType.values())
+        {
+            if (farmBuilding.getName().equalsIgnoreCase(name))
+            {
+                return farmBuilding;
+            }
+        }
+        return null;
+    }
+
+    public int getWoodNumber()
+    {
+        for (GameObject gameObject : requirements)
+        {
+            if (gameObject.getObjectType().equals(GameObjectType.WOOD))
+            {
+                return gameObject.getNumber();
+            }
+        }
+        return 0;
+    }
+
+    public int getStoneNumber()
+    {
+        for (GameObject gameObject : requirements)
+        {
+            if (gameObject.getObjectType().equals(GameObjectType.STONE))
+            {
+                return gameObject.getNumber();
+            }
+        }
+        return 0;
+    }
+
+    public int getWidth()
+    {
+        return size.get(0);
+    }
+
+    public int getHeight()
+    {
+        return size.get(1);
     }
 }

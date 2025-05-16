@@ -1,32 +1,82 @@
 package model.player_data;
 
-public class FriendshipWithNpcData {
-    private int xp;
-    private int level;
+import model.NPC;
+import model.Player;
+import view.GameMenu;
 
-    public int getXp() {
-        return xp;
+import javax.swing.plaf.SplitPaneUI;
+
+public class FriendshipWithNpcData
+{
+    private final NPC npc;
+    private final Player player;
+
+    private int xp = 0; // TODO: ask Moshtagh about base
+
+    private boolean hasTalked = false;
+    private boolean hasGifted = false;
+
+    public FriendshipWithNpcData(NPC npc, Player player)
+    {
+        this.npc = npc;
+        this.player = player;
     }
-    public void increaseXp(int amount) {
-        this.xp += amount;
-        if(this.xp > 200) {
-            increaseLevel();
+
+    public int getXp()
+    {
+        return xp - (200 * getLevel());
+    }
+
+    public int getLevel()
+    {
+        return (xp / 200);
+    }
+
+    public void talk()
+    {
+        if (!hasTalked)
+        {
+            GameMenu.println("You talked to " + npc.getName() + " for the first time today.");
+            GameMenu.println("You received 20 xp.");
+            addXp(20);
+            hasTalked = true;
         }
     }
 
-    public int getLevel() {
-        return level;
-    }
-    public void increaseLevel() {
-        if(level == 799) return;
-        this.level++;
+    public void gift(boolean favorite)
+    {
+        if (!hasGifted)
+        {
+            GameMenu.println("Oh, you gifted " + npc.getName() + " for the first time today!");
+
+            if (favorite)
+            {
+                GameMenu.println(npc.getName() + " loves your gift! You just received 200 xp!");
+                addXp(200);
+            } else
+            {
+                GameMenu.println("You received 50 xp.");
+                addXp(50);
+            }
+
+            hasGifted = true;
+        }
     }
 
-    public void setXp(int xp) {
-        this.xp = xp;
+    public void addXp(int amount)
+    {
+        this.xp += amount;
+        doLevelThing();
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public void reset()
+    {
+        hasTalked = false;
+        hasGifted = false;
+    }
+
+    public void doLevelThing()
+    {
+        // TODO : addddddddddddd
     }
 }

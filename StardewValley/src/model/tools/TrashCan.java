@@ -2,36 +2,40 @@ package model.tools;
 
 import model.enums.GameObjectType;
 import model.enums.tool_enums.ToolType;
+import model.enums.tool_enums.TrashCanLevel;
 import model.enums.tool_enums.WateringCanLevel;
 
 import java.util.ArrayList;
 
 public class TrashCan extends Tool {
-    private WateringCanLevel level;
-    private final ArrayList<GameObjectType> usage = new ArrayList<>();
+    private TrashCanLevel level;
+    private double percentage;
 
     public TrashCan() {
         super.ObjectType = GameObjectType.TRASH_CAN;
         super.toolType = ToolType.TrashCan;
         super.name = toolType.getName();
-        this.level = WateringCanLevel.base;
+        this.level = TrashCanLevel.base;
+        this.percentage = level.getReturnedMoneyPercentage();
     }
 
-    public TrashCan(WateringCanLevel level) {
+    public TrashCan(TrashCanLevel level) {
+        super.ObjectType = GameObjectType.TRASH_CAN;
         super.toolType = ToolType.TrashCan;
         super.name = toolType.getName();
         this.level = level;
+        this.percentage = level.getReturnedMoneyPercentage();
     }
 
-    public WateringCanLevel getLevel() {
+    public TrashCanLevel getLevel() {
         return level;
     }
 
-    public void setLevel(WateringCanLevel level) {
+    public void setLevel(TrashCanLevel level) {
         this.level = level;
     }
 
-    public ArrayList<GameObjectType> getUsage() {
-        return usage;
+    public double getPercentage() {
+        return percentage;
     }
 }

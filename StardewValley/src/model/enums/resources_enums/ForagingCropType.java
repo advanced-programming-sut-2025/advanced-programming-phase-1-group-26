@@ -119,4 +119,24 @@ public enum ForagingCropType
         }
         return null;
     }
+
+    public static ForagingCropType getMushroom(GameObjectType type)
+    {
+        if (type == GameObjectType.COMMON_MUSHROOM_FORAGING_CROP)
+        {
+            return ForagingCropType.COMMON_MUSHROOM_FORAGING_CROP;
+        }
+
+        if (type == GameObjectType.RED_MUSHROOM_FORAGING_CROP)
+        {
+            return ForagingCropType.RED_MUSHROOM_FORAGING_CROP;
+        }
+
+        if (type == GameObjectType.PURPLE_MUSHROOM_FORAGING_CROP)
+        {
+            return ForagingCropType.PURPLE_MUSHROOM_FORAGING_CROP;
+        }
+
+        return null;
+    }
 }

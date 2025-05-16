@@ -302,6 +302,7 @@ public enum GameObjectType
     Mystic_Tree_Seed("mystic tree seeds"),
 
     FERTILIZER("fertilizer"),
+    SPECIAL_FERTILIZER("special fertilizer"),
 
     CHERRY_BOMB_RECIPE("Cherry Bomb"),
     BOMB_RECIPE("Bomb"),
@@ -378,6 +379,31 @@ public enum GameObjectType
     TRASH_CAN("Trash Can"),
     WATERING_CAN("Watering Can"),
 
+    ANIMAL_BUILDING("animal building"),
+
+    SHAD("Shad"),
+    BLUE_DISCUS("Blue Discus"),
+    SQUID("Squid"),
+    TUNA("Tuna"),
+    PERCH("Perch"),
+    LIONFISH("Lionfish"),
+    HERRING("Herring"),
+    GHOSTFISH("Ghostfish"),
+    TILAPIA("Tilapia"),
+    DORADO("Dorado"),
+    LEGEND("Legend"),
+    GLACIER_FISH("Glacier Fish"),
+    ANGLER("Angler"),
+    CRIMSON_FISH("Crimson Fish"),
+
+    CHICKEN("Chicken"),
+    DUCK("Duck"),
+    RABBIT("Rabbit"),
+    DINOSAUR("Dinosaur"),
+    COW("Cow"),
+    GOAT("Goat"),
+    SHEEP("Sheep"),
+    PIG("Pig"),
     ;
 
     private final String name;
