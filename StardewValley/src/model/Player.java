@@ -66,7 +66,6 @@ public class Player {
     private double money;
 
     private ArrayList<AnimalBuilding> animalBuildings = new ArrayList<>();
-    private ArrayList<Fish> fishes = new ArrayList<>();
 
     private ArrayList<CraftingRecipeEnums> craftingRecipes = new ArrayList<>();
 
@@ -95,6 +94,8 @@ public class Player {
     private ArrayList<ArtisanGood> artisanGoods = new ArrayList<>();
 
     private ShopType currentShop;
+
+    private ArrayList<Fish> fishes = new ArrayList<>();
 
     public Player(User user, Farm farm, int number) {
         this.user = user;
@@ -690,14 +691,6 @@ public class Player {
         money -= amount;
     }
 
-    public ArrayList<Fish> getFishes() {
-        return fishes;
-    }
-
-    public void addFish(Fish fish) {
-        fishes.add(fish);
-    }
-
     public boolean hasEnoughEnergy(int required)
     {
         if (turnEnergy == -1)
@@ -1049,5 +1042,10 @@ public class Player {
         }
 
         return false;
+    }
+
+    public ArrayList<Fish> getFishes()
+    {
+        return fishes;
     }
 }

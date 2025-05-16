@@ -448,72 +448,60 @@ public class AnimalController
         }
 
         ArrayList<Fish> fishes = new ArrayList<>();
-        for (Tile fishTile : fishTiles)
-        {
-            if (fishTile.getFish() != null)
-            {
-                fishes.add(fishTile.getFish());
-            }
-        }
 
         FishingPole pole = (FishingPole) player.getCurrentTool();
+        Season season = App.getCurrentGame().getCurrentTime().getSeason();
 
         switch (pole.getLevel())
         {
             case FishingPoleLevel.Training:
             {
-
+                for (Tile tile : fishTiles)
+                {
+                    Fish fish = tile.getFish();
+                    if (FishType.isCheapestOfTheSeason(fish.getType()))
+                    {
+                        fishes.add(fish);
+                    }
+                }
             }
-        }
+            break;
 
-        FishingPole fishingPole = null;
-        FishingPoleLevel level = null;
-
-        return null;
-    }
-
-    public boolean isInBounds(int x, int y)
-    {
-        return x >= 0 && x < 70 && y >= 0 && y < 70;
-    }
-
-    public boolean isBuildable(Tile targetTile) {
-        if (targetTile.getObject() == null &&
-                (targetTile.getTexture().equals(TileTexture.LAND) ||
-                        targetTile.getTexture().equals(TileTexture.GRASS))) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean canWeBuild(FarmBuildingType building) {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        boolean affordable = player.getMoney() >= building.getPrice();
-
-        for (GameObject required : building.getRequirements()) {
-            GameObject inventoryItem = player.getItemInInventory(required.getObjectType());
-            if (inventoryItem == null || inventoryItem.getNumber() < required.getNumber()) {
-                return false;
+            case FishingPoleLevel.Bamboo:
+            case FishingPoleLevel.Iridium:
+            case FishingPoleLevel.FiberGlass:
+            {
+                for (Tile tile : fishTiles)
+                {
+                    Fish fish = tile.getFish();
+                    if (fishes.add(fish))
+                    {
+                        fishes.add(fish);
+                    }
+                }
             }
+            break;
         }
 
-        return affordable;
-    }
-
-    public int numberOfFishes() {
-        Random random = new Random();
-        int R = random.nextInt(2);
-        double M;
-        int skill = App.getCurrentGame().getCurrentPlayer().getFishingSkill().getLevel();
-        switch (App.getCurrentGame().getCurrentTime().getCurrentWeather()) {
-            case Weather.Sunny -> M = 1.5;
-            case Weather.Rain -> M = 1.2;
-            case Weather.Storm -> M = 0.5;
-            default -> M = 1;
+        if (fishes.isEmpty())
+        {
+            return new Result(false, "you didn't catch any fish =(");
         }
 
-        int result = (int) (R * M * (skill + 2));
-        return result;
-    }
+        if (!player.inventoryHasCapacity())
+        {
+            return new Result(false, "you don't have enough capacity in your inventory");
+        }
 
+        int index = 0;
+        while (player.inventoryHasCapacity() && index < fishes.size())
+        {
+            Fish fish = fishes.get(index);
+            fish.calculateQuality(pole.getLevel());
+
+            GameMenu.println("\tYou caught a " + fish.getQuality() + " with a quality of " + fish.getQuality() + ".");
+        }
+
+        return new Result(true, "That's all!");
+    }
 }

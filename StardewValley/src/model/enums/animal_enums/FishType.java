@@ -104,7 +104,7 @@ public enum FishType
         return null;
     }
 
-    public boolean isCheapestOfTheSeason(FishType fishType)
+    public static boolean isCheapestOfTheSeason(FishType fishType)
     {
         for (FishType fish : FishType.values())
         {

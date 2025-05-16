@@ -11,7 +11,7 @@ import java.util.Random;
 public class Fish extends GameObject
 {
     private FishType type;
-    private double quality;
+    private double quality = 0.0;
 
     public Fish(FishType type)
     {
