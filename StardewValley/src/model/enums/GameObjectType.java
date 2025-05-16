@@ -396,7 +396,14 @@ public enum GameObjectType
     ANGLER("Angler"),
     CRIMSON_FISH("Crimson Fish"),
 
-
+    CHICKEN("Chicken"),
+    DUCK("Duck"),
+    RABBIT("Rabbit"),
+    DINOSAUR("Dinosaur"),
+    COW("Cow"),
+    GOAT("Goat"),
+    SHEEP("Sheep"),
+    PIG("Pig"),
     ;
 
     private final String name;

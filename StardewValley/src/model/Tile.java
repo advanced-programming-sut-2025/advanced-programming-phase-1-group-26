@@ -524,6 +524,9 @@ public class Tile
                     texture.equals(TileTexture.NPC_CARPENTER))
             {
                 return "\uD83E\uDD13"; // 🤓
+            } else if (texture.equals(TileTexture.ANIMAL_BUILDING))
+            {
+                return "⬜"; // ⬜
             }
             else
             {

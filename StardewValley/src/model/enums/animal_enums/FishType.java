@@ -103,4 +103,17 @@ public enum FishType
 
         return null;
     }
+
+    public boolean isCheapestOfTheSeason(FishType fishType)
+    {
+        for (FishType fish : FishType.values())
+        {
+            if (fish.getSeason() == fishType.getSeason() && fish.getBasePrice() < fishType.getBasePrice())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -4,8 +4,6 @@ import model.animal.Animal;
 import model.animal.AnimalBuilding;
 import model.animal.Fish;
 import model.enums.*;
-import model.enums.animal_enums.FarmAnimals;
-import model.enums.animal_enums.FarmBuilding;
 import model.enums.building_enums.ArtisanGoodsType;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenRecipe;
@@ -67,7 +65,6 @@ public class Player {
     private Tool currentTool;
     private double money;
 
-    private ArrayList<Animal> animals = new ArrayList<>();
     private ArrayList<AnimalBuilding> animalBuildings = new ArrayList<>();
     private ArrayList<Fish> fishes = new ArrayList<>();
 
@@ -96,6 +93,8 @@ public class Player {
     private ArrayList<NPC> npcGiftsNPC = new ArrayList<>();
 
     private ArrayList<ArtisanGood> artisanGoods = new ArrayList<>();
+
+    private ShopType currentShop;
 
     public Player(User user, Farm farm, int number) {
         this.user = user;
@@ -536,14 +535,6 @@ public class Player {
         RobinFriendship = robinFriendship;
     }
 
-    public ArrayList<Animal> getAnimals() {
-        return animals;
-    }
-
-    public void addAnimal(Animal animal) {
-        animals.add(animal);
-    }
-
     public ArrayList<GameObject> getRefrigerator()
     {
         return refrigerator;
@@ -969,5 +960,94 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public boolean hasFishingPole()
+    {
+        for (GameObject object : currentBackPack.getInventory())
+        {
+            if (object instanceof FishingPole)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ShopType getCurrentShop()
+    {
+        return currentShop;
+    }
+
+    public void setCurrentShop(ShopType currentShop)
+    {
+        this.currentShop = currentShop;
+    }
+
+    public ArrayList<Animal> getAnimals()
+    {
+        ArrayList<Animal> animals = new ArrayList<>();
+        for (AnimalBuilding animalBuilding : farm.getAnimalBuildings())
+        {
+            for (Animal animal : animalBuilding.getAnimals())
+            {
+                animals.add(animal);
+            }
+        }
+        return animals;
+    }
+
+    public Animal findAnimal(String name)
+    {
+        for (Animal animal : getAnimals())
+        {
+            if (animal.getName().equalsIgnoreCase(name))
+            {
+                return animal;
+            }
+        }
+        return null;
+    }
+
+    public boolean validAnimalName(String name)
+    {
+        for (Animal animal : getAnimals())
+        {
+            if (animal.getName().equalsIgnoreCase(name))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isNearAnimal(Animal animal)
+    {
+        for (Animal a : getAnimals())
+        {
+            if (a.getName().equalsIgnoreCase(animal.getName()))
+            {
+                Tile tile = a.getTile();
+
+                if (tile == null) // TODO: technically should be changed later
+                {
+                    return false;
+                }
+
+                Point p = tile.getPoint();
+                ArrayList<Point> neighbors = App.getCurrentGame().getCurrentPlayer().getFarm().getNeighbors(
+                        App.getCurrentGame().getCurrentPlayer().getLocation());
+
+                for (Point neighbor : neighbors)
+                {
+                    if (neighbor.equals(p))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

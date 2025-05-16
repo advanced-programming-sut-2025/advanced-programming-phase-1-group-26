@@ -3,6 +3,7 @@ package model.shops;
 import model.App;
 import model.GameObject;
 import model.enums.ShopType;
+import model.enums.animal_enums.FarmAnimalsType;
 import model.enums.shop_enums.MarniesRanchLivestock;
 import model.enums.shop_enums.MarniesRanchShopInventory;
 
@@ -11,7 +12,7 @@ import java.util.Arrays;
 
 public class MarniesRanch extends Shop {
     private ArrayList<MarniesRanchShopInventory> inventory = new ArrayList<>();
-    private ArrayList<MarniesRanchLivestock> livestocks = new ArrayList<>();
+    private ArrayList<FarmAnimalsType> livestocks = new ArrayList<>();
 
     public MarniesRanch() {
         super(ShopType.MARINE_RANCH, ShopType.MARINE_RANCH.name(), "Marnie", 9, 16);
@@ -23,7 +24,7 @@ public class MarniesRanch extends Shop {
         this.inventory.addAll(Arrays.asList(MarniesRanchShopInventory.values()));
     }
     public void setLivestocks() {
-        this.livestocks.addAll(Arrays.asList(MarniesRanchLivestock.values()));
+        this.livestocks.addAll(Arrays.asList(FarmAnimalsType.values()));
     }
 
     @Override
@@ -46,8 +47,8 @@ public class MarniesRanch extends Shop {
         for(MarniesRanchShopInventory item : inventory) {
             products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
         }
-        for(MarniesRanchLivestock item : livestocks) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+        for(FarmAnimalsType item : livestocks) {
+            products.append(item.getName()).append(" ").append(item.getPurchaseCost()).append("\n");
         }
         return products.toString();
     }

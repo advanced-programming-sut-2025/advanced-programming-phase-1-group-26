@@ -4,10 +4,8 @@ import model.*;
 import model.animal.AnimalBuilding;
 import model.enums.GameObjectType;
 import model.enums.NpcDetails;
-import model.enums.Season;
 import model.enums.ShopType;
-import model.enums.animal_enums.FarmAnimals;
-import model.enums.animal_enums.FarmBuilding;
+import model.enums.animal_enums.FarmBuildingType;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenRecipe;
 import model.enums.regex_enums.CityCommands;
@@ -17,7 +15,6 @@ import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ForagingCropType;
 import model.enums.resources_enums.ForagingMineralType;
 import model.enums.resources_enums.TreeType;
-import model.enums.shop_enums.BlacksmithStockItem;
 import model.enums.tool_enums.ToolType;
 import model.player_data.FriendshipWithNpcData;
 import model.shops.*;
@@ -25,10 +22,7 @@ import model.tools.Tool;
 import view.CityMenu;
 import view.GameMenu;
 
-import java.sql.Ref;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.regex.Matcher;
 
 public class MarketingController {
     public Result showAllProducts() {
@@ -176,15 +170,15 @@ public class MarketingController {
         if(price < 0) {
             return new Result(false, "You can't sell this product");
         }
-        for(AnimalBuilding building : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
-            if(building.getFarmBuilding().equals(FarmBuilding.SHIPPING_BIN)) {
-                if(App.getCurrentGame().getCurrentPlayer().getLocation().equals(building.getLocation())) {
-                    building.addFaghatVaseShipingBin(sellGameObject);
-                    App.getCurrentGame().getCurrentPlayer().removeFromInventory(sellGameObject);
-                    return new Result(true, "You have successfully add this product to shipping bin");
-                }
-            }
-        }
+//        for(AnimalBuilding building : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
+//            if(building.getFarmBuilding().equals(FarmBuildingType.SHIPPING_BIN)) {
+//                if(App.getCurrentGame().getCurrentPlayer().getLocation().equals(building.getLocation())) {
+//                    building.addFaghatVaseShipingBin(sellGameObject);
+//                    App.getCurrentGame().getCurrentPlayer().removeFromInventory(sellGameObject);
+//                    return new Result(true, "You have successfully add this product to shipping bin");
+//                }
+//            }
+//        }
         return new Result(false, "Shipping bin unavailable");
     }
 

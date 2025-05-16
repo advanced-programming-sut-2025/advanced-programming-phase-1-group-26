@@ -54,6 +54,8 @@ public enum TileTexture
 
     WALL("wall"),
     FLOOR("floor"),
+
+    ANIMAL_BUILDING("animal building"),
     ;
 
     private final String name;

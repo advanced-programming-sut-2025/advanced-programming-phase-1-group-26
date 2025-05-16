@@ -3,6 +3,7 @@ package model;
 import model.enums.MapTypes;
 import model.enums.ShopType;
 import model.enums.TileTexture;
+import model.shops.*;
 
 import java.util.ArrayList;
 
@@ -11,11 +12,15 @@ public class City extends Map
     private final String mapPath;
     Point[] playerPoints = new Point[4];
 
+    private final ArrayList<Shop> shops = new ArrayList<>();
+
     public City()
     {
         this.mapType = MapTypes.CITY;
         this.mapPath = mapType.getMapPath();
+
         initialize();
+        initializeShops();
     }
 
     private void initialize()
@@ -200,5 +205,29 @@ public class City extends Map
         }
 
         return shopTiles;
+    }
+
+    private void initializeShops()
+    {
+        shops.add (new Blacksmith());
+        shops.add (new JojaMart());
+        shops.add (new TheStardropSaloon());
+        shops.add (new PierresGeneralStore());
+        shops.add (new FishShop());
+//        shops.add (new MarniesRanch());
+        shops.add (new CarpentersShop());
+    }
+
+    public Shop getShop(ShopType type)
+    {
+        for (Shop shop : shops)
+        {
+            if (shop.getType() == type)
+            {
+                return shop;
+            }
+        }
+
+        return null;
     }
 }

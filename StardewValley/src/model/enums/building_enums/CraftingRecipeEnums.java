@@ -218,8 +218,8 @@ public enum CraftingRecipeEnums
         return null;
     }
 
-    public ArtisanGoodsType getFromIngredients(GameObjectType ingredient)
-    {
-
-    }
+//    public ArtisanGoodsType getFromIngredients(GameObjectType ingredient)
+//    {
+//
+//    }
 }

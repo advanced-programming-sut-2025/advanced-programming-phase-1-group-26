@@ -3,19 +3,16 @@ package model;
 import control.game.activities.MarketingController;
 import model.animal.AnimalBuilding;
 import model.enums.Menu;
-import model.building.CraftingItems.CraftingItem;
 import model.enums.*;
 import model.animal.Animal;
 import model.enums.NpcDetails;
-import model.enums.ShopType;
 import model.enums.Weather;
-import model.enums.animal_enums.FarmBuilding;
+import model.enums.animal_enums.FarmBuildingType;
 import model.enums.building_enums.CraftingRecipeEnums;
 import model.enums.building_enums.KitchenRecipe;
 import model.enums.resources_enums.*;
 import model.player_data.FriendshipData;
 import model.player_data.FriendshipWithNpcData;
-import model.resources.ForagingMineral;
 import model.resources.Plant;
 import model.shops.*;
 import view.GameMenu;
@@ -58,21 +55,21 @@ public class Game
         {
             for (Player player : players)
             {
-                switch (npc.getName())
+                switch (npc.getName().toLowerCase())
                 {
-                    case "Robin":
+                    case "robin":
                         player.setRobinFriendship(new FriendshipWithNpcData(npc, player));
                         break;
-                    case "Abigail":
+                    case "abigail":
                         player.setAbigailFriendship(new FriendshipWithNpcData(npc, player));
                         break;
-                    case "Sebastian":
+                    case "sebastian":
                         player.setSebastianFriendship(new FriendshipWithNpcData(npc, player));
                         break;
-                    case "Harvey":
+                    case "harvey":
                         player.setHarveyFriendship(new FriendshipWithNpcData(npc, player));
                         break;
-                    case "Lia":
+                    case "lia":
                         player.setLiaFriendship(new FriendshipWithNpcData(npc, player));
                         break;
                 }
@@ -120,17 +117,17 @@ public class Game
             animal.checkAndReset();
         }
 
-        for(Player player : players) {
-            for(AnimalBuilding animalBuilding : player.getAnimalBuildings()) {
-                if(animalBuilding.getFarmBuilding().equals(FarmBuilding.SHIPPING_BIN)) {
-                    for(GameObject gameObject : animalBuilding.getFaghatVaseShipingBin()) {
-                        player.increaseMoney
-                                (MarketingController.getPrice(gameObject.getObjectType()) * gameObject.getNumber());
-                    }
-                }
-            }
-
-        }
+//        for(Player player : players) {
+//            for(AnimalBuilding animalBuilding : player.getAnimalBuildings()) {
+//                if(animalBuilding.getFarmBuilding().equals(FarmBuildingType.SHIPPING_BIN)) {
+//                    for(GameObject gameObject : animalBuilding.getFaghatVaseShipingBin()) {
+//                        player.increaseMoney
+//                                (MarketingController.getPrice(gameObject.getObjectType()) * gameObject.getNumber());
+//                    }
+//                }
+//            }
+//
+//        }
 
         // TODO: add this methods later
         // resetPlayersEnergy();
@@ -160,6 +157,7 @@ public class Game
         npcGiveGift();
 
         distributeFish();
+        resetAnimals();
     }
 
     public void distributeForagingItems()
@@ -604,6 +602,17 @@ public class Game
             farm.resetFish();
             farm.putFishInLake(season);
             farm.putLegendaryFishInLake(player, season);
+        }
+    }
+
+    public void resetAnimals()
+    {
+        for (Player player : players)
+        {
+            for (Animal animal : player.getAnimals())
+            {
+                animal.checkAndReset();
+            }
         }
     }
 }

@@ -4,9 +4,7 @@ import model.*;
 import model.animal.Animal;
 import model.animal.AnimalBuilding;
 import model.enums.*;
-import model.enums.animal_enums.AnimalType;
-import model.enums.animal_enums.FarmAnimals;
-import model.enums.building_enums.ArtisanGoodsType;
+import model.enums.animal_enums.FarmAnimalsType;
 import model.enums.resources_enums.CropType;
 import model.enums.resources_enums.ResourceItem;
 import model.enums.resources_enums.TreeType;
@@ -155,12 +153,12 @@ public class GameController
                 if (targetTile.getObject().getObjectType().equals(GameObjectType.ANIMAL_BUILDING)) {
                     AnimalBuilding animalBuilding = (AnimalBuilding) targetTile.getObject();
                     for (Animal animal : animalBuilding.getAnimals()) {
-                        if (animal.getAnimalType().equals(FarmAnimals.SHEEP) ||
-                        animal.getAnimalType().equals(FarmAnimals.COW)) {
+                        if (animal.getAnimalType().equals(FarmAnimalsType.SHEEP) ||
+                        animal.getAnimalType().equals(FarmAnimalsType.COW)) {
                             currentPlayer.addToInventory(GameObjectType.MILK, 1);
                             currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((MilkPail) tool).getEnergyUsage()));
                             return new Result(true, "milk added to your inventory!");
-                        } else if (animal.getAnimalType().equals(FarmAnimals.GOAT)) {
+                        } else if (animal.getAnimalType().equals(FarmAnimalsType.GOAT)) {
                             currentPlayer.addToInventory(GameObjectType.GOAT_MILK, 1);
                             currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((MilkPail) tool).getEnergyUsage()));
                             return new Result(true, "goat milk added to your inventory!");
@@ -300,7 +298,7 @@ public class GameController
                 if (targetTile.getObject().getObjectType().equals(GameObjectType.ANIMAL_BUILDING)) {
                     AnimalBuilding animalBuilding = (AnimalBuilding) targetTile.getObject();
                     for (Animal animal : animalBuilding.getAnimals()) {
-                        if (animal.getAnimalType().equals(FarmAnimals.SHEEP)) {
+                        if (animal.getAnimalType().equals(FarmAnimalsType.SHEEP)) {
                             currentPlayer.addToInventory(GameObjectType.WOOL, 3);
                             currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Shear) tool).getEnergyUsage()));
                             return new Result(true, "3 wools added to your inventory!");
