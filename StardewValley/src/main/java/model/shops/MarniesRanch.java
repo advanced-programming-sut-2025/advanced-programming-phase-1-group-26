@@ -9,6 +9,7 @@ import model.enums.shop_enums.MarniesRanchShopInventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class MarniesRanch extends Shop
 {
@@ -72,16 +73,19 @@ public class MarniesRanch extends Shop
     @Override
     public void purchase(GameObject gameObject)
     {
-        for (MarniesRanchShopInventory item : inventory)
-        {
-            if (item.getGameObjectType().equals(gameObject.getObjectType()))
-            {
+        Iterator<MarniesRanchShopInventory> iterator = inventory.iterator();
+        while (iterator.hasNext()) {
+            MarniesRanchShopInventory item = iterator.next();
+            if (item.getGameObjectType().equals(gameObject.getObjectType())) {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(item.getPrice() * gameObject.getNumber());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
                 item.decreaseLimit();
-                if (item.getLimit() == 0) inventory.remove(item);
+                if (item.getLimit() == 0) {
+                    iterator.remove(); // safe removal
+                }
             }
         }
+
     }
 
     @Override
