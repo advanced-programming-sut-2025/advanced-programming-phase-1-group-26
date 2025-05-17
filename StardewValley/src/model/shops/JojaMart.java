@@ -14,7 +14,7 @@ public class JojaMart extends Shop{
     private ArrayList<JojaMartSeasonalStock> seasonalStocks = new ArrayList<>();
 
     public JojaMart() {
-        super(ShopType.JOJA_MART, ShopType.JOJA_MART.name(), "Morris", 9, 23);
+        super(ShopType.JOJA_MART, "Morris", 9, 23);
     }
 
     public void setPermanentStocks() {
@@ -25,28 +25,44 @@ public class JojaMart extends Shop{
     }
 
     @Override
-    public String showProducts() {
+    public String showProducts()
+    {
         StringBuilder products = new StringBuilder();
         products.append(super.showProducts());
-        for(JojaMartPermanentStock item : JojaMartPermanentStock.values()) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (JojaMartPermanentStock item : JojaMartPermanentStock.values())
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(JojaMartSeasonalStock item : JojaMartSeasonalStock.values()) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (JojaMartSeasonalStock item : JojaMartSeasonalStock.values())
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
     @Override
-    public String showAvailableProducts() {
+    public String showAvailableProducts()
+    {
         StringBuilder products = new StringBuilder();
         products.append(super.showAvailableProducts());
-        for(JojaMartPermanentStock item : permanentStocks) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (JojaMartPermanentStock item : permanentStocks)
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(JojaMartSeasonalStock item : seasonalStocks) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (JojaMartSeasonalStock item : seasonalStocks)
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
@@ -82,15 +98,19 @@ public class JojaMart extends Shop{
     }
 
     @Override
-    public boolean isAffordable(GameObject gameObject) {
-        super.isAffordable(gameObject);
-        for(JojaMartPermanentStock item : permanentStocks) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+    public boolean isAffordable(GameObject gameObject)
+    {
+        for (JojaMartPermanentStock item : permanentStocks)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return App.getCurrentGame().getCurrentPlayer().getMoney() >= item.getPrice() * gameObject.getNumber();
             }
         }
-        for(JojaMartSeasonalStock item : seasonalStocks) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+        for (JojaMartSeasonalStock item : seasonalStocks)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return App.getCurrentGame().getCurrentPlayer().getMoney() >= item.getPrice() * gameObject.getNumber();
             }
         }
@@ -98,15 +118,19 @@ public class JojaMart extends Shop{
     }
 
     @Override
-    public boolean isCorrectShop(GameObject gameObject) {
-        super.isCorrectShop(gameObject);
-        for(JojaMartPermanentStock item : permanentStocks) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+    public boolean isCorrectShop(GameObject gameObject)
+    {
+        for (JojaMartPermanentStock item : permanentStocks)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return true;
             }
         }
-        for(JojaMartSeasonalStock item : seasonalStocks) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+        for (JojaMartSeasonalStock item : seasonalStocks)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return true;
             }
         }
@@ -114,18 +138,24 @@ public class JojaMart extends Shop{
     }
 
     @Override
-    public boolean dailyLimitCheck(GameObject gameObject) {
-        super.dailyLimitCheck(gameObject);
-        for(JojaMartPermanentStock item : permanentStocks) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
-                if(item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber()) {
+    public boolean dailyLimitCheck(GameObject gameObject)
+    {
+        for (JojaMartPermanentStock item : permanentStocks)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
+                if (item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber())
+                {
                     return false;
                 }
             }
         }
-        for(JojaMartSeasonalStock item : seasonalStocks) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
-                if(item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber()) {
+        for (JojaMartSeasonalStock item : seasonalStocks)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
+                if (item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber())
+                {
                     return false;
                 }
             }

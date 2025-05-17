@@ -159,8 +159,12 @@ public class Player {
         this.turnEnergy = turnEnergy;
     }
 
-    public void increaseTurnEnergy(int turnEnergy) {
-        this.turnEnergy += turnEnergy;
+    public void increaseTurnEnergy(int turnEnergy)
+    {
+        if (energy != -1)
+        {
+            this.energy += energy;
+        }
     }
 
     public int getMaxEnergy() {
@@ -687,7 +691,8 @@ public class Player {
         animalBuildings.add(animalBuilding);
     }
 
-    public void decreaseMoney(int amount) {
+    public void decreaseMoney(int amount)
+    {
         money -= amount;
     }
 
@@ -793,6 +798,8 @@ public class Player {
 
         if (energy != -1) // not unlimited
         {
+            // TODO
+
             energy = maxEnergy;
             if (fainted)
             {

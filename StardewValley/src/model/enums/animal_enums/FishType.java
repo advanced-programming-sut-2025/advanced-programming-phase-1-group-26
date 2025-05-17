@@ -1,9 +1,14 @@
 package model.enums.animal_enums;
 
+import model.App;
+import model.Tile;
+import model.animal.Fish;
 import model.enums.GameObjectType;
 import model.enums.Season;
+import model.enums.tool_enums.FishingPoleLevel;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public enum FishType
 {
@@ -115,5 +120,34 @@ public enum FishType
         }
 
         return true;
+    }
+
+    public static FishType getRandomFish(FishingPoleLevel poleLevel)
+    {
+        Season season = App.getCurrentGame().getCurrentTime().getSeason();
+
+        switch (poleLevel)
+        {
+            case FishingPoleLevel.Training:
+            {
+                switch (season)
+                {
+                    case Summer: return FishType.TILAPIA;
+                    case Fall: return FishType.SARDINE;
+                    case Winter: return FishType.PERCH;
+                    case Spring: return FishType.HERRING;
+                }
+            }
+
+            case FishingPoleLevel.Bamboo:
+            case FishingPoleLevel.Iridium:
+            case FishingPoleLevel.FiberGlass:
+            {
+                Random rand = new Random();
+                return FishType.values()[rand.nextInt(FishType.values().length)];
+            }
+        }
+
+        return null;
     }
 }

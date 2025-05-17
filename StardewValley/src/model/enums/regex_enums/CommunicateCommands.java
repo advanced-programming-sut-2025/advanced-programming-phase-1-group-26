@@ -5,15 +5,15 @@ import java.util.regex.Pattern;
 
 public enum CommunicateCommands implements Command {
 
-    FRIENDSHIP("^friendship$"),
+    FRIENDSHIP("friendship"),
     TALK("talk -u (?<username>.*) -m (?<message>.*)"),
     TALK_HISTORY("talk history -u (?<username>.*)"),
     GIFT("gift -u (?<username>.*) -i (?<item>.*) -a (?<amount>\\d+)"),
     GIFT_LIST("gift list"),
     GIFT_RATE("gift rate -i (?<giftNumber>\\d+) -r (?<rate>\\d+)"),
     GIFT_HISTORY("gift history -u (?<username>.*)"),
-    HUG("hug (?<username>.*)"),
-    FLOWER("flower (?<username>.*)"),
+    HUG("hug -u (?<username>.*)"),
+    FLOWER("flower -u (?<username>.*)"),
     ASK_MARRIAGE("ask marriage -u (?<username>.*) -r (?<ring>.*)"),
     RESPOND("respond -(?<respond>I do|cancel) -u (?<username>.*)"),
 

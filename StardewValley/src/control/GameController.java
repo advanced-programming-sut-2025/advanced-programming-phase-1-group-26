@@ -716,7 +716,7 @@ public class GameController
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.increaseMoney(money);
 
-        return new Result(true, "Congrats Thief. You just stole $ " + money + " from bank.");
+        return new Result(true, "Congrats Thief. You just stole $" + money + " from bank.");
     }
 
     public Result showPlant(String inputX, String inputY)

@@ -46,6 +46,11 @@ public class GameObject
         return price;
     }
 
+    public void setPrice(int price)
+    {
+        this.price = price;
+    }
+
     @Override
     public boolean equals(Object o)
     {

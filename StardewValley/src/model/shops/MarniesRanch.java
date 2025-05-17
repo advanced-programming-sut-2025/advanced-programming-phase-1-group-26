@@ -13,45 +13,59 @@ import java.util.Arrays;
 public class MarniesRanch extends Shop
 {
     private ArrayList<MarniesRanchShopInventory> inventory = new ArrayList<>();
-    //private ArrayList<FarmAnimalsType> livestocks = new ArrayList<>();
+    private ArrayList<FarmAnimalsType> liveStocks = new ArrayList<>();
 
     public MarniesRanch()
     {
-        super(ShopType.MARINE_RANCH, ShopType.MARINE_RANCH.name(), "Marnie", 9, 16);
+        super(ShopType.MARINE_RANCH, "Marnie", 9, 16);
         setInventory();
-        //setLivestocks();
     }
 
     public void setInventory() {
         this.inventory.addAll(Arrays.asList(MarniesRanchShopInventory.values()));
     }
-//    public void setLivestocks() {
-//        this.livestocks.addAll(Arrays.asList(FarmAnimalsType.values()));
-//    }
+
+    public void setLivestocks() {
+        this.liveStocks.addAll(Arrays.asList(FarmAnimalsType.values()));
+    }
 
     @Override
     public String showProducts() {
         StringBuilder products = new StringBuilder();
-        super.showProducts();
-        for(MarniesRanchShopInventory item : MarniesRanchShopInventory.values()) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+        products.append(super.showProducts());
+
+        for (MarniesRanchShopInventory item : MarniesRanchShopInventory.values())
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(MarniesRanchLivestock item : MarniesRanchLivestock.values()) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (MarniesRanchLivestock item : MarniesRanchLivestock.values())
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
     @Override
     public String showAvailableProducts() {
         StringBuilder products = new StringBuilder();
-        super.showAvailableProducts();
-        for(MarniesRanchShopInventory item : inventory) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+        products.append(super.showAvailableProducts());
+
+        for(MarniesRanchShopInventory item : inventory)
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPrice()).append("\n");
+            products.append("--------------------------------\n");
         }
-        for(MarniesRanchLivestock item : MarniesRanchLivestock.values()) {
-            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
+
+        for (FarmAnimalsType item : FarmAnimalsType.values())
+        {
+            products.append("\titem: ").append(item.getName()).append("\n\tprice: ").append(item.getPurchaseCost()).append("\n");
+            products.append("--------------------------------\n");
         }
+
         return products.toString();
     }
 
@@ -71,10 +85,12 @@ public class MarniesRanch extends Shop
     }
 
     @Override
-    public boolean isCorrectShop(GameObject gameObject) {
-        super.isCorrectShop(gameObject);
-        for(MarniesRanchShopInventory item : inventory) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+    public boolean isCorrectShop(GameObject gameObject)
+    {
+        for (MarniesRanchShopInventory item : inventory)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return true;
             }
         }
@@ -82,10 +98,12 @@ public class MarniesRanch extends Shop
     }
 
     @Override
-    public boolean isAffordable(GameObject gameObject) {
-        super.isAffordable(gameObject);
-        for(MarniesRanchShopInventory item : inventory) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
+    public boolean isAffordable(GameObject gameObject)
+    {
+        for (MarniesRanchShopInventory item : inventory)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
                 return App.getCurrentGame().getCurrentPlayer().getMoney() >= item.getPrice() * gameObject.getNumber();
             }
         }
@@ -93,11 +111,14 @@ public class MarniesRanch extends Shop
     }
 
     @Override
-    public boolean dailyLimitCheck(GameObject gameObject) {
-        super.dailyLimitCheck(gameObject);
-        for(MarniesRanchShopInventory item : inventory) {
-            if(item.getGameObjectType().equals(gameObject.getObjectType())) {
-                if(item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber()) {
+    public boolean dailyLimitCheck(GameObject gameObject)
+    {
+        for (MarniesRanchShopInventory item : inventory)
+        {
+            if (item.getGameObjectType().equals(gameObject.getObjectType()))
+            {
+                if (item.getDailyLimit() > 0 && item.getLimit() < gameObject.getNumber())
+                {
                     return false;
                 }
             }

@@ -9,6 +9,7 @@ import model.enums.animal_enums.FarmBuildingType;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class AnimalBuilding extends GameObject
 {
@@ -87,22 +88,23 @@ public class AnimalBuilding extends GameObject
         ArrayList<Tile> tiles = getTiles();
         ArrayList<Tile> copy = new ArrayList<>(tiles);
 
-        for (Tile tile : copy)
-        {
-            if (tile.getObject() != null)
-            {
-                copy.remove(tile);
+        Iterator<Tile> iterator = copy.iterator();
+        while (iterator.hasNext()) {
+            Tile tile = iterator.next();
+            if (tile.getObject() != null) {
+                iterator.remove();
             }
         }
 
-       if (copy.size() > 0)
-       {
+        // TODO
+//        if (copy.size() > 0)
+//       {
            Collections.shuffle(copy);
 
            Tile tile = copy.get(0);
            animal.setTile(tile);
            tile.setObject(animal);
-       }
+//       }
     }
 
     public void sellAnimal(Animal animal)

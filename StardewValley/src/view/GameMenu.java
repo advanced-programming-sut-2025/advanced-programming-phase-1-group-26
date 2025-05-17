@@ -16,6 +16,7 @@ import model.enums.regex_enums.GeneralCommands;
 import model.shops.Blacksmith;
 import model.shops.Shop;
 
+import javax.swing.*;
 import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -272,10 +273,14 @@ public class GameMenu implements AppMenu
             System.out.println(animalController.sellAnimal(input, scanner));
         } else if(GameCommands.SET_FRIENDSHIP.getMatcher(input) != null)
         {
-            animalController.cheatSetFriendship(input);
-        } else if(GameCommands.FISHING.getMatcher(input) != null)
+            System.out.println(animalController.cheatSetFriendship(input));
+        } else if (GameCommands.COLLECT_PRODUCES.getMatcher(input) != null)
         {
-            animalController.fishing(input);
+            System.out.println(animalController.collectProducts(input));
+        }
+        else if((matcher = GameCommands.FISHING.getMatcher(input)) != null)
+        {
+            System.out.println(animalController.fishing(input));
         }
 
         else if (GeneralCommands.START_TRADE.getMatcher(input) != null)
@@ -292,6 +297,21 @@ public class GameMenu implements AppMenu
 
         else if ((matcher = GeneralCommands.CHEAT_TOOL_CHECK.getMatcher(input)) != null) {
             System.out.println(gameController.cheatToolCheck(matcher));
+        }
+
+        else if (input.equalsIgnoreCase("cheat"))
+        {
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+            App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
+
+            System.out.println("fdfffffffffffffffffffffffffffffffffffffffffffff");
         }
 
         else
