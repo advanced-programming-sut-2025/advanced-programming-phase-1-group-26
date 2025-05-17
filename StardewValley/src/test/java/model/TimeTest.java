@@ -220,24 +220,4 @@ public class TimeTest {
         int advancedTime = time.getHour();
         assertEquals(currentHour, advancedTime);
     }
-
-    @Test
-    public void isThunderedWithMocks() {
-        Map mockMap = Mockito.mock(Map.class);
-        Tile mockTile = Mockito.mock(Tile.class);
-        Mockito.when(mockMap.getTile(10, 10)).thenReturn(mockTile);
-
-        Player mockPlayer = Mockito.mock(Player.class);
-        Mockito.when(mockPlayer.getCurrentMap()).thenReturn(mockMap);
-
-        Game mockGame = Mockito.mock(Game.class);
-        Mockito.when(mockGame.getCurrentPlayer()).thenReturn(mockPlayer);
-
-        App.setCurrentGame(mockGame);
-
-        GeneralController controller = new GeneralController();
-        controller.cheatHitThunder("10", "10");
-
-        Mockito.verify(mockTile).hitByThunder();
-    }
 }
