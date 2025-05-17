@@ -28,8 +28,12 @@ public class CommunicateController
     public Result cheatUpgradeFriendship(Matcher matcher) {
         String name = matcher.group("name");
         Player player = App.getCurrentGame().getPlayerByNickname(name);
-        int level = Integer.parseInt(matcher.group("level"));
         Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (player == null || player.equals(mainPlayer)) {
+            return new Result(false, "wrong name");
+        }
+        int level = Integer.parseInt(matcher.group("level"));
+
         FriendshipData currentLevel = mainPlayer.getFriendships().get(player);
         FriendshipData otherLevel = player.getFriendships().get(mainPlayer);
         currentLevel.setLevel(level);
@@ -50,65 +54,6 @@ public class CommunicateController
 
         return new Result(true, "xp upgraded cheater");
     }
-
-//    public static void upgradeFriendshipLevel (Player mainPlayer, Player player2) {
-//        FriendshipData currentLevel = mainPlayer.getFriendships().get(player2);
-//        FriendshipData otherLevel = player2.getFriendships().get(mainPlayer);
-//
-//        switch (mainPlayer.getFriendships().get(player2).getLevel()) {
-//            case 0:
-//                while (currentLevel.getXp() >= 100 && currentLevel.getXp() < 200) {
-//                    currentLevel.addLevel();
-//                    currentLevel.setXp(currentLevel.getXp() - 100);
-//                    otherLevel.addLevel();
-//                    otherLevel.setXp(currentLevel.getXp() - 100);
-//                    System.out.println("your friendship with " + player2 +
-//                            " upgraded to level: " + currentLevel.getLevel());
-//                }
-//                break;
-//            case 1:
-//                while (currentLevel.getXp() >= 200 && currentLevel.getXp() < 300) {
-//                    currentLevel.addLevel();
-//                    currentLevel.setXp(currentLevel.getXp() - 200);
-//                    otherLevel.addLevel();
-//                    otherLevel.setXp(currentLevel.getXp() - 200);
-//                    System.out.println("your friendship with " + player2 +
-//                            " upgraded to level: " + currentLevel.getLevel());
-//                }
-//                break;
-//            case 2:
-//                while (currentLevel.getXp() >= 300 && currentLevel.getXp() < 400) {
-//                    if (currentLevel.isBouquetBought()) {
-//                        currentLevel.addLevel();
-//                        currentLevel.setXp(currentLevel.getXp() - 300);
-//                        otherLevel.addLevel();
-//                        otherLevel.setXp(currentLevel.getXp() - 300);
-//                        System.out.println("your friendship with " + player2 +
-//                                " upgraded to level: " + currentLevel.getLevel());
-//                    } else {
-//                        System.out.println("buy bouquet to upgrade your friendship with " + player2);
-//                        break;
-//                    }
-//                }
-//                break;
-//            case 3:
-//                if (currentLevel.getXp() >= 400) {
-//                    if (currentLevel.isMarried()) {
-//                        currentLevel.addLevel();
-//                        currentLevel.setXp(0);
-//                        otherLevel.addLevel();
-//                        otherLevel.setXp(0);
-//                        System.out.println("your friendship with " + player2 +
-//                                " upgraded to level: " + currentLevel.getLevel());
-//                    } else {
-//                        System.out.println("you should marry each other to upgrade your friendship");
-//                    }
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//    }
 
     public static boolean checkFriendship (Player player1, Player player2, String command) { //TODO: might change string to command
 
@@ -137,6 +82,9 @@ public class CommunicateController
     public Result talk (Matcher matcher) {
         Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (currentPlayer.equals(player)) {
+            return new Result(false, "you can't gift yourself");
+        }
         String message = matcher.group("message");
 
         if (currentPlayer.isNear(player.getLocation())) {
@@ -149,6 +97,12 @@ public class CommunicateController
             if (!data1.isIntrcatedToday()) {
                 data1.changeXp(20, currentPlayer, player);
                 data2.changeXp(20, currentPlayer, player);
+                if (player.getFriendships().get(currentPlayer).isNewLevel()) {
+                    System.out.println("your friendship with " + player.getNickName() +
+                            " changed to " + player.getFriendships().get(currentPlayer).getLevel());
+                    player.getFriendships().get(currentPlayer).setNewLevel(false);
+                    currentPlayer.getFriendships().get(player).setNewLevel(false);
+                }
                 data1.setIntrcatedToday(true);
                 data2.setIntrcatedToday(true);
             }
@@ -173,10 +127,14 @@ public class CommunicateController
     //gifting methods
 
     public void gift (Matcher matcher) {
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
+        if (currentPlayer.equals(player)) {
+            System.out.println("you can't gift yourself");
+            return;
+        }
         String itemName = matcher.group("item");
         int amount = Integer.parseInt(matcher.group("amount"));
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameObjectType item = null;
         for (GameObjectType type : GameObjectType.values()) {
             if (type.name().equalsIgnoreCase(itemName)) {

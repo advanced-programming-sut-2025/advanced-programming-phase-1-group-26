@@ -6,7 +6,7 @@ public enum JojaMartPermanentStock {
     JOJA_COLA("Joja Cola", "The flagship product of Joja corporation.", 75, -1,
             GameObjectType.JOJA_COLA, -1),
     ANCIENT_SEED("Ancient Seed", "Could these still grow?", 500, 1,
-            GameObjectType.ANCIENT_SEEDS, -1),
+            GameObjectType.ANCIENT_SEEDS, 1),
     GRASS_STARTER("Grass Starter", "Place this on your farm to start a new patch of grass.", 125, -1,
             GameObjectType.GRAPE_STARTER, -1),
     SUGAR("Sugar", "Adds sweetness to pastries and candies. Too much can be unhealthy.", 125, -1,

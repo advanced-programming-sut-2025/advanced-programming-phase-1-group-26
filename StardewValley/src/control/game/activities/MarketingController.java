@@ -95,7 +95,7 @@ public class MarketingController {
 
         GameObjectType gameObjectType = null;
         for(GameObjectType type : GameObjectType.values()){
-            if(type.toString().equals(productName)){
+            if(type.toString().equalsIgnoreCase(productName)){
                 gameObjectType = type;
             }
         }

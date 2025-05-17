@@ -8,6 +8,7 @@ import model.enums.shop_enums.JojaMartSeasonalStock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class JojaMart extends Shop{
     private ArrayList<JojaMartPermanentStock> permanentStocks = new ArrayList<>();
@@ -15,6 +16,8 @@ public class JojaMart extends Shop{
 
     public JojaMart() {
         super(ShopType.JOJA_MART, "Morris", 9, 23);
+        setPermanentStocks();
+        setSeasonalStocks();
     }
 
     public void setPermanentStocks() {
@@ -69,32 +72,36 @@ public class JojaMart extends Shop{
     @Override
     public void purchase(GameObject gameObject)
     {
-        for (JojaMartPermanentStock item : permanentStocks)
-        {
-            if (item.getGameObjectType().equals(gameObject.getObjectType()))
-            {
+        Iterator<JojaMartPermanentStock> permanentIterator = permanentStocks.iterator();
+        while (permanentIterator.hasNext()) {
+            JojaMartPermanentStock item = permanentIterator.next();
+            if (item.getGameObjectType().equals(gameObject.getObjectType())) {
                 App.getCurrentGame().getCurrentPlayer().decreaseMoney(item.getPrice() * gameObject.getNumber());
                 App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
                 item.decreaseLimit();
-                if (item.getLimit() == 0) permanentStocks.remove(item);
+                if (item.getLimit() == 0) {
+                    permanentIterator.remove(); // Safe removal
+                }
+                break; // If only one match is allowed
             }
         }
-        for (JojaMartSeasonalStock item : seasonalStocks)
-        {
-            if (item.getGameObjectType().equals(gameObject.getObjectType()))
-            {
-                if (!item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()))
-                {
+
+        Iterator<JojaMartSeasonalStock> seasonalIterator = seasonalStocks.iterator();
+        while (seasonalIterator.hasNext()) {
+            JojaMartSeasonalStock item = seasonalIterator.next();
+            if (item.getGameObjectType().equals(gameObject.getObjectType())) {
+                if (!item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
                     isInSeason = false;
-                } else
-                {
+                } else {
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(item.getPrice() * gameObject.getNumber());
                     App.getCurrentGame().getCurrentPlayer().addToInventory(gameObject);
-                    seasonalStocks.remove(item);
                     item.decreaseLimit();
+                    seasonalIterator.remove(); // Safe removal
                 }
+                break; // If only one match is expected
             }
         }
+
     }
 
     @Override
