@@ -17,6 +17,7 @@ public enum Menu
     PreGameMenu(new PreGameMenu(), "pre game menu"),
     CityMenu(new CityMenu(), "city menu"),
     TradeMenu(new TradeMenu(), "trade menu"),
+    //ShopMenu(new ShopMenu(), "shop menu"),
     ;
 
     private final AppMenu menu;
