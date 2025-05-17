@@ -248,6 +248,11 @@ public class CityMenu implements AppMenu
             marketingController.cheatAddMoney(input);
         }
 
+        else if ((matcher = GeneralCommands.GO_ESGH_O_HAL.getMatcher(input)) != null)
+        {
+            System.out.println(generalController.goEsghOHal());
+        }
+
         else
         {
 //            System.out.println("invalid command");

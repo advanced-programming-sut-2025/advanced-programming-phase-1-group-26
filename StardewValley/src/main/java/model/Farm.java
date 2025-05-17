@@ -117,11 +117,6 @@ public class Farm extends model.Map
         }
     }
 
-    public MapTypes getMapType()
-    {
-        return mapType;
-    }
-
     public void setRandomForagingItems()
     {
         if (foragingCount() < 200)
@@ -463,5 +458,23 @@ public class Farm extends model.Map
             }
         }
         return null;
+    }
+
+    public ArrayList<Tile> getTilesForThunder()
+    {
+        ArrayList<Tile> tilesForThunder = new ArrayList<>();
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            for (int x = 0; x < WIDTH; x++)
+            {
+                Tile tile = getTile(x, y);
+                if ((tile.getTexture() == TileTexture.LAND || tile.getTexture() == TileTexture.GRASS))
+                {
+                    tilesForThunder.add(tile);
+                }
+            }
+        }
+
+        return tilesForThunder;
     }
 }

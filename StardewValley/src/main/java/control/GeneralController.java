@@ -238,6 +238,12 @@ public class GeneralController
 
     public Result cheatHitThunder(String inputX, String inputY)
     {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (!player.isInFarm())
+        {
+            return new Result(false, "You can only run this command in your farm.");
+        }
+
         int x = Integer.parseInt(inputX);
         int y = Integer.parseInt(inputY);
 
@@ -503,6 +509,12 @@ public class GeneralController
         App.setCurrentUser(player.getUser());
         App.setCurrentMenu(Menu.MainMenu);
 
+        if (App.getLoggedInUser() != null)
+        {
+            GameMenu.println("The App will be logged in as " + App.getLoggedInUser().getNickname() + ".");
+            App.setCurrentUser(App.getLoggedInUser());
+        }
+
         return new Result(true, """
                 Soooo Loooong, gooood byeeeeeeeeeeeeeeee! (Do I really have to finish?)
                 Redirecting to Main Menu...""");
@@ -567,8 +579,32 @@ public class GeneralController
         App.setCurrentGame(null);
         App.setCurrentMenu(Menu.MainMenu);
 
+        if (App.getLoggedInUser() != null)
+        {
+            GameMenu.println("The App will be logged in as " + App.getLoggedInUser().getNickname() + ".");
+            App.setCurrentUser(App.getLoggedInUser());
+        }
+
         return new Result(true, """
                 You broke my heart, good bye.
                 Redirecting to Main Menu...""");
+    }
+
+    public Result goEsghOHal()
+    {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        if (player.getZeidy() == null)
+        {
+            return new Result(false, "You don't have a zeidy badbakht.");
+        }
+
+        if (player.isInZeidiesFarm())
+        {
+            return new Result(false, "You are already in zeidy's farm.");
+        }
+
+        player.goToZeidyFarm();
+        return new Result(true, "Going to zeidy's farm.");
     }
 }
