@@ -190,10 +190,7 @@ public class CommunicateController
                         currentPlayer.getItemInInventory(item).getNumber() < amount) {
                     System.out.println("you don't have enough number this item in your inventory!");
                 } else {
-                    currentPlayer.getItemInInventory(item).addNumber(-amount);
-                    if (currentPlayer.getItemInInventory(item).getNumber() < 1) {
-                        currentPlayer.getCurrentBackPack().getInventory().remove(item);
-                    }
+                    currentPlayer.removeAmountFromInventory(item, amount);
 
                     Gift newGift = new Gift(item, currentPlayer, player, amount);
 

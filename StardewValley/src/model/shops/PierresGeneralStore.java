@@ -132,16 +132,16 @@ public class PierresGeneralStore extends Shop{
 
         for (PierresGeneralStoreBackpacks backpack : PierresGeneralStoreBackpacks.values())
         {
-            if (gameObject instanceof BackPack)
-            {
-                if (gameObject.toString().equals(backpack.getName()))
+//            if (gameObject instanceof BackPack)
+//            {
+                if (gameObject.getObjectType().toString().equals(backpack.getName()))
                 {
                     App.getCurrentGame().getCurrentPlayer().getCurrentBackPack().setLevel(backpack.getLevel());
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(backpack.getPrice());
                     backpack.decreaseDailyLimit();
                     backpacks.remove(backpack);
                 }
-            }
+//            }
         }
     }
 

@@ -159,8 +159,12 @@ public class Player {
         this.turnEnergy = turnEnergy;
     }
 
-    public void increaseTurnEnergy(int turnEnergy) {
-        this.turnEnergy += turnEnergy;
+    public void increaseTurnEnergy(int turnEnergy)
+    {
+        if (energy != -1)
+        {
+            this.energy += energy;
+        }
     }
 
     public int getMaxEnergy() {
