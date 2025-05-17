@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public enum MapTypes
 {
-    STANDARD("standard", "StardewValley/resources/map/standard.json"),
-    RIVERLAND("riverland", "StardewValley/resources/map/river.json"),
-    HILL_TOP("hilltop", "StardewValley/resources/map/hilltop.json"),
-    BEACH("four_corners", "StardewValley/resources/map/beach.json"),
+    STANDARD("standard", "StardewValley/src/resources/map/standard.json"),
+    RIVERLAND("riverland", "StardewValley/src/resources/map/river.json"),
+    HILL_TOP("hilltop", "StardewValley/src/resources/map/hilltop.json"),
+    BEACH("four_corners", "StardewValley/src/resources/map/beach.json"),
 
-    CABIN("cabin", "StardewValley/resources/map/cabin.json"),
-    GREEN_HOUSE("greenhouse", "StardewValley/resources/map/greenhouse.json"),
-    CITY("city", "StardewValley/resources/map/city.json"),
-    SHOP("shop", "StardewValley/resources/map/shop.json"),
+    CABIN("cabin", "StardewValley/src/resources/map/cabin.json"),
+    GREEN_HOUSE("greenhouse", "StardewValley/src/resources/map/greenhouse.json"),
+    CITY("city", "StardewValley/src/resources/map/city.json"),
+    SHOP("shop", "StardewValley/src/resources/map/shop.json"),
     ;
 
     private final String name;
