@@ -2,6 +2,7 @@ package control;
 
 import model.App;
 import model.Result;
+import model.SHA256Hasher;
 import model.User;
 import model.enums.Gender;
 import model.enums.Menu;
@@ -60,12 +61,12 @@ public class ProfileController
     {
         User user = App.getCurrentUser();
 
-        if (!user.getPassword().equals(oldPassword))
+        if (!user.getPassword().equals(SHA256Hasher.hash(oldPassword)))
         {
             return new Result(false, "Your password is incorrect.");
         }
 
-        if (user.getPassword().equals(newPassword))
+        if (user.getPassword().equals(SHA256Hasher.hash(newPassword)))
         {
             return new Result(false, "You must enter a new password.");
         }
@@ -102,7 +103,7 @@ public class ProfileController
     {
         User user = App.getCurrentUser();
 
-        if (!user.getPassword().equals(oldPassword))
+        if (!user.getPassword().equals(SHA256Hasher.hash(oldPassword)))
         {
             ProfileMenu.println("Your password is incorrect.");
             return;

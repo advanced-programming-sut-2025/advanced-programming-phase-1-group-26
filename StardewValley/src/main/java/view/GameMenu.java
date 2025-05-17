@@ -312,6 +312,10 @@ public class GameMenu implements AppMenu
             App.getCurrentGame().getCurrentPlayer().getFishingSkill().addLevel();
 
             System.out.println("fdfffffffffffffffffffffffffffffffffffffffffffff");
+        } else if((matcher = GameCommands.SELL.getMatcher(input)) != null) {
+            System.out.println(marketingController.sell(input));
+        } else if((matcher = GameCommands.SELL_N.getMatcher(input)) != null) {
+            System.out.println(marketingController.sell(input));
         }
 
         else

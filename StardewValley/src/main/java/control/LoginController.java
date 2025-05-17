@@ -2,6 +2,7 @@ package control;
 
 import model.App;
 import model.Result;
+import model.SHA256Hasher;
 import model.User;
 import model.enums.Menu;
 import model.enums.regex_enums.RegisterCommands;
@@ -19,13 +20,17 @@ public class LoginController
         User user = App.getPlayerByUsername(username);
         if (user == null) {
             return new Result(false, "username doesn't exist");
-        } else if (!user.getPassword().equals(password)) {
+        } else if (!user.getPassword().equals(SHA256Hasher.hash(password))) {
             return new Result(false, "password doesn't match");
         }
 
         App.setCurrentUser(user);
-        App.getCurrentUser().setStay(stayLoggedIn);
         App.setCurrentMenu(Menu.MainMenu);
+
+        if (stayLoggedIn)
+        {
+            App.setLoggedInUser(user);
+        }
 
         return new Result(true, "logged in successfully");
     }

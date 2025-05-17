@@ -23,6 +23,7 @@ import view.CityMenu;
 import view.GameMenu;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 public class MarketingController {
     public Result showAllProducts() {
@@ -150,35 +151,38 @@ public class MarketingController {
     public Result sell(String input) {
         String productName;
         int numberOfProductsToSell = 0;
-        if(GameCommands.SELL.matches(input)) {
-        productName = GameCommands.SELL.getMatcher(input).group("productName");
+
+        Matcher matcher;
+        if ((matcher = GameCommands.SELL_N.getMatcher(input)) != null) {
+            productName = GameCommands.SELL_N.getMatcher(input).group("productName").trim();
+            numberOfProductsToSell = Integer.parseInt(GameCommands.SELL_N.getMatcher(input).group("count").trim());
+        } else {
+            productName = GameCommands.SELL.getMatcher(input).group("productName").trim();
             numberOfProductsToSell = 1;
         }
-        else {
-            productName = GameCommands.SELL_N.getMatcher(input).group("productName");
-            numberOfProductsToSell = Integer.parseInt(GameCommands.SELL_N.getMatcher(input).group("count"));
-        }
 
-        GameObject sellGameObject = null;
-        for(GameObjectType type : GameObjectType.values()){
-            if(type.name().equals(productName)){
-                sellGameObject = new GameObject(type, numberOfProductsToSell);
-            }
-        }
-        if(sellGameObject == null) {return new Result(false, "No such product");}
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        GameObjectType gameObjectType = GameObjectType.getGameObjectType(productName);
+        if (gameObjectType == null) {return new Result(false, "No such product");}
+
+        GameObject sellGameObject = player.getItemInInventory(gameObjectType);
+        if(sellGameObject == null) {return new Result(false, "you don't have this product");}
         int price = getPrice(sellGameObject.getObjectType());
         if(price < 0) {
             return new Result(false, "You can't sell this product");
         }
-//        for(AnimalBuilding building : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
-//            if(building.getFarmBuilding().equals(FarmBuildingType.SHIPPING_BIN)) {
-//                if(App.getCurrentGame().getCurrentPlayer().getLocation().equals(building.getLocation())) {
-//                    building.addFaghatVaseShipingBin(sellGameObject);
-//                    App.getCurrentGame().getCurrentPlayer().removeFromInventory(sellGameObject);
-//                    return new Result(true, "You have successfully add this product to shipping bin");
-//                }
-//            }
-//        }
+
+        for(AnimalBuilding building : App.getCurrentGame().getCurrentPlayer().getAnimalBuildings()) {
+            if(building.getFarmBuildingType().equals(FarmBuildingType.SHIPPING_BIN)) {
+                if (App.getCurrentGame().getCurrentPlayer().isNear(building.getLocation())) {
+                    building.addFaghatVaseShipingBin(sellGameObject);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(sellGameObject.getObjectType(), numberOfProductsToSell);
+                    return new Result(true, "You have successfully add this product to shipping bin");
+                }
+            }
+        }
+
         return new Result(false, "Shipping bin unavailable");
     }
 
@@ -240,13 +244,13 @@ public class MarketingController {
         Tool targetTool = null;
         for(GameObject eachObject : App.getCurrentGame().getCurrentPlayer().getInventory()) {
             if(eachObject instanceof Tool) {
-                if(toolName.equals(((Tool)eachObject).getName())) {
+                if(toolName.equalsIgnoreCase(((Tool)eachObject).getName())) {
                     targetTool = (Tool)eachObject;
                 }
             }
         }
         for(ToolType type : ToolType.values()){
-            if(type.name().equals(toolName)) {
+            if(type.toString().equalsIgnoreCase(toolName)) {
                 if(!App.getCurrentGame().getCity().isNearShop(ShopType.BLACK_SMITH)) {
                     return new Result(false, "You are not in the correct shop");
                 } else {

@@ -161,9 +161,9 @@ public class Player {
 
     public void increaseTurnEnergy(int turnEnergy)
     {
-        if (energy != -1)
+        if (this.turnEnergy != -1)
         {
-            this.energy += energy;
+            this.turnEnergy += turnEnergy;
         }
     }
 
@@ -399,6 +399,12 @@ public class Player {
         } else
         {
             currentBackPack.getInventory().add(object);
+        }
+
+        GameObject inInventory = getItemInInventory(object.getObjectType());
+        if (inInventory != null && inInventory.getNumber() <= 0)
+        {
+            this.currentBackPack.getInventory().remove(inInventory);
         }
     }
 
@@ -639,6 +645,24 @@ public class Player {
         this.location = farm.getStartingPoint();
     }
 
+    public void goToZeidyFarm()
+    {
+        if (isInCity)
+        {
+            City city = App.getCurrentGame().getCity();
+            city.getPlayerPoints()[App.getCurrentGame().getPlayerIndex()] = null;
+        }
+
+        this.isInCity = false;
+        this.isInGreenHouse = false;
+        this.isInFarm = false;
+        this.isInHome = false;
+        this.isInZeidiesFarm = true;
+        this.isInZeidiesHome = false;
+        this.currentMap = zeidy.getFarm();
+        this.location = zeidy.getFarm().getStartingPoint();
+    }
+
     public void goToCabin()
     {
         this.isInHome = true;
@@ -683,8 +707,9 @@ public class Player {
         return (money >= GreenHouse.getMoneyCost() && howManyInInventory(GameObjectType.WOOD) >= GreenHouse.getWoodCost());
     }
 
-    public ArrayList<AnimalBuilding> getAnimalBuildings() {
-        return animalBuildings;
+    public ArrayList<AnimalBuilding> getAnimalBuildings()
+    {
+        return farm.getAnimalBuildings();
     }
 
     public void addAnimalBuilding(AnimalBuilding animalBuilding) {
@@ -818,11 +843,6 @@ public class Player {
     public boolean isInZeidiesFarm()
     {
         return isInZeidiesFarm;
-    }
-
-    public boolean isInZeidiesHome()
-    {
-        return isInZeidiesHome;
     }
 
     public boolean isShouldBeSkipped()

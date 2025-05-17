@@ -62,6 +62,7 @@ public enum GeneralCommands implements Command
     SHOW_MONEY("show\\s+money"),
     START_TRADE("start\\s+trade"),
 
+    GO_ESGH_O_HAL("go\\s+to\\s+zeidy\\s+farm")
     ;
 
     private final Pattern pattern;

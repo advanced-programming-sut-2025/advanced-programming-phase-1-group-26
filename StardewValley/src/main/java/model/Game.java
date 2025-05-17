@@ -139,7 +139,8 @@ public class Game
         }
 
         resetHitByThunders();
-        if (currentTime.getCurrentWeather().equals(Weather.Storm))
+
+        if (currentTime.getTomorrowWeather().equals(Weather.Storm))
         {
             hitTilesByThunder();
         }
@@ -153,6 +154,7 @@ public class Game
         npcGiveGift();
 
         distributeFish();
+        updateShippingBin();
         resetAnimals();
     }
 
@@ -176,21 +178,21 @@ public class Game
            currentPlayer = getNext(currentPlayer);
            currentIndex = players.indexOf(currentPlayer);
 
-            if (players.indexOf(currentPlayer) == 0)
-            {
-                currentTime.updateHour(1);
+           if (players.indexOf(currentPlayer) == 0)
+           {
+               resetTurnEnergy();
+               currentTime.updateHour(1);
 
-                if (currentTime.getHour() == 9)
-                {
-                    GameMenu.println("a day passed by, current day: " + currentTime.getDay());
-                } else
-                {
-                    GameMenu.println("an hour passed by, current time: " + currentTime.getHour());
-                }
-            }
+               if (currentTime.getHour() == 9)
+               {
+                   GameMenu.println("a day passed by, current day: " + currentTime.getDay());
+               } else
+               {
+                   GameMenu.println("an hour passed by, current time: " + currentTime.getHour());
+               }
+           }
 
-
-            if (currentPlayer.getEnergy() > 0 && !currentPlayer.shouldBeSkipped())
+           if (currentPlayer.getEnergy() > 0 && !currentPlayer.shouldBeSkipped())
            {
                GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
                System.out.println(currentPlayer.newMessages());
@@ -365,7 +367,7 @@ public class Game
     {
         for (Player player : players)
         {
-            ArrayList<Tile> playerFarmPlants = player.getFarmPlants();
+            ArrayList<Tile> playerFarmPlants = player.getFarm().getTilesForThunder();
             ArrayList<Tile> randomFarmPlants = getThreeRandomElements(playerFarmPlants);
             for (Tile tile : randomFarmPlants)
             {
@@ -419,7 +421,7 @@ public class Game
             {
                 for (Plant plant : plants)
                 {
-                    if (plant.getLastWatered() > 2)
+                    if (plant.getLastWatered() > 2 && !plant.isInGreenHouse())
                     {
                         Tile tile = plant.getTile();
                         tile.unPlant();
@@ -488,7 +490,7 @@ public class Game
         if (currentPlayer.isInCity())
         {
             App.setCurrentMenu(Menu.CityMenu);
-        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm())
+        } else if (currentPlayer.isInGreenHouse() || currentPlayer.isInFarm() || currentPlayer.isInZeidiesFarm())
         {
             App.setCurrentMenu(Menu.GameMenu);
         } else if (currentPlayer.isInHome())
@@ -622,6 +624,40 @@ public class Game
             for (Animal animal : player.getAnimals())
             {
                 animal.checkAndReset();
+            }
+        }
+    }
+
+    public void updateShippingBin()
+    {
+        for(Player player : players)
+        {
+            for(AnimalBuilding animalBuilding : player.getAnimalBuildings())
+            {
+                if(animalBuilding.getFarmBuildingType().equals(FarmBuildingType.SHIPPING_BIN))
+                {
+                    for(GameObject gameObject : animalBuilding.getFaghatVaseShipingBin()) {
+                        player.increaseMoney
+                                (MarketingController.getPrice(gameObject.getObjectType()) * gameObject.getNumber());
+                    }
+                }
+            }
+
+        }
+    }
+
+    public void resetTurnEnergy()
+    {
+        for (Player player : players)
+        {
+            int diff = 50 - player.getTurnEnergy();
+            if (player.getEnergy() >= diff)
+            {
+                player.increaseEnergy(-diff);
+                player.increaseTurnEnergy(diff);
+            } else
+            {
+                player.faint();
             }
         }
     }

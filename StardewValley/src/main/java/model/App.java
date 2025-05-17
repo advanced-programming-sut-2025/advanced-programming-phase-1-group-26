@@ -11,6 +11,7 @@ public class App
     private static Game currentGame = null;
     private static User currentUser = null;
     private static Menu currentMenu = Menu.RegisterMenu;
+    private static User loggedInUser = null;
 
     public static ArrayList<User> getUsers() {
         return users;
@@ -55,5 +56,15 @@ public class App
             }
         }
         return null;
+    }
+
+    public static User getLoggedInUser()
+    {
+        return loggedInUser;
+    }
+
+    public static void setLoggedInUser(User loggedInUser)
+    {
+        App.loggedInUser = loggedInUser;
     }
 }

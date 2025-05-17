@@ -35,7 +35,7 @@ public class User {
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
-        this.password = password;
+        this.password = SHA256Hasher.hash(password);
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
@@ -88,13 +88,6 @@ public class User {
     }
     public void setAnswer(int answer) {
         this.answer = answer;
-    }
-
-    public boolean isStay() {
-        return stay;
-    }
-    public void setStay(boolean stay) {
-        this.stay = stay;
     }
 
     public int getNumberOfGames()

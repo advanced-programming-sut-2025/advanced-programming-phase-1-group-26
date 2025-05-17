@@ -58,20 +58,19 @@ public class Tile
     public void hitByThunder()
     {
         hitByThunder = true;
+        Object object = this.object;
 
-        isFertilized = false;
-        isPloughed = false;
+        unPlant();
 
         if (object != null)
         {
-            if (object instanceof Tree)
+            if (object instanceof Tree || object instanceof ForagingTree)
             {
-                object = new GameObject(GameObjectType.COAL, 3);
+                this.object = new GameObject(GameObjectType.COAL, 3);
             }
-
-            if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof Plant)
+            else if (object instanceof ForagingCrop || object instanceof ForagingSeed || object instanceof Plant)
             {
-                object = null;
+                this.object = null;
             }
         }
     }
@@ -363,9 +362,30 @@ public class Tile
     public String getAppearance()
     {
         // TODO: uncomment this later
-        if (App.getCurrentGame().getCurrentPlayer().getLocation().equals(point))
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        Point playerLocation = player.getLocation();
+        Point zeidyLocation = null;
+
+        if (player.getZeidy() != null && player.getZeidy().isInZeidiesFarm())
+        {
+            zeidyLocation = player.getZeidy().getLocation();
+        }
+
+        if (playerLocation.equals(point) && zeidyLocation != null && zeidyLocation.equals(point))
+        {
+            return "❤\uFE0F"; // ❤️
+        }
+
+        if (playerLocation.equals(point))
         {
             return App.getCurrentGame().getCurrentPlayer().getApperance();
+        }
+
+        if (zeidyLocation != null && zeidyLocation.equals(point))
+        {
+            return App.getCurrentGame().getCurrentPlayer().getZeidy().getApperance();
         }
 
         if (App.getCurrentGame().getCurrentPlayer().isInCity())
@@ -388,6 +408,11 @@ public class Tile
             return getNpc().getAppearance();
         }
 
+        if (hitByThunder)
+        {
+            return "⬛";
+        }
+
         if (fish != null)
         {
             if (fish.getType().isLegendary())
@@ -401,10 +426,7 @@ public class Tile
 
         if (object == null)
         {
-            if (hitByThunder)
-            {
-                return "⬛";
-            } else if (texture.equals(TileTexture.LAND))
+            if (texture.equals(TileTexture.LAND))
             {
                 if (isPloughed)
                 {

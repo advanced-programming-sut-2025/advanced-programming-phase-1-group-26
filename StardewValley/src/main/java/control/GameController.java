@@ -67,7 +67,7 @@ public class GameController
         //check if in blacksmith
 
         for (GameObject object : currentPlayer.getCurrentBackPack().getInventory()) {
-            if (object.getObjectType().name().equals(toolName)) {
+            if (object.getObjectType().toString().equalsIgnoreCase(toolName)) {
                 if (object instanceof Tool) {
                     if (object instanceof Axe) {
 
@@ -150,9 +150,8 @@ public class GameController
                 if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * ((MilkPail) tool).getEnergyUsage())) {
                     return new Result(false, "you don't have enough energy!");
                 }
-                if (targetTile.getObject().getObjectType().equals(GameObjectType.ANIMAL_BUILDING)) {
-                    AnimalBuilding animalBuilding = (AnimalBuilding) targetTile.getObject();
-                    for (Animal animal : animalBuilding.getAnimals()) {
+                if (targetTile.getObject().getObjectType() != null && targetTile.getObject() instanceof Animal) {
+                    Animal animal = (Animal) targetTile.getObject();
                         if (animal.getAnimalType().equals(FarmAnimalsType.SHEEP) ||
                         animal.getAnimalType().equals(FarmAnimalsType.COW)) {
                             currentPlayer.addToInventory(GameObjectType.MILK, 1);
@@ -163,13 +162,29 @@ public class GameController
                             currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((MilkPail) tool).getEnergyUsage()));
                             return new Result(true, "goat milk added to your inventory!");
                         }
-                    }
                     return new Result(false, "no daam animal found in this barn");
                 }
                 return new Result(false, "no animal farm found!");
 
             } else if (tool instanceof Pickaxe) {
-                if (targetTile.getObject() instanceof ForagingMineral) {
+                if (!targetTile.hasPlants() && targetTile.getObject() != null)
+                {
+                    GameObject object = targetTile.getObject();
+                    Player player = App.getCurrentGame().getCurrentPlayer();
+                    if (!player.inventoryHasCapacity())
+                    {
+                        return new Result(false, "you don't have enough space in your inventory");
+                    }
+                    player.addToInventory(object);
+                    targetTile.setObject(null);
+
+                    if (targetTile.isHitByThunder())
+                    {
+                        targetTile.unHitByThunder();
+                    }
+
+                    return new Result(true, object.getObjectType().toString() + " added to your inventory");
+                } else if (targetTile.getObject() instanceof ForagingMineral) {
                     if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * ((Pickaxe) tool).getLevel().getBaseEnergyUsage())){
                         return new Result(false, "you don't have enough energy");
                     }
@@ -213,19 +228,7 @@ public class GameController
                     targetTile.setObject(null);
                     currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getBaseEnergyUsage()));
                     return new Result(true, "seed is removed");
-                } else if (!targetTile.hasPlants() && targetTile.getObject() != null)
-                {
-                    GameObject object = targetTile.getObject();
-                    Player player = App.getCurrentGame().getCurrentPlayer();
-                    if (!player.inventoryHasCapacity())
-                    {
-                        return new Result(false, "you don't have enough space in your inventory");
-                    }
-                    player.addToInventory(object);
-                    targetTile.setObject(null);
-                    return new Result(true, object.getObjectType().toString() + " added to your inventory");
-                }
-                else {
+                } else {
                     currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Pickaxe) tool).getLevel().getFailedEnergyUsage()));
                     return new Result(false, "you can't use pickaxe on this tile");
                 }
@@ -295,15 +298,14 @@ public class GameController
                 if (currentPlayer.getTurnEnergy() <= (int)(weatherModifier * ((Shear) tool).getEnergyUsage())) {
                     return new Result(false, "you don't have enough energy!");
                 }
-                if (targetTile.getObject().getObjectType().equals(GameObjectType.ANIMAL_BUILDING)) {
-                    AnimalBuilding animalBuilding = (AnimalBuilding) targetTile.getObject();
-                    for (Animal animal : animalBuilding.getAnimals()) {
+                if (targetTile.getObject().getObjectType() != null && targetTile.getObject() instanceof Animal)
+                {
+                    Animal animal = (Animal) targetTile.getObject();
                         if (animal.getAnimalType().equals(FarmAnimalsType.SHEEP)) {
                             currentPlayer.addToInventory(GameObjectType.WOOL, 3);
                             currentPlayer.increaseTurnEnergy((int)(weatherModifier * -((Shear) tool).getEnergyUsage()));
                             return new Result(true, "3 wools added to your inventory!");
                         }
-                    }
                     return new Result(false, "no sheep found in this barn");
                 }
                 return new Result(false, "no animal farm found!");

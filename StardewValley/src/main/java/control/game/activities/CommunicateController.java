@@ -219,7 +219,7 @@ public class CommunicateController
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         System.out.println("gits given: ");
         for (Gift object : currentPlayer.getGivenGifts())  {
-            if (object.getTaker().getNickName().equals(player.getNickName())) {
+            if (object.getTaker().getNickName().equalsIgnoreCase(player.getNickName())) {
                 System.out.println("id: " + object.getId() +
                         " item: " + object.getGameObject().name() +
                         " amount: " + object.getAmount());
@@ -228,7 +228,7 @@ public class CommunicateController
         }
         System.out.println("gifts taken: ");
         for (Gift object : currentPlayer.getArchiveGifts()) {
-            if (object.getGiver().getNickName().equals(player.getNickName())) {
+            if (object.getGiver().getNickName().equalsIgnoreCase(player.getNickName())) {
                 System.out.println("id: " + object.getId() +
                         " item: " + object.getGameObject().name() +
                         " amount: " + object.getAmount());
@@ -360,7 +360,7 @@ public class CommunicateController
         Player player = App.getCurrentGame().getPlayerByNickname(matcher.group("username"));
         boolean answer = true;
         String respond = matcher.group("respond");
-        if (respond.equals("cancel")) answer = false;
+        if (respond.equalsIgnoreCase("cancel")) answer = false;
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameObject ring = player.getItemInInventory(currentPlayer.getPurposeList().get(player));
 
