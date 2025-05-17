@@ -176,7 +176,21 @@ public class Game
            currentPlayer = getNext(currentPlayer);
            currentIndex = players.indexOf(currentPlayer);
 
-           if (currentPlayer.getEnergy() > 0 && !currentPlayer.shouldBeSkipped())
+            if (players.indexOf(currentPlayer) == 0)
+            {
+                currentTime.updateHour(1);
+
+                if (currentTime.getHour() == 9)
+                {
+                    GameMenu.println("a day passed by, current day: " + currentTime.getDay());
+                } else
+                {
+                    GameMenu.println("an hour passed by, current time: " + currentTime.getHour());
+                }
+            }
+
+
+            if (currentPlayer.getEnergy() > 0 && !currentPlayer.shouldBeSkipped())
            {
                GameMenu.println(currentPlayer.getUser().getNickname() + " is now playing.");
                System.out.println(currentPlayer.newMessages());
