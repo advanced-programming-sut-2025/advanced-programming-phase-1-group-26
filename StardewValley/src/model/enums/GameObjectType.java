@@ -404,6 +404,10 @@ public enum GameObjectType
     GOAT("Goat"),
     SHEEP("Sheep"),
     PIG("Pig"),
+
+    BASE_PACK("Base Pack"),
+    LARGE_PACK("Large Pack"),
+    DELUXE_PACK("Deluxe Pack"),
     ;
 
     private final String name;

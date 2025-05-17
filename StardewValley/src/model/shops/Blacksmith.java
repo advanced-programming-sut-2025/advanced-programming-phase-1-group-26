@@ -2,6 +2,7 @@ package model.shops;
 
 import model.App;
 import model.GameObject;
+import model.enums.GameObjectType;
 import model.enums.ShopType;
 import model.enums.shop_enums.BlacksmithStockItem;
 import model.enums.shop_enums.BlacksmithUpgradeTools;
@@ -112,6 +113,7 @@ public class Blacksmith extends Shop {
         switch (tool.getToolType()) {
             case ToolType.FishingPole -> upgradeFishingPole((FishingPole) tool);
             case ToolType.Axe -> upgradeAxe((Axe) tool);
+            case ToolType.WateringCan -> upgradeWateringCan((WateringCan) tool);
             case ToolType.TrashCan -> upgradeTrashCan((TrashCan) tool);
             case ToolType.Hoe -> upgradeHoe((Hoe) tool);
             case ToolType.Pickaxe -> upgradePickaxe((Pickaxe) tool);
@@ -149,36 +151,60 @@ public class Blacksmith extends Shop {
             case AxeLevel.base -> {
                 if((App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost()) &&
                 BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Copper);
-                    App.getCurrentGame().getCurrentPlayer().increaseMoney(-1 * BlacksmithUpgradeTools.COPPER_TOOL.getCost());
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.COPPER_BAR, 5);
                     BlacksmithUpgradeTools.COPPER_TOOL.decreaseDailyLimit();
                 }
             }
             case AxeLevel.Copper -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost() &&
                 BlacksmithUpgradeTools.STEEL_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Iron);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TOOL.getCost());
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRON_BAR, 5);
                     BlacksmithUpgradeTools.STEEL_TOOL.decreaseDailyLimit();
                 }
             }
             case AxeLevel.Iron -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost() &&
                 BlacksmithUpgradeTools.GOLD_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Golden);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TOOL.getCost());
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.GOLD_BAR, 5);
                     BlacksmithUpgradeTools.GOLD_TOOL.decreaseDailyLimit();
                 }
             }
             case AxeLevel.Golden -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost() &&
                 BlacksmithUpgradeTools.IRIDIUM_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(axe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     axe.setLevel(AxeLevel.Iridium);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost());
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRIDIUM_BAR, 5);
                     BlacksmithUpgradeTools.IRIDIUM_TOOL.decreaseDailyLimit();
                 }
             }
@@ -190,8 +216,14 @@ public class Blacksmith extends Shop {
             case PickaxeLevel.base -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost() &&
                 BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Copper);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.COPPER_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
                     BlacksmithUpgradeTools.COPPER_TOOL.decreaseDailyLimit();
                 }
@@ -199,8 +231,14 @@ public class Blacksmith extends Shop {
             case PickaxeLevel.Copper -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost() &&
                 BlacksmithUpgradeTools.STEEL_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Iron);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRON_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TOOL.getCost());
                     BlacksmithUpgradeTools.STEEL_TOOL.decreaseDailyLimit();
                 }
@@ -208,8 +246,14 @@ public class Blacksmith extends Shop {
             case PickaxeLevel.Iron -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost() &&
                 BlacksmithUpgradeTools.GOLD_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Golden);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.GOLD_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TOOL.getCost());
                     BlacksmithUpgradeTools.GOLD_TOOL.decreaseDailyLimit();
                 }
@@ -217,8 +261,14 @@ public class Blacksmith extends Shop {
             case PickaxeLevel.Golden -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost() &&
                 BlacksmithUpgradeTools.IRIDIUM_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(pickaxe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     pickaxe.setLevel(PickaxeLevel.Iridium);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRIDIUM_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost());
                     BlacksmithUpgradeTools.IRIDIUM_TOOL.decreaseDailyLimit();
                 }
@@ -231,8 +281,14 @@ public class Blacksmith extends Shop {
             case HoeLevel.base -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost() &&
                 BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Copper);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.COPPER_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
                     BlacksmithUpgradeTools.COPPER_TOOL.decreaseDailyLimit();
                 }
@@ -240,8 +296,14 @@ public class Blacksmith extends Shop {
             case HoeLevel.Copper -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost() &&
                 BlacksmithUpgradeTools.STEEL_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Iron);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRON_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TOOL.getCost());
                     BlacksmithUpgradeTools.STEEL_TOOL.decreaseDailyLimit();
                 }
@@ -249,8 +311,14 @@ public class Blacksmith extends Shop {
             case HoeLevel.Iron -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost() &&
                 BlacksmithUpgradeTools.GOLD_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Golden);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.GOLD_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TOOL.getCost());
                     BlacksmithUpgradeTools.GOLD_TOOL.decreaseDailyLimit();
                 }
@@ -258,8 +326,14 @@ public class Blacksmith extends Shop {
             case HoeLevel.Golden -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost() &&
                 BlacksmithUpgradeTools.IRIDIUM_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(hoe.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     hoe.setLevel(HoeLevel.Iridium);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRIDIUM_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost());
                     BlacksmithUpgradeTools.IRIDIUM_TOOL.decreaseDailyLimit();
                 }
@@ -272,8 +346,14 @@ public class Blacksmith extends Shop {
             case TrashCanLevel.base -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.COPPER_TRASH_CAN.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     trashCan.setLevel(TrashCanLevel.Copper);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.COPPER_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.COPPER_TRASH_CAN.decreaseDailyLimit();
                 }
@@ -281,8 +361,14 @@ public class Blacksmith extends Shop {
             case TrashCanLevel.Copper -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.STEEL_TRASH_CAN.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     trashCan.setLevel(TrashCanLevel.Iron);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRON_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.STEEL_TRASH_CAN.decreaseDailyLimit();
                 }
@@ -290,8 +376,14 @@ public class Blacksmith extends Shop {
             case TrashCanLevel.Iron -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.GOLD_TRASH_CAN.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     trashCan.setLevel(TrashCanLevel.Golden);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.GOLD_BAR, 5);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.GOLD_TRASH_CAN.decreaseDailyLimit();
                 }
@@ -299,10 +391,80 @@ public class Blacksmith extends Shop {
             case TrashCanLevel.Golden -> {
                 if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getCost() &&
                 BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(trashCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
                     canWeUpgrade = true;
                     trashCan.setLevel(TrashCanLevel.Iridium);
                     App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.getCost());
                     BlacksmithUpgradeTools.IRIDIUM_TRASH_CAN.decreaseDailyLimit();
+                }
+            }
+        }
+    }
+
+    public void upgradeWateringCan(WateringCan wateringCan) {
+        switch (wateringCan.getLevel()) {
+            case WateringCanLevel.base -> {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.COPPER_TOOL.getCost() &&
+                        BlacksmithUpgradeTools.COPPER_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
+                    canWeUpgrade = true;
+                    wateringCan.setLevel(WateringCanLevel.Copper);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.COPPER_BAR, 5);
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.COPPER_TOOL.getCost());
+                    BlacksmithUpgradeTools.COPPER_TOOL.decreaseDailyLimit();
+                }
+            }
+            case WateringCanLevel.Copper -> {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.STEEL_TOOL.getCost() &&
+                        BlacksmithUpgradeTools.STEEL_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
+                    canWeUpgrade = true;
+                    wateringCan.setLevel(WateringCanLevel.Iron);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRON_BAR, 5);
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.STEEL_TOOL.getCost());
+                    BlacksmithUpgradeTools.STEEL_TOOL.decreaseDailyLimit();
+                }
+            }
+            case WateringCanLevel.Iron -> {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.GOLD_TOOL.getCost() &&
+                        BlacksmithUpgradeTools.GOLD_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
+                    canWeUpgrade = true;
+                    wateringCan.setLevel(WateringCanLevel.Golden);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.GOLD_BAR, 5);
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.GOLD_TOOL.getCost());
+                    BlacksmithUpgradeTools.GOLD_TOOL.decreaseDailyLimit();
+                }
+            }
+            case WateringCanLevel.Golden -> {
+                if(App.getCurrentGame().getCurrentPlayer().getMoney() >= BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost() &&
+                        BlacksmithUpgradeTools.IRIDIUM_TOOL.getDailyLimit() != 0) {
+                    if(App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()) == null ||
+                            App.getCurrentGame().getCurrentPlayer().getItemInInventory(wateringCan.getObjectType()).getNumber() < 5) {
+                        System.out.println("You don't have enough item tools to upgrade, Faghir");
+                        return;
+                    }
+                    canWeUpgrade = true;
+                    wateringCan.setLevel(WateringCanLevel.Iridium);
+                    App.getCurrentGame().getCurrentPlayer().removeAmountFromInventory(GameObjectType.IRIDIUM_BAR, 5);
+                    App.getCurrentGame().getCurrentPlayer().decreaseMoney(BlacksmithUpgradeTools.IRIDIUM_TOOL.getCost());
+                    BlacksmithUpgradeTools.IRIDIUM_TOOL.decreaseDailyLimit();
                 }
             }
         }
