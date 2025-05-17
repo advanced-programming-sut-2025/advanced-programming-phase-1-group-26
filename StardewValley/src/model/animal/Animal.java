@@ -10,8 +10,7 @@ import view.GameMenu;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Animal extends GameObject
-{
+
 public class Animal extends GameObject {
     private String name;
     private FarmAnimalsType animalType;

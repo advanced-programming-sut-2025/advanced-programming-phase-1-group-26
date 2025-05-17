@@ -35,9 +35,9 @@ public class AnimalController
         Tile targetTile = farm.getTile(x, y);
         FarmBuildingType farmBuilding = FarmBuildingType.getFarmBuilding(buildingName);
 
-        if (player.getCurrentShop() == null || !player.getCurrentShop().equals(ShopType.BLACK_SMITH))
+        if (!city.isNearShop(ShopType.CARPENTER_SHOP))
         {
-            return new Result(false, "you should be in Blacksmith Shop for this command");
+            return new Result(false, "you should be in Carpenters Shop for this command");
         }
 
         if (farmBuilding == null)
@@ -53,7 +53,7 @@ public class AnimalController
         int width = farmBuilding.getWidth();
         int height = farmBuilding.getHeight();
 
-        if (!farm.isGoodForAnimalBuilding(targetTile, width, height))
+        if (false)
         {
             return new Result(false, "you can't build this building here");
         }

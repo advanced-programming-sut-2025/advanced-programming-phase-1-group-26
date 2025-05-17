@@ -13,21 +13,21 @@ import java.util.Arrays;
 public class MarniesRanch extends Shop
 {
     private ArrayList<MarniesRanchShopInventory> inventory = new ArrayList<>();
-    private ArrayList<FarmAnimalsType> livestocks = new ArrayList<>();
+    //private ArrayList<FarmAnimalsType> livestocks = new ArrayList<>();
 
     public MarniesRanch()
     {
         super(ShopType.MARINE_RANCH, ShopType.MARINE_RANCH.name(), "Marnie", 9, 16);
         setInventory();
-        setLivestocks();
+        //setLivestocks();
     }
 
     public void setInventory() {
         this.inventory.addAll(Arrays.asList(MarniesRanchShopInventory.values()));
     }
-    public void setLivestocks() {
-        this.livestocks.addAll(Arrays.asList(FarmAnimalsType.values()));
-    }
+//    public void setLivestocks() {
+//        this.livestocks.addAll(Arrays.asList(FarmAnimalsType.values()));
+//    }
 
     @Override
     public String showProducts() {
@@ -49,8 +49,8 @@ public class MarniesRanch extends Shop
         for(MarniesRanchShopInventory item : inventory) {
             products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
         }
-        for(FarmAnimalsType item : livestocks) {
-            products.append(item.getName()).append(" ").append(item.getPurchaseCost()).append("\n");
+        for(MarniesRanchLivestock item : MarniesRanchLivestock.values()) {
+            products.append(item.getName()).append(" ").append(item.getPrice()).append("\n");
         }
         return products.toString();
     }

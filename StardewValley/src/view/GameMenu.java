@@ -284,11 +284,11 @@ public class GameMenu implements AppMenu
             System.out.println("redirecting to trade menu...");
             tradeController.tradeList();
         }
-        else if((matcher = GameCommands.CHECK_SHOP.getMatcher(input)) != null) {
-            App.setCurrentMenu(Menu.ShopMenu);
-            Shop shop = new Blacksmith();
-            App.getCurrentGame().setCurrentShop(shop);
-        }
+//        else if((matcher = GameCommands.CHECK_SHOP.getMatcher(input)) != null) {
+//            App.setCurrentMenu(Menu.ShopMenu);
+//            Shop shop = new Blacksmith();
+//            App.getCurrentGame().setCurrentShop(shop);
+//        }
 
         else if ((matcher = GeneralCommands.CHEAT_TOOL_CHECK.getMatcher(input)) != null) {
             System.out.println(gameController.cheatToolCheck(matcher));
